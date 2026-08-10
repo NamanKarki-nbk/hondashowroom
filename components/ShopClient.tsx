@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import VehicleCard from "./VehicleCard";
-import { Search, SlidersHorizontal, ArrowDownAZ, ArrowUpAZ, X } from "lucide-react";
+import { Search, SlidersHorizontal, X, ArrowUpAZ, ArrowDownAZ } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 
@@ -13,36 +13,121 @@ export type Product = {
   price: number;
   imageUrl: string;
   description: string | null;
+  // Mock properties for advanced filtering
+  engineType?: string;
+  powerKw?: number;
+  seatHeight?: number;
 };
 
 interface ShopClientProps {
   initialProducts: Product[];
 }
 
-/**
- * The primary e-commerce product listing and filtering client component.
- * 
- * Features:
- * - Dynamic client-side filtering by category (Motorcycles, Scooters, Power Products).
- * - Real-time client-side search functionality.
- * - Price sorting (Low to High, High to Low).
- * - Auto-initializes search from URL query parameters (e.g. ?search=Dio).
- * - Animated grid transitions using Framer Motion.
- * 
- * @param {ShopClientProps} props - The initial server-fetched products to display.
- * @returns {JSX.Element} The rendered interactive shop interface.
- */
+// Helper to assign mock specs for advanced filtering
+const enhanceProducts = (products: Product[]) => {
+  return products.map(p => {
+    let engineType = "1-cylinder, 4-stroke engine";
+    let powerKw = 10;
+    let seatHeight = 750;
+
+    const lowerName = p.name.toLowerCase();
+    if (lowerName.includes("nx")) {
+      powerKw = 12.7; seatHeight = 810;
+    } else if (lowerName.includes("hornet")) {
+      powerKw = 12.7; seatHeight = 790;
+    } else if (lowerName.includes("dio")) {
+      engineType = "1-cylinder, 4-stroke engine (CVT transmission)";
+      powerKw = 6.0; seatHeight = 765;
+    } else if (lowerName.includes("shine") || lowerName.includes("sp 125")) {
+      powerKw = 8.0; seatHeight = 790;
+    } else if (p.category === "POWER_PRODUCTS") {
+      engineType = "Power Equipment";
+      powerKw = 2; seatHeight = 0;
+    }
+
+    return { ...p, engineType, powerKw, seatHeight };
+  });
+};
+
+const DualRangeSlider = ({ 
+  min, max, value, onChange, format = (v: number) => v.toString() 
+}: { 
+  min: number, max: number, value: [number, number], onChange: (val: [number, number]) => void, format?: (v: number) => string 
+}) => {
+  const [minVal, maxVal] = value;
+  
+  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = Math.min(Number(e.target.value), maxVal - 1);
+    onChange([v, maxVal]);
+  };
+  
+  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = Math.max(Number(e.target.value), minVal + 1);
+    onChange([minVal, v]);
+  };
+
+  const getPercent = (value: number) => Math.round(((value - min) / (max - min)) * 100);
+
+  return (
+    <div className="pt-6 pb-2">
+      <div className="flex justify-between items-center mb-6">
+        <span className="font-bold text-sm text-foreground">{format(minVal)}</span>
+        <span className="font-bold text-sm text-foreground">{format(maxVal)}</span>
+      </div>
+      <div className="relative h-1 w-full bg-gray-300 dark:bg-gray-700 rounded">
+        <div 
+          className="absolute h-1 bg-foreground rounded" 
+          style={{ left: `${getPercent(minVal)}%`, width: `${getPercent(maxVal) - getPercent(minVal)}%` }}
+        />
+        <input
+          type="range"
+          min={min}
+          max={max}
+          value={minVal}
+          onChange={handleMinChange}
+          className="absolute w-full -top-1.5 h-4 opacity-0 cursor-pointer pointer-events-auto"
+          style={{ zIndex: minVal > max - 100 ? 5 : 3 }}
+        />
+        <input
+          type="range"
+          min={min}
+          max={max}
+          value={maxVal}
+          onChange={handleMaxChange}
+          className="absolute w-full -top-1.5 h-4 opacity-0 cursor-pointer pointer-events-auto"
+          style={{ zIndex: 4 }}
+        />
+        {/* Custom thumbs */}
+        <div 
+          className="absolute h-4 w-4 bg-background border-2 border-foreground rounded-full -top-1.5 pointer-events-none" 
+          style={{ left: `calc(${getPercent(minVal)}% - 8px)` }}
+        />
+        <div 
+          className="absolute h-4 w-4 bg-background border-2 border-foreground rounded-full -top-1.5 pointer-events-none" 
+          style={{ left: `calc(${getPercent(maxVal)}% - 8px)` }}
+        />
+      </div>
+    </div>
+  );
+};
+
 export default function ShopClient({ initialProducts }: ShopClientProps) {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams?.get("search") || "");
-  const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
   const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc">("default");
 
-  const CATEGORIES = [
-    { id: "ALL", label: "All Vehicles" },
-    { id: "SCOOTERS", label: "Scooters" },
-    { id: "MOTORCYCLES", label: "Motorcycles" },
-    { id: "POWER_PRODUCTS", label: "Power Products" },
+  // Advanced Filters State
+  const [selectedEngines, setSelectedEngines] = useState<string[]>([]);
+  const [powerRange, setPowerRange] = useState<[number, number]>([0, 20]); // kW
+  const [seatRange, setSeatRange] = useState<[number, number]>([700, 850]); // mm
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000000]); // NPR
+
+  const products = useMemo(() => enhanceProducts(initialProducts), [initialProducts]);
+
+  const ENGINE_TYPES = [
+    "1-cylinder, 4-stroke engine",
+    "1-cylinder, 4-stroke engine (CVT transmission)",
+    "Power Equipment"
   ];
 
   useEffect(() => {
@@ -51,12 +136,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
   }, [searchParams]);
 
   const filteredProducts = useMemo(() => {
-    let result = initialProducts;
-
-    // Filter by Category
-    if (categoryFilter !== "ALL") {
-      result = result.filter(p => p.category === categoryFilter);
-    }
+    let result = products;
 
     // Filter by Search
     if (searchQuery.trim()) {
@@ -67,6 +147,21 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
       );
     }
 
+    // Advanced Filters
+    if (selectedEngines.length > 0) {
+      result = result.filter(p => p.engineType && selectedEngines.includes(p.engineType));
+    }
+    
+    result = result.filter(p => (p.powerKw ?? 0) >= powerRange[0] && (p.powerKw ?? 0) <= powerRange[1]);
+    
+    // Ignore seat height for power products
+    result = result.filter(p => {
+      if (p.category === "POWER_PRODUCTS") return true;
+      return (p.seatHeight ?? 0) >= seatRange[0] && (p.seatHeight ?? 0) <= seatRange[1];
+    });
+
+    result = result.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
+
     // Sort
     if (sortBy === "price-asc") {
       result = [...result].sort((a, b) => a.price - b.price);
@@ -75,126 +170,130 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
     }
 
     return result;
-  }, [initialProducts, categoryFilter, searchQuery, sortBy]);
+  }, [products, searchQuery, selectedEngines, powerRange, seatRange, priceRange, sortBy]);
+
+  const toggleEngine = (eng: string) => {
+    setSelectedEngines(prev => prev.includes(eng) ? prev.filter(e => e !== eng) : [...prev, eng]);
+  };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8 items-start">
-      {/* Sidebar / Filters */}
-      <div className="w-full lg:w-64 flex-shrink-0 sticky top-28 bg-[#f3ebdd] dark:bg-[#111111] p-6 rounded-2xl border border-gray-200 dark:border-[#f3ebdd]/10 shadow-sm">
+    <div className="flex flex-col lg:flex-row gap-0 bg-background text-foreground min-h-screen border-t border-gray-200 dark:border-gray-800">
+      
+      {/* BMW-Style Filter Sidebar */}
+      <div className="w-full lg:w-[320px] flex-shrink-0 bg-background border-r border-gray-200 dark:border-gray-800 p-8 h-fit lg:sticky top-20">
+        <h2 className="text-xl font-normal mb-8 tracking-wide">Filter according to your requirements</h2>
         
         {/* Search */}
-        <div className="mb-8">
-          <label className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-3 block">Search</label>
-          <div className="relative">
+        <div className="mb-10">
+           <div className="relative border-b border-foreground pb-2">
             <input 
               type="text" 
-              placeholder="Search Honda..." 
+              placeholder="Search Models..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#e8dfd1] dark:bg-[#1A1A1A] text-gray-900 dark:text-[#f3ebdd] border-none rounded-xl py-3 pl-10 pr-4 text-sm focus:ring-2 focus:ring-[#c1291A] outline-none"
+              className="w-full bg-transparent border-none text-foreground text-sm focus:outline-none"
             />
-            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            {searchQuery && (
-              <button 
-                onClick={() => setSearchQuery("")} 
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-[#f3ebdd]"
-              >
-                <X className="w-4 h-4" />
-              </button>
+            {searchQuery ? (
+               <X className="w-4 h-4 absolute right-0 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500" onClick={() => setSearchQuery("")} />
+            ) : (
+               <Search className="w-4 h-4 absolute right-0 top-1/2 -translate-y-1/2 text-gray-500" />
             )}
           </div>
         </div>
 
-        {/* Categories */}
-        <div className="mb-8">
-          <label className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-3 block">Categories</label>
-          <div className="flex flex-col gap-2">
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => setCategoryFilter(cat.id)}
-                className={`text-left px-4 py-2 rounded-xl text-sm font-medium transition-colors ${categoryFilter === cat.id ? "bg-[#c1291A] text-[#f3ebdd]" : "text-gray-600 dark:text-gray-400 hover:bg-[#e8dfd1] dark:hover:bg-[#1A1A1A] hover:text-gray-900 dark:hover:text-[#f3ebdd]"}`}
-              >
-                {cat.label}
-              </button>
+        {/* Engine Checkboxes */}
+        <div className="mb-10">
+          <h3 className="font-bold mb-4 border-b border-foreground pb-2 text-sm">Engine</h3>
+          <div className="flex flex-col gap-3">
+            {ENGINE_TYPES.map(eng => (
+              <label key={eng} className="flex items-start gap-3 cursor-pointer group">
+                <div className={`w-5 h-5 flex-shrink-0 border mt-0.5 transition-colors flex items-center justify-center ${selectedEngines.includes(eng) ? "border-primary bg-primary" : "border-gray-400 group-hover:border-foreground"}`}>
+                  {selectedEngines.includes(eng) && <Check className="w-3 h-3 text-[#f3ebdd]" />}
+                </div>
+                <span className="text-sm leading-tight text-gray-700 dark:text-gray-300">{eng}</span>
+              </label>
             ))}
           </div>
         </div>
 
-        {/* Sort */}
-        <div>
-          <label className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-3 block">Sort By Price</label>
-          <div className="flex flex-col gap-2">
-            <button
-              onClick={() => setSortBy("default")}
-              className={`text-left px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 ${sortBy === "default" ? "bg-[#e8dfd1] dark:bg-[#1A1A1A] text-[#c1291A]" : "text-gray-600 dark:text-gray-400 hover:bg-[#f3ebdd] dark:hover:bg-[#1A1A1A]"}`}
-            >
-              <SlidersHorizontal className="w-4 h-4" /> Default
-            </button>
-            <button
-              onClick={() => setSortBy("price-asc")}
-              className={`text-left px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 ${sortBy === "price-asc" ? "bg-[#e8dfd1] dark:bg-[#1A1A1A] text-[#c1291A]" : "text-gray-600 dark:text-gray-400 hover:bg-[#f3ebdd] dark:hover:bg-[#1A1A1A]"}`}
-            >
-              <ArrowDownAZ className="w-4 h-4" /> Low to High
-            </button>
-            <button
-              onClick={() => setSortBy("price-desc")}
-              className={`text-left px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 ${sortBy === "price-desc" ? "bg-[#e8dfd1] dark:bg-[#1A1A1A] text-[#c1291A]" : "text-gray-600 dark:text-gray-400 hover:bg-[#f3ebdd] dark:hover:bg-[#1A1A1A]"}`}
-            >
-              <ArrowUpAZ className="w-4 h-4" /> High to Low
-            </button>
-          </div>
+        {/* Performance Slider */}
+        <div className="mb-10">
+          <h3 className="font-bold mb-2 border-b border-foreground pb-2 text-sm">Performance</h3>
+          <DualRangeSlider 
+            min={0} max={25} value={powerRange} onChange={setPowerRange} 
+            format={(v) => `${v} kW`}
+          />
         </div>
+
+        {/* Seat Height Slider */}
+        <div className="mb-10">
+          <h3 className="font-bold mb-2 border-b border-foreground pb-2 text-sm">Seat height, unladen</h3>
+          <DualRangeSlider 
+            min={700} max={850} value={seatRange} onChange={setSeatRange} 
+            format={(v) => `${v} mm`}
+          />
+        </div>
+
+        {/* Price Slider */}
+        <div className="mb-10">
+          <h3 className="font-bold mb-2 border-b border-foreground pb-2 text-sm">Price</h3>
+          <DualRangeSlider 
+            min={0} max={1000000} value={priceRange} onChange={setPriceRange} 
+            format={(v) => `₹${(v/100000).toFixed(1)}L`}
+          />
+        </div>
+
+        {/* Sort */}
+        <div className="mb-8">
+           <h3 className="font-bold mb-4 border-b border-foreground pb-2 text-sm">Sort By</h3>
+           <select 
+             value={sortBy} 
+             onChange={(e) => setSortBy(e.target.value as any)}
+             className="w-full bg-transparent border border-gray-300 dark:border-gray-700 rounded px-3 py-2 text-sm outline-none focus:border-foreground"
+           >
+              <option className="bg-background text-foreground" value="default">Recommended</option>
+              <option className="bg-background text-foreground" value="price-asc">Price: Low to High</option>
+              <option className="bg-background text-foreground" value="price-desc">Price: High to Low</option>
+           </select>
+        </div>
+
       </div>
 
-      {/* Product Grid */}
-      <div className="flex-1">
-        <div className="flex items-center justify-between mb-6">
-          <p className="text-gray-500 text-sm">
-            Showing <span className="font-bold text-gray-900 dark:text-[#f3ebdd]">{filteredProducts.length}</span> results
-          </p>
+      {/* Product Grid Area */}
+      <div className="flex-1 bg-[#e8dfd1] dark:bg-[#111111] p-8 lg:p-12">
+        <div className="flex justify-end mb-6">
+          <div className="bg-background text-foreground text-xs font-bold py-2 px-4 rounded border border-gray-200 dark:border-gray-800 shadow-sm">
+            Matching models {filteredProducts.length}
+          </div>
         </div>
 
         {filteredProducts.length === 0 ? (
-          <div className="bg-[#f3ebdd] dark:bg-[#111111] rounded-2xl border border-gray-200 dark:border-[#f3ebdd]/10 p-12 text-center flex flex-col items-center justify-center min-h-[400px]">
-             <div className="w-16 h-16 bg-[#e8dfd1] dark:bg-[#1A1A1A] rounded-full flex items-center justify-center mb-4">
-                <Search className="w-8 h-8 text-gray-400" />
-             </div>
-             <h3 className="text-xl font-bold text-gray-900 dark:text-[#f3ebdd] mb-2">No products found</h3>
-             <p className="text-gray-500">We couldn't find anything matching your search criteria.</p>
-             <button 
-               onClick={() => { setSearchQuery(""); setCategoryFilter("ALL"); setSortBy("default"); }}
-               className="mt-6 text-[#c1291A] font-bold hover:underline"
-             >
-               Clear all filters
-             </button>
+          <div className="flex flex-col items-center justify-center min-h-[400px] opacity-60">
+             <Search className="w-10 h-10 mb-4" />
+             <h3 className="text-xl font-normal mb-2">No models found</h3>
+             <p className="text-sm">Try adjusting your filters.</p>
+             <button onClick={() => { setSelectedEngines([]); setPowerRange([0,25]); setSeatRange([700,850]); setPriceRange([0,1000000]); setSearchQuery(""); }} className="mt-4 text-primary font-bold underline">Reset Filters</button>
           </div>
         ) : (
-          <motion.div 
-            layout
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
+          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
             <AnimatePresence mode="popLayout">
               {filteredProducts.map(vehicle => (
                 <motion.div
                   layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3 }}
                   key={vehicle.id}
+                  className="bg-background"
                 >
                   <VehicleCard
                     title={vehicle.name}
                     priceNpr={vehicle.price}
                     category={
-                      vehicle.category === "POWER_PRODUCTS"
-                        ? "Power Product"
-                        : vehicle.category === "AUTOMOBILES"
-                        ? "Automobile"
-                        : vehicle.category === "SCOOTERS"
-                        ? "Scooter"
-                        : "Motorcycle"
+                      vehicle.category === "POWER_PRODUCTS" ? "Power Product" : 
+                      vehicle.category === "AUTOMOBILES" ? "Automobile" : 
+                      vehicle.category === "SCOOTERS" ? "Scooter" : "Motorcycle"
                     }
                     slug={vehicle.id}
                     imageUrl={vehicle.imageUrl}
@@ -206,5 +305,14 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
         )}
       </div>
     </div>
+  );
+}
+
+// Simple Check icon component for checkboxes
+function Check(props: any) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
   );
 }
