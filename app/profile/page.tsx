@@ -95,9 +95,13 @@ export default function ProfilePage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "front" | "back") => {
     const file = e.target.files?.[0];
     if (file) {
-      const url = URL.createObjectURL(file);
-      if (type === "front") setFrontImage(url);
-      else setBackImage(url);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64Url = reader.result as string;
+        if (type === "front") setFrontImage(base64Url);
+        else setBackImage(base64Url);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
