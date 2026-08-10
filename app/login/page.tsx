@@ -14,6 +14,13 @@ export default function LoginPage() {
   const [step, setStep] = useState<"request" | "verify">("request");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   const handleRequestOtp = async (e: React.FormEvent) => {
     e.preventDefault();
