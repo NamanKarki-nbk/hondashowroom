@@ -1,0 +1,236 @@
+[
+  {
+    "id": "93",
+    "name": "HHH25D75UT",
+    "category": "POWER_PRODUCTS",
+    "price": 94900,
+    "imageUrl": "/inventory/hhh25d75ut.jpeg",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "75",
+    "name": "CB Hornet 2.0",
+    "category": "MOTORCYCLES",
+    "price": 469900,
+    "imageUrl": "/inventory/cb-hornet-2-0.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "88",
+    "name": "Honda SP 125 ",
+    "category": "MOTORCYCLES",
+    "price": 304900,
+    "imageUrl": "/inventory/honda-sp-125-.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "91",
+    "name": "Honda NX 200",
+    "category": "MOTORCYCLES",
+    "price": 489900,
+    "imageUrl": "/inventory/honda-nx-200.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "94",
+    "name": "Honda Shine BS6",
+    "category": "MOTORCYCLES",
+    "price": 303900,
+    "imageUrl": "/inventory/honda-shine-bs6.jpg",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "26",
+    "name": "EG 1000",
+    "category": "POWER_PRODUCTS",
+    "price": 69900,
+    "imageUrl": "/inventory/eg-1000.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "27",
+    "name": "EP 1000",
+    "category": "POWER_PRODUCTS",
+    "price": 75900,
+    "imageUrl": "/inventory/ep-1000.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "28",
+    "name": "EP 1800CX",
+    "category": "POWER_PRODUCTS",
+    "price": 90000,
+    "imageUrl": "/inventory/ep-1800cx.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "33",
+    "name": "EU10I",
+    "category": "POWER_PRODUCTS",
+    "price": 186900,
+    "imageUrl": "/inventory/eu10i.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "34",
+    "name": "EU22i",
+    "category": "POWER_PRODUCTS",
+    "price": 209900,
+    "imageUrl": "/inventory/eu22i.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "35",
+    "name": "EU30IS",
+    "category": "POWER_PRODUCTS",
+    "price": 246900,
+    "imageUrl": "/inventory/eu30is.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "51",
+    "name": "EU70is",
+    "category": "POWER_PRODUCTS",
+    "price": 409900,
+    "imageUrl": "/inventory/eu70is.jpeg",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "61",
+    "name": "EZ6500CXS",
+    "category": "POWER_PRODUCTS",
+    "price": 246900,
+    "imageUrl": "/inventory/ez6500cxs.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "66",
+    "name": "EZ3000CX",
+    "category": "POWER_PRODUCTS",
+    "price": 115900,
+    "imageUrl": "/inventory/ez3000cx.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "19",
+    "name": "HRU 196",
+    "category": "POWER_PRODUCTS",
+    "price": 141900,
+    "imageUrl": "/inventory/hru-196.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "81",
+    "name": "HRU216M3TBUH",
+    "category": "POWER_PRODUCTS",
+    "price": 176900,
+    "imageUrl": "/inventory/hru216m3tbuh.jpg",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "67",
+    "name": "WB30XD",
+    "category": "POWER_PRODUCTS",
+    "price": 51900,
+    "imageUrl": "/inventory/wb30xd.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "76",
+    "name": "WV30D",
+    "category": "POWER_PRODUCTS",
+    "price": 74900,
+    "imageUrl": "/inventory/wv30d.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "84",
+    "name": "Honda Dio 125",
+    "category": "SCOOTERS",
+    "price": 329900,
+    "imageUrl": "/inventory/honda-dio-125.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "87",
+    "name": "Honda Dio BS6",
+    "category": "SCOOTERS",
+    "price": 284900,
+    "imageUrl": "/inventory/honda-dio-bs6.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "20",
+    "name": "UMK 435T",
+    "category": "POWER_PRODUCTS",
+    "price": 71900,
+    "imageUrl": "/inventory/umk-435t.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "21",
+    "name": "UMR  435T",
+    "category": "POWER_PRODUCTS",
+    "price": 86900,
+    "imageUrl": "/inventory/umr--435t.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "52",
+    "name": "F300",
+    "category": "POWER_PRODUCTS",
+    "price": 88900,
+    "imageUrl": "/inventory/f300.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "77",
+    "name": "FQ650",
+    "category": "POWER_PRODUCTS",
+    "price": 156900,
+    "imageUrl": "/inventory/fq650.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "62",
+    "name": "WJR2525T1",
+    "category": "POWER_PRODUCTS",
+    "price": 76900,
+    "imageUrl": "/inventory/wjr2525t1.png",
+    "description": "",
+    "specs": {}
+  },
+  {
+    "id": "63",
+    "name": "WJR4025T",
+    "category": "POWER_PRODUCTS",
+    "price": 76900,
+    "imageUrl": "/inventory/wjr4025t.png",
+    "description": "",
+    "specs": {}
+  }
+]

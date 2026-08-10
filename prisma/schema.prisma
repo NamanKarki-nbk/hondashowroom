@@ -1,0 +1,150 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum DocumentType {
+  CITIZENSHIP
+  LICENSE
+  NATIONAL_ID
+}
+
+enum VehicleStatus {
+  IN_STOCK
+  SOLD
+}
+
+enum PaymentType {
+  CASH
+  FINANCE
+  EXCHANGE
+  CREDIT
+}
+
+enum ServiceStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id               String   @id @default(uuid())
+  fullName         String
+  phone            String
+  email            String?
+  address          String?
+  
+  // Documents
+  documentType     DocumentType
+  documentNumber   String
+  docFrontImageUrl String?
+  docBackImageUrl  String?
+  ocrVerified      Boolean  @default(false)
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  sales            SalesTransaction[]
+  services         ServiceRecord[]
+}
+
+model VehicleInventory {
+  id              String   @id @default(uuid())
+  vin             String   @unique // Chassis No
+  engineNo        String   @unique
+  category        String   // e.g., Motorcycle, Scooter, Power Product
+  modelName       String
+  cc              Int
+  color           String
+  
+  purchasePrice   Float
+  sellingPrice    Float
+  purchaseDate    DateTime
+  purchaseMethod  String
+  rtoStatus       String?
+  
+  status          VehicleStatus @default(IN_STOCK)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  saleTransaction SalesTransaction?
+  services        ServiceRecord[]
+}
+
+model OfficialLetter {
+  id              String   @id @default(uuid())
+  referenceNo     String   @unique
+  letterType      String
+  recipientName   String
+  recipientDesignation String?
+  recipientBranch String?
+  
+  amountNpr       Float?
+  
+  englishContent  String?
+  nepaliContent   String   @db.Text
+  
+  createdBy       String   // Staff ID
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model SalesTransaction {
+  id              String   @id @default(uuid())
+  invoiceNo       String   @unique
+  
+  vehicleId       String   @unique
+  vehicle         VehicleInventory @relation(fields: [vehicleId], references: [id])
+  
+  customerId      String
+  customer        User     @relation(fields: [customerId], references: [id])
+  
+  paymentType     PaymentType
+  finalAmount     Float
+  commission      Float    // Auto-calculate 1.5%
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ServiceRecord {
+  id              String   @id @default(uuid())
+  
+  vehicleId       String
+  vehicle         VehicleInventory @relation(fields: [vehicleId], references: [id])
+  
+  customerId      String
+  customer        User     @relation(fields: [customerId], references: [id])
+  
+  odometerKm      Int
+  serviceType     String
+  status          ServiceStatus @default(PENDING)
+  mechanicNotes   String?  @db.Text
+  totalBill       Float
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ProductCatalog {
+  id          String   @id
+  name        String
+  category    String   // MOTORCYCLES, AUTOMOBILES, POWER_PRODUCTS
+  price       Float
+  imageUrl    String
+  description String?
+  specs       Json?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
