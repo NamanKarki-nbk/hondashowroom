@@ -1,0 +1,65 @@
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { generateNumericOtp, hashOtp } from "@/lib/auth";
+import { sendEmailOtp } from "@/lib/mailer";
+import { sendWhatsAppMessage } from "@/lib/whatsapp";
+
+// Simple in-memory rate limiting map
+// Key: identifier, Value: Array of timestamps
+const rateLimitMap = new Map<string, number[]>();
+
+export async function POST(req: NextRequest) {
+  try {
+    const { identifier, type } = await req.json();
+
+    if (!identifier || !type || !["email", "whatsapp"].includes(type)) {
+      return NextResponse.json({ error: "Invalid request parameters" }, { status: 400 });
+    }
+
+    // Rate limiting logic: Max 3 requests per minute
+    const now = Date.now();
+    const timestamps = rateLimitMap.get(identifier) || [];
+    const validTimestamps = timestamps.filter(ts => now - ts < 60000); // last 1 minute
+    
+    if (validTimestamps.length >= 3) {
+      return NextResponse.json({ error: "Too many requests. Please wait a minute before requesting another OTP." }, { status: 429 });
+    }
+    
+    validTimestamps.push(now);
+    rateLimitMap.set(identifier, validTimestamps);
+
+    // Generate and hash OTP
+    const otp = generateNumericOtp(6);
+    const hashedOtp = await hashOtp(otp);
+
+    // Store in DB
+    const expiresAt = new Date(Date.now() + 5 * 60000); // 5 mins
+    await prisma.otpVerification.create({
+      data: {
+        identifier,
+        hashedOtp,
+        expiresAt,
+      },
+    });
+
+    // Send OTP
+    if (type === "email") {
+      const success = await sendEmailOtp(identifier, otp);
+      if (!success) {
+        return NextResponse.json({ error: "Failed to send Email OTP. Check server configuration." }, { status: 500 });
+      }
+    } else if (type === "whatsapp") {
+      try {
+        await sendWhatsAppMessage(identifier, `*Honda Showroom Authentication*\n\nYour One-Time Password is: *${otp}*\n\nValid for 5 minutes. Do not share this code.`);
+      } catch (error: any) {
+        return NextResponse.json({ error: "WhatsApp dispatch failed: " + error.message + ". Please try Email OTP instead." }, { status: 500 });
+      }
+    }
+
+    return NextResponse.json({ success: true, message: `OTP sent successfully via ${type}` });
+
+  } catch (error: any) {
+    console.error("Error in send-otp: ", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}

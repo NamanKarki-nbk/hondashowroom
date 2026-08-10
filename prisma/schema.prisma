@@ -37,14 +37,16 @@ enum ServiceStatus {
 
 model User {
   id               String   @id @default(uuid())
-  fullName         String
-  phone            String
-  email            String?
+  fullName         String?
+  phone            String   @unique
+  email            String?  @unique
   address          String?
+  bio              String?
+  avatarUrl        String?
   
   // Documents
-  documentType     DocumentType
-  documentNumber   String
+  documentType     DocumentType?
+  documentNumber   String?
   docFrontImageUrl String?
   docBackImageUrl  String?
   ocrVerified      Boolean  @default(false)
@@ -54,6 +56,14 @@ model User {
 
   sales            SalesTransaction[]
   services         ServiceRecord[]
+}
+
+model OtpVerification {
+  id         String   @id @default(uuid())
+  identifier String   // email or phone
+  hashedOtp  String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
 }
 
 model VehicleInventory {

@@ -2,7 +2,8 @@ import { prisma } from "@/lib/prisma";
 import FinanceDetailClient from "./FinanceDetailClient";
 import { notFound } from "next/navigation";
 
-export default async function FinanceDetailPage({ params }: { params: { slug: string } }) {
+export default async function FinanceDetailPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const product = await prisma.productCatalog.findUnique({
     where: { id: params.slug }
   });
