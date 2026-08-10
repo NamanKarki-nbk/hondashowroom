@@ -24,8 +24,10 @@ export default function Header() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true');
   }, []);
 
@@ -49,6 +51,7 @@ export default function Header() {
   };
 
   if (pathname?.includes('/vehicles/')) return null;
+  if (!mounted) return null;
 
   return (
     <header className="w-full bg-[#f3ebdd] dark:bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-[#f3ebdd]/95 fixed top-0 z-50 shadow-md dark:shadow-white/5 transition-colors duration-300">

@@ -14,7 +14,14 @@ const ACTIONS = [
 ];
 
 export default function FloatingActionBar() {
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(true);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <div className="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-col items-end gap-0">

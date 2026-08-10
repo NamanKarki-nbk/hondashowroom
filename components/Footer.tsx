@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
-import { Phone } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { Phone, Mail, MapPin, Facebook, Instagram, Youtube, ArrowRight } from "lucide-react";
 import Logo from "@/components/Logo";
 
 /**
@@ -13,8 +14,16 @@ import Logo from "@/components/Logo";
  * @returns {JSX.Element} The rendered footer component.
  */
 export default function Footer() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
-    <footer className="border-t border-gray-200 bg-[#f3ebdd] dark:bg-[#0B0B0C] py-12 px-6 transition-colors duration-300">
+    <footer className="border-t border-gray-200 dark:border-slate-800 bg-white dark:bg-[#0B0B0C] py-16 transition-colors duration-300">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="flex items-center space-x-3">
            <Logo className="w-8 h-8 text-[#c1291A]" />
