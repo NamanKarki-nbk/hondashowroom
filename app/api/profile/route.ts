@@ -20,6 +20,14 @@ export async function GET(req: NextRequest) {
         bio: true,
         avatarUrl: true,
         address: true,
+        gender: true,
+        dobAd: true,
+        dobBs: true,
+        documentType: true,
+        documentNumber: true,
+        docFrontImageUrl: true,
+        docBackImageUrl: true,
+        ocrVerified: true,
         createdAt: true
       }
     });
@@ -43,7 +51,11 @@ export async function PATCH(req: NextRequest) {
     const updates = await req.json();
     
     // Whitelist allowed update fields
-    const allowedUpdates = ["fullName", "email", "phone", "bio", "avatarUrl", "address"];
+    const allowedUpdates = [
+      "fullName", "email", "phone", "bio", "avatarUrl", "address", 
+      "gender", "dobAd", "dobBs", "documentType", "documentNumber",
+      "docFrontImageUrl", "docBackImageUrl", "ocrVerified"
+    ];
     const dataToUpdate: Record<string, any> = {};
     
     for (const key of allowedUpdates) {
@@ -66,7 +78,15 @@ export async function PATCH(req: NextRequest) {
         phone: true,
         bio: true,
         avatarUrl: true,
-        address: true
+        address: true,
+        gender: true,
+        dobAd: true,
+        dobBs: true,
+        documentType: true,
+        documentNumber: true,
+        docFrontImageUrl: true,
+        docBackImageUrl: true,
+        ocrVerified: true,
       }
     });
 

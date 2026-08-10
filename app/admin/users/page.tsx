@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Users, Mail, Phone, Calendar, Search } from "lucide-react";
+import { Users, Mail, Phone, Calendar, Search, ShieldCheck, AlertCircle } from "lucide-react";
 import Image from "next/image";
 
 export const metadata = {
@@ -38,7 +38,8 @@ export default async function AdminUsersPage() {
               <tr className="bg-slate-900/80 border-b border-slate-800 text-xs uppercase tracking-wider text-gray-500">
                 <th className="px-6 py-4 font-medium">User</th>
                 <th className="px-6 py-4 font-medium">Contact</th>
-                <th className="px-6 py-4 font-medium">Role / Type</th>
+                <th className="px-6 py-4 font-medium">KYC Status</th>
+                <th className="px-6 py-4 font-medium">Role</th>
                 <th className="px-6 py-4 font-medium">Joined</th>
                 <th className="px-6 py-4 font-medium text-right">Actions</th>
               </tr>
@@ -49,7 +50,7 @@ export default async function AdminUsersPage() {
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-4">
                       {user.avatarUrl ? (
-                        <Image src={user.avatarUrl} alt="Avatar" width={40} height={40} className="rounded-full bg-slate-800 object-cover" />
+                        <img src={user.avatarUrl} alt="Avatar" className="w-10 h-10 rounded-full bg-slate-800 object-cover" />
                       ) : (
                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-[#f3ebdd] font-bold border border-slate-700">
                           {user.fullName ? user.fullName[0].toUpperCase() : user.email ? user.email[0].toUpperCase() : "U"}
@@ -57,7 +58,7 @@ export default async function AdminUsersPage() {
                       )}
                       <div>
                         <div className="font-medium">{user.fullName || "Unnamed User"}</div>
-                        <div className="text-xs text-gray-500">ID: {user.id.slice(0, 8)}...</div>
+                        <div className="text-xs text-gray-500">{user.gender ? `${user.gender.charAt(0)}${user.gender.slice(1).toLowerCase()}` : 'Unknown'} • ID: {user.id.slice(0, 8)}</div>
                       </div>
                     </div>
                   </td>
@@ -74,9 +75,20 @@ export default async function AdminUsersPage() {
                     )}
                   </td>
                   <td className="px-6 py-4">
+                    {user.ocrVerified ? (
+                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">
+                         <ShieldCheck className="w-3.5 h-3.5" /> Verified
+                       </span>
+                    ) : (
+                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">
+                         <AlertCircle className="w-3.5 h-3.5" /> Pending
+                       </span>
+                    )}
+                  </td>
+                  <td className="px-6 py-4">
                     {user.email === "successbhattarai1998@gmail.com" ? (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#c1291A]/10 text-[#c1291A] border border-[#c1291A]/20">
-                        Administrator
+                        Admin
                       </span>
                     ) : (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-800 text-gray-300">
@@ -98,7 +110,7 @@ export default async function AdminUsersPage() {
               
               {users.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
                     No users found in the database.
                   </td>
                 </tr>
