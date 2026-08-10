@@ -642,10 +642,51 @@ export default function ProfilePage() {
                     {scannedData ? (
                       <div className="space-y-4 animate-in fade-in zoom-in duration-300">
                         <div className="grid grid-cols-2 gap-4 text-sm">
-                          <div><span className="block text-gray-500 uppercase tracking-widest text-[10px] font-bold">Document Number</span><span className="font-medium text-gray-900 dark:text-white">{scannedData[`${activeTab.toLowerCase().replace('_', '')}Number`]}</span></div>
-                          {scannedData.fullName && <div><span className="block text-gray-500 uppercase tracking-widest text-[10px] font-bold">Full Name</span><span className="font-medium text-gray-900 dark:text-white">{scannedData.fullName}</span></div>}
-                          {scannedData.dobAd && <div><span className="block text-gray-500 uppercase tracking-widest text-[10px] font-bold">DOB (AD)</span><span className="font-medium text-gray-900 dark:text-white">{scannedData.dobAd}</span></div>}
-                          {scannedData.gender && <div><span className="block text-gray-500 uppercase tracking-widest text-[10px] font-bold">Gender</span><span className="font-medium text-gray-900 dark:text-white">{scannedData.gender}</span></div>}
+                          <div>
+                            <span className="block text-gray-500 uppercase tracking-widest text-[10px] font-bold mb-1">Document Number</span>
+                            <input 
+                              type="text" 
+                              value={scannedData[`${activeTab.toLowerCase().replace('_', '')}Number`] || ''} 
+                              onChange={(e) => setScannedData({...scannedData, [`${activeTab.toLowerCase().replace('_', '')}Number`]: e.target.value})}
+                              className="w-full bg-white dark:bg-black border border-gray-300 dark:border-slate-700 rounded-none px-2 py-1 text-sm font-medium text-gray-900 dark:text-white focus:outline-none focus:border-[#cc0000] transition-colors"
+                            />
+                          </div>
+                          {scannedData.fullName !== undefined && (
+                            <div>
+                              <span className="block text-gray-500 uppercase tracking-widest text-[10px] font-bold mb-1">Full Name</span>
+                              <input 
+                                type="text" 
+                                value={scannedData.fullName} 
+                                onChange={(e) => setScannedData({...scannedData, fullName: e.target.value})}
+                                className="w-full bg-white dark:bg-black border border-gray-300 dark:border-slate-700 rounded-none px-2 py-1 text-sm font-medium text-gray-900 dark:text-white focus:outline-none focus:border-[#cc0000] transition-colors"
+                              />
+                            </div>
+                          )}
+                          {scannedData.dobAd !== undefined && (
+                            <div>
+                              <span className="block text-gray-500 uppercase tracking-widest text-[10px] font-bold mb-1">DOB (AD)</span>
+                              <input 
+                                type="text" 
+                                value={scannedData.dobAd} 
+                                onChange={(e) => setScannedData({...scannedData, dobAd: e.target.value})}
+                                className="w-full bg-white dark:bg-black border border-gray-300 dark:border-slate-700 rounded-none px-2 py-1 text-sm font-medium text-gray-900 dark:text-white focus:outline-none focus:border-[#cc0000] transition-colors"
+                              />
+                            </div>
+                          )}
+                          {scannedData.gender !== undefined && (
+                            <div>
+                              <span className="block text-gray-500 uppercase tracking-widest text-[10px] font-bold mb-1">Gender</span>
+                              <select 
+                                value={scannedData.gender} 
+                                onChange={(e) => setScannedData({...scannedData, gender: e.target.value})}
+                                className="w-full bg-white dark:bg-black border border-gray-300 dark:border-slate-700 rounded-none px-2 py-1 text-sm font-medium text-gray-900 dark:text-white focus:outline-none focus:border-[#cc0000] transition-colors"
+                              >
+                                <option value="MALE">MALE</option>
+                                <option value="FEMALE">FEMALE</option>
+                                <option value="OTHER">OTHER</option>
+                              </select>
+                            </div>
+                          )}
                         </div>
                         <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-slate-800">
                           <button type="button" onClick={handleCancelScan} className="flex-1 py-2 text-xs font-bold uppercase tracking-wider border border-gray-300 dark:border-slate-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">Discard</button>
