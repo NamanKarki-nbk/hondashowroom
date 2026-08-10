@@ -259,25 +259,68 @@ export default function ProfilePage() {
     setMessage({ type: "", text: "" });
   };
 
-  // OTP Logic
-  const handleVerifyContact = (target: "email" | "phone") => {
+  const handleVerifyContact = async (target: "email" | "phone") => {
     if (!formData[target]) return;
+    
+    // Check if WhatsApp is connected if trying to send to phone
     setOtpTarget(target);
     setPendingContactValue(formData[target]);
     setOtpValue("");
-    setShowOtpModal(true);
+    
+    try {
+      // Show loading state by using an empty message
+      setMessage({ type: "", text: "" });
+      
+      const res = await fetch("/api/auth/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          identifier: formData[target],
+          type: target === "phone" ? "whatsapp" : "email"
+        })
+      });
+      
+      const data = await res.json();
+      if (!res.ok) {
+        setMessage({ type: "error", text: data.error || "Failed to send OTP." });
+        return;
+      }
+      
+      setShowOtpModal(true);
+      setMessage({ type: "success", text: data.message || `OTP sent to ${formData[target]}` });
+    } catch (err) {
+      console.error(err);
+      setMessage({ type: "error", text: "Failed to send OTP. Please try again." });
+    }
   };
 
-  const handleOtpSubmit = () => {
-    if (otpValue === "1234") {
-      setIsOtpVerifying(true);
-      setTimeout(() => {
+  const handleOtpSubmit = async () => {
+    setIsOtpVerifying(true);
+    try {
+      const res = await fetch("/api/profile/verify-contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          identifier: pendingContactValue,
+          code: otpValue
+        })
+      });
+      
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Invalid OTP.");
         setIsOtpVerifying(false);
-        setShowOtpModal(false);
-        setMessage({ type: "success", text: `${otpTarget === 'email' ? 'Email' : 'Phone'} verified successfully! Save profile to finalize.` });
-      }, 1000);
-    } else {
-      alert("Invalid OTP. Try 1234");
+        return;
+      }
+      
+      setInitialState((prev: any) => ({ ...prev, [otpTarget]: pendingContactValue }));
+      setShowOtpModal(false);
+      setMessage({ type: "success", text: `${otpTarget === 'email' ? 'Email' : 'Phone'} verified! Please save your profile.` });
+    } catch (err) {
+      console.error(err);
+      alert("Verification failed. Please try again.");
+    } finally {
+      setIsOtpVerifying(false);
     }
   };
 
@@ -763,14 +806,13 @@ export default function ProfilePage() {
               </div>
               <h2 className="text-xl font-bold text-gray-900 dark:text-white uppercase tracking-wider">Verify Contact</h2>
               <p className="text-sm text-gray-500 mt-2">Enter the OTP sent to <span className="font-bold text-gray-800 dark:text-gray-300">{pendingContactValue}</span></p>
-              <p className="text-xs text-red-500 mt-1 font-bold">(Hint: Use 1234 for demo)</p>
             </div>
             
             <input 
               type="text" 
               value={otpValue}
               onChange={(e) => setOtpValue(e.target.value)}
-              placeholder="Enter 4-digit code"
+              placeholder="Enter 6-digit code"
               className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-300 dark:border-slate-700 text-center text-2xl tracking-[0.5em] font-mono py-4 focus:border-[#cc0000] focus:ring-1 focus:ring-[#cc0000] outline-none text-gray-900 dark:text-white mb-6"
             />
 
@@ -785,7 +827,7 @@ export default function ProfilePage() {
               <button 
                 type="button" 
                 onClick={handleOtpSubmit}
-                disabled={isOtpVerifying || otpValue.length !== 4}
+                disabled={isOtpVerifying || otpValue.length !== 6}
                 className="flex-1 py-3 text-sm font-bold uppercase tracking-wider bg-[#cc0000] hover:bg-red-700 text-white disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isOtpVerifying ? <Loader2 className="w-4 h-4 animate-spin" /> : "Verify"}
