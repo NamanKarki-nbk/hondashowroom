@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Camera, Loader2, Save, FileText, CheckCircle2, AlertCircle } from "lucide-react";
+import { Camera, Loader2, Save, FileText, CheckCircle2, AlertCircle, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
