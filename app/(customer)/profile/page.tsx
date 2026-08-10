@@ -75,8 +75,8 @@ export default function ProfilePage() {
         if (data.user) {
           const fetchedData = {
             fullName: data.user.fullName || "",
-            email: data.user.email || "",
-            phone: data.user.phone || "",
+            email: data.user.email?.startsWith("placeholder-") ? "" : (data.user.email || ""),
+            phone: data.user.phone?.startsWith("placeholder-") ? "" : (data.user.phone || ""),
             bio: data.user.bio || "",
             address: data.user.address || "",
             avatarUrl: data.user.avatarUrl || "",
@@ -114,6 +114,13 @@ export default function ProfilePage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    if (name === "phone") {
+      const digitsOnly = value.replace(/\D/g, "");
+      if (digitsOnly.length <= 10) {
+        setFormData(prev => ({ ...prev, [name]: digitsOnly }));
+      }
+      return;
+    }
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
