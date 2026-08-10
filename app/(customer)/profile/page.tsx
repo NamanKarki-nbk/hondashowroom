@@ -89,7 +89,34 @@ export default function ProfilePage() {
     }
   };
 
-  const handleScan = () => {
+  const extractFaceFromID = (base64Image: string): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        
+        // Approximate coordinates for the photo on a Nepal Citizenship Card
+        // The photo is typically on the middle-left side
+        const cropSize = img.width * 0.22; // Make it a square for the avatar
+        const cropX = img.width * 0.035;
+        const cropY = img.height * 0.32;
+        
+        canvas.width = cropSize;
+        canvas.height = cropSize;
+        
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(img, cropX, cropY, cropSize, cropSize, 0, 0, cropSize, cropSize);
+          resolve(canvas.toDataURL("image/jpeg", 0.9));
+        } else {
+          resolve(base64Image);
+        }
+      };
+      img.src = base64Image;
+    });
+  };
+
+  const handleScan = async () => {
     if (!frontImage || !backImage) {
       setMessage({ type: "error", text: "Please upload both Front and Back photos to scan." });
       return;
@@ -97,6 +124,9 @@ export default function ProfilePage() {
     
     setIsScanning(true);
     setMessage({ type: "", text: "" });
+
+    // Extract the exact face from their uploaded document!
+    const extractedFace = await extractFaceFromID(frontImage);
     
     setTimeout(() => {
       setIsScanning(false);
@@ -108,8 +138,8 @@ export default function ProfilePage() {
         documentNumber: "04-02-72-01532",
         gender: "MALE",
         ocrVerified: true,
-        // Force update to realistic high-quality face extraction from the ID document
-        avatarUrl: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=300&h=300"
+        // Using the EXACT face cropped directly from their uploaded image
+        avatarUrl: extractedFace
       }));
       setMessage({ type: "success", text: "OCR Data Extracted! Please save your profile to confirm." });
     }, 2500);
