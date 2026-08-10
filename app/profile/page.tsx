@@ -92,10 +92,13 @@ export default function ProfilePage() {
     }, 2500);
   };
 
-  const handleFileChange = (type: "front" | "back") => {
-    // Simulated file upload picking a generic placeholder for demo
-    if (type === "front") setFrontImage("https://placehold.co/400x250/e2e8f0/64748b?text=Front+Side");
-    else setBackImage("https://placehold.co/400x250/e2e8f0/64748b?text=Back+Side");
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "front" | "back") => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      if (type === "front") setFrontImage(url);
+      else setBackImage(url);
+    }
   };
 
   const handleAvatarChange = () => {
@@ -179,10 +182,8 @@ export default function ProfilePage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-bold text-gray-800 mb-2">Front</label>
-                <div 
-                  onClick={() => handleFileChange("front")}
-                  className="border-2 border-dashed border-gray-300 rounded-xl overflow-hidden cursor-pointer hover:bg-gray-50 transition-colors aspect-[1.6/1] flex flex-col items-center justify-center text-gray-500 bg-white"
-                >
+                <label className="border-2 border-dashed border-gray-300 rounded-xl overflow-hidden cursor-pointer hover:bg-gray-50 transition-colors aspect-[1.6/1] flex flex-col items-center justify-center text-gray-500 bg-white block w-full relative">
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, "front")} />
                   {frontImage ? (
                     <img src={frontImage} alt="Front" className="w-full h-full object-cover" />
                   ) : (
@@ -191,15 +192,13 @@ export default function ProfilePage() {
                       <span className="text-sm font-medium">Click to Scan</span>
                     </>
                   )}
-                </div>
+                </label>
               </div>
               
               <div>
                 <label className="block text-sm font-bold text-gray-800 mb-2">Back</label>
-                <div 
-                  onClick={() => handleFileChange("back")}
-                  className="border-2 border-dashed border-gray-300 rounded-xl overflow-hidden cursor-pointer hover:bg-gray-50 transition-colors aspect-[1.6/1] flex flex-col items-center justify-center text-gray-500 bg-white"
-                >
+                <label className="border-2 border-dashed border-gray-300 rounded-xl overflow-hidden cursor-pointer hover:bg-gray-50 transition-colors aspect-[1.6/1] flex flex-col items-center justify-center text-gray-500 bg-white block w-full relative">
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, "back")} />
                   {backImage ? (
                     <img src={backImage} alt="Back" className="w-full h-full object-cover" />
                   ) : (
@@ -208,7 +207,7 @@ export default function ProfilePage() {
                       <span className="text-sm font-medium">Click to Scan</span>
                     </>
                   )}
-                </div>
+                </label>
               </div>
             </div>
 
