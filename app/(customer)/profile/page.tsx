@@ -108,7 +108,8 @@ export default function ProfilePage() {
         documentNumber: "04-02-72-01532",
         gender: "MALE",
         ocrVerified: true,
-        avatarUrl: prev.avatarUrl || "https://api.dicebear.com/9.x/avataaars/svg?seed=Success&gender=male"
+        // Simulating high-quality face extraction from the ID document
+        avatarUrl: prev.avatarUrl || "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=300&h=300"
       }));
       setMessage({ type: "success", text: "OCR Data Extracted! Please save your profile to confirm." });
     }, 2500);
