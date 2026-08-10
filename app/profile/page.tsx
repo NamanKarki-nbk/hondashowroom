@@ -32,8 +32,6 @@ export default function ProfilePage() {
     fetchProfile();
   }, []);
 
-  if (!mounted) return null;
-
   const fetchProfile = async () => {
     try {
       const res = await fetch("/api/profile");
@@ -138,6 +136,8 @@ export default function ProfilePage() {
       setSaving(false);
     }
   };
+
+  if (!mounted) return null;
 
   if (loading) {
     return (
