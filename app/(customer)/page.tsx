@@ -2,13 +2,14 @@ import React from "react";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Phone, Search, Menu, ChevronDown } from "lucide-react";
 import Logo from "@/components/Logo";
-import EmiCalculator from "@/components/EmiCalculator";
-import HeroSlider from "@/components/HeroSlider";
-import CategoryCarousel from "@/components/CategoryCarousel";
-import AccessoriesSection from "@/components/AccessoriesSection";
-import HondaBlogSection from "@/components/HondaBlogSection";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import dynamic from "next/dynamic";
 import { prisma } from "@/lib/prisma";
+
+const EmiCalculator = dynamic(() => import("@/components/EmiCalculator"), { ssr: false });
+const HeroSlider = dynamic(() => import("@/components/HeroSlider"), { ssr: false });
+const CategoryCarousel = dynamic(() => import("@/components/CategoryCarousel"), { ssr: false });
+const AccessoriesSection = dynamic(() => import("@/components/AccessoriesSection"), { ssr: false });
+const HondaBlogSection = dynamic(() => import("@/components/HondaBlogSection"), { ssr: false });
 
 export default async function CustomerLandingPage() {
   const products = await prisma.productCatalog.findMany();
