@@ -7,14 +7,15 @@ export function ThemeProvider({
   children,
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return <>{children}</>;
+  // Suppress React 19 strict warning for next-themes script tag injection
+  if (typeof window !== "undefined") {
+    const originalConsoleError = console.error;
+    console.error = (...args: any[]) => {
+      if (typeof args[0] === "string" && args[0].includes("Encountered a script tag while rendering React component")) {
+        return;
+      }
+      originalConsoleError(...args);
+    };
   }
 
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
