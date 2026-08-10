@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifySessionToken } from "@/lib/auth";
+import { verifySessionToken } from "@/lib/session";
 
 export async function GET(req: NextRequest) {
   try {

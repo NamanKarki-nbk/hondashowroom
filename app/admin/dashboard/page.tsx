@@ -18,7 +18,7 @@ const COLOR_MATRIX = [
 
 export default function AdminDashboard() {
   return (
-    <div className="min-h-screen bg-[#f3ebdd] dark:bg-[#0B0B0C] text-gray-100 p-8 selection:bg-[#c1291A] selection:text-[#f3ebdd]">
+    <div className="bg-[#f3ebdd] dark:bg-[#0B0B0C] text-gray-100 p-8 selection:bg-[#c1291A] selection:text-[#f3ebdd] h-full">
       <div className="max-w-7xl mx-auto space-y-8">
         
         <header className="flex justify-between items-end mb-10">

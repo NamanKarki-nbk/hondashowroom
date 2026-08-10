@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyOtpHash, signSessionToken } from "@/lib/auth";
-
+import { verifyOtpHash } from "@/lib/auth";
+import { signSessionToken } from "@/lib/session";
 export async function POST(req: NextRequest) {
   try {
     const { identifier, code } = await req.json();
