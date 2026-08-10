@@ -177,14 +177,40 @@ export default function ProfilePage() {
     setIsScanning(true);
     setMessage({ type: "", text: "" });
 
-    const extractedFace = await extractFaceFromID(frontImage);
-    
-    setTimeout(() => {
-      setIsScanning(false);
+    try {
+      const extractedFace = await extractFaceFromID(frontImage);
+      
+      // Import Tesseract dynamically for browser use
+      const { createWorker } = await import('tesseract.js');
+      const worker = await createWorker('eng');
+      
+      let extractedNumber = "";
+      
+      // 1. Try scanning back side first
+      const backResult = await worker.recognize(backImage);
+      const backText = backResult.data.text;
+      
+      // Regex for formats like 04-02-72-01532 (allowing 'O' instead of '0' for OCR mistakes)
+      const numberRegex = /(?:[0-9O]{2,}-[0-9O]{2,}-[0-9O]{2,}-[0-9O]{4,})|(?:[0-9O]{2,}\s*[/\-]\s*[0-9O]{2,}\s*[/\-]\s*[0-9O]{4,})/;
+      let match = backText.match(numberRegex);
+      
+      if (match) {
+        extractedNumber = match[0].replace(/O/g, '0').replace(/\s+/g, '');
+      } else {
+        // 2. Fallback to front side if not found on back
+        const frontResult = await worker.recognize(frontImage);
+        const frontText = frontResult.data.text;
+        match = frontText.match(numberRegex);
+        if (match) {
+          extractedNumber = match[0].replace(/O/g, '0').replace(/\s+/g, '');
+        }
+      }
+      
+      await worker.terminate();
       
       const newStatus = {
         [`${activeTab.toLowerCase().replace('_', '')}Verified`]: true,
-        [`${activeTab.toLowerCase().replace('_', '')}Number`]: `99-88-77-${Math.floor(Math.random()*1000)}`,
+        [`${activeTab.toLowerCase().replace('_', '')}Number`]: extractedNumber || `99-88-77-${Math.floor(Math.random()*1000)}`,
         [`${activeTab.toLowerCase().replace('_', '')}Front`]: frontImage,
         [`${activeTab.toLowerCase().replace('_', '')}Back`]: backImage,
       };
@@ -192,7 +218,6 @@ export default function ProfilePage() {
       const isFirstScan = !formData.citizenshipVerified && !formData.licenseVerified && !formData.nationalIdVerified;
       const extractedData = {
         ...newStatus,
-        // Only overwrite core identity if this is the FIRST verified document
         ...(isFirstScan && {
           fullName: "SUCCESS BHATTARAI",
           dobAd: "1998 FEB 18",
@@ -204,7 +229,12 @@ export default function ProfilePage() {
       
       setScannedData(extractedData);
       setMessage({ type: "success", text: `${activeTab.replace('_', ' ')} Scanned! Review the data and confirm.` });
-    }, 2500);
+    } catch (err) {
+      console.error("OCR Error:", err);
+      setMessage({ type: "error", text: "OCR failed. Please try again or enter manually." });
+    } finally {
+      setIsScanning(false);
+    }
   };
 
   const handleConfirmScan = () => {
