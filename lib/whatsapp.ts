@@ -69,8 +69,19 @@ export function isWhatsAppConnected() {
 }
 
 export async function sendWhatsAppMessage(toPhone: string, text: string) {
+  if (!global._waSock) {
+    await initWhatsApp();
+  }
+
+  // Wait up to 10 seconds for the connection to establish (useful for cold starts in dev mode)
+  let retries = 100;
+  while (!global._waIsConnected && retries > 0) {
+    await new Promise(r => setTimeout(r, 100));
+    retries--;
+  }
+
   if (!global._waSock || !global._waIsConnected) {
-    throw new Error("WhatsApp is not connected");
+    throw new Error("WhatsApp is not connected or took too long to initialize.");
   }
 
   // Format phone number for Baileys (e.g. 97798xxxxxxx@s.whatsapp.net)
