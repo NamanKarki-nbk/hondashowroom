@@ -23,11 +23,22 @@ export async function GET(req: NextRequest) {
         gender: true,
         dobAd: true,
         dobBs: true,
-        documentType: true,
-        documentNumber: true,
-        docFrontImageUrl: true,
-        docBackImageUrl: true,
-        ocrVerified: true,
+        
+        citizenshipVerified: true,
+        citizenshipNumber: true,
+        citizenshipFront: true,
+        citizenshipBack: true,
+        
+        licenseVerified: true,
+        licenseNumber: true,
+        licenseFront: true,
+        licenseBack: true,
+        
+        nationalIdVerified: true,
+        nationalIdNumber: true,
+        nationalIdFront: true,
+        nationalIdBack: true,
+        
         createdAt: true
       }
     });
@@ -53,8 +64,10 @@ export async function PATCH(req: NextRequest) {
     // Whitelist allowed update fields
     const allowedUpdates = [
       "fullName", "email", "phone", "bio", "avatarUrl", "address", 
-      "gender", "dobAd", "dobBs", "documentType", "documentNumber",
-      "docFrontImageUrl", "docBackImageUrl", "ocrVerified"
+      "gender", "dobAd", "dobBs",
+      "citizenshipVerified", "citizenshipNumber", "citizenshipFront", "citizenshipBack",
+      "licenseVerified", "licenseNumber", "licenseFront", "licenseBack",
+      "nationalIdVerified", "nationalIdNumber", "nationalIdFront", "nationalIdBack"
     ];
     const dataToUpdate: Record<string, any> = {};
     
@@ -82,11 +95,18 @@ export async function PATCH(req: NextRequest) {
         gender: true,
         dobAd: true,
         dobBs: true,
-        documentType: true,
-        documentNumber: true,
-        docFrontImageUrl: true,
-        docBackImageUrl: true,
-        ocrVerified: true,
+        citizenshipVerified: true,
+        citizenshipNumber: true,
+        citizenshipFront: true,
+        citizenshipBack: true,
+        licenseVerified: true,
+        licenseNumber: true,
+        licenseFront: true,
+        licenseBack: true,
+        nationalIdVerified: true,
+        nationalIdNumber: true,
+        nationalIdFront: true,
+        nationalIdBack: true,
       }
     });
 

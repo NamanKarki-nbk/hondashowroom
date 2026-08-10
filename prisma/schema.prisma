@@ -53,12 +53,23 @@ model User {
   dobAd            String?
   dobBs            String?
   
-  // Documents
-  documentType     DocumentType?
-  documentNumber   String?
-  docFrontImageUrl String?
-  docBackImageUrl  String?
-  ocrVerified      Boolean  @default(false)
+  // Documents (Multi-KYC)
+  citizenshipVerified Boolean @default(false)
+  citizenshipNumber   String?
+  citizenshipFront    String?
+  citizenshipBack     String?
+  
+  licenseVerified     Boolean @default(false)
+  licenseNumber       String?
+  licenseFront        String?
+  licenseBack         String?
+  
+  nationalIdVerified  Boolean @default(false)
+  nationalIdNumber    String?
+  nationalIdFront     String?
+  nationalIdBack      String?
+  
+  ocrVerified         Boolean  @default(false) // Legacy flag, keep for backwards compatibility if needed
   
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt

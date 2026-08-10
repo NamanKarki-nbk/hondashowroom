@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { User, Mail, Phone, MapPin, FileText, Camera, Loader2, Save, CheckCircle2, AlertCircle, ShieldCheck, ChevronRight, Home, Upload, Image as ImageIcon } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { User, Mail, Phone, MapPin, FileText, Camera, Loader2, Save, CheckCircle2, AlertCircle, ShieldCheck, ChevronRight, Home, Upload, Image as ImageIcon, Lock, Smartphone } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -11,13 +11,25 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
   
-  // Document States
-  const [documentType, setDocumentType] = useState("CITIZENSHIP");
+  // KYC Tab State
+  const [activeTab, setActiveTab] = useState<"CITIZENSHIP" | "LICENSE" | "NATIONAL_ID">("CITIZENSHIP");
+  
+  // Active KYC Upload States
   const [frontImage, setFrontImage] = useState<string | null>(null);
   const [backImage, setBackImage] = useState<string | null>(null);
   const [isScanning, setIsScanning] = useState(false);
+  
+  // Viewing Modal
   const [viewingImage, setViewingImage] = useState<{url: string, title: string} | null>(null);
   
+  // OTP Simulation State
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otpTarget, setOtpTarget] = useState<"email" | "phone" | null>(null);
+  const [otpValue, setOtpValue] = useState("");
+  const [pendingContactValue, setPendingContactValue] = useState("");
+  const [isOtpVerifying, setIsOtpVerifying] = useState(false);
+
+  // Form Data
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -27,12 +39,27 @@ export default function ProfilePage() {
     avatarUrl: "",
     dobAd: "",
     dobBs: "",
-    documentNumber: "",
     gender: "MALE",
-    ocrVerified: false
+    
+    citizenshipVerified: false,
+    citizenshipNumber: "",
+    citizenshipFront: "",
+    citizenshipBack: "",
+    
+    licenseVerified: false,
+    licenseNumber: "",
+    licenseFront: "",
+    licenseBack: "",
+    
+    nationalIdVerified: false,
+    nationalIdNumber: "",
+    nationalIdFront: "",
+    nationalIdBack: "",
   });
   
+  const [initialState, setInitialState] = useState<any>({});
   const [mounted, setMounted] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -45,7 +72,7 @@ export default function ProfilePage() {
       if (res.ok) {
         const data = await res.json();
         if (data.user) {
-          setFormData({
+          const fetchedData = {
             fullName: data.user.fullName || "",
             email: data.user.email || "",
             phone: data.user.phone || "",
@@ -54,13 +81,25 @@ export default function ProfilePage() {
             avatarUrl: data.user.avatarUrl || "",
             dobAd: data.user.dobAd || "",
             dobBs: data.user.dobBs || "",
-            documentNumber: data.user.documentNumber || "",
             gender: data.user.gender || "MALE",
-            ocrVerified: data.user.ocrVerified || false
-          });
-          if (data.user.documentType) setDocumentType(data.user.documentType);
-          if (data.user.docFrontImageUrl) setFrontImage(data.user.docFrontImageUrl);
-          if (data.user.docBackImageUrl) setBackImage(data.user.docBackImageUrl);
+            
+            citizenshipVerified: data.user.citizenshipVerified || false,
+            citizenshipNumber: data.user.citizenshipNumber || "",
+            citizenshipFront: data.user.citizenshipFront || "",
+            citizenshipBack: data.user.citizenshipBack || "",
+            
+            licenseVerified: data.user.licenseVerified || false,
+            licenseNumber: data.user.licenseNumber || "",
+            licenseFront: data.user.licenseFront || "",
+            licenseBack: data.user.licenseBack || "",
+            
+            nationalIdVerified: data.user.nationalIdVerified || false,
+            nationalIdNumber: data.user.nationalIdNumber || "",
+            nationalIdFront: data.user.nationalIdFront || "",
+            nationalIdBack: data.user.nationalIdBack || "",
+          };
+          setFormData(fetchedData);
+          setInitialState(fetchedData);
         }
       } else {
         setMessage({ type: "error", text: "Failed to load profile data." });
@@ -75,6 +114,22 @@ export default function ProfilePage() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  // Avatar Upload Logic
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleAvatarFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, avatarUrl: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "front" | "back") => {
@@ -95,16 +150,11 @@ export default function ProfilePage() {
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement("canvas");
-        
-        // Approximate coordinates for the photo on a Nepal Citizenship Card
-        // The photo is typically on the middle-left side
-        const cropSize = img.width * 0.22; // Make it a square for the avatar
+        const cropSize = img.width * 0.22;
         const cropX = img.width * 0.035;
         const cropY = img.height * 0.32;
-        
         canvas.width = cropSize;
         canvas.height = cropSize;
-        
         const ctx = canvas.getContext("2d");
         if (ctx) {
           ctx.drawImage(img, cropX, cropY, cropSize, cropSize, 0, 0, cropSize, cropSize);
@@ -126,30 +176,59 @@ export default function ProfilePage() {
     setIsScanning(true);
     setMessage({ type: "", text: "" });
 
-    // Extract the exact face from their uploaded document!
     const extractedFace = await extractFaceFromID(frontImage);
     
     setTimeout(() => {
       setIsScanning(false);
-      setFormData(prev => ({
-        ...prev,
-        fullName: "SUCCESS BHATTARAI",
-        dobAd: "1998 FEB 18",
-        dobBs: "२०५४/११/०६",
-        documentNumber: "04-02-72-01532",
-        gender: "MALE",
-        ocrVerified: true,
-        // Using the EXACT face cropped directly from their uploaded image
-        avatarUrl: extractedFace
-      }));
-      setMessage({ type: "success", text: "OCR Data Extracted! Please save your profile to confirm." });
+      
+      const newStatus = {
+        [`${activeTab.toLowerCase().replace('_', '')}Verified`]: true,
+        [`${activeTab.toLowerCase().replace('_', '')}Number`]: `99-88-77-${Math.floor(Math.random()*1000)}`,
+        [`${activeTab.toLowerCase().replace('_', '')}Front`]: frontImage,
+        [`${activeTab.toLowerCase().replace('_', '')}Back`]: backImage,
+      };
+
+      setFormData(prev => {
+        const isFirstScan = !prev.citizenshipVerified && !prev.licenseVerified && !prev.nationalIdVerified;
+        return {
+          ...prev,
+          ...newStatus,
+          // Only overwrite core identity if this is the FIRST verified document
+          ...(isFirstScan && {
+            fullName: "SUCCESS BHATTARAI",
+            dobAd: "1998 FEB 18",
+            dobBs: "२०५४/११/०६",
+            gender: "MALE",
+            avatarUrl: extractedFace
+          })
+        };
+      });
+      
+      setFrontImage(null);
+      setBackImage(null);
+      setMessage({ type: "success", text: `${activeTab.replace('_', ' ')} Data Extracted! Please save your profile to confirm.` });
     }, 2500);
   };
 
-  const handleAvatarChange = () => {
-    const customUrl = prompt("Enter Image URL for Custom Avatar:");
-    if (customUrl) {
-      setFormData(prev => ({ ...prev, avatarUrl: customUrl }));
+  // OTP Logic
+  const handleVerifyContact = (target: "email" | "phone") => {
+    if (!formData[target]) return;
+    setOtpTarget(target);
+    setPendingContactValue(formData[target]);
+    setOtpValue("");
+    setShowOtpModal(true);
+  };
+
+  const handleOtpSubmit = () => {
+    if (otpValue === "1234") {
+      setIsOtpVerifying(true);
+      setTimeout(() => {
+        setIsOtpVerifying(false);
+        setShowOtpModal(false);
+        setMessage({ type: "success", text: `${otpTarget === 'email' ? 'Email' : 'Phone'} verified successfully! Save profile to finalize.` });
+      }, 1000);
+    } else {
+      alert("Invalid OTP. Try 1234");
     }
   };
 
@@ -162,18 +241,14 @@ export default function ProfilePage() {
       const res = await fetch("/api/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          documentType,
-          docFrontImageUrl: frontImage,
-          docBackImageUrl: backImage
-        })
+        body: JSON.stringify(formData)
       });
 
       const data = await res.json();
 
       if (res.ok) {
         setMessage({ type: "success", text: "Profile updated successfully!" });
+        setInitialState(formData);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setMessage({ type: "error", text: data.error || "Failed to update profile." });
@@ -197,6 +272,22 @@ export default function ProfilePage() {
     );
   }
 
+  // Determine which identifier is the "Primary" locked one based on initial state
+  const isPhonePrimary = !!initialState.phone && !initialState.email;
+  const isEmailPrimary = !!initialState.email && !initialState.phone;
+  // If both existed initially, lock both or let's just lock phone.
+  const lockPhone = isPhonePrimary || (!!initialState.phone && !!initialState.email);
+  const lockEmail = isEmailPrimary;
+
+  // Active KYC State helper
+  const prefix = activeTab.toLowerCase().replace('_', '');
+  const isCurrentTabVerified = (formData as any)[`${prefix}Verified`];
+  const currentTabFront = (formData as any)[`${prefix}Front`];
+  const currentTabBack = (formData as any)[`${prefix}Back`];
+  const currentTabNumber = (formData as any)[`${prefix}Number`];
+  
+  const hasAnyVerification = formData.citizenshipVerified || formData.licenseVerified || formData.nationalIdVerified;
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0B0B0C] font-sans pt-[80px] lg:pt-[100px] pb-16">
       
@@ -215,11 +306,11 @@ export default function ProfilePage() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight uppercase">My Profile</h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm md:text-base">Manage your personal information and identity verification.</p>
+            <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm md:text-base">Manage your personal information and multi-document verification.</p>
           </div>
-          {formData.ocrVerified && (
+          {hasAnyVerification && (
             <div className="flex items-center gap-2 text-green-700 dark:text-green-400 font-bold bg-green-50 dark:bg-green-500/10 px-5 py-2.5 rounded-none border border-green-200 dark:border-green-900 shadow-sm">
-              <ShieldCheck className="w-5 h-5" /> KYC Verified
+              <ShieldCheck className="w-5 h-5" /> Identity Verified
             </div>
           )}
         </div>
@@ -234,302 +325,321 @@ export default function ProfilePage() {
         <form onSubmit={handleSubmit} className="space-y-10">
           
           {/* SECTION 1: Personal Information */}
-          <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none p-6 md:p-10 shadow-sm">
+          <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none p-6 md:p-10 shadow-sm relative">
+            
+            {hasAnyVerification && (
+              <div className="absolute top-6 right-6 md:top-10 md:right-10 flex items-center gap-1.5 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-slate-800 px-3 py-1.5 rounded-full">
+                <Lock className="w-3 h-3" /> Core Identity Locked
+              </div>
+            )}
+
             <div className="border-l-4 border-[#cc0000] pl-4 mb-8">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white uppercase tracking-tight">Personal Details</h2>
             </div>
             
             <div className="flex flex-col sm:flex-row items-center gap-8 mb-10 pb-10 border-b border-gray-100 dark:border-slate-800">
-              <div className="relative group shrink-0">
+              <div className="relative group shrink-0 cursor-pointer" onClick={handleAvatarClick}>
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleAvatarFileChange} 
+                  accept="image/*" 
+                  className="hidden" 
+                />
                 {formData.avatarUrl ? (
-                  <img src={formData.avatarUrl} alt="Avatar" className="w-32 h-32 rounded-full object-cover border-4 border-gray-50 dark:border-slate-900 shadow-md" />
+                  <img src={formData.avatarUrl} alt="Avatar" className="w-32 h-32 rounded-full object-cover border-4 border-gray-50 dark:border-slate-900 shadow-md group-hover:opacity-75 transition-opacity" />
                 ) : (
-                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#cc0000] to-red-600 flex items-center justify-center text-white text-4xl font-bold shadow-md">
+                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#cc0000] to-red-600 flex items-center justify-center text-white text-4xl font-bold shadow-md group-hover:opacity-75 transition-opacity">
                     {formData.fullName ? formData.fullName.charAt(0).toUpperCase() : (formData.email ? formData.email.charAt(0).toUpperCase() : "U")}
                   </div>
                 )}
-                <button type="button" onClick={handleAvatarChange} className="absolute bottom-0 right-0 bg-gray-900 text-white p-2.5 rounded-full hover:bg-[#cc0000] transition-colors border-2 border-white dark:border-[#111111] shadow-lg">
+                <div className="absolute bottom-0 right-0 bg-gray-900 text-white p-2.5 rounded-full hover:bg-[#cc0000] transition-colors border-2 border-white dark:border-[#111111] shadow-lg">
                   <Camera className="w-5 h-5" />
-                </button>
+                </div>
               </div>
               
               <div className="text-center sm:text-left flex-1 w-full">
                 <h2 className="text-2xl font-black text-gray-900 dark:text-white uppercase">{formData.fullName || "Your Name"}</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-5">Click the camera icon to set a custom profile picture URL.</p>
-                
-                <div className="max-w-md">
-                   <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest block mb-2">Avatar URL</label>
-                   <input 
-                     type="url" 
-                     name="avatarUrl" 
-                     value={formData.avatarUrl} 
-                     onChange={handleInputChange} 
-                     placeholder="https://example.com/avatar.jpg" 
-                     className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] focus:ring-1 focus:ring-[#cc0000] outline-none text-gray-900 dark:text-white transition-all"
-                   />
-                </div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-5">Click your avatar to upload a new profile picture from your gallery.</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-              <div className="space-y-2">
+              
+              {/* Full Name (Locked if verified) */}
+              <div className="space-y-2 relative">
                 <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest flex items-center gap-2">
                   <User className="w-3.5 h-3.5" /> Full Name
                 </label>
-                <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange} className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] focus:ring-1 focus:ring-[#cc0000] outline-none text-gray-900 dark:text-white transition-all" placeholder="John Doe" />
-              </div>
-              
-              <div className="space-y-2">
-                <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                  <Mail className="w-3.5 h-3.5" /> Email Address
-                </label>
-                <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] focus:ring-1 focus:ring-[#cc0000] outline-none text-gray-900 dark:text-white transition-all" placeholder="you@example.com" />
+                <input 
+                  type="text" 
+                  name="fullName" 
+                  value={formData.fullName} 
+                  onChange={handleInputChange} 
+                  disabled={hasAnyVerification}
+                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
+                  placeholder="John Doe" 
+                />
               </div>
 
-              <div className="space-y-2">
+              {/* Gender (Locked if verified) */}
+              <div className="space-y-2 relative">
                 <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                  <Phone className="w-3.5 h-3.5" /> Phone Number
+                  Gender
                 </label>
-                <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] focus:ring-1 focus:ring-[#cc0000] outline-none text-gray-900 dark:text-white transition-all" placeholder="+977 98XXXXXXXX" />
+                <select 
+                  name="gender" 
+                  value={formData.gender} 
+                  onChange={handleInputChange} 
+                  disabled={hasAnyVerification}
+                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3.5 text-sm focus:border-[#cc0000] outline-none transition-colors dark:text-white font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                  <option value="OTHER">Other</option>
+                </select>
+              </div>
+
+              {/* DOB (Locked if verified) */}
+              <div className="space-y-2 relative">
+                <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                  Date of Birth (AD)
+                </label>
+                <input 
+                  type="text" 
+                  name="dobAd" 
+                  value={formData.dobAd} 
+                  onChange={handleInputChange} 
+                  disabled={hasAnyVerification}
+                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
+                  placeholder="YYYY MMM DD" 
+                />
+              </div>
+
+              {/* Email (OTP Editable if Phone is Primary) */}
+              <div className="space-y-2">
+                <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest flex items-center justify-between">
+                  <div className="flex items-center gap-2"><Mail className="w-3.5 h-3.5" /> Email Address</div>
+                  {lockEmail && <span className="text-gray-400 flex items-center gap-1"><Lock className="w-3 h-3" /> Primary</span>}
+                </label>
+                <div className="flex gap-2">
+                  <input 
+                    type="email" 
+                    name="email" 
+                    value={formData.email} 
+                    onChange={handleInputChange} 
+                    disabled={lockEmail}
+                    className="flex-1 bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
+                    placeholder="you@example.com" 
+                  />
+                  {!lockEmail && formData.email !== initialState.email && (
+                    <button 
+                      type="button"
+                      onClick={() => handleVerifyContact('email')}
+                      className="bg-gray-900 text-white px-4 text-xs font-bold uppercase tracking-wider hover:bg-black transition-colors"
+                    >
+                      Verify
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Phone (OTP Editable if Email is Primary) */}
+              <div className="space-y-2">
+                <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest flex items-center justify-between">
+                  <div className="flex items-center gap-2"><Phone className="w-3.5 h-3.5" /> Phone Number</div>
+                  {lockPhone && <span className="text-gray-400 flex items-center gap-1"><Lock className="w-3 h-3" /> Primary</span>}
+                </label>
+                <div className="flex gap-2">
+                  <input 
+                    type="tel" 
+                    name="phone" 
+                    value={formData.phone} 
+                    onChange={handleInputChange} 
+                    disabled={lockPhone}
+                    className="flex-1 bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
+                    placeholder="+977 98XXXXXXXX" 
+                  />
+                  {!lockPhone && formData.phone !== initialState.phone && (
+                    <button 
+                      type="button"
+                      onClick={() => handleVerifyContact('phone')}
+                      className="bg-gray-900 text-white px-4 text-xs font-bold uppercase tracking-wider hover:bg-black transition-colors"
+                    >
+                      Verify
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-2">
                 <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest flex items-center gap-2">
                   <MapPin className="w-3.5 h-3.5" /> Full Address
                 </label>
-                <input type="text" name="address" value={formData.address} onChange={handleInputChange} className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] focus:ring-1 focus:ring-[#cc0000] outline-none text-gray-900 dark:text-white transition-all" placeholder="Kathmandu, Nepal" />
+                <input 
+                  type="text" 
+                  name="address" 
+                  value={formData.address} 
+                  onChange={handleInputChange} 
+                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] outline-none text-gray-900 dark:text-white transition-all" 
+                  placeholder="Kathmandu, Nepal" 
+                />
               </div>
 
               <div className="space-y-2 md:col-span-2">
                 <label className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest flex items-center gap-2">
                   <FileText className="w-3.5 h-3.5" /> Bio / Notes
                 </label>
-                <textarea name="bio" value={formData.bio} onChange={handleInputChange} rows={3} className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] focus:ring-1 focus:ring-[#cc0000] outline-none text-gray-900 dark:text-white transition-all resize-none" placeholder="Tell us a little about your riding experience..."></textarea>
+                <textarea 
+                  name="bio" 
+                  value={formData.bio} 
+                  onChange={handleInputChange} 
+                  rows={3} 
+                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] outline-none text-gray-900 dark:text-white transition-all resize-none" 
+                  placeholder="Tell us a little about your riding experience..."
+                ></textarea>
               </div>
             </div>
           </div>
 
-          {/* SECTION 2: Identity Verification (OCR) */}
-          <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none p-6 md:p-10 shadow-sm relative overflow-hidden">
-            <div className="border-l-4 border-[#cc0000] pl-4 mb-8 flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white uppercase tracking-tight">Identity Document</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">OCR Verification for secure booking and test rides.</p>
+          {/* SECTION 2: Multi-Document KYC Verification */}
+          <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none shadow-sm relative overflow-hidden">
+            
+            <div className="p-6 md:p-10 pb-0">
+              <div className="border-l-4 border-[#cc0000] pl-4 mb-6 flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white uppercase tracking-tight">Identity Documents</h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Verify multiple documents to increase your profile trust score.</p>
+                </div>
               </div>
             </div>
 
-            {formData.ocrVerified ? (
-              /* Verified State */
-              <div className="space-y-8 animate-in fade-in zoom-in duration-500">
-                <div className="bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800 rounded-none p-6 flex items-start gap-4">
-                  <ShieldCheck className="w-8 h-8 text-green-600 dark:text-green-500 shrink-0 mt-1" />
-                  <div>
-                    <h3 className="text-lg font-bold text-green-900 dark:text-green-400 uppercase">Document Successfully Verified</h3>
-                    <p className="text-sm text-green-700 dark:text-green-500/80 mt-1 leading-relaxed">
-                      Your identity document has been scanned and verified. You are now eligible for priority test rides and fast-track financing. The data below is locked for security.
-                    </p>
+            {/* KYC Tabs */}
+            <div className="flex border-b border-gray-200 dark:border-slate-800 px-6 md:px-10 gap-8">
+              {[
+                { id: "CITIZENSHIP", label: "Citizenship", icon: FileText, verified: formData.citizenshipVerified },
+                { id: "LICENSE", label: "Driver's License", icon: FileText, verified: formData.licenseVerified },
+                { id: "NATIONAL_ID", label: "National ID", icon: FileText, verified: formData.nationalIdVerified },
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => {
+                    setActiveTab(tab.id as any);
+                    setFrontImage(null);
+                    setBackImage(null);
+                  }}
+                  className={`py-4 px-2 font-bold text-sm uppercase tracking-wider border-b-2 flex items-center gap-2 transition-colors ${activeTab === tab.id ? 'border-[#cc0000] text-[#cc0000]' : 'border-transparent text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}
+                >
+                  {tab.label}
+                  {tab.verified && <ShieldCheck className="w-4 h-4 text-green-500" />}
+                </button>
+              ))}
+            </div>
+
+            <div className="p-6 md:p-10 pt-8 bg-gray-50/50 dark:bg-[#0B0B0C]/50">
+              {isCurrentTabVerified ? (
+                /* Verified State for Active Tab */
+                <div className="space-y-8 animate-in fade-in zoom-in duration-500">
+                  <div className="bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800 rounded-none p-6 flex items-start gap-4">
+                    <ShieldCheck className="w-8 h-8 text-green-600 dark:text-green-500 shrink-0 mt-1" />
+                    <div>
+                      <h3 className="text-lg font-bold text-green-900 dark:text-green-400 uppercase">{activeTab.replace('_', ' ')} Verified</h3>
+                      <p className="text-sm text-green-700 dark:text-green-500/80 mt-1 leading-relaxed">
+                        This document has been successfully scanned and verified.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div className="space-y-4">
+                      <h4 className="text-[11px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-200 dark:border-slate-800 pb-2">Uploaded Document</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div onClick={() => currentTabFront && setViewingImage({url: currentTabFront, title: `Front ${activeTab}`})} className="aspect-[1.6/1] bg-gray-100 dark:bg-black border border-gray-200 dark:border-slate-800 rounded-lg overflow-hidden shadow-sm relative group cursor-pointer">
+                          {currentTabFront ? <img src={currentTabFront} alt="Front" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-gray-400"><ImageIcon className="w-8 h-8" /></div>}
+                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><span className="text-white text-xs font-bold uppercase tracking-wider">View</span></div>
+                        </div>
+                        <div onClick={() => currentTabBack && setViewingImage({url: currentTabBack, title: `Back ${activeTab}`})} className="aspect-[1.6/1] bg-gray-100 dark:bg-black border border-gray-200 dark:border-slate-800 rounded-lg overflow-hidden shadow-sm relative group cursor-pointer">
+                          {currentTabBack ? <img src={currentTabBack} alt="Back" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-gray-400"><ImageIcon className="w-8 h-8" /></div>}
+                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><span className="text-white text-xs font-bold uppercase tracking-wider">View</span></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h4 className="text-[11px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-200 dark:border-slate-800 pb-2">Verified Data</h4>
+                      <div className="grid grid-cols-1 gap-y-6">
+                        <div>
+                          <span className="block text-[10px] uppercase tracking-wider text-gray-400 mb-1">Document Number</span>
+                          <span className="text-sm font-bold text-gray-900 dark:text-white">{currentTabNumber || '-'}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                  {/* Read-Only Images */}
-                  <div className="space-y-4">
-                    <h4 className="text-[11px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-200 dark:border-slate-800 pb-2">Uploaded Document</h4>
+              ) : (
+                /* Unverified / Scanning State for Active Tab */
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                  <div className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
-                       <div 
-                         onClick={() => frontImage && setViewingImage({url: frontImage, title: "Front ID"})}
-                         className="aspect-[1.6/1] bg-gray-100 dark:bg-black border border-gray-200 dark:border-slate-800 rounded-lg overflow-hidden shadow-sm relative group cursor-pointer"
-                       >
+                      <div>
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Front Photo</label>
+                        <label className="border-2 border-dashed border-gray-300 dark:border-slate-700 rounded-none overflow-hidden cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors aspect-[1.6/1] flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 bg-white dark:bg-black block w-full relative group">
+                          <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, "front")} />
                           {frontImage ? (
-                            <img src={frontImage} alt="Front ID" className="w-full h-full object-cover" />
+                            <><img src={frontImage} alt="Front" className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><span className="text-white text-xs font-bold uppercase tracking-wider">Change</span></div></>
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-400"><ImageIcon className="w-8 h-8" /></div>
+                            <><Upload className="w-6 h-6 mb-2 opacity-60 group-hover:-translate-y-1 transition-transform" /><span className="text-xs font-bold uppercase tracking-wider">Browse</span></>
                           )}
-                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span className="text-white text-xs font-bold uppercase tracking-wider">Click to View</span>
-                          </div>
-                       </div>
-                       <div 
-                         onClick={() => backImage && setViewingImage({url: backImage, title: "Back ID"})}
-                         className="aspect-[1.6/1] bg-gray-100 dark:bg-black border border-gray-200 dark:border-slate-800 rounded-lg overflow-hidden shadow-sm relative group cursor-pointer"
-                       >
+                        </label>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Back Photo</label>
+                        <label className="border-2 border-dashed border-gray-300 dark:border-slate-700 rounded-none overflow-hidden cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors aspect-[1.6/1] flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 bg-white dark:bg-black block w-full relative group">
+                          <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, "back")} />
                           {backImage ? (
-                            <img src={backImage} alt="Back ID" className="w-full h-full object-cover" />
+                             <><img src={backImage} alt="Back" className="w-full h-full object-cover" />
+                             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><span className="text-white text-xs font-bold uppercase tracking-wider">Change</span></div></>
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-400"><ImageIcon className="w-8 h-8" /></div>
+                            <><Upload className="w-6 h-6 mb-2 opacity-60 group-hover:-translate-y-1 transition-transform" /><span className="text-xs font-bold uppercase tracking-wider">Browse</span></>
                           )}
-                           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span className="text-white text-xs font-bold uppercase tracking-wider">Click to View</span>
-                          </div>
-                       </div>
+                        </label>
+                      </div>
                     </div>
+
                     <button 
-                      type="button" 
-                      onClick={() => {
-                        if (confirm("Are you sure you want to rescan your document? This will remove your verified status.")) {
-                          setFormData(prev => ({ ...prev, ocrVerified: false }));
-                        }
-                      }}
-                      className="text-sm font-bold text-[#cc0000] hover:underline"
+                      type="button"
+                      onClick={handleScan}
+                      disabled={isScanning || !frontImage || !backImage}
+                      className="w-full bg-gray-900 dark:bg-white text-white dark:text-black font-black uppercase tracking-widest py-4 px-4 rounded-none hover:bg-black hover:text-[#cc0000] dark:hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center justify-center gap-3"
                     >
-                      Update Document
+                      {isScanning ? <><Loader2 className="w-5 h-5 animate-spin" /> Extracting...</> : `Scan ${activeTab.replace('_', ' ')}`}
                     </button>
                   </div>
 
-                  {/* Read-Only Fields */}
-                  <div className="space-y-4">
-                    <h4 className="text-[11px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-200 dark:border-slate-800 pb-2">Verified Data</h4>
-                    <div className="grid grid-cols-2 gap-y-6 gap-x-4">
-                      <div>
-                        <span className="block text-[10px] uppercase tracking-wider text-gray-400 mb-1">Gender</span>
-                        <span className="text-sm font-bold text-gray-900 dark:text-white">{formData.gender === 'MALE' ? 'Male' : formData.gender === 'FEMALE' ? 'Female' : 'Other'}</span>
+                  <div className="bg-gray-50 dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none p-6 relative">
+                    {isScanning && (
+                      <div className="absolute inset-0 z-10 bg-white/60 dark:bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center">
+                        <div className="relative"><div className="absolute inset-0 border-t-2 border-[#cc0000] rounded-full animate-spin"></div><ShieldCheck className="w-12 h-12 text-[#cc0000] opacity-50 animate-pulse" /></div>
+                        <p className="mt-4 text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest animate-pulse">Scanning Document...</p>
                       </div>
-                      <div>
-                        <span className="block text-[10px] uppercase tracking-wider text-gray-400 mb-1">Doc Type</span>
-                        <span className="text-sm font-bold text-gray-900 dark:text-white capitalize">{documentType.toLowerCase().replace('_', ' ')}</span>
-                      </div>
-                      <div>
-                        <span className="block text-[10px] uppercase tracking-wider text-gray-400 mb-1">DOB (AD)</span>
-                        <span className="text-sm font-bold text-gray-900 dark:text-white">{formData.dobAd || '-'}</span>
-                      </div>
-                      <div>
-                        <span className="block text-[10px] uppercase tracking-wider text-gray-400 mb-1">DOB (BS)</span>
-                        <span className="text-sm font-bold text-gray-900 dark:text-white">{formData.dobBs || '-'}</span>
-                      </div>
-                      <div className="col-span-2">
-                        <span className="block text-[10px] uppercase tracking-wider text-gray-400 mb-1">Document Number</span>
-                        <span className="text-sm font-bold text-gray-900 dark:text-white">{formData.documentNumber || '-'}</span>
-                      </div>
+                    )}
+                    <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest mb-6 flex items-center gap-2"><FileText className="w-4 h-4 text-[#cc0000]" /> Extracted Data</h3>
+                    <div className="space-y-5 flex items-center justify-center h-40">
+                       <p className="text-sm text-gray-400 text-center">Data will appear here after scanning.</p>
                     </div>
                   </div>
                 </div>
-              </div>
-            ) : (
-              /* Unverified / Scanning State */
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                
-                {/* Document Uploads */}
-                <div className="space-y-6">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-800 dark:text-gray-300 uppercase tracking-widest mb-2">Select Identity Document</label>
-                    <select 
-                      value={documentType}
-                      onChange={e => setDocumentType(e.target.value)}
-                      className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3.5 text-sm focus:border-[#cc0000] focus:ring-1 focus:ring-[#cc0000] outline-none transition-all dark:text-white font-medium"
-                    >
-                      <option value="CITIZENSHIP">Citizenship (नागरिकता)</option>
-                      <option value="LICENSE">Driver's License (लाइसेन्स)</option>
-                      <option value="NATIONAL_ID">National ID (राष्ट्रिय परिचयपत्र)</option>
-                    </select>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Front Photo</label>
-                      <label className="border-2 border-dashed border-gray-300 dark:border-slate-700 rounded-none overflow-hidden cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors aspect-[1.6/1] flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 bg-white dark:bg-black block w-full relative group">
-                        <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, "front")} />
-                        {frontImage ? (
-                          <>
-                            <img src={frontImage} alt="Front" className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                              <span className="text-white text-xs font-bold uppercase tracking-wider">Change Image</span>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <Upload className="w-6 h-6 mb-2 opacity-60 group-hover:-translate-y-1 transition-transform" />
-                            <span className="text-xs font-bold uppercase tracking-wider">Click to Scan</span>
-                          </>
-                        )}
-                      </label>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Back Photo</label>
-                      <label className="border-2 border-dashed border-gray-300 dark:border-slate-700 rounded-none overflow-hidden cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors aspect-[1.6/1] flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 bg-white dark:bg-black block w-full relative group">
-                        <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, "back")} />
-                        {backImage ? (
-                           <>
-                           <img src={backImage} alt="Back" className="w-full h-full object-cover" />
-                           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                             <span className="text-white text-xs font-bold uppercase tracking-wider">Change Image</span>
-                           </div>
-                         </>
-                        ) : (
-                          <>
-                            <Upload className="w-6 h-6 mb-2 opacity-60 group-hover:-translate-y-1 transition-transform" />
-                            <span className="text-xs font-bold uppercase tracking-wider">Click to Scan</span>
-                          </>
-                        )}
-                      </label>
-                    </div>
-                  </div>
-
-                  <button 
-                    type="button"
-                    onClick={handleScan}
-                    disabled={isScanning || !frontImage || !backImage}
-                    className="w-full bg-gray-900 dark:bg-white text-white dark:text-black font-black uppercase tracking-widest py-4 px-4 rounded-none hover:bg-black hover:text-[#cc0000] dark:hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center justify-center gap-3"
-                  >
-                    {isScanning ? (
-                      <><Loader2 className="w-5 h-5 animate-spin" /> Extracting OCR Data...</>
-                    ) : "Complete OCR Verification"}
-                  </button>
-                </div>
-
-                {/* Extracted Data Fields */}
-                <div className="bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none p-6 relative">
-                  
-                  {isScanning && (
-                    <div className="absolute inset-0 z-10 bg-white/60 dark:bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center">
-                      <div className="relative">
-                        <div className="absolute inset-0 border-t-2 border-[#cc0000] rounded-full animate-spin"></div>
-                        <ShieldCheck className="w-12 h-12 text-[#cc0000] opacity-50 animate-pulse" />
-                      </div>
-                      <p className="mt-4 text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest animate-pulse">Scanning Document...</p>
-                    </div>
-                  )}
-
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest mb-6 flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-[#cc0000]" /> Extracted Data
-                  </h3>
-
-                  <div className="space-y-5">
-                    <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Gender</label>
-                      <select name="gender" value={formData.gender} onChange={handleInputChange} className="w-full bg-white dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-2.5 text-sm focus:border-[#cc0000] outline-none transition-colors dark:text-white font-medium">
-                        <option value="MALE">Male</option>
-                        <option value="FEMALE">Female</option>
-                        <option value="OTHER">Other</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Date of Birth (AD)</label>
-                      <input type="text" name="dobAd" value={formData.dobAd} onChange={handleInputChange} className="w-full bg-white dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-2.5 text-sm focus:border-[#cc0000] outline-none transition-colors dark:text-white font-medium" placeholder="YYYY MMM DD" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Date of Birth (BS)</label>
-                      <input type="text" name="dobBs" value={formData.dobBs} onChange={handleInputChange} className="w-full bg-white dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-2.5 text-sm focus:border-[#cc0000] outline-none transition-colors dark:text-white font-medium" placeholder="YYYY/MM/DD" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Document Number</label>
-                      <input type="text" name="documentNumber" value={formData.documentNumber} onChange={handleInputChange} className="w-full bg-white dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-2.5 text-sm focus:border-[#cc0000] outline-none transition-colors dark:text-white font-medium" placeholder="e.g. 04-02-72-01532" />
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Form Actions */}
           <div className="flex justify-end pt-4 pb-20 sticky bottom-0 z-20 pointer-events-none">
             <div className="pointer-events-auto">
-              <button
-                type="submit"
-                disabled={saving}
-                className="bg-[#cc0000] hover:bg-red-700 text-white font-black uppercase tracking-widest py-4 px-10 rounded-none flex items-center gap-3 transition-transform active:scale-95 shadow-xl disabled:opacity-50 text-base"
-              >
+              <button type="submit" disabled={saving} className="bg-[#cc0000] hover:bg-red-700 text-white font-black uppercase tracking-widest py-4 px-10 rounded-none flex items-center gap-3 transition-transform active:scale-95 shadow-xl disabled:opacity-50 text-base">
                 {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                 {saving ? "Saving Changes..." : "Save Profile"}
               </button>
@@ -538,31 +648,62 @@ export default function ProfilePage() {
         </form>
       </div>
 
+      {/* OTP Verification Modal */}
+      {showOtpModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#111111] w-full max-w-md border border-gray-200 dark:border-slate-800 p-8 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Smartphone className="w-8 h-8 text-[#cc0000]" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white uppercase tracking-wider">Verify Contact</h2>
+              <p className="text-sm text-gray-500 mt-2">Enter the OTP sent to <span className="font-bold text-gray-800 dark:text-gray-300">{pendingContactValue}</span></p>
+              <p className="text-xs text-red-500 mt-1 font-bold">(Hint: Use 1234 for demo)</p>
+            </div>
+            
+            <input 
+              type="text" 
+              value={otpValue}
+              onChange={(e) => setOtpValue(e.target.value)}
+              placeholder="Enter 4-digit code"
+              className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-300 dark:border-slate-700 text-center text-2xl tracking-[0.5em] font-mono py-4 focus:border-[#cc0000] focus:ring-1 focus:ring-[#cc0000] outline-none text-gray-900 dark:text-white mb-6"
+            />
+
+            <div className="flex gap-4">
+              <button 
+                type="button" 
+                onClick={() => setShowOtpModal(false)}
+                className="flex-1 py-3 text-sm font-bold uppercase tracking-wider border border-gray-300 dark:border-slate-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800"
+              >
+                Cancel
+              </button>
+              <button 
+                type="button" 
+                onClick={handleOtpSubmit}
+                disabled={isOtpVerifying || otpValue.length !== 4}
+                className="flex-1 py-3 text-sm font-bold uppercase tracking-wider bg-[#cc0000] hover:bg-red-700 text-white disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isOtpVerifying ? <Loader2 className="w-4 h-4 animate-spin" /> : "Verify"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Image Viewer Modal */}
       {viewingImage && (
         <div className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center animate-in fade-in duration-200 backdrop-blur-sm p-4">
           <div className="absolute top-6 right-6 flex items-center gap-4">
-            <a 
-              href={viewingImage.url} 
-              download={viewingImage.title.replace(' ', '_') + ".jpg"}
-              className="bg-white text-black px-6 py-2.5 rounded-full font-bold text-sm hover:bg-gray-200 transition-colors flex items-center gap-2"
-            >
+            <a href={viewingImage.url} download={viewingImage.title.replace(' ', '_') + ".jpg"} className="bg-white text-black px-6 py-2.5 rounded-full font-bold text-sm hover:bg-gray-200 transition-colors flex items-center gap-2">
               <Upload className="w-4 h-4 rotate-180" /> Download High-Res
             </a>
-            <button 
-              onClick={() => setViewingImage(null)}
-              className="text-white bg-white/20 hover:bg-white/30 rounded-full w-10 h-10 flex items-center justify-center transition-colors"
-            >
+            <button onClick={() => setViewingImage(null)} className="text-white bg-white/20 hover:bg-white/30 rounded-full w-10 h-10 flex items-center justify-center transition-colors">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <path d="M1 1L13 13M1 13L13 1" />
               </svg>
             </button>
           </div>
-          <img 
-            src={viewingImage.url} 
-            alt="Expanded Document" 
-            className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl border border-white/10" 
-          />
+          <img src={viewingImage.url} alt="Expanded Document" className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl border border-white/10" />
         </div>
       )}
     </div>
