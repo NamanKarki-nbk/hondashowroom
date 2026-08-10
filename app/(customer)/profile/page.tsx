@@ -16,6 +16,7 @@ export default function ProfilePage() {
   const [frontImage, setFrontImage] = useState<string | null>(null);
   const [backImage, setBackImage] = useState<string | null>(null);
   const [isScanning, setIsScanning] = useState(false);
+  const [viewingImage, setViewingImage] = useState<{url: string, title: string} | null>(null);
   
   const [formData, setFormData] = useState({
     fullName: "",
@@ -335,24 +336,30 @@ export default function ProfilePage() {
                   <div className="space-y-4">
                     <h4 className="text-[11px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-200 dark:border-slate-800 pb-2">Uploaded Document</h4>
                     <div className="grid grid-cols-2 gap-4">
-                       <div className="aspect-[1.6/1] bg-gray-100 dark:bg-black border border-gray-200 dark:border-slate-800 rounded-lg overflow-hidden shadow-sm relative group">
+                       <div 
+                         onClick={() => frontImage && setViewingImage({url: frontImage, title: "Front ID"})}
+                         className="aspect-[1.6/1] bg-gray-100 dark:bg-black border border-gray-200 dark:border-slate-800 rounded-lg overflow-hidden shadow-sm relative group cursor-pointer"
+                       >
                           {frontImage ? (
                             <img src={frontImage} alt="Front ID" className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-gray-400"><ImageIcon className="w-8 h-8" /></div>
                           )}
                           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span className="text-white text-xs font-bold uppercase tracking-wider">Front</span>
+                            <span className="text-white text-xs font-bold uppercase tracking-wider">Click to View</span>
                           </div>
                        </div>
-                       <div className="aspect-[1.6/1] bg-gray-100 dark:bg-black border border-gray-200 dark:border-slate-800 rounded-lg overflow-hidden shadow-sm relative group">
+                       <div 
+                         onClick={() => backImage && setViewingImage({url: backImage, title: "Back ID"})}
+                         className="aspect-[1.6/1] bg-gray-100 dark:bg-black border border-gray-200 dark:border-slate-800 rounded-lg overflow-hidden shadow-sm relative group cursor-pointer"
+                       >
                           {backImage ? (
                             <img src={backImage} alt="Back ID" className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-gray-400"><ImageIcon className="w-8 h-8" /></div>
                           )}
                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span className="text-white text-xs font-bold uppercase tracking-wider">Back</span>
+                            <span className="text-white text-xs font-bold uppercase tracking-wider">Click to View</span>
                           </div>
                        </div>
                     </div>
@@ -530,6 +537,34 @@ export default function ProfilePage() {
           </div>
         </form>
       </div>
+
+      {/* Image Viewer Modal */}
+      {viewingImage && (
+        <div className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center animate-in fade-in duration-200 backdrop-blur-sm p-4">
+          <div className="absolute top-6 right-6 flex items-center gap-4">
+            <a 
+              href={viewingImage.url} 
+              download={viewingImage.title.replace(' ', '_') + ".jpg"}
+              className="bg-white text-black px-6 py-2.5 rounded-full font-bold text-sm hover:bg-gray-200 transition-colors flex items-center gap-2"
+            >
+              <Upload className="w-4 h-4 rotate-180" /> Download High-Res
+            </a>
+            <button 
+              onClick={() => setViewingImage(null)}
+              className="text-white bg-white/20 hover:bg-white/30 rounded-full w-10 h-10 flex items-center justify-center transition-colors"
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M1 1L13 13M1 13L13 1" />
+              </svg>
+            </button>
+          </div>
+          <img 
+            src={viewingImage.url} 
+            alt="Expanded Document" 
+            className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl border border-white/10" 
+          />
+        </div>
+      )}
     </div>
   );
 }
