@@ -24,10 +24,15 @@ export default function ProfilePage() {
     avatarUrl: "",
     ocrVerified: false
   });
+  
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     fetchProfile();
   }, []);
+
+  if (!mounted) return null;
 
   const fetchProfile = async () => {
     try {
