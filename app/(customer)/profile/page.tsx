@@ -18,6 +18,7 @@ export default function ProfilePage() {
   const [frontImage, setFrontImage] = useState<string | null>(null);
   const [backImage, setBackImage] = useState<string | null>(null);
   const [isScanning, setIsScanning] = useState(false);
+  const [scannedData, setScannedData] = useState<any>(null);
   
   // Viewing Modal
   const [viewingImage, setViewingImage] = useState<{url: string, title: string} | null>(null);
@@ -188,26 +189,37 @@ export default function ProfilePage() {
         [`${activeTab.toLowerCase().replace('_', '')}Back`]: backImage,
       };
 
-      setFormData(prev => {
-        const isFirstScan = !prev.citizenshipVerified && !prev.licenseVerified && !prev.nationalIdVerified;
-        return {
-          ...prev,
-          ...newStatus,
-          // Only overwrite core identity if this is the FIRST verified document
-          ...(isFirstScan && {
-            fullName: "SUCCESS BHATTARAI",
-            dobAd: "1998 FEB 18",
-            dobBs: "२०५४/११/०६",
-            gender: "MALE",
-            avatarUrl: extractedFace
-          })
-        };
-      });
+      const isFirstScan = !formData.citizenshipVerified && !formData.licenseVerified && !formData.nationalIdVerified;
+      const extractedData = {
+        ...newStatus,
+        // Only overwrite core identity if this is the FIRST verified document
+        ...(isFirstScan && {
+          fullName: "SUCCESS BHATTARAI",
+          dobAd: "1998 FEB 18",
+          dobBs: "२०५४/११/०६",
+          gender: "MALE",
+          avatarUrl: extractedFace
+        })
+      };
       
-      setFrontImage(null);
-      setBackImage(null);
-      setMessage({ type: "success", text: `${activeTab.replace('_', ' ')} Data Extracted! Please save your profile to confirm.` });
+      setScannedData(extractedData);
+      setMessage({ type: "success", text: `${activeTab.replace('_', ' ')} Scanned! Review the data and confirm.` });
     }, 2500);
+  };
+
+  const handleConfirmScan = () => {
+    setFormData(prev => ({ ...prev, ...scannedData }));
+    setScannedData(null);
+    setFrontImage(null);
+    setBackImage(null);
+    setMessage({ type: "success", text: `${activeTab.replace('_', ' ')} Added! Please save your profile to confirm.` });
+  };
+
+  const handleCancelScan = () => {
+    setScannedData(null);
+    setFrontImage(null);
+    setBackImage(null);
+    setMessage({ type: "", text: "" });
   };
 
   // OTP Logic
@@ -627,9 +639,24 @@ export default function ProfilePage() {
                       </div>
                     )}
                     <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest mb-6 flex items-center gap-2"><FileText className="w-4 h-4 text-[#cc0000]" /> Extracted Data</h3>
-                    <div className="space-y-5 flex items-center justify-center h-40">
-                       <p className="text-sm text-gray-400 text-center">Data will appear here after scanning.</p>
-                    </div>
+                    {scannedData ? (
+                      <div className="space-y-4 animate-in fade-in zoom-in duration-300">
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div><span className="block text-gray-500 uppercase tracking-widest text-[10px] font-bold">Document Number</span><span className="font-medium text-gray-900 dark:text-white">{scannedData[`${activeTab.toLowerCase().replace('_', '')}Number`]}</span></div>
+                          {scannedData.fullName && <div><span className="block text-gray-500 uppercase tracking-widest text-[10px] font-bold">Full Name</span><span className="font-medium text-gray-900 dark:text-white">{scannedData.fullName}</span></div>}
+                          {scannedData.dobAd && <div><span className="block text-gray-500 uppercase tracking-widest text-[10px] font-bold">DOB (AD)</span><span className="font-medium text-gray-900 dark:text-white">{scannedData.dobAd}</span></div>}
+                          {scannedData.gender && <div><span className="block text-gray-500 uppercase tracking-widest text-[10px] font-bold">Gender</span><span className="font-medium text-gray-900 dark:text-white">{scannedData.gender}</span></div>}
+                        </div>
+                        <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-slate-800">
+                          <button type="button" onClick={handleCancelScan} className="flex-1 py-2 text-xs font-bold uppercase tracking-wider border border-gray-300 dark:border-slate-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">Discard</button>
+                          <button type="button" onClick={handleConfirmScan} className="flex-1 py-2 text-xs font-bold uppercase tracking-wider bg-[#cc0000] hover:bg-red-700 text-white transition-colors">Confirm & Add</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-5 flex items-center justify-center h-40">
+                         <p className="text-sm text-gray-400 text-center">Data will appear here after scanning.</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
