@@ -59,7 +59,7 @@ export default function LoginPage() {
         body: JSON.stringify({
           type: loginMethod,
           identifier,
-          otp,
+          code: otp,
         }),
       });
       
@@ -69,7 +69,8 @@ export default function LoginPage() {
       }
       
       // Successfully logged in / signed up
-      router.push("/admin/dashboard");
+      localStorage.setItem('isLoggedIn', 'true');
+      router.push("/");
       router.refresh();
     } catch (err: any) {
       setError(err.message);

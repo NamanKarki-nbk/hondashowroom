@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
     const token = req.cookies.get("auth_session")?.value;
     if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const payload = verifySessionToken(token);
+    const payload = await verifySessionToken(token);
     if (!payload) return NextResponse.json({ error: "Invalid or expired session" }, { status: 401 });
 
     const user = await prisma.user.findUnique({
@@ -37,7 +37,7 @@ export async function PATCH(req: NextRequest) {
     const token = req.cookies.get("auth_session")?.value;
     if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const payload = verifySessionToken(token);
+    const payload = await verifySessionToken(token);
     if (!payload) return NextResponse.json({ error: "Invalid or expired session" }, { status: 401 });
 
     const updates = await req.json();

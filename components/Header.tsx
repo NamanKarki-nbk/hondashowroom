@@ -36,10 +36,16 @@ export default function Header() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (e) {
+      console.error(e);
+    }
     localStorage.removeItem('isLoggedIn');
     setIsLoggedIn(false);
     router.push('/');
+    router.refresh();
   };
 
   if (pathname?.includes('/vehicles/')) return null;

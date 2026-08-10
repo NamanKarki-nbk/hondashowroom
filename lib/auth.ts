@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { SignJWT, jwtVerify } from "jose";
 
 const SALT_ROUNDS = 10;
 const JWT_SECRET = process.env.JWT_SECRET || "fallback_super_secret_honda_key_12345"; // In prod, ALWAYS set JWT_SECRET
+const secretKey = new TextEncoder().encode(JWT_SECRET);
 
 // OTP Hashing
 export async function hashOtp(otp: string): Promise<string> {
@@ -26,15 +27,23 @@ export interface JwtPayload {
   userId: string;
   phone?: string;
   email?: string;
+  [key: string]: any;
 }
 
-export function signSessionToken(payload: JwtPayload): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+export async function signSessionToken(payload: JwtPayload): Promise<string> {
+  const jwt = await new SignJWT(payload)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("7d")
+    .sign(secretKey);
+  
+  return jwt;
 }
 
-export function verifySessionToken(token: string): JwtPayload | null {
+export async function verifySessionToken(token: string): Promise<JwtPayload | null> {
   try {
-    return jwt.verify(token, JWT_SECRET) as JwtPayload;
+    const { payload } = await jwtVerify(token, secretKey);
+    return payload as JwtPayload;
   } catch (error) {
     return null;
   }
