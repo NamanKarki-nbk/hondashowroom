@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyOtpHash } from "@/lib/auth";
-import { verifySession } from "@/lib/session";
+import { verifySessionToken } from "@/lib/session";
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await verifySession();
-    if (!session?.userId) {
+    const token = req.cookies.get("auth_session")?.value;
+    if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const session = await verifySessionToken(token);
+    if (!session?.userId) {
+      return NextResponse.json({ error: "Invalid or expired session" }, { status: 401 });
     }
 
     const { identifier, code } = await req.json();
