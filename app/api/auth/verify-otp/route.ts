@@ -4,15 +4,24 @@ import { verifyOtpHash } from "@/lib/auth";
 import { signSessionToken } from "@/lib/session";
 export async function POST(req: NextRequest) {
   try {
-    const { identifier, code } = await req.json();
+    const { identifier, code, type } = await req.json();
 
     if (!identifier || !code) {
       return NextResponse.json({ error: "Identifier and code are required" }, { status: 400 });
     }
 
+    let formattedIdentifier = identifier;
+    if (type === "whatsapp") {
+      let digits = identifier.replace(/\D/g, '');
+      if (digits.length === 10) {
+        digits = `977${digits}`;
+      }
+      formattedIdentifier = digits;
+    }
+
     // Find the latest OTP for this identifier
     const latestOtp = await prisma.otpVerification.findFirst({
-      where: { identifier },
+      where: { identifier: formattedIdentifier },
       orderBy: { createdAt: "desc" }
     });
 
@@ -31,15 +40,15 @@ export async function POST(req: NextRequest) {
     }
 
     // Determine if identifier is email or phone
-    const isEmail = identifier.includes("@");
+    const isEmail = formattedIdentifier.includes("@");
     
     // Upsert User
     const user = await prisma.user.upsert({
-      where: isEmail ? { email: identifier } : { phone: identifier },
+      where: isEmail ? { email: formattedIdentifier } : { phone: formattedIdentifier },
       update: {}, // Don't overwrite existing data
       create: {
-        email: isEmail ? identifier : null,
-        phone: isEmail ? `placeholder-${Date.now()}` : identifier, // Phone is required by DB so use a placeholder if email login
+        email: isEmail ? formattedIdentifier : null,
+        phone: isEmail ? `placeholder-${Date.now()}` : formattedIdentifier, // Phone is required by DB so use a placeholder if email login
       }
     });
 

@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     const hashedOtp = await hashOtp(otp);
 
     // Store in DB
-    const expiresAt = new Date(Date.now() + 5 * 60000); // 5 mins
+    const expiresAt = new Date(Date.now() + 15 * 60000); // 15 mins
     await prisma.otpVerification.create({
       data: {
         identifier: formattedIdentifier,
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
       }
     } else if (type === "whatsapp") {
       try {
-        await sendWhatsAppMessage(formattedIdentifier, `*Honda Showroom Authentication*\n\nYour One-Time Password is: *${otp}*\n\nValid for 5 minutes. Do not share this code.`);
+        await sendWhatsAppMessage(formattedIdentifier, `*Honda Showroom Authentication*\n\nYour One-Time Password is: *${otp}*\n\nValid for 15 minutes. Do not share this code.`);
       } catch (error: any) {
         console.error("WhatsApp Dispatch Error:", error);
         return NextResponse.json({ error: "WhatsApp dispatch failed: Make sure the bot is connected or try Email instead." }, { status: 500 });

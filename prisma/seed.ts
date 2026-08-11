@@ -1,54 +1,44 @@
-import { PrismaClient } from '../app/generated/prisma'
-import { Pool } from 'pg'
-import { PrismaPg } from '@prisma/adapter-pg'
-import fs from 'fs'
-import path from 'path'
+import { PrismaClient } from "../app/generated/prisma";
+import { Pool } from "pg";
+import { PrismaPg } from "@prisma/adapter-pg";
+import bcrypt from "bcrypt";
 
-const connectionString = `${process.env.DATABASE_URL}`
-const pool = new Pool({ connectionString })
-const adapter = new PrismaPg(pool)
-const prisma = new PrismaClient({ adapter })
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const rawData = fs.readFileSync(path.join(__dirname, 'scraped_data.json'), 'utf-8');
-  const products = JSON.parse(rawData);
-
-  console.log("Clearing existing products...");
-  await prisma.productCatalog.deleteMany();
-
-  console.log(`Seeding ${products.length} products...`);
+  const adminEmail = process.env.ADMIN_EMAIL || "admin@honda.com";
+  const password = "admin123";
   
-  for (const product of products) {
-    await prisma.productCatalog.upsert({
-      where: { id: product.id },
-      update: {
-        name: product.name,
-        category: product.category,
-        price: product.price,
-        imageUrl: product.imageUrl,
-        description: product.description,
-        specs: product.specs || {}
-      },
-      create: {
-        id: product.id,
-        name: product.name,
-        category: product.category,
-        price: product.price,
-        imageUrl: product.imageUrl,
-        description: product.description,
-        specs: product.specs || {}
-      }
-    });
-  }
+  const salt = await bcrypt.genSalt(10);
+  const passwordHash = await bcrypt.hash(password, salt);
 
-  console.log('Seeding completed!');
+  const admin = await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {
+      passwordHash,
+    },
+    create: {
+      email: adminEmail,
+      fullName: "System Admin",
+      passwordHash,
+      phone: "0000000000",
+      // Set as fully verified to avoid KYC prompts
+      citizenshipVerified: true,
+      licenseVerified: true,
+      nationalIdVerified: true,
+    },
+  });
+
+  console.log(`Admin user seeded: ${admin.email}`);
 }
 
 main()
   .catch((e) => {
-    console.error(e)
-    process.exit(1)
+    console.error(e);
+    process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect()
-  })
+    await prisma.$disconnect();
+  });
