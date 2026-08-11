@@ -14,9 +14,7 @@ export type Product = {
   imageUrl: string;
   description: string | null;
   // Mock properties for advanced filtering
-  engineType?: string;
-  powerKw?: number;
-  seatHeight?: number;
+  cc?: number;
 };
 
 interface ShopClientProps {
@@ -26,26 +24,20 @@ interface ShopClientProps {
 // Helper to assign mock specs for advanced filtering
 const enhanceProducts = (products: Product[]) => {
   return products.map(p => {
-    let engineType = "1-cylinder, 4-stroke engine";
-    let powerKw = 10;
-    let seatHeight = 750;
-
+    let cc = 125;
     const lowerName = p.name.toLowerCase();
-    if (lowerName.includes("nx")) {
-      powerKw = 12.7; seatHeight = 810;
-    } else if (lowerName.includes("hornet")) {
-      powerKw = 12.7; seatHeight = 790;
-    } else if (lowerName.includes("dio")) {
-      engineType = "1-cylinder, 4-stroke engine (CVT transmission)";
-      powerKw = 6.0; seatHeight = 765;
-    } else if (lowerName.includes("shine") || lowerName.includes("sp 125")) {
-      powerKw = 8.0; seatHeight = 790;
-    } else if (p.category === "POWER_PRODUCTS") {
-      engineType = "Power Equipment";
-      powerKw = 2; seatHeight = 0;
-    }
+    
+    if (lowerName.includes("350")) cc = 350;
+    else if (lowerName.includes("250")) cc = 250;
+    else if (lowerName.includes("190")) cc = 184;
+    else if (lowerName.includes("160")) cc = 162;
+    else if (lowerName.includes("125")) cc = 124;
+    else if (lowerName.includes("110") || lowerName.includes("aviator") || lowerName.includes("dio")) cc = 109;
+    
+    // For power products, set cc to 0
+    if (p.category === "POWER_PRODUCTS") cc = 0;
 
-    return { ...p, engineType, powerKw, seatHeight };
+    return { ...p, cc };
   });
 };
 
@@ -124,23 +116,16 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
   const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc">("default");
 
   // Advanced Filters State
-  const [selectedEngines, setSelectedEngines] = useState<string[]>([]);
-  const [powerRange, setPowerRange] = useState<[number, number]>([11, 152]); // kW
-  const [seatRange, setSeatRange] = useState<[number, number]>([690, 910]); // mm
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 3800000]); // NPR
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [ccRange, setCcRange] = useState<[number, number]>([100, 350]); // CC
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000000]); // NPR
 
   const products = useMemo(() => enhanceProducts(initialProducts), [initialProducts]);
 
-  const ENGINE_TYPES = [
-    "2-cylinder, 4-stroke boxer engine (external camshafts)",
-    "4-cylinder, 4-stroke in-line engine (BMW ShiftCam)",
-    "2-cylinder, 4-stroke engine",
-    "1-cylinder, 4-stroke engine (manual transmission)",
-    "4-cylinder, 4-stroke in-line engine",
-    "6-cylinder, 4-stroke in-line engine",
-    "1-cylinder, 4-stroke engine (CVT transmission)",
-    "2-cylinder, 4-stroke boxer engine (balance gear wheels)",
-    "Permanent-magnet liquid-cooled synchronous motor"
+  const CATEGORY_TYPES = [
+    { id: "MOTORCYCLES", label: "Motorcycles" },
+    { id: "SCOOTERS", label: "Scooters" },
+    { id: "POWER_PRODUCTS", label: "Power Products" }
   ];
 
   useEffect(() => {
@@ -161,16 +146,13 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
     }
 
     // Advanced Filters
-    if (selectedEngines.length > 0) {
-      result = result.filter(p => p.engineType && selectedEngines.includes(p.engineType));
+    if (selectedCategories.length > 0) {
+      result = result.filter(p => selectedCategories.includes(p.category));
     }
     
-    result = result.filter(p => (p.powerKw ?? 0) >= powerRange[0] && (p.powerKw ?? 0) <= powerRange[1]);
-    
-    // Ignore seat height for power products
     result = result.filter(p => {
       if (p.category === "POWER_PRODUCTS") return true;
-      return (p.seatHeight ?? 0) >= seatRange[0] && (p.seatHeight ?? 0) <= seatRange[1];
+      return (p.cc ?? 0) >= ccRange[0] && (p.cc ?? 0) <= ccRange[1];
     });
 
     result = result.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
@@ -217,64 +199,69 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
             >
               <div className="p-6 lg:p-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 xl:gap-12 border-t-2 border-[#1c1c1c]">
                 
-                {/* Engine Column */}
+                {/* Category Column */}
                 <div>
-                  <h3 className="font-bold mb-4 border-b border-black dark:border-white pb-3 text-sm">Engine</h3>
+                  <h3 className="font-bold mb-4 border-b border-black dark:border-white pb-3 text-sm">Category</h3>
                   <div className="flex flex-col gap-5 pt-2">
-                    {ENGINE_TYPES.map(eng => (
-                      <label key={eng} className="flex items-start gap-3 cursor-pointer group">
-                        <div className={`w-[22px] h-[22px] flex-shrink-0 border-[1.5px] mt-0.5 transition-colors flex items-center justify-center ${selectedEngines.includes(eng) ? "border-black bg-white dark:border-white dark:bg-black" : "border-black dark:border-white"}`}>
-                          {selectedEngines.includes(eng) && <Check className="w-4 h-4 text-black dark:text-white" />}
+                    {CATEGORY_TYPES.map(cat => (
+                      <label 
+                        key={cat.id} 
+                        className="flex items-start gap-3 cursor-pointer group"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSelectedCategories(prev => prev.includes(cat.id) ? prev.filter(c => c !== cat.id) : [...prev, cat.id]);
+                        }}
+                      >
+                        <div className={`w-[22px] h-[22px] flex-shrink-0 border-[1.5px] mt-0.5 transition-colors flex items-center justify-center ${selectedCategories.includes(cat.id) ? "border-black bg-white dark:border-white dark:bg-black" : "border-black dark:border-white"}`}>
+                          {selectedCategories.includes(cat.id) && <Check className="w-4 h-4 text-black dark:text-white" />}
                         </div>
-                        <span className="text-[13px] leading-[1.3] opacity-90">{eng}</span>
+                        <span className="text-[13px] leading-[1.3] opacity-90">{cat.label}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
-                {/* Performance Column */}
+                {/* Engine CC Column */}
                 <div>
-                  <h3 className="font-bold mb-4 border-b border-black dark:border-white pb-3 text-sm">Performance</h3>
+                  <h3 className="font-bold mb-4 border-b border-black dark:border-white pb-3 text-sm">Engine Size (cc)</h3>
                   <DualRangeSlider 
-                    min={11} max={152} value={powerRange} onChange={setPowerRange} 
-                    format={(v) => `${v} kW`}
-                    formatSecondary={(v) => `${Math.round(v * 1.35962)} PS`}
+                    min={100} max={350} value={ccRange} onChange={setCcRange} 
+                    format={(v) => `${v} cc`}
                   />
                   <div className="mt-14">
-                    <p className="text-[13px] mb-4 opacity-90 leading-snug">Your driving licence affects how much power your motorcycle can have:</p>
+                    <p className="text-[13px] mb-4 opacity-90 leading-snug">Quickly filter by popular engine capacities:</p>
                     <div className="grid grid-cols-2 gap-3 mb-3">
-                      <button onClick={() => setPowerRange([11, 15])} className="border border-black dark:border-white py-2 text-[13px] font-bold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">A1</button>
-                      <button onClick={() => setPowerRange([11, 35])} className="border border-black dark:border-white py-2 text-[13px] font-bold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">A2</button>
+                      <button onClick={() => setCcRange([100, 110])} className="border border-black dark:border-white py-2 text-[13px] font-bold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">110 cc</button>
+                      <button onClick={() => setCcRange([120, 130])} className="border border-black dark:border-white py-2 text-[13px] font-bold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">125 cc</button>
                     </div>
-                    <button onClick={() => setPowerRange([11, 152])} className="w-full border border-black dark:border-white py-2 text-[13px] font-bold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">A</button>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button onClick={() => setCcRange([150, 170])} className="border border-black dark:border-white py-2 text-[13px] font-bold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">160 cc</button>
+                      <button onClick={() => setCcRange([340, 360])} className="border border-black dark:border-white py-2 text-[13px] font-bold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">350 cc</button>
+                    </div>
                   </div>
                 </div>
 
-                {/* Seat Height Column */}
+                {/* Sort By Column */}
                 <div>
-                  <h3 className="font-bold mb-4 border-b border-black dark:border-white pb-3 text-sm">Seat height, unladen</h3>
-                  <DualRangeSlider 
-                    min={690} max={910} value={seatRange} onChange={setSeatRange} 
-                    format={(v) => `${v} mm`}
-                  />
-                  <div className="mt-14">
-                    <p className="text-[13px] mb-4 opacity-90 leading-snug">Use your jeans length to help you find your seat height:</p>
-                    <div className="grid grid-cols-4 gap-3 mb-3">
-                      {[26, 28, 30, 32].map(len => (
-                        <button key={len} onClick={() => setSeatRange([Math.max(690, 700 + (len-26)*20), Math.min(910, 800 + (len-26)*20)])} className="border border-black dark:border-white py-2 text-[13px] font-bold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">{len}</button>
-                      ))}
-                    </div>
-                    <div className="grid grid-cols-4 gap-3">
-                       <button onClick={() => setSeatRange([860, 910])} className="border border-black dark:border-white py-2 text-[13px] font-bold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors">34</button>
-                    </div>
+                  <h3 className="font-bold mb-4 border-b border-black dark:border-white pb-3 text-sm">Sort By</h3>
+                  <div className="mt-4">
+                    <select 
+                      value={sortBy} 
+                      onChange={(e) => setSortBy(e.target.value as any)}
+                      className="w-full bg-transparent border border-black dark:border-white rounded-none px-3 py-3 text-sm font-bold outline-none cursor-pointer"
+                    >
+                        <option className="bg-background text-foreground" value="default">Recommended</option>
+                        <option className="bg-background text-foreground" value="price-asc">Price: Low to High</option>
+                        <option className="bg-background text-foreground" value="price-desc">Price: High to Low</option>
+                    </select>
                   </div>
                 </div>
 
                 {/* Price Column */}
                 <div>
-                  <h3 className="font-bold mb-4 border-b border-black dark:border-white pb-3 text-sm">Price</h3>
+                  <h3 className="font-bold mb-4 border-b border-black dark:border-white pb-3 text-sm">Price (NPR)</h3>
                   <DualRangeSlider 
-                    min={0} max={3800000} value={priceRange} onChange={setPriceRange} 
+                    min={0} max={5000000} value={priceRange} onChange={setPriceRange} 
                     format={(v) => `₹${v.toLocaleString('en-IN')}`}
                   />
                 </div>
@@ -292,7 +279,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
              <Search className="w-10 h-10 mb-4" />
              <h3 className="text-xl font-normal mb-2">No models found</h3>
              <p className="text-sm">Try adjusting your filters.</p>
-             <button onClick={() => { setSelectedEngines([]); setPowerRange([11,152]); setSeatRange([690,910]); setPriceRange([0,3800000]); setSearchQuery(""); }} className="mt-4 text-[#c1291A] font-bold underline">Reset Filters</button>
+             <button onClick={() => { setSelectedCategories([]); setCcRange([100,350]); setPriceRange([0,5000000]); setSearchQuery(""); }} className="mt-4 text-[#c1291A] font-bold underline">Reset Filters</button>
           </div>
         ) : (
           <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
