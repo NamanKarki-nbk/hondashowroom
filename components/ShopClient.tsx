@@ -165,11 +165,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
     }
 
     return result;
-  }, [products, searchQuery, selectedEngines, powerRange, seatRange, priceRange, sortBy]);
-
-  const toggleEngine = (eng: string) => {
-    setSelectedEngines(prev => prev.includes(eng) ? prev.filter(e => e !== eng) : [...prev, eng]);
-  };
+  }, [products, searchQuery, selectedCategories, ccRange, priceRange, sortBy]);
 
   return (
     <div className="flex flex-col bg-[#f3ebdd] dark:bg-[#0B0B0C] min-h-screen">
