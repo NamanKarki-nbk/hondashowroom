@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Phone, Mail, MapPin, Facebook, Instagram, Youtube, ArrowRight } from "lucide-react";
+import { Phone } from "lucide-react";
 import Logo from "@/components/Logo";
 
 /**

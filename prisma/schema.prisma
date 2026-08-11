@@ -46,6 +46,7 @@ model User {
   fullName         String?
   phone            String   @unique
   email            String?  @unique
+  passwordHash     String?
   address          String?
   bio              String?
   avatarUrl        String?

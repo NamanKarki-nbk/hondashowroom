@@ -35,6 +35,16 @@ export async function POST(req: NextRequest) {
     validTimestamps.push(now);
     rateLimitMap.set(identifier, validTimestamps);
 
+    // Format identifier if it's WhatsApp (default to Nepal +977 if no country code provided)
+    let formattedIdentifier = identifier;
+    if (type === "whatsapp") {
+      let digits = identifier.replace(/\D/g, '');
+      if (digits.length === 10) {
+        digits = `977${digits}`;
+      }
+      formattedIdentifier = digits;
+    }
+
     // Generate and hash OTP
     const otp = generateNumericOtp(6);
     const hashedOtp = await hashOtp(otp);
@@ -43,7 +53,7 @@ export async function POST(req: NextRequest) {
     const expiresAt = new Date(Date.now() + 5 * 60000); // 5 mins
     await prisma.otpVerification.create({
       data: {
-        identifier,
+        identifier: formattedIdentifier,
         hashedOtp,
         expiresAt,
       },
@@ -51,15 +61,16 @@ export async function POST(req: NextRequest) {
 
     // Send OTP
     if (type === "email") {
-      const success = await sendEmailOtp(identifier, otp);
+      const success = await sendEmailOtp(formattedIdentifier, otp);
       if (!success) {
         return NextResponse.json({ error: "Failed to send Email OTP. Check server configuration." }, { status: 500 });
       }
     } else if (type === "whatsapp") {
       try {
-        await sendWhatsAppMessage(identifier, `*Honda Showroom Authentication*\n\nYour One-Time Password is: *${otp}*\n\nValid for 5 minutes. Do not share this code.`);
+        await sendWhatsAppMessage(formattedIdentifier, `*Honda Showroom Authentication*\n\nYour One-Time Password is: *${otp}*\n\nValid for 5 minutes. Do not share this code.`);
       } catch (error: any) {
-        return NextResponse.json({ error: "WhatsApp dispatch failed: " + error.message + ". Please try Email OTP instead." }, { status: 500 });
+        console.error("WhatsApp Dispatch Error:", error);
+        return NextResponse.json({ error: "WhatsApp dispatch failed: Make sure the bot is connected or try Email instead." }, { status: 500 });
       }
     }
 

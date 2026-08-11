@@ -381,8 +381,9 @@ export default function ProfilePage() {
         setIsOtpVerifying(false);
         return;
       }
-      
-      setInitialState((prev: any) => ({ ...prev, [otpTarget]: pendingContactValue }));
+      if (otpTarget) {
+        setInitialState((prev: any) => ({ ...prev, [otpTarget]: pendingContactValue }));
+      }
       setShowOtpModal(false);
       setMessage({ type: "success", text: `${otpTarget === 'email' ? 'Email' : 'Phone'} verified! Please save your profile.` });
     } catch (err) {
