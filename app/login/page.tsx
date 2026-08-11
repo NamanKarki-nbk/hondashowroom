@@ -121,18 +121,35 @@ export default function LoginPage() {
               </label>
               <div className="relative">
                  {loginMethod === "email" ? (
-                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                   <>
+                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                     <input 
+                       type="email" 
+                       required
+                       value={identifier}
+                       onChange={e => setIdentifier(e.target.value)}
+                       className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-slate-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-[#f3ebdd] focus:border-[#c1291A] focus:ring-1 focus:ring-[#c1291A] outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-600"
+                       placeholder="name@example.com"
+                     />
+                   </>
                  ) : (
-                   <MessageCircle className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                   <div className="flex">
+                     <div className="flex items-center justify-center bg-gray-100 dark:bg-slate-800 border border-r-0 border-gray-200 dark:border-slate-700 rounded-l-xl px-4 text-gray-700 dark:text-[#f3ebdd] font-medium shrink-0">
+                       +977
+                     </div>
+                     <div className="relative w-full">
+                       <MessageCircle className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                       <input 
+                         type="tel" 
+                         required
+                         value={identifier}
+                         onChange={e => setIdentifier(e.target.value)}
+                         className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-slate-700 rounded-r-xl py-3 pl-10 pr-4 text-gray-900 dark:text-[#f3ebdd] focus:border-[#c1291A] focus:ring-1 focus:ring-[#c1291A] outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-600"
+                         placeholder="98XXXXXXX"
+                       />
+                     </div>
+                   </div>
                  )}
-                 <input 
-                   type={loginMethod === "email" ? "email" : "tel"} 
-                   required
-                   value={identifier}
-                   onChange={e => setIdentifier(e.target.value)}
-                   className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-slate-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-[#f3ebdd] focus:border-[#c1291A] focus:ring-1 focus:ring-[#c1291A] outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-600"
-                   placeholder={loginMethod === "email" ? "name@example.com" : "+97798XXXXXXX"}
-                 />
               </div>
             </div>
 

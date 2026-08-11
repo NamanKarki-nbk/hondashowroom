@@ -36,10 +36,16 @@ export async function sendEmailOtp(toEmail: string, otpCode: string) {
 
   try {
     const info = await transporter.sendMail({
-      from: `"Honda Showroom" <${process.env.GMAIL_USER}>`,
+      from: `"Honda Showroom Security" <noreply@hondashowroom.com>`, // Use an authenticated domain name
+      replyTo: `"Honda Support" <support@hondashowroom.com>`,
       to: toEmail,
       subject: "Your Authentication OTP - Honda Showroom",
       html: htmlContent,
+      headers: {
+        'X-Priority': '1',
+        'X-MSMail-Priority': 'High',
+        // IMPORTANT: To completely stop emails from going to spam, configure SPF, DKIM, and DMARC records on your domain host.
+      }
     });
     console.log("Email OTP sent: ", info.messageId);
     return true;

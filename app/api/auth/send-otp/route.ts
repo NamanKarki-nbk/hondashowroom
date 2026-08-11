@@ -16,6 +16,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid request parameters" }, { status: 400 });
     }
 
+    // Backend Admin Restriction: Prevent public admin registration
+    const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@honda.com";
+    
+    if (identifier.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+      return NextResponse.json({ error: "Admin accounts cannot be registered or accessed via public OTP. Please use the secure admin portal." }, { status: 403 });
+    }
+
     // Rate limiting logic: Max 3 requests per minute
     const now = Date.now();
     const timestamps = rateLimitMap.get(identifier) || [];
