@@ -11,11 +11,11 @@ export default function VehicleFeatures({ features }: { features: Feature[] }) {
   if (!features || features.length === 0) return null;
 
   return (
-    <section id="features" className="py-24 px-6 bg-[#f3ebdd] dark:bg-background border-t border-gray-100 dark:border-gray-800 transition-colors duration-300 min-h-screen flex items-center">
+    <section id="features" className="py-24 px-6 bg-background  border-t border-gray-100 dark:border-gray-800 transition-colors duration-300 min-h-screen flex items-center">
       <div className="max-w-[1600px] mx-auto w-full">
         <div className="text-center mb-16 xl:mb-24">
-          <h2 className="text-4xl md:text-5xl xl:text-6xl font-extrabold text-gray-900 dark:text-[#f3ebdd] uppercase tracking-tight">Key Features</h2>
-          <div className="w-24 xl:w-32 h-1 xl:h-2 bg-[#c1291A] mx-auto mt-6 xl:mt-8 rounded-full"></div>
+          <h2 className="text-4xl md:text-5xl xl:text-6xl font-extrabold text-gray-900 dark:text-primary-foreground uppercase tracking-tight">Key Features</h2>
+          <div className="w-24 xl:w-32 h-1 xl:h-2 bg-primary mx-auto mt-6 xl:mt-8 rounded-full"></div>
         </div>
         
         <div className="space-y-24 xl:space-y-32">
@@ -41,7 +41,7 @@ export default function VehicleFeatures({ features }: { features: Feature[] }) {
                       viewport={{ once: true }}
                       transition={{ duration: 0.6, delay: 0.2 }}
                    >
-                     <h3 className="text-3xl xl:text-5xl font-extrabold text-gray-900 dark:text-[#f3ebdd] mb-6 leading-tight">{feature.title}</h3>
+                     <h3 className="text-3xl xl:text-5xl font-extrabold text-gray-900 dark:text-primary-foreground mb-6 leading-tight">{feature.title}</h3>
                      <p className="text-lg xl:text-2xl text-gray-600 dark:text-gray-400 leading-relaxed">
                         {feature.description}
                      </p>

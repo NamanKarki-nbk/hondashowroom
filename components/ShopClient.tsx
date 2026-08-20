@@ -162,13 +162,25 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
       result = [...result].sort((a, b) => a.price - b.price);
     } else if (sortBy === "price-desc") {
       result = [...result].sort((a, b) => b.price - a.price);
+    } else {
+      // Default sort order
+      const orderMap: Record<string, number> = {
+        "SCOOTERS": 1,
+        "MOTORCYCLES": 2,
+        "POWER_PRODUCTS": 3
+      };
+      result = [...result].sort((a, b) => {
+        const orderA = orderMap[a.category] || 99;
+        const orderB = orderMap[b.category] || 99;
+        return orderA - orderB;
+      });
     }
 
     return result;
   }, [products, searchQuery, selectedCategories, ccRange, priceRange, sortBy]);
 
   return (
-    <div className="flex flex-col bg-[#f3ebdd] dark:bg-[#0B0B0C] min-h-screen">
+    <div className="flex flex-col bg-background dark:bg-[#0B0B0C] min-h-screen">
       
       {/* Expandable Filter Bar */}
       <div className="bg-[#1c1c1c] text-white">
@@ -275,7 +287,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
              <Search className="w-10 h-10 mb-4" />
              <h3 className="text-xl font-normal mb-2">No models found</h3>
              <p className="text-sm">Try adjusting your filters.</p>
-             <button onClick={() => { setSelectedCategories([]); setCcRange([100,350]); setPriceRange([0,5000000]); setSearchQuery(""); }} className="mt-4 text-[#c1291A] font-bold underline">Reset Filters</button>
+             <button onClick={() => { setSelectedCategories([]); setCcRange([100,350]); setPriceRange([0,5000000]); setSearchQuery(""); }} className="mt-4 text-primary font-bold underline">Reset Filters</button>
           </div>
         ) : (
           <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

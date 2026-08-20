@@ -88,7 +88,7 @@ const COMPONENTS: Component[] = [
     icon: Shield,
     description: "Brakes are critical for your safety. Periodic inspection of brake pads, fluids, and lines is essential to maintain responsive stopping power.",
     color: "border-red-200 dark:border-red-900/30",
-    iconBg: "bg-red-50 dark:bg-red-900/10 text-[#c1291A]",
+    iconBg: "bg-red-50 dark:bg-red-900/10 text-primary",
     interval: "Every 6,000 km or before long trips",
     cardImage: "/components/brake.png",
     dialogue: [
@@ -158,7 +158,7 @@ const COMPONENTS: Component[] = [
     icon: PenTool,
     description: "Air filters and spark plugs directly impact combustion efficiency. Replacing them as per schedule keeps the engine breathing right.",
     color: "border-gray-200 dark:border-gray-700",
-    iconBg: "bg-[#f3ebdd] dark:bg-gray-800 text-gray-600 dark:text-gray-300",
+    iconBg: "bg-background dark:bg-gray-800 text-gray-600 dark:text-gray-300",
     interval: "Air filter 10,000 km, spark plug 8,000 km",
     dialogue: [
       { character: "benly", text: "Dr. Dream, my bike is blowing black smoke from the exhaust and the fuel economy got much worse suddenly! 😱" },
@@ -192,7 +192,7 @@ function DialogueBubble({
     >
       {/* Avatar */}
       <div className="flex-shrink-0 flex flex-col items-center gap-1">
-        <div className={`w-14 h-14 rounded-full border-2 ${char.border} overflow-hidden bg-[#f3ebdd] shadow-sm`}>
+        <div className={`w-14 h-14 rounded-full border-2 ${char.border} overflow-hidden bg-background shadow-sm`}>
           <Image src={char.avatar} alt={char.name} width={56} height={56} className="w-full h-full object-cover" />
         </div>
         <span className={`text-[9px] font-black uppercase tracking-wide ${char.nameColor} leading-tight text-center max-w-[56px]`}>
@@ -236,20 +236,20 @@ function ComponentModal({ comp, onClose }: { comp: Component; onClose: () => voi
 
         {/* Modal Panel */}
         <motion.div
-          className="relative bg-[#f3ebdd] dark:bg-[#111] rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-[#f3ebdd]/10 flex flex-col"
+          className="relative bg-background dark:bg-[#111] rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-background/10 flex flex-col"
           initial={{ opacity: 0, scale: 0.92, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.92, y: 30 }}
           transition={{ type: "spring", stiffness: 280, damping: 28 }}
         >
           {/* Sticky Header */}
-          <div className="sticky top-0 z-10 bg-[#f3ebdd] dark:bg-[#111] border-b border-gray-100 dark:border-[#f3ebdd]/10 px-6 py-4 flex items-center justify-between rounded-t-3xl">
+          <div className="sticky top-0 z-10 bg-background dark:bg-[#111] border-b border-gray-100 dark:border-background/10 px-6 py-4 flex items-center justify-between rounded-t-3xl">
             <div className="flex items-center gap-3">
               <div className={`w-11 h-11 rounded-2xl flex items-center justify-center border ${comp.iconBg} ${comp.color}`}>
                 <comp.icon className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-lg font-black text-gray-900 dark:text-[#f3ebdd]">{comp.title}</h2>
+                <h2 className="text-lg font-black text-gray-900 dark:text-primary-foreground">{comp.title}</h2>
                 <p className="text-xs text-gray-400 flex items-center gap-1">
                   <Clock className="w-3 h-3" /> {comp.interval}
                 </p>
@@ -257,7 +257,7 @@ function ComponentModal({ comp, onClose }: { comp: Component; onClose: () => voi
             </div>
             <button
               onClick={onClose}
-              className="w-9 h-9 flex items-center justify-center rounded-full bg-[#e8dfd1] dark:bg-[#f3ebdd]/10 hover:bg-gray-200 dark:hover:bg-[#f3ebdd]/20 transition-colors"
+              className="w-9 h-9 flex items-center justify-center rounded-full bg-[#e8dfd1] /10 hover:bg-gray-200 dark:hover:bg-background/20 transition-colors"
             >
               <X className="w-4 h-4 text-gray-600 dark:text-gray-300" />
             </button>
@@ -265,7 +265,7 @@ function ComponentModal({ comp, onClose }: { comp: Component; onClose: () => voi
 
           {/* Component image if available */}
           {comp.cardImage && (
-            <div className="mx-6 mt-5 rounded-2xl overflow-hidden bg-[#f3ebdd] dark:bg-[#f3ebdd]/5 border border-gray-100 dark:border-[#f3ebdd]/10">
+            <div className="mx-6 mt-5 rounded-2xl overflow-hidden bg-background /5 border border-gray-100 dark:border-background/10">
               <Image
                 src={comp.cardImage}
                 alt={comp.title}
@@ -277,14 +277,14 @@ function ComponentModal({ comp, onClose }: { comp: Component; onClose: () => voi
           )}
 
           {/* Character intro strip */}
-          <div className="mx-6 mt-5 rounded-2xl bg-[#f3ebdd] dark:bg-[#f3ebdd]/5 border border-gray-100 dark:border-[#f3ebdd]/5 px-4 py-3">
+          <div className="mx-6 mt-5 rounded-2xl bg-background /5 border border-gray-100 dark:border-background/5 px-4 py-3">
             <p className="text-xs text-gray-400 uppercase tracking-widest font-bold mb-3 text-center">Meet the Experts</p>
             <div className="flex items-center justify-center gap-6">
               {(["benly", "dream", "cub"] as CharacterKey[]).map((key) => {
                 const c = CHARACTERS[key];
                 return (
                   <div key={key} className="flex flex-col items-center gap-1.5">
-                    <div className={`w-12 h-12 rounded-full border-2 ${c.border} overflow-hidden bg-[#f3ebdd] shadow`}>
+                    <div className={`w-12 h-12 rounded-full border-2 ${c.border} overflow-hidden bg-background shadow`}>
                       <Image src={c.avatar} alt={c.name} width={48} height={48} className="w-full h-full object-cover" />
                     </div>
                     <div className="text-center">
@@ -306,16 +306,16 @@ function ComponentModal({ comp, onClose }: { comp: Component; onClose: () => voi
           </div>
 
           {/* CTA Footer */}
-          <div className="sticky bottom-0 bg-[#f3ebdd] dark:bg-[#111] border-t border-gray-100 dark:border-[#f3ebdd]/10 px-6 py-4 flex gap-3 rounded-b-3xl">
+          <div className="sticky bottom-0 bg-background dark:bg-[#111] border-t border-gray-100 dark:border-background/10 px-6 py-4 flex gap-3 rounded-b-3xl">
             <Link
               href="/book-now"
-              className="flex-1 bg-[#c1291A] text-[#f3ebdd] text-sm font-bold px-5 py-3 rounded-xl hover:bg-[#a02014] transition-colors text-center"
+              className="flex-1 bg-primary text-primary-foreground text-sm font-bold px-5 py-3 rounded-xl hover:bg-primary-hover transition-colors text-center"
             >
               Book a Service
             </Link>
             <Link
               href="/owners-manual?tab=schedule"
-              className="flex-1 bg-[#e8dfd1] dark:bg-[#f3ebdd]/10 text-gray-900 dark:text-[#f3ebdd] text-sm font-bold px-5 py-3 rounded-xl hover:bg-gray-200 dark:hover:bg-[#f3ebdd]/20 transition-colors text-center"
+              className="flex-1 bg-[#e8dfd1] /10 text-gray-900 dark:text-primary-foreground text-sm font-bold px-5 py-3 rounded-xl hover:bg-gray-200 dark:hover:bg-background/20 transition-colors text-center"
             >
               View Schedule
             </Link>
@@ -331,7 +331,7 @@ export default function KnowYourVehiclePage() {
   const [activeModal, setActiveModal] = useState<Component | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#f3ebdd] dark:bg-[#0B0B0C] pt-28 pb-24">
+    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] pt-28 pb-24">
 
       {/* Modal */}
       {activeModal && (
@@ -339,23 +339,23 @@ export default function KnowYourVehiclePage() {
       )}
 
       {/* Hero */}
-      <div className="bg-[#f3ebdd] dark:bg-[#111] border-b border-gray-100 dark:border-[#f3ebdd]/5">
+      <div className="bg-background dark:bg-[#111] border-b border-gray-100 dark:border-background/5">
         <div className="max-w-7xl mx-auto px-6 py-12">
           <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-            <Link href="/" className="hover:text-[#c1291A] flex items-center gap-1 transition-colors">
+            <Link href="/" className="hover:text-primary flex items-center gap-1 transition-colors">
               <Home className="w-3.5 h-3.5" /> Home
             </Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-gray-900 dark:text-[#f3ebdd] font-medium">Know Your Vehicle</span>
+            <span className="text-gray-900 dark:text-primary-foreground font-medium">Know Your Vehicle</span>
           </nav>
 
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
             <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#c1291A] mb-3">
-                <span className="w-6 h-0.5 bg-[#c1291A] rounded-full" />
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary mb-3">
+                <span className="w-6 h-0.5 bg-primary rounded-full" />
                 Right to Repair &amp; Maintenance
               </div>
-              <h1 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-[#f3ebdd] tracking-tight leading-tight">
+              <h1 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight leading-tight">
                 Periodic Maintenance for Safe, Reliable Riding
               </h1>
               <p className="text-gray-500 dark:text-gray-400 mt-4 text-lg">
@@ -375,7 +375,7 @@ export default function KnowYourVehiclePage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.15 }}
                   >
-                    <div className={`w-20 h-20 rounded-full border-2 ${c.border} overflow-hidden bg-[#f3ebdd] shadow-lg`}>
+                    <div className={`w-20 h-20 rounded-full border-2 ${c.border} overflow-hidden bg-background shadow-lg`}>
                       <Image src={c.avatar} alt={c.name} width={80} height={80} className="w-full h-full object-cover" />
                     </div>
                     <p className={`text-[10px] font-black uppercase tracking-wide ${c.nameColor}`}>{c.name}</p>
@@ -389,8 +389,8 @@ export default function KnowYourVehiclePage() {
 
       {/* Characters intro banner */}
       <div className="max-w-7xl mx-auto px-6 py-10">
-        <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-[#111] dark:to-[#1a1a1a] rounded-3xl border border-gray-200 dark:border-[#f3ebdd]/10 p-8">
-          <h2 className="text-center text-2xl font-black text-gray-900 dark:text-[#f3ebdd] mb-2">Your Maintenance Guide Characters</h2>
+        <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-[#111] dark:to-[#1a1a1a] rounded-3xl border border-gray-200 dark:border-background/10 p-8">
+          <h2 className="text-center text-2xl font-black text-gray-900 dark:text-primary-foreground mb-2">Your Maintenance Guide Characters</h2>
           <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-8">Click "Read More" on any component card to follow their conversation and learn about your Honda</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {(["benly", "dream", "cub"] as CharacterKey[]).map((key) => {
@@ -401,7 +401,7 @@ export default function KnowYourVehiclePage() {
                   whileHover={{ y: -4 }}
                   className={`flex flex-col items-center text-center gap-4 p-6 rounded-2xl border ${c.bg} ${c.border}`}
                 >
-                  <div className={`w-24 h-24 rounded-full border-2 ${c.border} overflow-hidden bg-[#f3ebdd] shadow-md`}>
+                  <div className={`w-24 h-24 rounded-full border-2 ${c.border} overflow-hidden bg-background shadow-md`}>
                     <Image src={c.avatar} alt={c.name} width={96} height={96} className="w-full h-full object-cover" />
                   </div>
                   <div>
@@ -421,10 +421,10 @@ export default function KnowYourVehiclePage() {
       </div>
 
       {/* Critical Components Grid */}
-      <div className="bg-[#f3ebdd] dark:bg-[#111] py-20 border-y border-gray-100 dark:border-[#f3ebdd]/5">
+      <div className="bg-background dark:bg-[#111] py-20 border-y border-gray-100 dark:border-background/5">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-[#f3ebdd] mb-4">Critical Components to Monitor</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-primary-foreground mb-4">Critical Components to Monitor</h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
               Click <strong>"Read More"</strong> to follow Ms. Benly, Dr. Dream, and Mr. Cub as they walk you through each component in a fun conversation.
             </p>
@@ -438,11 +438,11 @@ export default function KnowYourVehiclePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.08 }}
-                className="bg-[#f3ebdd] dark:bg-[#1A1A1A] rounded-3xl border border-gray-100 dark:border-[#f3ebdd]/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden group"
+                className="bg-background dark:bg-[#1A1A1A] rounded-3xl border border-gray-100 dark:border-background/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden group"
               >
                 {/* Card image */}
                 {comp.cardImage ? (
-                  <div className="h-44 bg-[#f3ebdd] dark:bg-[#f3ebdd]/5 overflow-hidden">
+                  <div className="h-44 bg-background /5 overflow-hidden">
                     <Image
                       src={comp.cardImage}
                       alt={comp.title}
@@ -463,7 +463,7 @@ export default function KnowYourVehiclePage() {
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${comp.iconBg} ${comp.color}`}>
                       <comp.icon className="w-5 h-5" />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-[#f3ebdd]">{comp.title}</h3>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-primary-foreground">{comp.title}</h3>
                   </div>
 
                   <p className="text-xs text-gray-400 flex items-center gap-1 mb-3">
@@ -478,14 +478,14 @@ export default function KnowYourVehiclePage() {
                   <div className="mt-5 flex items-center justify-between">
                     <div className="flex -space-x-2">
                       {(["benly", "dream", "cub"] as CharacterKey[]).map((key) => (
-                        <div key={key} className={`w-7 h-7 rounded-full border-2 border-[#f3ebdd] dark:border-[#1A1A1A] overflow-hidden ${CHARACTERS[key].bg}`}>
+                        <div key={key} className={`w-7 h-7 rounded-full border-2 border-background dark:border-[#1A1A1A] overflow-hidden ${CHARACTERS[key].bg}`}>
                           <Image src={CHARACTERS[key].avatar} alt={CHARACTERS[key].name} width={28} height={28} className="w-full h-full object-cover" />
                         </div>
                       ))}
                     </div>
                     <button
                       onClick={() => setActiveModal(comp)}
-                      className="flex items-center gap-1.5 text-sm font-bold text-[#c1291A] hover:gap-3 transition-all duration-200"
+                      className="flex items-center gap-1.5 text-sm font-bold text-primary hover:gap-3 transition-all duration-200"
                     >
                       Read More <Arrow className="w-3.5 h-3.5" />
                     </button>
@@ -502,25 +502,25 @@ export default function KnowYourVehiclePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-gray-900 dark:bg-[#161616] rounded-3xl p-10 flex flex-col justify-between items-start relative overflow-hidden group">
             <div className="relative z-10">
-              <h3 className="text-2xl font-black text-[#f3ebdd] mb-4">Always Use Genuine Honda Parts</h3>
+              <h3 className="text-2xl font-black text-primary-foreground mb-4">Always Use Genuine Honda Parts</h3>
               <p className="text-gray-400 mb-8 max-w-md">
                 Non-genuine parts can compromise your safety and vehicle performance. Insist on Honda Genuine Parts for guaranteed reliability and perfect fit.
               </p>
             </div>
-            <Link href="/book-now" className="relative z-10 bg-[#f3ebdd] text-gray-900 px-6 py-3 rounded-xl font-bold hover:bg-[#e8dfd1] transition-colors">
+            <Link href="/book-now" className="relative z-10 bg-background text-gray-900 px-6 py-3 rounded-xl font-bold hover:bg-[#e8dfd1] transition-colors">
               Book Service Now
             </Link>
-            <Settings className="absolute -right-8 -bottom-8 w-48 h-48 text-[#f3ebdd]/5 group-hover:rotate-45 transition-transform duration-700" />
+            <Settings className="absolute -right-8 -bottom-8 w-48 h-48 text-primary-foreground/5 group-hover:rotate-45 transition-transform duration-700" />
           </div>
 
-          <div className="bg-[#c1291A] rounded-3xl p-10 flex flex-col justify-between items-start relative overflow-hidden group">
+          <div className="bg-primary rounded-3xl p-10 flex flex-col justify-between items-start relative overflow-hidden group">
             <div className="relative z-10">
-              <h3 className="text-2xl font-black text-[#f3ebdd] mb-4">Protect with Extended Warranty</h3>
+              <h3 className="text-2xl font-black text-primary-foreground mb-4">Protect with Extended Warranty</h3>
               <p className="text-red-100 mb-8 max-w-md">
                 Secure your peace of mind against unexpected repair costs. Our extended warranty packages cover major mechanical and electrical components.
               </p>
             </div>
-            <Link href="/warranty" className="relative z-10 bg-black text-[#f3ebdd] px-6 py-3 rounded-xl font-bold hover:bg-gray-900 transition-colors">
+            <Link href="/warranty" className="relative z-10 bg-black text-primary-foreground px-6 py-3 rounded-xl font-bold hover:bg-gray-900 transition-colors">
               Explore Warranty Plans
             </Link>
             <Shield className="absolute -right-4 -bottom-4 w-48 h-48 text-black/10 group-hover:scale-110 transition-transform duration-700" />

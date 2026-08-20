@@ -20,9 +20,24 @@ interface CategoryCarouselProps {
 }
 
 export default function CategoryCarousel({ products }: CategoryCarouselProps) {
-  // Group products by category
-  const scooters = products.filter((p) => p.category === "SCOOTERS");
-  const motorcycles = products.filter((p) => p.category === "MOTORCYCLES");
+  const scooterOrder = ["dio bs6 110", "dio bs6 125"];
+  const motorcycleOrder = ["cb shine bs6", "honda shine bs6", "sp shine bs6", "nx 200", "hornet"];
+
+  const getSortIndex = (name: string, orderArray: string[]) => {
+    const lowerName = name.toLowerCase();
+    const index = orderArray.findIndex(order => lowerName.includes(order));
+    return index === -1 ? 999 : index;
+  };
+
+  // Group products by category and sort them according to requirements
+  const scooters = products
+    .filter((p) => p.category === "SCOOTERS")
+    .sort((a, b) => getSortIndex(a.name, scooterOrder) - getSortIndex(b.name, scooterOrder));
+    
+  const motorcycles = products
+    .filter((p) => p.category === "MOTORCYCLES")
+    .sort((a, b) => getSortIndex(a.name, motorcycleOrder) - getSortIndex(b.name, motorcycleOrder));
+    
   const power = products.filter((p) => p.category === "POWER_PRODUCTS");
 
   const TABS = useMemo(() => [
@@ -78,10 +93,10 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
   if (TABS.length === 0) return null;
 
   return (
-    <div className="py-24 px-6 bg-[#f3ebdd] relative overflow-hidden min-h-[500px]">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight uppercase mb-8">
+    <section className="py-12 md:py-16 lg:py-24 px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px] relative overflow-hidden min-h-[500px]">
+      <div className="w-full mx-auto">
+        <div className="text-center mb-12 px-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight uppercase mb-8">
             Choose Your Product
           </h2>
 
@@ -91,13 +106,13 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`text-lg font-bold px-4 py-2 transition-colors relative ${activeTab === tab.id ? "text-[#c1291A]" : "text-gray-500 hover:text-gray-900"}`}
+                className={`text-lg font-bold px-4 py-2 transition-colors relative ${activeTab === tab.id ? "text-primary" : "text-gray-500 hover:text-gray-900"}`}
               >
                 {tab.label}
                 {activeTab === tab.id && (
                   <motion.div
                     layoutId="underline"
-                    className="absolute left-0 bottom-[-17px] w-full h-1 bg-[#c1291A]"
+                    className="absolute left-0 bottom-[-17px] w-full h-1 bg-primary"
                   />
                 )}
               </button>
@@ -139,18 +154,18 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
 
           <button
             onClick={scrollPrev}
-            className="absolute -left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-[#f3ebdd] hover:bg-[#e8dfd1] border border-gray-200 rounded-full flex items-center justify-center text-gray-800 shadow-xl transition-colors z-10 hidden sm:flex"
+            className="absolute -left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-background hover:bg-[#e8dfd1] border border-gray-200 rounded-full flex items-center justify-center text-gray-800 shadow-xl transition-colors z-10 hidden sm:flex"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button
             onClick={scrollNext}
-            className="absolute -right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-[#f3ebdd] hover:bg-[#e8dfd1] border border-gray-200 rounded-full flex items-center justify-center text-gray-800 shadow-xl transition-colors z-10 hidden sm:flex"
+            className="absolute -right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-background hover:bg-[#e8dfd1] border border-gray-200 rounded-full flex items-center justify-center text-gray-800 shadow-xl transition-colors z-10 hidden sm:flex"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

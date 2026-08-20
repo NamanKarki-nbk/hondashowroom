@@ -1,14 +1,10 @@
-import { PrismaClient } from "../app/generated/prisma";
-import { Pool } from "pg";
-import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "./app/generated/prisma";
 import bcrypt from "bcrypt";
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-const adapter = new PrismaPg(pool);
-const prisma = new PrismaClient({ adapter });
+const prisma = new PrismaClient();
 
 async function main() {
-  const adminEmail = process.env.ADMIN_EMAIL || "admin@honda.com";
+  const adminEmail = "admin@honda.com";
   const password = "admin123";
   
   const salt = await bcrypt.genSalt(10);
@@ -24,14 +20,13 @@ async function main() {
       fullName: "System Admin",
       passwordHash,
       phone: "0000000000",
-      // Set as fully verified to avoid KYC prompts
       citizenshipVerified: true,
       licenseVerified: true,
       nationalIdVerified: true,
     },
   });
 
-  console.log(`Admin user seeded: ${admin.email}`);
+  console.log(`Admin user created/updated: ${admin.email}`);
 }
 
 main()

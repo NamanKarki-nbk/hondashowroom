@@ -116,24 +116,24 @@ export default function BigWingTechnologySection({
         >
           <div className="bg-[#111111] p-2 flex flex-col items-center justify-center w-14 h-14">
              <Logo className="w-8 h-8" />
-             <div className="text-[#f3ebdd] text-[8px] font-bold uppercase tracking-wider mt-1">Honda</div>
+             <div className="text-primary-foreground text-[8px] font-bold uppercase tracking-wider mt-1">Honda</div>
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-[#f3ebdd]">{vehicleName}</h2>
+          <h2 className="text-3xl md:text-5xl font-black text-primary-foreground">{vehicleName}</h2>
         </motion.div>
 
         <motion.div 
           style={{ opacity: useTransform(scrollYProgress, [0.05, 0.1], [0, 1]) }}
           className="absolute top-8 left-8 md:top-12 md:left-12 z-20"
         >
-          <h2 className="text-3xl md:text-5xl font-black text-[#f3ebdd]">{activeTitle}</h2>
+          <h2 className="text-3xl md:text-5xl font-black text-primary-foreground">{activeTitle}</h2>
         </motion.div>
 
         {/* Concentric Circles behind the bike */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.05] z-0">
-          <div className="w-[300px] h-[300px] md:w-[450px] md:h-[450px] rounded-full border-[1.5px] border-[#f3ebdd] absolute"></div>
-          <div className="w-[450px] h-[450px] md:w-[650px] md:h-[650px] rounded-full border-[1.5px] border-[#f3ebdd] absolute"></div>
-          <div className="w-[600px] h-[600px] md:w-[850px] md:h-[850px] rounded-full border-[1.5px] border-[#f3ebdd] absolute"></div>
-          <div className="w-[750px] h-[750px] md:w-[1050px] md:h-[1050px] rounded-full border-[1.5px] border-[#f3ebdd] absolute"></div>
+          <div className="w-[300px] h-[300px] md:w-[450px] md:h-[450px] rounded-full border-[1.5px] border-background absolute"></div>
+          <div className="w-[450px] h-[450px] md:w-[650px] md:h-[650px] rounded-full border-[1.5px] border-background absolute"></div>
+          <div className="w-[600px] h-[600px] md:w-[850px] md:h-[850px] rounded-full border-[1.5px] border-background absolute"></div>
+          <div className="w-[750px] h-[750px] md:w-[1050px] md:h-[1050px] rounded-full border-[1.5px] border-background absolute"></div>
         </div>
 
         {/* Feature Backgrounds layer */}
@@ -192,7 +192,7 @@ export default function BigWingTechnologySection({
 
         {/* Action Button at bottom */}
         <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-30 pointer-events-auto">
-          <button className="bg-[#c1291A] hover:bg-[#a02014] text-[#f3ebdd] px-8 py-3 rounded-full font-bold text-sm shadow-[0_0_20px_rgba(237,27,46,0.5)] transition-all">
+          <button className="bg-primary hover:bg-primary-hover text-primary-foreground px-8 py-3 rounded-full font-bold text-sm shadow-[0_0_20px_rgba(237,27,46,0.5)] transition-all">
             More on {activeTitle.toLowerCase()}
           </button>
         </div>
@@ -279,7 +279,7 @@ function FeatureCard({
             <img src={feature.image} alt={feature.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
           </div>
         )}
-        <h3 className={`${showImageCard ? 'text-lg md:text-xl lg:text-3xl font-bold' : 'text-xl md:text-3xl lg:text-4xl font-black'} text-[#f3ebdd] mb-2 lg:mb-3 leading-tight ${showImageCard ? '' : 'tracking-wide'}`}>{feature.title}</h3>
+        <h3 className={`${showImageCard ? 'text-lg md:text-xl lg:text-3xl font-bold' : 'text-xl md:text-3xl lg:text-4xl font-black'} text-primary-foreground mb-2 lg:mb-3 leading-tight ${showImageCard ? '' : 'tracking-wide'}`}>{feature.title}</h3>
         <p className={`text-[#888888] ${showImageCard ? 'text-xs md:text-sm lg:text-base' : 'text-sm md:text-base lg:text-lg font-medium'} leading-relaxed`}>{feature.description}</p>
       </div>
     </motion.div>

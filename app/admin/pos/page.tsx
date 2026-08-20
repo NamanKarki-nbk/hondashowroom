@@ -24,9 +24,9 @@ export default function AdminPOS() {
   const commission = activeVehicle ? Math.round(activeVehicle.price * 0.015) : 0;
 
   return (
-    <div className="min-h-screen bg-[#f3ebdd] dark:bg-[#0B0B0C] text-gray-100 p-8">
+    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] text-gray-100 p-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-extrabold text-[#f3ebdd] mb-8">Point of Sale (POS) Terminal</h1>
+        <h1 className="text-3xl font-extrabold text-primary-foreground mb-8">Point of Sale (POS) Terminal</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
@@ -35,8 +35,8 @@ export default function AdminPOS() {
             
             {/* VIN Search */}
             <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 shadow-lg">
-              <h2 className="text-xl font-bold text-[#f3ebdd] mb-4 flex items-center gap-2">
-                <Search className="w-5 h-5 text-[#c1291A]" /> Scan or Enter VIN/Chassis
+              <h2 className="text-xl font-bold text-primary-foreground mb-4 flex items-center gap-2">
+                <Search className="w-5 h-5 text-primary" /> Scan or Enter VIN/Chassis
               </h2>
               <div className="flex gap-4">
                 <input 
@@ -44,9 +44,9 @@ export default function AdminPOS() {
                   value={vinSearch}
                   onChange={e => setVinSearch(e.target.value)}
                   placeholder="e.g. ME4HXXXXXX..."
-                  className="flex-1 bg-black border border-slate-700 rounded-xl px-4 py-3 text-[#f3ebdd] uppercase focus:border-[#c1291A] outline-none"
+                  className="flex-1 bg-black border border-slate-700 rounded-xl px-4 py-3 text-primary-foreground uppercase focus:border-primary outline-none"
                 />
-                <button onClick={handleSearch} className="bg-[#c1291A] hover:bg-[#a02014] text-[#f3ebdd] px-6 py-3 rounded-xl font-bold transition-colors">
+                <button onClick={handleSearch} className="bg-primary hover:bg-primary-hover text-primary-foreground px-6 py-3 rounded-xl font-bold transition-colors">
                   Search
                 </button>
               </div>
@@ -58,7 +58,7 @@ export default function AdminPOS() {
                     <h3 className="text-lg font-bold text-green-400">{activeVehicle.model}</h3>
                     <p className="text-sm text-gray-400 mt-1">VIN: {activeVehicle.vin}</p>
                     <p className="text-sm text-gray-400">Status: {activeVehicle.status}</p>
-                    <div className="text-xl font-black text-[#f3ebdd] mt-2">Rs. {activeVehicle.price.toLocaleString()}</div>
+                    <div className="text-xl font-black text-primary-foreground mt-2">Rs. {activeVehicle.price.toLocaleString()}</div>
                   </div>
                 </div>
               )}
@@ -66,22 +66,22 @@ export default function AdminPOS() {
 
             {/* Customer Linkage */}
             <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 shadow-lg">
-              <h2 className="text-xl font-bold text-[#f3ebdd] mb-4 flex items-center gap-2">
-                <UserPlus className="w-5 h-5 text-[#c1291A]" /> Link Customer Profile
+              <h2 className="text-xl font-bold text-primary-foreground mb-4 flex items-center gap-2">
+                <UserPlus className="w-5 h-5 text-primary" /> Link Customer Profile
               </h2>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <input type="text" placeholder="Full Name" value={customer.name} onChange={e => setCustomer({...customer, name: e.target.value})} className="bg-black border border-slate-700 rounded-xl px-4 py-3 text-sm focus:border-[#c1291A] outline-none" />
-                  <input type="tel" placeholder="Phone Number" value={customer.phone} onChange={e => setCustomer({...customer, phone: e.target.value})} className="bg-black border border-slate-700 rounded-xl px-4 py-3 text-sm focus:border-[#c1291A] outline-none" />
+                  <input type="text" placeholder="Full Name" value={customer.name} onChange={e => setCustomer({...customer, name: e.target.value})} className="bg-black border border-slate-700 rounded-xl px-4 py-3 text-sm focus:border-primary outline-none" />
+                  <input type="tel" placeholder="Phone Number" value={customer.phone} onChange={e => setCustomer({...customer, phone: e.target.value})} className="bg-black border border-slate-700 rounded-xl px-4 py-3 text-sm focus:border-primary outline-none" />
                 </div>
-                <input type="text" placeholder="Citizenship / License Number" value={customer.id} onChange={e => setCustomer({...customer, id: e.target.value})} className="w-full bg-black border border-slate-700 rounded-xl px-4 py-3 text-sm focus:border-[#c1291A] outline-none" />
+                <input type="text" placeholder="Citizenship / License Number" value={customer.id} onChange={e => setCustomer({...customer, id: e.target.value})} className="w-full bg-black border border-slate-700 rounded-xl px-4 py-3 text-sm focus:border-primary outline-none" />
               </div>
             </div>
 
             {/* Payment Method */}
             <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 shadow-lg">
-              <h2 className="text-xl font-bold text-[#f3ebdd] mb-4 flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-[#c1291A]" /> Payment Method
+              <h2 className="text-xl font-bold text-primary-foreground mb-4 flex items-center gap-2">
+                <CreditCard className="w-5 h-5 text-primary" /> Payment Method
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {["Bank Transfer", "Cheque", "eSewa", "Cash"].map(method => (
@@ -90,7 +90,7 @@ export default function AdminPOS() {
                     onClick={() => setPaymentMethod(method)}
                     className={`p-3 rounded-xl border text-sm font-medium transition-all ${
                       paymentMethod === method 
-                        ? "bg-[#c1291A]/10 border-[#c1291A] text-[#c1291A]" 
+                        ? "bg-primary/10 border-primary text-primary" 
                         : "bg-black border-slate-700 text-gray-400 hover:border-slate-500"
                     }`}
                   >
@@ -105,28 +105,28 @@ export default function AdminPOS() {
           {/* Right Column: Checkout & Invoice */}
           <div className="lg:col-span-5">
             <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 shadow-lg sticky top-8">
-              <h2 className="text-xl font-bold text-[#f3ebdd] mb-6 flex items-center gap-2">
-                <Calculator className="w-5 h-5 text-[#c1291A]" /> Transaction Summary
+              <h2 className="text-xl font-bold text-primary-foreground mb-6 flex items-center gap-2">
+                <Calculator className="w-5 h-5 text-primary" /> Transaction Summary
               </h2>
               
               <div className="space-y-4 mb-8">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-400">Vehicle Base Price</span>
-                  <span className="text-[#f3ebdd] font-medium">Rs. {activeVehicle ? activeVehicle.price.toLocaleString() : "0"}</span>
+                  <span className="text-primary-foreground font-medium">Rs. {activeVehicle ? activeVehicle.price.toLocaleString() : "0"}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-400">VAT (13%)</span>
-                  <span className="text-[#f3ebdd] font-medium">Inclusive</span>
+                  <span className="text-primary-foreground font-medium">Inclusive</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-400">Registration & Tax</span>
-                  <span className="text-[#f3ebdd] font-medium">At Actuals</span>
+                  <span className="text-primary-foreground font-medium">At Actuals</span>
                 </div>
                 
                 <div className="border-t border-slate-700 pt-4 mt-4">
                    <div className="flex justify-between items-end">
                       <span className="text-gray-400 text-sm">Total Receivable</span>
-                      <span className="text-3xl font-black text-[#c1291A]">
+                      <span className="text-3xl font-black text-primary">
                         Rs. {activeVehicle ? activeVehicle.price.toLocaleString() : "0"}
                       </span>
                    </div>
@@ -141,7 +141,7 @@ export default function AdminPOS() {
 
               <button 
                 disabled={!activeVehicle || !customer.name}
-                className="w-full bg-[#f3ebdd] text-black hover:bg-gray-200 py-4 rounded-xl font-bold text-lg transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
+                className="w-full bg-background text-black hover:bg-gray-200 py-4 rounded-xl font-bold text-lg transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
               >
                 <FileText className="w-5 h-5" /> Generate Tax Invoice
               </button>

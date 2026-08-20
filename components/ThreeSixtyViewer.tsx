@@ -67,7 +67,7 @@ export default function ThreeSixtyViewer({ vehicleSlug = "dio-125", fallbackImag
 
   return (
     <div 
-      className="w-full h-[400px] lg:h-[600px] xl:h-[750px] relative bg-[#f3ebdd] rounded-3xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col items-center justify-center"
+      className="w-full h-[400px] lg:h-[600px] xl:h-[750px] relative bg-background rounded-3xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col items-center justify-center"
     >
       <div 
         ref={containerRef}
@@ -95,7 +95,7 @@ export default function ThreeSixtyViewer({ vehicleSlug = "dio-125", fallbackImag
         )}
       </div>
       {!imageError && (
-        <div className="absolute bottom-6 bg-black/60 text-[#f3ebdd] px-4 py-2 rounded-full text-sm font-medium backdrop-blur-md pointer-events-none">
+        <div className="absolute bottom-6 bg-black/60 text-primary-foreground px-4 py-2 rounded-full text-sm font-medium backdrop-blur-md pointer-events-none">
           Drag to Rotate 360°
         </div>
       )}

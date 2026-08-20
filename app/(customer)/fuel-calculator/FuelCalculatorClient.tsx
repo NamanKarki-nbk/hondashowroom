@@ -77,7 +77,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
   const maxCost = Math.max(...chartData.map(d => d.cost), 1);
 
   return (
-    <div className="min-h-screen pt-28 pb-20 bg-[#f3ebdd] dark:bg-[#0B0B0C]">
+    <div className="min-h-screen pt-28 pb-20 bg-background dark:bg-[#0B0B0C]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Hero Section */}
@@ -85,16 +85,16 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
           <motion.div 
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6 text-[#c1291A]"
+            className="w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-6 text-primary"
           >
             <Gauge className="w-10 h-10" />
           </motion.div>
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-[#f3ebdd] mb-4"
+            className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-primary-foreground mb-4"
           >
-            Fuel Cost <span className="text-[#c1291A]">Calculator</span>
+            Fuel Cost <span className="text-primary">Calculator</span>
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -112,16 +112,16 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="lg:col-span-5 bg-[#f3ebdd] dark:bg-[#111] border border-gray-200 dark:border-[#f3ebdd]/10 rounded-3xl p-8 shadow-xl"
+            className="lg:col-span-5 bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-3xl p-8 shadow-xl"
           >
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-[#f3ebdd] flex items-center">
-                <Calculator className="w-6 h-6 mr-3 text-[#c1291A]" />
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-primary-foreground flex items-center">
+                <Calculator className="w-6 h-6 mr-3 text-primary" />
                 Your Details
               </h2>
               <button 
                 onClick={handleReset}
-                className="text-sm font-medium text-gray-500 hover:text-[#c1291A] dark:text-gray-400 flex items-center transition-colors"
+                className="text-sm font-medium text-gray-500 hover:text-primary dark:text-gray-400 flex items-center transition-colors"
               >
                 <RefreshCw className="w-4 h-4 mr-1" /> Reset
               </button>
@@ -136,7 +136,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
                 <select
                   value={vehicleId}
                   onChange={(e) => setVehicleId(e.target.value)}
-                  className="w-full bg-[#f3ebdd] dark:bg-[#1a1a1c] border border-gray-200 dark:border-[#f3ebdd]/10 text-gray-900 dark:text-[#f3ebdd] rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#c1291A] focus:border-transparent transition-shadow outline-none"
+                  className="w-full bg-background dark:bg-[#1a1a1c] border border-gray-200 dark:border-background/10 text-gray-900 dark:text-primary-foreground rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow outline-none"
                 >
                   {vehicles.map(v => (
                     <option key={v.id} value={v.id}>{v.name}</option>
@@ -150,7 +150,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Daily Distance (km)
                   </label>
-                  <span className="text-xl font-bold text-[#c1291A]">{dailyDistance} km</span>
+                  <span className="text-xl font-bold text-primary">{dailyDistance} km</span>
                 </div>
                 <input
                   type="range"
@@ -158,7 +158,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
                   max="150"
                   value={dailyDistance}
                   onChange={(e) => setDailyDistance(Number(e.target.value))}
-                  className="w-full h-2 bg-gray-200 dark:bg-gray-800 rounded-lg appearance-none cursor-pointer accent-[#c1291A]"
+                  className="w-full h-2 bg-gray-200 dark:bg-gray-800 rounded-lg appearance-none cursor-pointer accent-primary"
                 />
                 <div className="flex justify-between text-xs text-gray-400 mt-1">
                   <span>5 km</span>
@@ -172,7 +172,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Days Commuting Per Month
                   </label>
-                  <span className="text-xl font-bold text-[#c1291A]">{daysPerMonth} days</span>
+                  <span className="text-xl font-bold text-primary">{daysPerMonth} days</span>
                 </div>
                 <input
                   type="range"
@@ -180,7 +180,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
                   max="31"
                   value={daysPerMonth}
                   onChange={(e) => setDaysPerMonth(Number(e.target.value))}
-                  className="w-full h-2 bg-gray-200 dark:bg-gray-800 rounded-lg appearance-none cursor-pointer accent-[#c1291A]"
+                  className="w-full h-2 bg-gray-200 dark:bg-gray-800 rounded-lg appearance-none cursor-pointer accent-primary"
                 />
                 <div className="flex justify-between text-xs text-gray-400 mt-1">
                   <span>1 day</span>
@@ -198,7 +198,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
                     type="number"
                     value={fuelPrice}
                     onChange={(e) => setFuelPrice(Number(e.target.value))}
-                    className="w-full bg-[#f3ebdd] dark:bg-[#1a1a1c] border border-gray-200 dark:border-[#f3ebdd]/10 text-gray-900 dark:text-[#f3ebdd] font-semibold rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#c1291A] focus:border-transparent outline-none"
+                    className="w-full bg-background dark:bg-[#1a1a1c] border border-gray-200 dark:border-background/10 text-gray-900 dark:text-primary-foreground font-semibold rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
                 </div>
                 {/* Mileage */}
@@ -212,7 +212,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
                     max="80"
                     value={mileage}
                     onChange={(e) => setMileage(Number(e.target.value))}
-                    className="w-full bg-[#f3ebdd] dark:bg-[#1a1a1c] border border-gray-200 dark:border-[#f3ebdd]/10 text-gray-900 dark:text-[#f3ebdd] font-semibold rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#c1291A] focus:border-transparent outline-none"
+                    className="w-full bg-background dark:bg-[#1a1a1c] border border-gray-200 dark:border-background/10 text-gray-900 dark:text-primary-foreground font-semibold rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                   />
                 </div>
               </div>
@@ -227,7 +227,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
             className="lg:col-span-7 flex flex-col space-y-6"
           >
             {/* Primary Result */}
-            <div className="bg-gradient-to-br from-[#c1291A] to-red-800 rounded-3xl p-8 shadow-2xl text-[#f3ebdd] relative overflow-hidden">
+            <div className="bg-gradient-to-br from-primary to-red-800 rounded-3xl p-8 shadow-2xl text-primary-foreground relative overflow-hidden">
               <div className="absolute top-0 right-0 -mt-10 -mr-10 opacity-10">
                 <Fuel className="w-64 h-64" />
               </div>
@@ -257,11 +257,11 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
             </div>
 
             {/* Savings Widget */}
-            <div className="bg-[#f3ebdd] dark:bg-[#111] border border-gray-200 dark:border-[#f3ebdd]/10 rounded-3xl p-6 shadow-lg flex items-center justify-between">
+            <div className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-3xl p-6 shadow-lg flex items-center justify-between">
               <div>
                 <div className="flex items-center space-x-2 mb-2">
                   <TrendingDown className="w-5 h-5 text-green-500" />
-                  <h4 className="font-bold text-gray-900 dark:text-[#f3ebdd]">Annual Savings</h4>
+                  <h4 className="font-bold text-gray-900 dark:text-primary-foreground">Annual Savings</h4>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Compared to an average car (12 kmpl)</p>
               </div>
@@ -277,30 +277,30 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
 
             {/* Tips Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-[#f3ebdd] dark:bg-[#111] border border-gray-200 dark:border-[#f3ebdd]/10 rounded-2xl p-4 flex items-start space-x-3">
+              <div className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-2xl p-4 flex items-start space-x-3">
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg text-blue-500">
                   <Leaf className="w-5 h-5" />
                 </div>
                 <div>
-                  <h5 className="font-semibold text-sm text-gray-900 dark:text-[#f3ebdd] mb-1">Eco-riding</h5>
+                  <h5 className="font-semibold text-sm text-gray-900 dark:text-primary-foreground mb-1">Eco-riding</h5>
                   <p className="text-xs text-gray-500 dark:text-gray-400">Maintain a steady speed of 40-50 km/h for optimal mileage.</p>
                 </div>
               </div>
-              <div className="bg-[#f3ebdd] dark:bg-[#111] border border-gray-200 dark:border-[#f3ebdd]/10 rounded-2xl p-4 flex items-start space-x-3">
+              <div className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-2xl p-4 flex items-start space-x-3">
                 <div className="bg-orange-50 dark:bg-orange-900/20 p-2 rounded-lg text-orange-500">
                   <Zap className="w-5 h-5" />
                 </div>
                 <div>
-                  <h5 className="font-semibold text-sm text-gray-900 dark:text-[#f3ebdd] mb-1">Tyre Pressure</h5>
+                  <h5 className="font-semibold text-sm text-gray-900 dark:text-primary-foreground mb-1">Tyre Pressure</h5>
                   <p className="text-xs text-gray-500 dark:text-gray-400">Check tyre pressure weekly. Low pressure increases fuel drag.</p>
                 </div>
               </div>
-              <div className="bg-[#f3ebdd] dark:bg-[#111] border border-gray-200 dark:border-[#f3ebdd]/10 rounded-2xl p-4 flex items-start space-x-3">
+              <div className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-2xl p-4 flex items-start space-x-3">
                 <div className="bg-purple-50 dark:bg-purple-900/20 p-2 rounded-lg text-purple-500">
                   <RefreshCw className="w-5 h-5" />
                 </div>
                 <div>
-                  <h5 className="font-semibold text-sm text-gray-900 dark:text-[#f3ebdd] mb-1">Regular Service</h5>
+                  <h5 className="font-semibold text-sm text-gray-900 dark:text-primary-foreground mb-1">Regular Service</h5>
                   <p className="text-xs text-gray-500 dark:text-gray-400">Fresh engine oil and clean filters significantly improve efficiency.</p>
                 </div>
               </div>
@@ -313,11 +313,11 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-[#f3ebdd] dark:bg-[#111] border border-gray-200 dark:border-[#f3ebdd]/10 rounded-3xl p-8 shadow-xl"
+          className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-3xl p-8 shadow-xl"
         >
           <div className="flex items-center space-x-3 mb-8">
-            <BarChart2 className="w-6 h-6 text-[#c1291A]" />
-            <h3 className="text-xl font-bold text-gray-900 dark:text-[#f3ebdd]">Monthly Cost Comparison</h3>
+            <BarChart2 className="w-6 h-6 text-primary" />
+            <h3 className="text-xl font-bold text-gray-900 dark:text-primary-foreground">Monthly Cost Comparison</h3>
           </div>
           
           <div className="space-y-4">
@@ -327,7 +327,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
               return (
                 <div key={v.id} className="relative flex items-center group">
                   <div className="w-1/4 pr-4 text-right">
-                    <span className={`text-sm font-semibold truncate block ${isSelected ? 'text-[#c1291A]' : 'text-gray-600 dark:text-gray-400'}`}>
+                    <span className={`text-sm font-semibold truncate block ${isSelected ? 'text-primary' : 'text-gray-600 dark:text-gray-400'}`}>
                       {v.name}
                     </span>
                     <span className="text-[10px] text-gray-400 uppercase">{v.vMileage} kmpl</span>
@@ -339,17 +339,17 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
                       transition={{ duration: 0.8, ease: "easeOut" }}
                       className={`h-full rounded-full flex items-center px-4 ${
                         isSelected 
-                          ? 'bg-gradient-to-r from-[#c1291A] to-red-600 shadow-[0_0_15px_rgba(237,27,46,0.5)]' 
+                          ? 'bg-gradient-to-r from-primary to-red-600 shadow-[0_0_15px_rgba(237,27,46,0.5)]' 
                           : 'bg-gray-300 dark:bg-gray-600'
                       }`}
                     >
                     </motion.div>
                     <span className={`absolute left-0 pl-4 text-xs font-bold whitespace-nowrap z-10 ${
-                      isSelected ? 'text-[#f3ebdd]' : 'text-gray-700 dark:text-[#f3ebdd]'
+                      isSelected ? 'text-primary-foreground' : 'text-gray-700 dark:text-primary-foreground'
                     }`} style={{ left: `calc(${barWidth} - 100px)`}}>
                       {/* Ensures text is visible even on small bars, positioned right after bar or inside if large enough. For simplicity just place it after the bar */}
                     </span>
-                    <span className="absolute left-0 pl-4 text-xs font-bold z-10 text-[#f3ebdd] mix-blend-difference">
+                    <span className="absolute left-0 pl-4 text-xs font-bold z-10 text-primary-foreground mix-blend-difference">
                       NPR {v.cost.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                     </span>
                   </div>

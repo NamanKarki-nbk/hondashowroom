@@ -428,7 +428,7 @@ export default function ProfilePage() {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-[#0B0B0C] flex flex-col pt-[120px]">
         <div className="flex-1 flex items-center justify-center">
-           <Loader2 className="w-10 h-10 text-[#cc0000] animate-spin" />
+           <Loader2 className="w-10 h-10 text-primary animate-spin" />
         </div>
       </div>
     );
@@ -456,7 +456,7 @@ export default function ProfilePage() {
       {/* Breadcrumbs */}
       <div className="bg-white dark:bg-[#111111] border-b border-gray-200 dark:border-slate-800 py-4 px-6 md:px-10">
         <div className="max-w-7xl mx-auto flex items-center text-sm text-gray-500 dark:text-gray-400 space-x-2">
-          <Link href="/" className="hover:text-[#cc0000] transition-colors flex items-center gap-1.5"><Home className="w-4 h-4" /> Home</Link>
+          <Link href="/" className="hover:text-primary transition-colors flex items-center gap-1.5"><Home className="w-4 h-4" /> Home</Link>
           <ChevronRight className="w-4 h-4" />
           <span className="text-gray-900 dark:text-white font-medium">My Profile</span>
         </div>
@@ -495,7 +495,7 @@ export default function ProfilePage() {
               </div>
             )}
 
-            <div className="border-l-4 border-[#cc0000] pl-4 mb-8">
+            <div className="border-l-4 border-primary pl-4 mb-8">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white uppercase tracking-tight">Personal Details</h2>
             </div>
             
@@ -511,11 +511,11 @@ export default function ProfilePage() {
                 {formData.avatarUrl ? (
                   <img src={formData.avatarUrl} alt="Avatar" className="w-32 h-32 rounded-full object-cover border-4 border-gray-50 dark:border-slate-900 shadow-md group-hover:opacity-75 transition-opacity" />
                 ) : (
-                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#cc0000] to-red-600 flex items-center justify-center text-white text-4xl font-bold shadow-md group-hover:opacity-75 transition-opacity">
+                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-red-600 flex items-center justify-center text-white text-4xl font-bold shadow-md group-hover:opacity-75 transition-opacity">
                     {formData.fullName ? formData.fullName.charAt(0).toUpperCase() : (formData.email ? formData.email.charAt(0).toUpperCase() : "U")}
                   </div>
                 )}
-                <div className="absolute bottom-0 right-0 bg-gray-900 text-white p-2.5 rounded-full hover:bg-[#cc0000] transition-colors border-2 border-white dark:border-[#111111] shadow-lg">
+                <div className="absolute bottom-0 right-0 bg-gray-900 text-white p-2.5 rounded-full hover:bg-primary transition-colors border-2 border-white dark:border-[#111111] shadow-lg">
                   <Camera className="w-5 h-5" />
                 </div>
               </div>
@@ -539,7 +539,7 @@ export default function ProfilePage() {
                   value={formData.fullName} 
                   onChange={handleInputChange} 
                   disabled={hasAnyVerification}
-                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
+                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
                   placeholder="John Doe" 
                 />
               </div>
@@ -554,7 +554,7 @@ export default function ProfilePage() {
                   value={formData.gender} 
                   onChange={handleInputChange} 
                   disabled={hasAnyVerification}
-                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3.5 text-sm focus:border-[#cc0000] outline-none transition-colors dark:text-white font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3.5 text-sm focus:border-primary outline-none transition-colors dark:text-white font-medium disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <option value="MALE">Male</option>
                   <option value="FEMALE">Female</option>
@@ -573,7 +573,7 @@ export default function ProfilePage() {
                   value={formData.dobAd} 
                   onChange={handleInputChange} 
                   disabled={hasAnyVerification}
-                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
+                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
                   placeholder="YYYY MMM DD" 
                 />
               </div>
@@ -591,7 +591,7 @@ export default function ProfilePage() {
                     value={formData.email} 
                     onChange={handleInputChange} 
                     disabled={lockEmail}
-                    className="flex-1 bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
+                    className="flex-1 bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
                     placeholder="you@example.com" 
                   />
                   {!lockEmail && formData.email !== initialState.email && (
@@ -619,7 +619,7 @@ export default function ProfilePage() {
                     value={formData.phone} 
                     onChange={handleInputChange} 
                     disabled={lockPhone}
-                    className="flex-1 bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
+                    className="flex-1 bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
                     placeholder="+977 98XXXXXXXX" 
                   />
                   {!lockPhone && formData.phone !== initialState.phone && (
@@ -643,7 +643,7 @@ export default function ProfilePage() {
                   name="address" 
                   value={formData.address} 
                   onChange={handleInputChange} 
-                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] outline-none text-gray-900 dark:text-white transition-all" 
+                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all" 
                   placeholder="Kathmandu, Nepal" 
                 />
               </div>
@@ -657,7 +657,7 @@ export default function ProfilePage() {
                   value={formData.bio} 
                   onChange={handleInputChange} 
                   rows={3} 
-                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-[#cc0000] outline-none text-gray-900 dark:text-white transition-all resize-none" 
+                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all resize-none" 
                   placeholder="Tell us a little about your riding experience..."
                 ></textarea>
               </div>
@@ -668,7 +668,7 @@ export default function ProfilePage() {
           <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none shadow-sm relative overflow-hidden">
             
             <div className="p-6 md:p-10 pb-0">
-              <div className="border-l-4 border-[#cc0000] pl-4 mb-6 flex items-center justify-between">
+              <div className="border-l-4 border-primary pl-4 mb-6 flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white uppercase tracking-tight">Identity Documents</h2>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Verify multiple documents to increase your profile trust score.</p>
@@ -691,7 +691,7 @@ export default function ProfilePage() {
                     setFrontImage(null);
                     setBackImage(null);
                   }}
-                  className={`py-4 px-2 font-bold text-sm uppercase tracking-wider border-b-2 flex items-center gap-2 transition-colors ${activeTab === tab.id ? 'border-[#cc0000] text-[#cc0000]' : 'border-transparent text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}
+                  className={`py-4 px-2 font-bold text-sm uppercase tracking-wider border-b-2 flex items-center gap-2 transition-colors ${activeTab === tab.id ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}
                 >
                   {tab.label}
                   {tab.verified && <ShieldCheck className="w-4 h-4 text-green-500" />}
@@ -795,7 +795,7 @@ export default function ProfilePage() {
                       type="button"
                       onClick={handleScan}
                       disabled={isScanning || !frontImage || !backImage}
-                      className="w-full bg-gray-900 dark:bg-white text-white dark:text-black font-black uppercase tracking-widest py-4 px-4 rounded-none hover:bg-black hover:text-[#cc0000] dark:hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center justify-center gap-3"
+                      className="w-full bg-gray-900 dark:bg-white text-white dark:text-black font-black uppercase tracking-widest py-4 px-4 rounded-none hover:bg-black hover:text-primary dark:hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center justify-center gap-3"
                     >
                       {isScanning ? <><Loader2 className="w-5 h-5 animate-spin" /> Extracting...</> : `Scan ${activeTab.replace('_', ' ')}`}
                     </button>
@@ -804,11 +804,11 @@ export default function ProfilePage() {
                   <div className="bg-gray-50 dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none p-6 relative">
                     {isScanning && (
                       <div className="absolute inset-0 z-10 bg-white/60 dark:bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center">
-                        <div className="relative"><div className="absolute inset-0 border-t-2 border-[#cc0000] rounded-full animate-spin"></div><ShieldCheck className="w-12 h-12 text-[#cc0000] opacity-50 animate-pulse" /></div>
+                        <div className="relative"><div className="absolute inset-0 border-t-2 border-primary rounded-full animate-spin"></div><ShieldCheck className="w-12 h-12 text-primary opacity-50 animate-pulse" /></div>
                         <p className="mt-4 text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest animate-pulse">Scanning Document...</p>
                       </div>
                     )}
-                    <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest mb-6 flex items-center gap-2"><FileText className="w-4 h-4 text-[#cc0000]" /> Extracted Data</h3>
+                    <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest mb-6 flex items-center gap-2"><FileText className="w-4 h-4 text-primary" /> Extracted Data</h3>
                     {scannedData ? (
                       <div className="space-y-4 animate-in fade-in zoom-in duration-300">
                         <div className="grid grid-cols-2 gap-4 text-sm">
@@ -818,7 +818,7 @@ export default function ProfilePage() {
                               type="text" 
                               value={scannedData[`${activeTab.toLowerCase().replace('_', '')}Number`] || ''} 
                               onChange={(e) => setScannedData({...scannedData, [`${activeTab.toLowerCase().replace('_', '')}Number`]: e.target.value})}
-                              className="w-full bg-white dark:bg-black border border-gray-300 dark:border-slate-700 rounded-none px-2 py-1 text-sm font-medium text-gray-900 dark:text-white focus:outline-none focus:border-[#cc0000] transition-colors"
+                              className="w-full bg-white dark:bg-black border border-gray-300 dark:border-slate-700 rounded-none px-2 py-1 text-sm font-medium text-gray-900 dark:text-white focus:outline-none focus:border-primary transition-colors"
                             />
                           </div>
                           {scannedData.fullName !== undefined && (
@@ -828,7 +828,7 @@ export default function ProfilePage() {
                                 type="text" 
                                 value={scannedData.fullName} 
                                 onChange={(e) => setScannedData({...scannedData, fullName: e.target.value})}
-                                className="w-full bg-white dark:bg-black border border-gray-300 dark:border-slate-700 rounded-none px-2 py-1 text-sm font-medium text-gray-900 dark:text-white focus:outline-none focus:border-[#cc0000] transition-colors"
+                                className="w-full bg-white dark:bg-black border border-gray-300 dark:border-slate-700 rounded-none px-2 py-1 text-sm font-medium text-gray-900 dark:text-white focus:outline-none focus:border-primary transition-colors"
                               />
                             </div>
                           )}
@@ -839,7 +839,7 @@ export default function ProfilePage() {
                                 type="text" 
                                 value={scannedData.dobAd} 
                                 onChange={(e) => setScannedData({...scannedData, dobAd: e.target.value})}
-                                className="w-full bg-white dark:bg-black border border-gray-300 dark:border-slate-700 rounded-none px-2 py-1 text-sm font-medium text-gray-900 dark:text-white focus:outline-none focus:border-[#cc0000] transition-colors"
+                                className="w-full bg-white dark:bg-black border border-gray-300 dark:border-slate-700 rounded-none px-2 py-1 text-sm font-medium text-gray-900 dark:text-white focus:outline-none focus:border-primary transition-colors"
                               />
                             </div>
                           )}
@@ -849,7 +849,7 @@ export default function ProfilePage() {
                               <select 
                                 value={scannedData.gender} 
                                 onChange={(e) => setScannedData({...scannedData, gender: e.target.value})}
-                                className="w-full bg-white dark:bg-black border border-gray-300 dark:border-slate-700 rounded-none px-2 py-1 text-sm font-medium text-gray-900 dark:text-white focus:outline-none focus:border-[#cc0000] transition-colors"
+                                className="w-full bg-white dark:bg-black border border-gray-300 dark:border-slate-700 rounded-none px-2 py-1 text-sm font-medium text-gray-900 dark:text-white focus:outline-none focus:border-primary transition-colors"
                               >
                                 <option value="MALE">MALE</option>
                                 <option value="FEMALE">FEMALE</option>
@@ -860,7 +860,7 @@ export default function ProfilePage() {
                         </div>
                         <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-slate-800">
                           <button type="button" onClick={handleCancelScan} className="flex-1 py-2 text-xs font-bold uppercase tracking-wider border border-gray-300 dark:border-slate-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">Discard</button>
-                          <button type="button" onClick={handleConfirmScan} className="flex-1 py-2 text-xs font-bold uppercase tracking-wider bg-[#cc0000] hover:bg-red-700 text-white transition-colors">Confirm & Add</button>
+                          <button type="button" onClick={handleConfirmScan} className="flex-1 py-2 text-xs font-bold uppercase tracking-wider bg-primary hover:bg-red-700 text-white transition-colors">Confirm & Add</button>
                         </div>
                       </div>
                     ) : (
@@ -877,7 +877,7 @@ export default function ProfilePage() {
           {/* Form Actions */}
           <div className="flex justify-end pt-4 pb-20 sticky bottom-0 z-20 pointer-events-none">
             <div className="pointer-events-auto">
-              <button type="submit" disabled={saving} className="bg-[#cc0000] hover:bg-red-700 text-white font-black uppercase tracking-widest py-4 px-10 rounded-none flex items-center gap-3 transition-transform active:scale-95 shadow-xl disabled:opacity-50 text-base">
+              <button type="submit" disabled={saving} className="bg-primary hover:bg-red-700 text-white font-black uppercase tracking-widest py-4 px-10 rounded-none flex items-center gap-3 transition-transform active:scale-95 shadow-xl disabled:opacity-50 text-base">
                 {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                 {saving ? "Saving Changes..." : "Save Profile"}
               </button>
@@ -892,7 +892,7 @@ export default function ProfilePage() {
           <div className="bg-white dark:bg-[#111111] w-full max-w-md border border-gray-200 dark:border-slate-800 p-8 shadow-2xl animate-in fade-in zoom-in duration-200">
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Smartphone className="w-8 h-8 text-[#cc0000]" />
+                <Smartphone className="w-8 h-8 text-primary" />
               </div>
               <h2 className="text-xl font-bold text-gray-900 dark:text-white uppercase tracking-wider">Verify Contact</h2>
               <p className="text-sm text-gray-500 mt-2">Enter the OTP sent to <span className="font-bold text-gray-800 dark:text-gray-300">{pendingContactValue}</span></p>
@@ -903,7 +903,7 @@ export default function ProfilePage() {
               value={otpValue}
               onChange={(e) => setOtpValue(e.target.value)}
               placeholder="Enter 6-digit code"
-              className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-300 dark:border-slate-700 text-center text-2xl tracking-[0.5em] font-mono py-4 focus:border-[#cc0000] focus:ring-1 focus:ring-[#cc0000] outline-none text-gray-900 dark:text-white mb-6"
+              className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-300 dark:border-slate-700 text-center text-2xl tracking-[0.5em] font-mono py-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-gray-900 dark:text-white mb-6"
             />
 
             <div className="flex gap-4">
@@ -918,7 +918,7 @@ export default function ProfilePage() {
                 type="button" 
                 onClick={handleOtpSubmit}
                 disabled={isOtpVerifying || otpValue.length !== 6}
-                className="flex-1 py-3 text-sm font-bold uppercase tracking-wider bg-[#cc0000] hover:bg-red-700 text-white disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 py-3 text-sm font-bold uppercase tracking-wider bg-primary hover:bg-red-700 text-white disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isOtpVerifying ? <Loader2 className="w-4 h-4 animate-spin" /> : "Verify"}
               </button>

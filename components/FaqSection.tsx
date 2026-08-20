@@ -31,11 +31,11 @@ export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-24 px-6 bg-[#f3ebdd] border-t border-gray-100">
+    <section className="py-24 px-6 bg-background border-t border-gray-100">
       <div className="max-w-[1200px] mx-auto w-full">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6 text-gray-900 uppercase">
-            FREQUENTLY ASKED <span className="text-[#c1291A]">QUESTIONS</span>
+            FREQUENTLY ASKED <span className="text-primary">QUESTIONS</span>
           </h2>
           <p className="text-lg xl:text-2xl text-gray-600">Got questions? We've got answers to help you ride with confidence.</p>
         </div>
@@ -44,7 +44,7 @@ export default function FaqSection() {
           {FAQS.map((faq, index) => (
             <div 
               key={index}
-              className={`border rounded-2xl overflow-hidden transition-colors duration-300 ${openIndex === index ? 'border-[#c1291A]/30 bg-red-50/50' : 'border-gray-200 bg-[#f3ebdd] hover:border-gray-300'}`}
+              className={`border rounded-2xl overflow-hidden transition-colors duration-300 ${openIndex === index ? 'border-primary/30 bg-red-50/50' : 'border-gray-200 bg-background hover:border-gray-300'}`}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
@@ -54,7 +54,7 @@ export default function FaqSection() {
                 <motion.div
                   animate={{ rotate: openIndex === index ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
-                  className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-colors ${openIndex === index ? 'bg-[#c1291A] text-[#f3ebdd]' : 'bg-[#e8dfd1] text-gray-500'}`}
+                  className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-colors ${openIndex === index ? 'bg-primary text-primary-foreground' : 'bg-[#e8dfd1] text-gray-500'}`}
                 >
                   <ChevronDown className="w-5 h-5 xl:w-6 xl:h-6" />
                 </motion.div>

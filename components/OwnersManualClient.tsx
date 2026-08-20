@@ -92,15 +92,15 @@ export default function OwnersManualClient({ products }: { products: Product[] }
   };
 
   return (
-    <div className="w-full text-[#f3ebdd] font-sans">
-      <h1 className="text-[28px] font-bold mb-1 text-[#f3ebdd]">Owners Manual</h1>
+    <div className="w-full text-primary-foreground font-sans">
+      <h1 className="text-[28px] font-bold mb-1 text-primary-foreground">Owners Manual</h1>
       <p className="text-[#5b8cff] text-[13px] mb-8 font-medium">Access your essential Honda two-wheeler owner's manuals</p>
 
       {/* Top Row Dropdowns */}
       <div className="flex flex-col lg:flex-row items-center gap-3">
         <div className="relative w-full lg:flex-1">
           <select 
-            className="w-full appearance-none bg-[#2a3040] border border-[#f3ebdd]/5 rounded py-[14px] px-4 text-[#a0aabf] text-[13px] focus:outline-none focus:border-[#f3ebdd]/20 cursor-pointer"
+            className="w-full appearance-none bg-[#2a3040] border border-background/5 rounded py-[14px] px-4 text-[#a0aabf] text-[13px] focus:outline-none focus:border-background/20 cursor-pointer"
             value={segment} onChange={e => setSegment(e.target.value)}
           >
             <option value="" disabled>Select Segment</option>
@@ -112,7 +112,7 @@ export default function OwnersManualClient({ products }: { products: Product[] }
         
         <div className="relative w-full lg:flex-1">
           <select 
-            className="w-full appearance-none bg-[#2a3040] border border-[#f3ebdd]/5 rounded py-[14px] px-4 text-[#a0aabf] text-[13px] focus:outline-none focus:border-[#f3ebdd]/20 cursor-pointer"
+            className="w-full appearance-none bg-[#2a3040] border border-background/5 rounded py-[14px] px-4 text-[#a0aabf] text-[13px] focus:outline-none focus:border-background/20 cursor-pointer"
             value={model} onChange={e => { setModel(e.target.value); setSubmittedModels([]); }}
           >
             <option value="" disabled>Select Model</option>
@@ -127,7 +127,7 @@ export default function OwnersManualClient({ products }: { products: Product[] }
 
         <div className="relative w-full lg:flex-1">
           <select 
-            className="w-full appearance-none bg-[#2a3040] border border-[#f3ebdd]/5 rounded py-[14px] px-4 text-[#a0aabf] text-[13px] focus:outline-none focus:border-[#f3ebdd]/20 cursor-pointer"
+            className="w-full appearance-none bg-[#2a3040] border border-background/5 rounded py-[14px] px-4 text-[#a0aabf] text-[13px] focus:outline-none focus:border-background/20 cursor-pointer"
             value={manualType} onChange={e => setManualType(e.target.value)}
           >
             <option value="" disabled>Select Manual Type</option>
@@ -139,7 +139,7 @@ export default function OwnersManualClient({ products }: { products: Product[] }
 
         <button 
           onClick={handleSubmit}
-          className="w-full lg:w-auto bg-[#c40000] hover:bg-[#a00000] text-[#f3ebdd] font-bold py-[14px] px-[30px] rounded transition-colors text-[13px] min-w-[120px]"
+          className="w-full lg:w-auto bg-primary hover:bg-primary-hover text-primary-foreground font-bold py-[14px] px-[30px] rounded transition-colors text-[13px] min-w-[120px]"
         >
           Submit
         </button>
@@ -158,7 +158,7 @@ export default function OwnersManualClient({ products }: { products: Product[] }
             placeholder="Enter VIN/Frame Number"
             value={vin}
             onChange={(e) => setVin(e.target.value)}
-            className="w-full bg-[#2a3040] border border-[#f3ebdd]/5 rounded py-[14px] px-4 text-gray-300 text-[13px] focus:outline-none focus:border-[#f3ebdd]/20 placeholder-[#6c7693]"
+            className="w-full bg-[#2a3040] border border-background/5 rounded py-[14px] px-4 text-gray-300 text-[13px] focus:outline-none focus:border-background/20 placeholder-[#6c7693]"
           />
         </div>
         
@@ -166,7 +166,7 @@ export default function OwnersManualClient({ products }: { products: Product[] }
 
         <button 
           onClick={handleVinSubmit}
-          className="w-full lg:w-auto bg-[#c40000] hover:bg-[#a00000] text-[#f3ebdd] font-bold py-[14px] px-[30px] rounded transition-colors text-[13px] min-w-[120px]"
+          className="w-full lg:w-auto bg-primary hover:bg-primary-hover text-primary-foreground font-bold py-[14px] px-[30px] rounded transition-colors text-[13px] min-w-[120px]"
         >
           Submit
         </button>
@@ -177,15 +177,15 @@ export default function OwnersManualClient({ products }: { products: Product[] }
           {submittedModels.map((item) => (
             <div key={item.id} className="flex flex-col gap-6">
               {submittedModels.length > 1 && (
-                <h2 className="text-xl font-bold text-[#5b8cff] border-b border-[#f3ebdd]/5 pb-2">
+                <h2 className="text-xl font-bold text-[#5b8cff] border-b border-background/5 pb-2">
                   {item.name}
                 </h2>
               )}
               
               {(submittedType === "OWNERS_MANUAL" || submittedType === "BOTH") && (
                 <div className="flex flex-col md:flex-row gap-6">
-                  <div className="bg-[#1e2330] border border-[#f3ebdd]/5 rounded-xl p-6 flex flex-col gap-4 w-full md:w-[400px]">
-                    <div className="text-[#c40000] w-fit">
+                  <div className="bg-[#1e2330] border border-background/5 rounded-xl p-6 flex flex-col gap-4 w-full md:w-[400px]">
+                    <div className="text-primary w-fit">
                       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         <path d="M14 2V8H20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -193,13 +193,13 @@ export default function OwnersManualClient({ products }: { products: Product[] }
                       </svg>
                     </div>
                     <div className="flex justify-between items-end gap-4 mt-2">
-                      <h3 className="text-[#f3ebdd] font-bold text-lg leading-snug">
+                      <h3 className="text-primary-foreground font-bold text-lg leading-snug">
                         {item.name} | Owners Manual <br/> | English
                       </h3>
                       <a 
                         href={`/manuals/${getOwnersManualFilename(item.name)}.pdf`}
                         download={`${item.name} Owners Manual.pdf`}
-                        className="bg-[#c40000] hover:bg-[#a00000] text-[#f3ebdd] p-3 rounded-full flex-shrink-0 transition-colors shadow-lg shadow-black/20"
+                        className="bg-primary hover:bg-primary-hover text-primary-foreground p-3 rounded-full flex-shrink-0 transition-colors shadow-lg shadow-black/20"
                       >
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M21 15V19C21 19.5304 20.5523 20 20 20H4C3.44772 20 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -212,8 +212,8 @@ export default function OwnersManualClient({ products }: { products: Product[] }
 
               {(submittedType === "MAINTENANCE_SCHEDULE" || submittedType === "BOTH") && (
                 <div className="flex flex-col md:flex-row gap-6">
-                  <div className="bg-[#1e2330] border border-[#f3ebdd]/5 rounded-xl p-6 flex flex-col gap-4 w-full md:w-[400px]">
-                    <div className="text-[#c40000] w-fit">
+                  <div className="bg-[#1e2330] border border-background/5 rounded-xl p-6 flex flex-col gap-4 w-full md:w-[400px]">
+                    <div className="text-primary w-fit">
                       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         <path d="M14 2V8H20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -221,13 +221,13 @@ export default function OwnersManualClient({ products }: { products: Product[] }
                       </svg>
                     </div>
                     <div className="flex justify-between items-end gap-4 mt-2">
-                      <h3 className="text-[#f3ebdd] font-bold text-lg leading-snug">
+                      <h3 className="text-primary-foreground font-bold text-lg leading-snug">
                         {item.name} | Maintenance Schedule <br/> | English
                       </h3>
                       <a 
                         href={`/manuals/${getMaintenanceScheduleFilename(item.name)}.pdf`}
                         download={`${item.name} Maintenance Schedule.pdf`}
-                        className="bg-[#c40000] hover:bg-[#a00000] text-[#f3ebdd] p-3 rounded-full flex-shrink-0 transition-colors shadow-lg shadow-black/20"
+                        className="bg-primary hover:bg-primary-hover text-primary-foreground p-3 rounded-full flex-shrink-0 transition-colors shadow-lg shadow-black/20"
                       >
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M21 15V19C21 19.5304 20.5523 20 20 20H4C3.44772 20 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

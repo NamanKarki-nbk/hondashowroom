@@ -42,14 +42,21 @@ export async function POST(req: NextRequest) {
     // Determine if identifier is email or phone
     const isEmail = formattedIdentifier.includes("@");
     
-    // Upsert User
+    // Upsert User and mark as verified
     const user = await prisma.user.upsert({
       where: isEmail ? { email: formattedIdentifier } : { phone: formattedIdentifier },
-      update: {}, // Don't overwrite existing data
+      update: { isVerified: true },
       create: {
         email: isEmail ? formattedIdentifier : null,
-        phone: isEmail ? `placeholder-${Date.now()}` : formattedIdentifier, // Phone is required by DB so use a placeholder if email login
+        phone: isEmail ? `placeholder-${Date.now()}` : formattedIdentifier,
+        isVerified: true
       }
+    });
+
+    // Also update Customer record if they have one
+    await prisma.customer.updateMany({
+      where: isEmail ? { email: formattedIdentifier } : { phone: formattedIdentifier },
+      data: { isVerified: true }
     });
 
     // Delete OTP record to prevent reuse

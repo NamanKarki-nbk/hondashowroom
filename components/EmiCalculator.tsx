@@ -42,7 +42,7 @@ export default function EmiCalculator({
     `linear-gradient(to right, #cc0000 0%, #cc0000 ${pct}%, #3a3a3a ${pct}%, #3a3a3a 100%)`;
 
   return (
-    <section className="bg-black text-[#f3ebdd] w-full">
+    <section className="bg-black text-primary-foreground w-full">
       <style>{`
         .emi-sl { -webkit-appearance:none; appearance:none; height:2px; width:100%; display:block; outline:none; cursor:pointer; }
         .emi-sl::-webkit-slider-thumb { -webkit-appearance:none; width:13px; height:13px; border-radius:50%; background:#cc0000; cursor:pointer; }
@@ -65,7 +65,7 @@ export default function EmiCalculator({
             ].map(({ label, opts }) => (
               <div key={label} className="border-b border-gray-600 pb-1.5 relative">
                 <p className="text-gray-400 text-[9px] tracking-[0.15em] uppercase mb-0.5">{label}</p>
-                <select className="w-full bg-transparent text-[#f3ebdd] font-semibold text-sm outline-none appearance-none cursor-pointer pr-5">
+                <select className="w-full bg-transparent text-primary-foreground font-semibold text-sm outline-none appearance-none cursor-pointer pr-5">
                   {opts.map((o) => <option key={o} className="text-black">{o}</option>)}
                 </select>
                 <div className="absolute right-0 bottom-2 pointer-events-none">
@@ -79,10 +79,10 @@ export default function EmiCalculator({
 
           {/* Enquire / Brochure */}
           <div className="flex items-center gap-5 mb-5">
-            <button className="bg-[#cc0000] hover:bg-[#aa0000] text-[#f3ebdd] px-5 py-2 rounded-full font-bold text-sm transition-colors flex items-center gap-1.5">
+            <button className="bg-primary hover:bg-primary-hover text-primary-foreground px-5 py-2 rounded-full font-bold text-sm transition-colors flex items-center gap-1.5">
               Enquire now <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
-            <button className="text-[#f3ebdd] hover:text-gray-300 text-sm font-semibold flex items-center gap-1.5">
+            <button className="text-primary-foreground hover:text-gray-300 text-sm font-semibold flex items-center gap-1.5">
               Get brochure <Download className="w-3.5 h-3.5 text-red-500" />
             </button>
           </div>
@@ -99,7 +99,7 @@ export default function EmiCalculator({
                 type="number"
                 value={downPayment}
                 onChange={(e) => setDownPayment(Number(e.target.value))}
-                className="bg-transparent border border-gray-500 text-[#f3ebdd] text-sm px-3 py-1.5 w-36 text-right outline-none focus:border-red-600"
+                className="bg-transparent border border-gray-500 text-primary-foreground text-sm px-3 py-1.5 w-36 text-right outline-none focus:border-red-600"
               />
             </div>
             <input type="range" min="0" max={initialPrice} step="1000"
@@ -114,15 +114,15 @@ export default function EmiCalculator({
               type="number"
               value={interestRate}
               onChange={(e) => setInterestRate(Number(e.target.value))}
-              className="bg-transparent border border-gray-500 text-[#f3ebdd] text-sm px-3 py-1.5 w-14 text-center outline-none focus:border-red-600"
+              className="bg-transparent border border-gray-500 text-primary-foreground text-sm px-3 py-1.5 w-14 text-center outline-none focus:border-red-600"
             />
             <div className="flex border border-gray-600 ml-4 shrink-0">
               <button onClick={() => setTenureType("Mo")}
-                className={`px-3 py-1.5 text-xs font-bold transition-colors ${tenureType === "Mo" ? "bg-[#cc0000] text-[#f3ebdd]" : "text-gray-400 hover:text-[#f3ebdd]"}`}>
+                className={`px-3 py-1.5 text-xs font-bold transition-colors ${tenureType === "Mo" ? "bg-primary text-primary-foreground" : "text-gray-400 hover:text-primary-foreground"}`}>
                 Mo
               </button>
               <button onClick={() => setTenureType("Yr")}
-                className={`px-3 py-1.5 text-xs font-bold border-l border-gray-600 transition-colors ${tenureType === "Yr" ? "bg-[#cc0000] text-[#f3ebdd]" : "text-gray-400 hover:text-[#f3ebdd]"}`}>
+                className={`px-3 py-1.5 text-xs font-bold border-l border-gray-600 transition-colors ${tenureType === "Yr" ? "bg-primary text-primary-foreground" : "text-gray-400 hover:text-primary-foreground"}`}>
                 Yr
               </button>
             </div>
@@ -130,7 +130,7 @@ export default function EmiCalculator({
               type="number"
               value={tenure}
               onChange={(e) => setTenure(Number(e.target.value))}
-              className="bg-transparent border border-gray-500 text-[#f3ebdd] text-sm px-3 py-1.5 w-16 text-center outline-none focus:border-red-600"
+              className="bg-transparent border border-gray-500 text-primary-foreground text-sm px-3 py-1.5 w-16 text-center outline-none focus:border-red-600"
             />
           </div>
 
@@ -149,10 +149,10 @@ export default function EmiCalculator({
 
           {/* Buttons */}
           <div className="flex items-center gap-4 mb-6">
-            <button className="bg-[#cc0000] hover:bg-[#aa0000] text-[#f3ebdd] px-6 py-2.5 rounded-full font-bold text-sm transition-colors">
+            <button className="bg-primary hover:bg-primary-hover text-primary-foreground px-6 py-2.5 rounded-full font-bold text-sm transition-colors">
               Calculate EMI
             </button>
-            <button className="bg-[#cc0000] hover:bg-[#aa0000] text-[#f3ebdd] px-6 py-2.5 rounded-full font-bold text-sm transition-colors">
+            <button className="bg-primary hover:bg-primary-hover text-primary-foreground px-6 py-2.5 rounded-full font-bold text-sm transition-colors">
               Avail Finance
             </button>
           </div>
@@ -182,7 +182,7 @@ export default function EmiCalculator({
 
           {/* Text — top left of card */}
           <div className="relative z-10 p-8 lg:p-10">
-            <h2 className="text-3xl lg:text-4xl font-extrabold text-[#f3ebdd] mb-1">{vehicleName}</h2>
+            <h2 className="text-3xl lg:text-4xl font-extrabold text-primary-foreground mb-1">{vehicleName}</h2>
             <p className="text-gray-400 text-xs mb-7">*Ex-Showroom Delhi ₹ {initialPrice.toLocaleString("en-IN")}</p>
 
             {/* Loan Amount & Total Interest — right aligned values */}
@@ -199,10 +199,10 @@ export default function EmiCalculator({
 
             {/* EMI — very large display */}
             <div className="mt-6">
-              <p className="text-[#f3ebdd] font-bold text-base mb-1">
+              <p className="text-primary-foreground font-bold text-base mb-1">
                 EMI for {tenureType === "Yr" ? tenure * 12 : tenure} months
               </p>
-              <p className="text-[#f3ebdd] font-black tabular-nums" style={{ fontSize: "clamp(2.5rem, 5vw, 3.75rem)", lineHeight: 1 }}>
+              <p className="text-primary-foreground font-black tabular-nums" style={{ fontSize: "clamp(2.5rem, 5vw, 3.75rem)", lineHeight: 1 }}>
                 ₹ {emi.toLocaleString("en-IN")}
               </p>
             </div>

@@ -11,8 +11,8 @@ const AMC_PLANS = [
     title: "1 Year",
     price: "1,500",
     savings: "2,635",
-    color: "bg-[#e8dfd1] dark:bg-[#1A1A1A] border-gray-200 dark:border-[#f3ebdd]/10",
-    headerColor: "text-gray-900 dark:text-[#f3ebdd]",
+    color: "bg-[#e8dfd1] dark:bg-[#1A1A1A] border-gray-200 dark:border-background/10",
+    headerColor: "text-gray-900 dark:text-primary-foreground",
     popular: false,
     features: [
       { text: "4 Free Services", subtext: "(Value Rs. 1,600 equivalent)", icon: Wrench },
@@ -28,8 +28,8 @@ const AMC_PLANS = [
     title: "3 Years",
     price: "3,000",
     savings: "7,717",
-    color: "bg-red-50 dark:bg-red-900/10 border-[#c1291A] shadow-xl shadow-red-100 dark:shadow-red-900/20",
-    headerColor: "text-[#c1291A]",
+    color: "bg-red-50 dark:bg-red-900/10 border-primary shadow-xl shadow-red-100 dark:shadow-red-900/20",
+    headerColor: "text-primary",
     popular: true,
     features: [
       { text: "12 Free Services", subtext: "(Value Rs. 4,800 equivalent)", icon: Wrench },
@@ -47,8 +47,8 @@ const AMC_PLANS = [
     title: "5 Years",
     price: "5,000",
     savings: "13,850",
-    color: "bg-[#e8dfd1] dark:bg-[#1A1A1A] border-gray-200 dark:border-[#f3ebdd]/10",
-    headerColor: "text-gray-900 dark:text-[#f3ebdd]",
+    color: "bg-[#e8dfd1] dark:bg-[#1A1A1A] border-gray-200 dark:border-background/10",
+    headerColor: "text-gray-900 dark:text-primary-foreground",
     popular: false,
     features: [
       { text: "20 Free Services", subtext: "(Value Rs. 12,000 equivalent)", icon: Wrench },
@@ -67,26 +67,26 @@ const AMC_PLANS = [
 
 export default function AmcPage() {
   return (
-    <div className="min-h-screen bg-[#f3ebdd] dark:bg-[#0B0B0C] pt-28 pb-24">
+    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] pt-28 pb-24">
 
       {/* Hero */}
-      <div className="bg-[#f3ebdd] dark:bg-[#111] border-b border-gray-100 dark:border-[#f3ebdd]/5">
+      <div className="bg-background dark:bg-[#111] border-b border-gray-100 dark:border-background/5">
         <div className="max-w-7xl mx-auto px-6 py-12">
           <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-            <Link href="/" className="hover:text-[#c1291A] flex items-center gap-1 transition-colors">
+            <Link href="/" className="hover:text-primary flex items-center gap-1 transition-colors">
               <Home className="w-3.5 h-3.5" /> Home
             </Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-gray-900 dark:text-[#f3ebdd] font-medium">Honda Service Contract</span>
+            <span className="text-gray-900 dark:text-primary-foreground font-medium">Honda Service Contract</span>
           </nav>
 
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#c1291A] mb-3">
-                <span className="w-6 h-0.5 bg-[#c1291A] rounded-full" />
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary mb-3">
+                <span className="w-6 h-0.5 bg-primary rounded-full" />
                 Annual Maintenance Contract
               </div>
-              <h1 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-[#f3ebdd] tracking-tight leading-tight">
+              <h1 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight leading-tight">
                 Honda Service Contract
               </h1>
               <p className="text-gray-500 dark:text-gray-400 mt-4 text-lg">
@@ -95,7 +95,7 @@ export default function AmcPage() {
             </div>
             
             <div className="hidden md:flex w-32 h-32 bg-red-50 dark:bg-red-900/10 rounded-full items-center justify-center flex-shrink-0">
-              <Shield className="w-16 h-16 text-[#c1291A]" />
+              <Shield className="w-16 h-16 text-primary" />
             </div>
           </div>
         </div>
@@ -104,7 +104,7 @@ export default function AmcPage() {
       {/* Pricing Grid */}
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-black text-gray-900 dark:text-[#f3ebdd] mb-4">Choose Your Protection Plan</h2>
+          <h2 className="text-3xl font-black text-gray-900 dark:text-primary-foreground mb-4">Choose Your Protection Plan</h2>
           <p className="text-gray-500 max-w-2xl mx-auto">
             Select the contract duration that best fits your riding needs. The longer the contract, the higher your overall savings.
           </p>
@@ -120,12 +120,12 @@ export default function AmcPage() {
               className={`relative rounded-3xl border p-8 flex flex-col h-full transition-transform hover:-translate-y-2 ${plan.color}`}
             >
               {plan.popular && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#c1291A] text-[#f3ebdd] px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg">
                   Most Popular
                 </div>
               )}
               
-              <div className="text-center mb-8 border-b border-gray-200 dark:border-[#f3ebdd]/10 pb-8">
+              <div className="text-center mb-8 border-b border-gray-200 dark:border-background/10 pb-8">
                 <h3 className={`text-2xl font-black mb-2 ${plan.headerColor}`}>
                   Honda Service Contract ({plan.title})
                 </h3>
@@ -141,11 +141,11 @@ export default function AmcPage() {
                 <ul className="space-y-6">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-4">
-                      <div className={`mt-0.5 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${plan.popular ? 'bg-red-100 dark:bg-red-900/30' : 'bg-[#f3ebdd] dark:bg-[#2A2A2A]'} shadow-sm`}>
-                        <feature.icon className={`w-4 h-4 ${plan.popular ? 'text-[#c1291A]' : 'text-gray-500 dark:text-gray-400'}`} />
+                      <div className={`mt-0.5 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${plan.popular ? 'bg-red-100 dark:bg-red-900/30' : 'bg-background dark:bg-[#2A2A2A]'} shadow-sm`}>
+                        <feature.icon className={`w-4 h-4 ${plan.popular ? 'text-primary' : 'text-gray-500 dark:text-gray-400'}`} />
                       </div>
                       <div>
-                        <div className="font-bold text-gray-900 dark:text-[#f3ebdd] text-sm">
+                        <div className="font-bold text-gray-900 dark:text-primary-foreground text-sm">
                           {feature.text}
                         </div>
                         {feature.subtext && (
@@ -159,15 +159,15 @@ export default function AmcPage() {
                 </ul>
               </div>
 
-              <div className="mt-8 pt-8 border-t border-gray-200 dark:border-[#f3ebdd]/10">
-                <div className={`rounded-xl p-4 text-center ${plan.popular ? 'bg-[#c1291A] text-[#f3ebdd]' : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400'}`}>
+              <div className="mt-8 pt-8 border-t border-gray-200 dark:border-background/10">
+                <div className={`rounded-xl p-4 text-center ${plan.popular ? 'bg-primary text-primary-foreground' : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400'}`}>
                   <div className="text-sm font-bold opacity-90 mb-1">Total Customer Saving</div>
                   <div className="text-2xl font-black">Rs. {plan.savings}/-</div>
                 </div>
                 <Link href="/book-now?service=amc" className={`w-full block text-center py-4 rounded-xl font-bold transition-colors mt-4 ${
                   plan.popular 
-                    ? 'bg-gray-900 hover:bg-black dark:bg-[#f3ebdd] dark:text-black dark:hover:bg-gray-200 text-[#f3ebdd]' 
-                    : 'bg-[#f3ebdd] hover:bg-[#f3ebdd] dark:bg-[#2A2A2A] dark:hover:bg-[#333] text-gray-900 dark:text-[#f3ebdd] border border-gray-200 dark:border-[#f3ebdd]/10'
+                    ? 'bg-gray-900 hover:bg-black  dark:text-black dark:hover:bg-gray-200 text-primary-foreground' 
+                    : 'bg-background hover:bg-background dark:bg-[#2A2A2A] dark:hover:bg-[#333] text-gray-900 dark:text-primary-foreground border border-gray-200 dark:border-background/10'
                 }`}>
                   Purchase Plan
                 </Link>
@@ -179,7 +179,7 @@ export default function AmcPage() {
       
       {/* CTA Section */}
       <div className="max-w-7xl mx-auto px-6 pb-12">
-         <div className="bg-[#c1291A] rounded-3xl p-8 md:p-12 text-[#f3ebdd] flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+         <div className="bg-primary rounded-3xl p-8 md:p-12 text-primary-foreground flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
             {/* Background pattern */}
             <div className="absolute -right-20 -top-20 opacity-10">
                <Shield className="w-96 h-96" />
@@ -187,12 +187,12 @@ export default function AmcPage() {
             
             <div className="relative z-10 max-w-2xl">
                <h3 className="text-2xl md:text-3xl font-black mb-3">Ready to protect your Honda?</h3>
-               <p className="text-[#f3ebdd]/80">
+               <p className="text-primary-foreground/80">
                   Visit our showroom today to purchase your Honda Service Contract book and start enjoying lifetime priority service and incredible discounts immediately.
                </p>
             </div>
             <div className="relative z-10 flex-shrink-0">
-               <Link href="/book-now" className="bg-[#f3ebdd] text-[#c1291A] px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all inline-block">
+               <Link href="/book-now" className="bg-background text-primary px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all inline-block">
                   Book Appointment
                </Link>
             </div>

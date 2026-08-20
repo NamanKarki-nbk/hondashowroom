@@ -104,7 +104,7 @@ export default function ThreeDViewer({
       
       {/* AR / Hint Overlay */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10 pointer-events-none">
-        <span className="bg-black/50 backdrop-blur-md text-[#f3ebdd]/70 text-xs px-3 py-1.5 rounded-full border border-[#f3ebdd]/10 uppercase tracking-widest">
+        <span className="bg-black/50 backdrop-blur-md text-primary-foreground/70 text-xs px-3 py-1.5 rounded-full border border-background/10 uppercase tracking-widest">
           3D Interactive GLB
         </span>
       </div>

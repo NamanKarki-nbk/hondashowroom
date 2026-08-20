@@ -17,24 +17,24 @@ export default function VehicleSpecs({ specs, vehicleSlug = "dio-125", fallbackI
   if (!specKeys.length) return null;
 
   return (
-    <section id="specs" className="py-24 px-6 bg-[#f3ebdd] dark:bg-background transition-colors duration-300 min-h-screen flex items-center">
+    <section id="specs" className="py-24 px-6 bg-background  transition-colors duration-300 min-h-screen flex items-center">
       <div className="max-w-[1600px] w-full mx-auto">
         <div className="text-center mb-12 xl:mb-20">
-          <h2 className="text-4xl md:text-5xl xl:text-6xl font-extrabold text-gray-900 dark:text-[#f3ebdd]">Get to know your ride</h2>
+          <h2 className="text-4xl md:text-5xl xl:text-6xl font-extrabold text-gray-900 dark:text-primary-foreground">Get to know your ride</h2>
         </div>
 
         {/* Top Controls Area */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-16 xl:mb-24 gap-6 px-4 lg:px-12">
           {/* Pill Tabs */}
-          <div className="bg-[#f3ebdd] dark:bg-[#111112] p-2 rounded-full flex overflow-x-auto hide-scrollbar border border-gray-100 dark:border-gray-800 w-full lg:w-auto">
+          <div className="bg-background dark:bg-[#111112] p-2 rounded-full flex overflow-x-auto hide-scrollbar border border-gray-100 dark:border-gray-800 w-full lg:w-auto">
             {specKeys.map(tab => (
               <button 
                 key={tab}
                 onClick={() => setActiveSpecTab(tab)}
                 className={`px-8 xl:px-10 py-3 xl:py-4 rounded-full text-base xl:text-lg font-bold whitespace-nowrap transition-all duration-300 ${
                   activeSpecTab === tab 
-                    ? "bg-[#f3ebdd] dark:bg-background text-[#c1291A] shadow-sm" 
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-[#f3ebdd] hover:bg-[#f3ebdd]/50 dark:hover:bg-gray-800/50"
+                    ? "bg-background  text-primary shadow-sm" 
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-primary-foreground hover:bg-background/50 dark:hover:bg-gray-800/50"
                 }`}
               >
                 {tab.replace(/_/g, ' ')}

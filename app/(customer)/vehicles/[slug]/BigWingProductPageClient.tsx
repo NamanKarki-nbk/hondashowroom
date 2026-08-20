@@ -65,13 +65,13 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
 
   return (
     <div className="dark">
-      <div className="min-h-screen bg-[#0A0A0A] text-[#f3ebdd] transition-colors duration-300">
+      <div className="min-h-screen bg-[#0A0A0A] text-primary-foreground transition-colors duration-300">
       
       {/* Product Specific Header (Matching BigWing Style) */}
       <header className="w-full bg-[#121212]/95 backdrop-blur fixed top-0 z-50 border-b border-gray-800 transition-colors duration-300">
         
         {/* Top Red Bar */}
-        <div className="w-full bg-[#c1291A] text-[#f3ebdd] text-sm py-2">
+        <div className="w-full bg-primary text-primary-foreground text-sm py-2">
            <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
               <div className="flex gap-4 font-semibold">
                  <Link href="/honda-finance-from-home" className="hover:underline">Honda Finance From Home</Link>
@@ -91,7 +91,7 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
              <Link href="/" className="flex items-center space-x-3 group">
-               <Logo className="w-10 h-10 group-hover:scale-105 transition-transform text-[#c1291A]" />
+               <Logo className="w-10 h-10 group-hover:scale-105 transition-transform text-primary" />
              </Link>
           </div>
 
@@ -103,8 +103,8 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
                 onClick={() => scrollTo(nav)}
                 className={`px-4 py-2 text-sm font-bold uppercase tracking-wider rounded-lg transition-colors ${
                   activeNav === nav 
-                    ? "text-[#c1291A] bg-red-950/30" 
-                    : "text-gray-400 hover:text-[#f3ebdd] hover:bg-gray-800"
+                    ? "text-primary bg-red-950/30" 
+                    : "text-gray-400 hover:text-primary-foreground hover:bg-gray-800"
                 }`}
               >
                 {nav}
@@ -113,10 +113,10 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
           </nav>
 
           <div className="flex items-center space-x-4">
-            <span className="font-bold text-[#f3ebdd] truncate uppercase tracking-wider hidden md:block mr-2">{vehicle.name} <span className="text-[#c1291A] ml-1 text-xs">BIGWING</span></span>
+            <span className="font-bold text-primary-foreground truncate uppercase tracking-wider hidden md:block mr-2">{vehicle.name} <span className="text-primary ml-1 text-xs">BIGWING</span></span>
             <button 
               onClick={() => scrollTo("book")}
-              className="bg-[#c1291A] hover:bg-[#a02014] text-[#f3ebdd] px-6 py-2 rounded-full font-bold text-sm shadow-md transition-all flex items-center gap-2"
+              className="bg-primary hover:bg-primary-hover text-primary-foreground px-6 py-2 rounded-full font-bold text-sm shadow-md transition-all flex items-center gap-2"
             >
               <CalendarClock className="w-4 h-4" /> <span className="hidden sm:inline">Book Now</span>
             </button>
@@ -132,29 +132,29 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
         <div className="max-w-[1600px] mx-auto w-full relative z-10">
           {/* Breadcrumbs */}
           <div className="mb-8 flex items-center text-sm xl:text-lg text-gray-400 font-medium">
-            <Link href="/" className="hover:text-[#c1291A] transition-colors">Home</Link>
+            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
             <ChevronRight className="w-4 h-4 xl:w-6 xl:h-6 mx-2" />
-            <Link href="/" className="uppercase hover:text-[#c1291A] transition-colors">{vehicle.category.replace('_', ' ')}</Link>
+            <Link href="/" className="uppercase hover:text-primary transition-colors">{vehicle.category.replace('_', ' ')}</Link>
             <ChevronRight className="w-4 h-4 xl:w-6 xl:h-6 mx-2" />
-            <span className="text-[#f3ebdd] font-bold">{vehicle.name}</span>
+            <span className="text-primary-foreground font-bold">{vehicle.name}</span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-24 items-center">
             {/* Text Content */}
             <div className="lg:col-span-5 order-2 lg:order-1">
               <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
-                <h1 className="text-6xl md:text-7xl xl:text-[7rem] font-black text-[#f3ebdd] tracking-tighter mb-4 uppercase leading-none">
+                <h1 className="text-6xl md:text-7xl xl:text-[7rem] font-black text-primary-foreground tracking-tighter mb-4 uppercase leading-none">
                   {vehicle.name}
                 </h1>
-                <p className="text-2xl xl:text-4xl text-[#c1291A] font-bold italic mb-8 xl:mb-12 tracking-wide">
+                <p className="text-2xl xl:text-4xl text-primary font-bold italic mb-8 xl:mb-12 tracking-wide">
                   "{vehicle.tagline}"
                 </p>
-                <div className="text-4xl xl:text-6xl font-black text-[#f3ebdd] mb-10 xl:mb-16 font-sans">
+                <div className="text-4xl xl:text-6xl font-black text-primary-foreground mb-10 xl:mb-16 font-sans">
                    Starting At Rs. {vehicle.price.toLocaleString('en-IN')}
                 </div>
                 
                 <div className="flex gap-4">
-                  <button onClick={() => scrollTo("book")} className="bg-[#c1291A] hover:bg-[#a02014] text-[#f3ebdd] px-10 py-5 xl:px-14 xl:py-7 rounded-none font-bold uppercase tracking-wider transition-all shadow-lg shadow-[#c1291A]/20 flex items-center gap-2 text-lg xl:text-2xl">
+                  <button onClick={() => scrollTo("book")} className="bg-primary hover:bg-primary-hover text-primary-foreground px-10 py-5 xl:px-14 xl:py-7 rounded-none font-bold uppercase tracking-wider transition-all shadow-lg shadow-primary/20 flex items-center gap-2 text-lg xl:text-2xl">
                     Book Test Ride <ChevronRight className="w-6 h-6 xl:w-8 xl:h-8" />
                   </button>
                 </div>
@@ -170,7 +170,7 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
                 className="relative h-[450px] md:h-[650px] xl:h-[800px] w-full flex items-center justify-center"
               >
                 {/* Background red slash typical of Honda styling */}
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[#c1291A] opacity-5 dark:opacity-10 -skew-x-12 -z-10 rounded-3xl"></div>
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary opacity-5 dark:opacity-10 -skew-x-12 -z-10 rounded-3xl"></div>
                 
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
@@ -211,11 +211,11 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
       <section id="book" className="py-24 px-6 bg-[#050505] border-t border-gray-900 transition-colors duration-300">
         <div className="max-w-4xl mx-auto">
           <div className="bg-[#121212] border border-gray-800 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden transition-colors duration-300">
-             <div className="absolute top-0 right-0 w-64 h-64 bg-[#c1291A]/5 rounded-bl-full pointer-events-none"></div>
+             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-bl-full pointer-events-none"></div>
              
              <div className="text-center mb-10 relative z-10">
-               <h3 className="text-3xl font-extrabold text-[#f3ebdd] mb-4 uppercase tracking-tight flex items-center justify-center gap-3">
-                  <CalendarClock className="w-8 h-8 text-[#c1291A]" />
+               <h3 className="text-3xl font-extrabold text-primary-foreground mb-4 uppercase tracking-tight flex items-center justify-center gap-3">
+                  <CalendarClock className="w-8 h-8 text-primary" />
                   Enquire Now
                </h3>
                <p className="text-gray-400">Experience the {vehicle.name} firsthand. Fill out the form below and our team will get back to you.</p>
@@ -225,16 +225,16 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                    <div className="space-y-2">
                      <label className="text-xs font-bold text-gray-300 uppercase tracking-wider ml-1">Full Name</label>
-                     <input type="text" placeholder="Your Name" className="w-full bg-[#1A1A1A] border border-gray-700 text-[#f3ebdd] rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#c1291A] focus:border-transparent outline-none transition-shadow" />
+                     <input type="text" placeholder="Your Name" className="w-full bg-[#1A1A1A] border border-gray-700 text-primary-foreground rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-shadow" />
                    </div>
                    <div className="space-y-2">
                      <label className="text-xs font-bold text-gray-300 uppercase tracking-wider ml-1">Phone Number</label>
-                     <input type="tel" placeholder="Mobile Number" className="w-full bg-[#1A1A1A] border border-gray-700 text-[#f3ebdd] rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#c1291A] focus:border-transparent outline-none transition-shadow" />
+                     <input type="tel" placeholder="Mobile Number" className="w-full bg-[#1A1A1A] border border-gray-700 text-primary-foreground rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-shadow" />
                    </div>
                 </div>
                 <div className="space-y-2">
                    <label className="text-xs font-bold text-gray-300 uppercase tracking-wider ml-1">Preferred Dealer Location</label>
-                   <select className="w-full bg-[#1A1A1A] border border-gray-700 text-[#f3ebdd] rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#c1291A] focus:border-transparent outline-none transition-shadow">
+                   <select className="w-full bg-[#1A1A1A] border border-gray-700 text-primary-foreground rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-shadow">
                      <option value="">Select a Branch</option>
                      <option value="kathmandu">Kathmandu</option>
                      <option value="lalitpur">Lalitpur</option>
@@ -242,7 +242,7 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
                    </select>
                 </div>
                 <div className="pt-4">
-                  <button className="w-full bg-[#c1291A] hover:bg-[#a02014] text-[#f3ebdd] py-4 rounded-xl font-bold uppercase tracking-wider text-lg transition-all shadow-lg shadow-[#c1291A]/20 flex items-center justify-center gap-2">
+                  <button className="w-full bg-primary hover:bg-primary-hover text-primary-foreground py-4 rounded-xl font-bold uppercase tracking-wider text-lg transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
                      Submit Enquiry <ChevronRight className="w-5 h-5" />
                   </button>
                 </div>

@@ -53,7 +53,7 @@ export default function HeroSlider() {
   }, [emblaApi, onSelect]);
 
   return (
-    <div className="relative w-full h-[calc(100vh-100px)] bg-[#f3ebdd] dark:bg-[#0B0B0C] overflow-hidden">
+    <div className="relative w-full h-[calc(100vh-116px)] bg-background dark:bg-[#0B0B0C] overflow-hidden">
       {/* Light Mode Dotted Background */}
       <div 
         className="absolute inset-0 dark:hidden"
@@ -81,28 +81,28 @@ export default function HeroSlider() {
             </div>
 
             {/* Left Content */}
-            <div className="absolute left-8 md:left-24 top-1/2 -translate-y-1/2 z-20">
+            <div className="absolute left-4 sm:left-8 md:left-24 top-1/2 -translate-y-1/2 z-20">
                <motion.div
                   key={`content-${selectedIndex === index}`}
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
                >
-                 <p className="text-[#c1291A] font-bold tracking-[0.3em] text-xs md:text-sm uppercase mb-3">
+                 <p className="text-primary font-bold tracking-[0.3em] text-[10px] sm:text-xs md:text-sm uppercase mb-3">
                    {slide.subtitle}
                  </p>
-                 <h2 className="text-6xl md:text-8xl lg:text-[130px] font-black text-gray-900 dark:text-[#f3ebdd] tracking-tighter uppercase leading-none mb-6 font-sans">
+                 <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-[130px] font-black text-gray-900 dark:text-primary-foreground tracking-tighter uppercase leading-none mb-4 sm:mb-6 font-sans">
                    {slide.title}
                  </h2>
-                 <p className="text-gray-600 dark:text-gray-400 text-base md:text-lg font-medium mb-10">
+                 <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base md:text-lg font-medium mb-6 sm:mb-10 max-w-[200px] sm:max-w-none">
                    {slide.tagline}
                  </p>
                  
                  <div className="flex items-center gap-4">
-                   <Link href={slide.link} className="bg-[#c1291A] text-[#f3ebdd] px-8 py-3 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-wider transition-colors hover:bg-[#a02014]">
+                   <Link href={slide.link} className="bg-primary text-primary-foreground px-8 py-3 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-wider transition-colors hover:bg-primary-hover">
                       Book Now
                    </Link>
-                   <Link href={slide.link} className="bg-transparent border border-gray-900 dark:border-[#f3ebdd] text-gray-900 dark:text-[#f3ebdd] px-8 py-3 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-wider transition-colors hover:bg-gray-900 hover:text-[#f3ebdd] dark:hover:bg-[#f3ebdd] dark:hover:text-black">
+                   <Link href={slide.link} className="bg-transparent border border-gray-900 dark:border-background text-gray-900 dark:text-primary-foreground px-8 py-3 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-wider transition-colors hover:bg-gray-900 hover:text-primary-foreground dark:hover:bg-background dark:hover:text-black">
                       Test Ride
                    </Link>
                  </div>
@@ -120,7 +120,7 @@ export default function HeroSlider() {
                  <p className="text-gray-500 font-bold tracking-[0.2em] text-xs md:text-sm uppercase mb-1 md:mb-2">
                    Starting At
                  </p>
-                 <p className="text-gray-900 dark:text-[#f3ebdd] text-3xl md:text-4xl lg:text-5xl font-black font-sans">
+                 <p className="text-gray-900 dark:text-primary-foreground text-3xl md:text-4xl lg:text-5xl font-black font-sans">
                    {slide.price}
                  </p>
                </motion.div>
@@ -155,7 +155,7 @@ export default function HeroSlider() {
             key={idx}
             onClick={() => emblaApi && emblaApi.scrollTo(idx)}
             aria-label={`Go to slide ${idx + 1}`}
-            className={`w-2.5 h-2.5 rounded-full border-2 transition-all duration-300 ${idx === selectedIndex ? "bg-gray-900 border-gray-900 dark:bg-[#f3ebdd] dark:border-[#f3ebdd] scale-125 shadow-[0_0_10px_rgba(0,0,0,0.2)] dark:shadow-[0_0_10px_rgba(255,255,255,0.5)]" : "bg-transparent border-gray-400 hover:border-gray-900 dark:border-gray-600 dark:hover:border-gray-400"}`}
+            className={`w-2.5 h-2.5 rounded-full border-2 transition-all duration-300 ${idx === selectedIndex ? "bg-gray-900 border-gray-900  dark:border-background scale-125 shadow-[0_0_10px_rgba(0,0,0,0.2)] dark:shadow-[0_0_10px_rgba(255,255,255,0.5)]" : "bg-transparent border-gray-400 hover:border-gray-900 dark:border-gray-600 dark:hover:border-gray-400"}`}
           />
         ))}
       </div>

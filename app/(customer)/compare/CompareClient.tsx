@@ -171,7 +171,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
   }, [activeVehicles]);
 
   return (
-    <div className="min-h-screen bg-[#f3ebdd] dark:bg-[#0B0B0C] text-gray-900 dark:text-[#f3ebdd] pt-28 pb-20 font-sans transition-colors duration-300">
+    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] text-gray-900 dark:text-primary-foreground pt-28 pb-20 font-sans transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6">
         
         <AnimatePresence mode="wait">
@@ -191,7 +191,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
               </div>
 
               {/* Selection Slots Frame */}
-              <div className="bg-[#f3ebdd] dark:bg-[#111] border border-gray-200 dark:border-[#f3ebdd]/5 rounded-2xl p-8 mb-8 shadow-sm">
+              <div className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/5 rounded-2xl p-8 mb-8 shadow-sm">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
                   {slots.map((slotId, idx) => {
                     const vehicle = slotId ? vehicles.find(v => v.id === slotId) : null;
@@ -202,7 +202,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                             setActiveSlotIdx(idx);
                             setIsModalOpen(true);
                           }}
-                          className={`relative group flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-[#f3ebdd]/10 rounded-2xl p-6 h-64 cursor-pointer hover:border-[#c1291A] dark:hover:border-[#c1291A] hover:bg-[#f3ebdd] dark:hover:bg-[#f3ebdd]/5 transition-all duration-300 ${vehicle ? 'border-none bg-[#f3ebdd] dark:bg-[#1d273a]/60 shadow-inner' : ''}`}
+                          className={`relative group flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-background/10 rounded-2xl p-6 h-64 cursor-pointer hover:border-primary dark:hover:border-primary hover:bg-background dark:hover:bg-background/5 transition-all duration-300 ${vehicle ? 'border-none bg-background dark:bg-[#1d273a]/60 shadow-inner' : ''}`}
                         >
                           {vehicle ? (
                             <div className="relative w-full h-full flex flex-col justify-between items-center text-center">
@@ -211,7 +211,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                                   e.stopPropagation();
                                   handleRemoveVehicle(idx);
                                 }}
-                                className="absolute -top-2 -right-2 bg-red-600 hover:bg-red-700 text-[#f3ebdd] rounded-full p-1.5 transition-colors z-20 shadow-md"
+                                className="absolute -top-2 -right-2 bg-red-600 hover:bg-red-700 text-primary-foreground rounded-full p-1.5 transition-colors z-20 shadow-md"
                               >
                                 <X className="w-4.5 h-4.5" />
                               </button>
@@ -225,12 +225,12 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                               </div>
                               <div className="mt-2">
                                 <span className="text-[10px] tracking-widest text-[#5b8cff] dark:text-[#5b8cff] uppercase font-bold block mb-1">{vehicle.brand || 'Honda'}</span>
-                                <h3 className="font-bold text-sm text-gray-900 dark:text-[#f3ebdd] line-clamp-1">{vehicle.name}</h3>
-                                <p className="text-[#c1291A] font-semibold text-xs mt-1">NPR {vehicle.price.toLocaleString('en-IN')}</p>
+                                <h3 className="font-bold text-sm text-gray-900 dark:text-primary-foreground line-clamp-1">{vehicle.name}</h3>
+                                <p className="text-primary font-semibold text-xs mt-1">NPR {vehicle.price.toLocaleString('en-IN')}</p>
                               </div>
                             </div>
                           ) : (
-                            <div className="flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 group-hover:text-[#c1291A]">
+                            <div className="flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 group-hover:text-primary">
                               {/* Custom motorcycle line icon */}
                               <svg className="w-14 h-14 mb-4 stroke-current opacity-60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="5" cy="18" r="3" strokeWidth="1.5" />
@@ -238,14 +238,14 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                                 <path d="M19 18V13.5L16.5 9H11.5L9 13.5H5V18" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                                 <path d="M12 9V5H14.5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                               </svg>
-                              <span className="text-sm font-semibold flex items-center gap-1 text-gray-700 dark:text-gray-300 group-hover:text-[#c1291A]">
+                              <span className="text-sm font-semibold flex items-center gap-1 text-gray-700 dark:text-gray-300 group-hover:text-primary">
                                 <Plus className="w-4 h-4" /> Add Bike
                               </span>
                             </div>
                           )}
                         </div>
                         {idx < 3 && (
-                          <div className="absolute top-1/2 left-[calc((idx+1)*25%)] -translate-x-1/2 -translate-y-1/2 hidden lg:flex bg-gray-200 dark:bg-[#0d111b] border border-gray-300 dark:border-[#f3ebdd]/5 text-gray-600 dark:text-[#5b8cff] font-bold text-xs p-1.5 rounded-full z-10 w-7 h-7 items-center justify-center shadow-sm">
+                          <div className="absolute top-1/2 left-[calc((idx+1)*25%)] -translate-x-1/2 -translate-y-1/2 hidden lg:flex bg-gray-200 dark:bg-[#0d111b] border border-gray-300 dark:border-background/5 text-gray-600 dark:text-[#5b8cff] font-bold text-xs p-1.5 rounded-full z-10 w-7 h-7 items-center justify-center shadow-sm">
                             vs
                           </div>
                         )}
@@ -262,7 +262,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                   onClick={() => setIsComparing(true)}
                   className={`w-64 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg ${
                     selectedCount >= 2
-                      ? 'bg-[#c1291A] hover:bg-red-700 text-[#f3ebdd] shadow-red-500/20 cursor-pointer'
+                      ? 'bg-primary hover:bg-red-700 text-primary-foreground shadow-red-500/20 cursor-pointer'
                       : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed'
                   }`}
                 >
@@ -275,16 +275,16 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                 <h2 className="text-2xl font-bold mb-6">Popular Comparisons</h2>
                 
                 {/* Popular Tabs */}
-                <div className="flex border-b border-gray-200 dark:border-[#f3ebdd]/10 gap-6 mb-8 text-sm">
+                <div className="flex border-b border-gray-200 dark:border-background/10 gap-6 mb-8 text-sm">
                   {(['BIKES', 'SCOOTERS'] as const).map(tab => (
                     <button
                       key={tab}
                       onClick={() => setPopularTab(tab)}
-                      className={`pb-3 font-semibold transition-all relative ${popularTab === tab ? 'text-[#c1291A]' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-[#f3ebdd]'}`}
+                      className={`pb-3 font-semibold transition-all relative ${popularTab === tab ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-primary-foreground'}`}
                     >
                       {tab}
                       {popularTab === tab && (
-                        <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#c1291A]"></span>
+                        <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary"></span>
                       )}
                     </button>
                   ))}
@@ -292,28 +292,28 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {popularComparisons[popularTab].map((item, idx) => (
-                    <div key={idx} className="bg-[#f3ebdd] dark:bg-[#111] border border-gray-200 dark:border-[#f3ebdd]/5 rounded-2xl p-6 flex flex-col justify-between hover:border-gray-300 dark:hover:border-[#f3ebdd]/10 transition-colors shadow-sm">
+                    <div key={idx} className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/5 rounded-2xl p-6 flex flex-col justify-between hover:border-gray-300 dark:hover:border-background/10 transition-colors shadow-sm">
                       <div className="flex items-center justify-between gap-4 mb-6">
                         {/* Vehicle 1 */}
                         <div className="flex flex-col items-center flex-1">
                           <img src={item.v1.imageUrl || '/honda-logo.svg'} className="h-16 object-contain mb-2" />
                           <span className="text-[10px] text-gray-500 dark:text-gray-400 font-bold block">{item.v1.brand}</span>
-                          <h4 className="text-xs font-semibold text-center mt-1 line-clamp-1 text-gray-900 dark:text-[#f3ebdd]">{item.v1.name}</h4>
+                          <h4 className="text-xs font-semibold text-center mt-1 line-clamp-1 text-gray-900 dark:text-primary-foreground">{item.v1.name}</h4>
                           <span className="text-red-500 text-[11px] font-medium mt-1">NPR {item.v1.price.toLocaleString('en-IN')}</span>
                         </div>
-                        <span className="text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 bg-[#e8dfd1] dark:bg-[#0d111b] w-6 h-6 rounded-full flex items-center justify-center border border-gray-200 dark:border-[#f3ebdd]/5 flex-shrink-0">vs</span>
+                        <span className="text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 bg-[#e8dfd1] dark:bg-[#0d111b] w-6 h-6 rounded-full flex items-center justify-center border border-gray-200 dark:border-background/5 flex-shrink-0">vs</span>
                         {/* Vehicle 2 */}
                         <div className="flex flex-col items-center flex-1">
                           <img src={item.v2.imageUrl || '/honda-logo.svg'} className="h-16 object-contain mb-2" />
                           <span className="text-[10px] text-gray-500 dark:text-gray-400 font-bold block">{item.v2.brand}</span>
-                          <h4 className="text-xs font-semibold text-center mt-1 line-clamp-1 text-gray-900 dark:text-[#f3ebdd]">{item.v2.name}</h4>
+                          <h4 className="text-xs font-semibold text-center mt-1 line-clamp-1 text-gray-900 dark:text-primary-foreground">{item.v2.name}</h4>
                           <span className="text-red-500 text-[11px] font-medium mt-1">NPR {item.v2.price.toLocaleString('en-IN')}</span>
                         </div>
                       </div>
                       
                       <button
                         onClick={() => startPopularCompare(item.v1.id, item.v2.id)}
-                        className="w-full py-2 bg-transparent border border-gray-200 dark:border-[#f3ebdd]/10 rounded-lg text-xs font-semibold text-gray-700 dark:text-[#f3ebdd] hover:bg-[#f3ebdd] dark:hover:bg-[#f3ebdd]/5 transition-colors"
+                        className="w-full py-2 bg-transparent border border-gray-200 dark:border-background/10 rounded-lg text-xs font-semibold text-gray-700 dark:text-primary-foreground hover:bg-background dark:hover:bg-background/5 transition-colors"
                       >
                         {item.label}
                       </button>
@@ -335,36 +335,36 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
               <div className="flex items-center gap-4 mb-6">
                 <button 
                   onClick={() => setIsComparing(false)}
-                  className="bg-[#f3ebdd] dark:bg-[#141b2b] border border-gray-200 dark:border-[#f3ebdd]/5 hover:bg-[#e8dfd1] dark:hover:bg-[#f3ebdd]/5 p-2 rounded-lg transition-colors text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-[#f3ebdd] shadow-sm"
+                  className="bg-background dark:bg-[#141b2b] border border-gray-200 dark:border-background/5 hover:bg-[#e8dfd1] dark:hover:bg-background/5 p-2 rounded-lg transition-colors text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-primary-foreground shadow-sm"
                 >
                   Back
                 </button>
-                <h1 className="text-2xl font-extrabold text-gray-900 dark:text-[#f3ebdd]">
+                <h1 className="text-2xl font-extrabold text-gray-900 dark:text-primary-foreground">
                   {activeNonNullVehicles.map(v => v.name).join(" vs ")}
                 </h1>
               </div>
 
               {/* Compare Slots Header */}
-              <div className="bg-[#f3ebdd] dark:bg-[#141b2b] border border-gray-200 dark:border-[#f3ebdd]/5 rounded-2xl p-6 mb-8 shadow-sm">
+              <div className="bg-background dark:bg-[#141b2b] border border-gray-200 dark:border-background/5 rounded-2xl p-6 mb-8 shadow-sm">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-center">
                   
                   {/* Left Controls */}
                   <div className="flex flex-col gap-3 justify-center">
-                    <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-[#f3ebdd]">
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-primary-foreground">
                       <input 
                         type="checkbox" 
                         checked={hideCommon} 
                         onChange={() => setHideCommon(!hideCommon)} 
-                        className="rounded accent-[#c1291A] bg-[#e8dfd1] dark:bg-gray-900 border-gray-300 dark:border-[#f3ebdd]/10"
+                        className="rounded accent-primary bg-[#e8dfd1] dark:bg-gray-900 border-gray-300 dark:border-background/10"
                       />
                       Hide common features
                     </label>
-                    <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-[#f3ebdd]">
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-primary-foreground">
                       <input 
                         type="checkbox" 
                         checked={highlightDiff} 
                         onChange={() => setHighlightDiff(!highlightDiff)}
-                        className="rounded accent-[#c1291A] bg-[#e8dfd1] dark:bg-gray-900 border-gray-300 dark:border-[#f3ebdd]/10"
+                        className="rounded accent-primary bg-[#e8dfd1] dark:bg-gray-900 border-gray-300 dark:border-background/10"
                       />
                       Highlight differences
                     </label>
@@ -374,12 +374,12 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                   {slots.map((slotId, idx) => {
                     const vehicle = slotId ? vehicles.find(v => v.id === slotId) : null;
                     return (
-                      <div key={idx} className="relative bg-[#f3ebdd] dark:bg-[#1d273a]/40 border border-gray-200 dark:border-[#f3ebdd]/5 rounded-xl p-4 flex flex-col justify-between h-52">
+                      <div key={idx} className="relative bg-background dark:bg-[#1d273a]/40 border border-gray-200 dark:border-background/5 rounded-xl p-4 flex flex-col justify-between h-52">
                         {vehicle ? (
                           <>
                             <button 
                               onClick={() => handleRemoveVehicle(idx)}
-                              className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-[#f3ebdd] rounded-full p-1 transition-colors shadow"
+                              className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-primary-foreground rounded-full p-1 transition-colors shadow"
                             >
                               <X className="w-3.5 h-3.5" />
                             </button>
@@ -387,9 +387,9 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                               <img src={vehicle.imageUrl || '/honda-logo.svg'} className="h-full object-contain" />
                             </div>
                             <div className="mt-2 text-center">
-                              <h3 className="font-bold text-xs line-clamp-1 text-gray-900 dark:text-[#f3ebdd]">{vehicle.name}</h3>
+                              <h3 className="font-bold text-xs line-clamp-1 text-gray-900 dark:text-primary-foreground">{vehicle.name}</h3>
                               <span className="text-[10px] text-gray-500 dark:text-gray-400 block mt-0.5">{vehicle.brand}</span>
-                              <span className="text-[#c1291A] font-bold text-xs block mt-1">NPR {vehicle.price.toLocaleString('en-IN')}</span>
+                              <span className="text-primary font-bold text-xs block mt-1">NPR {vehicle.price.toLocaleString('en-IN')}</span>
                             </div>
                           </>
                         ) : (
@@ -398,7 +398,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                               setActiveSlotIdx(idx);
                               setIsModalOpen(true);
                             }}
-                            className="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-[#f3ebdd] cursor-pointer border border-dashed border-gray-300 dark:border-[#f3ebdd]/10 rounded-xl hover:bg-[#e8dfd1] dark:hover:bg-[#f3ebdd]/5 transition-all duration-300"
+                            className="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-primary-foreground cursor-pointer border border-dashed border-gray-300 dark:border-background/10 rounded-xl hover:bg-[#e8dfd1] dark:hover:bg-background/5 transition-all duration-300"
                           >
                             <Plus className="w-6 h-6 mb-1" />
                             <span className="text-xs font-semibold">Add Bike</span>
@@ -411,16 +411,16 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
               </div>
 
               {/* Result specs Tabs */}
-              <div className="flex border-b border-gray-200 dark:border-[#f3ebdd]/10 gap-6 mb-8 text-sm">
+              <div className="flex border-b border-gray-200 dark:border-background/10 gap-6 mb-8 text-sm">
                 {(['SPECIFICATIONS', 'FEATURES'] as const).map(tab => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`pb-3 font-semibold transition-all relative ${activeTab === tab ? 'text-[#c1291A]' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-[#f3ebdd]'}`}
+                    className={`pb-3 font-semibold transition-all relative ${activeTab === tab ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-primary-foreground'}`}
                   >
                     {tab}
                     {activeTab === tab && (
-                      <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#c1291A]"></span>
+                      <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary"></span>
                     )}
                   </button>
                 ))}
@@ -434,7 +434,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                   placeholder="Type a spec or a feature e.g. Engine"
                   value={searchFilter}
                   onChange={(e) => setSearchFilter(e.target.value)}
-                  className="w-full bg-[#f3ebdd] dark:bg-[#141b2b] border border-gray-200 dark:border-[#f3ebdd]/10 rounded-xl py-3 pl-10 pr-4 text-xs text-gray-900 dark:text-[#f3ebdd] placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors shadow-sm"
+                  className="w-full bg-background dark:bg-[#141b2b] border border-gray-200 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 text-xs text-gray-900 dark:text-primary-foreground placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors shadow-sm"
                 />
               </div>
 
@@ -449,12 +449,12 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
 
                     const isOpen = openAccordions.includes(cat.title);
                     return (
-                      <div key={cat.title} className="bg-[#f3ebdd] dark:bg-[#141b2b] border border-gray-200 dark:border-[#f3ebdd]/5 rounded-2xl overflow-hidden shadow-sm">
+                      <div key={cat.title} className="bg-background dark:bg-[#141b2b] border border-gray-200 dark:border-background/5 rounded-2xl overflow-hidden shadow-sm">
                         <button 
                           onClick={() => toggleAccordion(cat.title)}
-                          className="w-full flex items-center justify-between p-5 bg-[#f3ebdd] dark:bg-[#1c2438]/50 hover:bg-[#e8dfd1] dark:hover:bg-[#1c2438] transition-colors text-left"
+                          className="w-full flex items-center justify-between p-5 bg-background dark:bg-[#1c2438]/50 hover:bg-[#e8dfd1] dark:hover:bg-[#1c2438] transition-colors text-left"
                         >
-                          <span className="font-bold text-sm tracking-wide text-gray-900 dark:text-[#f3ebdd]">{cat.title}</span>
+                          <span className="font-bold text-sm tracking-wide text-gray-900 dark:text-primary-foreground">{cat.title}</span>
                           {isOpen ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
                         </button>
                         
@@ -477,13 +477,13 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                                       return (
                                         <div 
                                           key={`${slotId}-${field}`}
-                                          className={`p-2 border-l border-gray-100 dark:border-[#f3ebdd]/5 text-center text-xs font-medium ${highlightDiff && isDifferent ? 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 font-bold' : 'text-gray-900 dark:text-[#f3ebdd]'}`}
+                                          className={`p-2 border-l border-gray-100 dark:border-background/5 text-center text-xs font-medium ${highlightDiff && isDifferent ? 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 font-bold' : 'text-gray-900 dark:text-primary-foreground'}`}
                                         >
                                           {specVal}
                                         </div>
                                       );
                                     } else {
-                                      return <div key={`empty-${idx}`} className="p-2 border-l border-gray-100 dark:border-[#f3ebdd]/5 text-center text-gray-400 dark:text-gray-500">—</div>;
+                                      return <div key={`empty-${idx}`} className="p-2 border-l border-gray-100 dark:border-background/5 text-center text-gray-400 dark:text-gray-500">—</div>;
                                     }
                                   })}
                                 </div>
@@ -497,28 +497,28 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                 </div>
               ) : (
                 // Features
-                <div className="bg-[#f3ebdd] dark:bg-[#141b2b] border border-gray-200 dark:border-[#f3ebdd]/5 rounded-2xl p-6 shadow-sm">
+                <div className="bg-background dark:bg-[#141b2b] border border-gray-200 dark:border-background/5 rounded-2xl p-6 shadow-sm">
                   <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4">Class Features</h3>
                   <div className="divide-y divide-gray-100 dark:divide-white/5">
                     <div className="grid grid-cols-1 lg:grid-cols-5 p-4 items-center">
                       <div className="text-xs font-semibold text-gray-500 dark:text-gray-400">Digital Console</div>
-                      <div className="p-2 border-l border-gray-100 dark:border-[#f3ebdd]/5"></div>
+                      <div className="p-2 border-l border-gray-100 dark:border-background/5"></div>
                       {slots.map((slotId, idx) => {
                         if (slotId) {
-                          return <div key={idx} className="p-2 border-l border-gray-100 dark:border-[#f3ebdd]/5 text-center text-xs text-gray-900 dark:text-[#f3ebdd]">Yes</div>;
+                          return <div key={idx} className="p-2 border-l border-gray-100 dark:border-background/5 text-center text-xs text-gray-900 dark:text-primary-foreground">Yes</div>;
                         }
-                        return <div key={idx} className="p-2 border-l border-gray-100 dark:border-[#f3ebdd]/5 text-center text-xs text-gray-400 dark:text-gray-500">—</div>;
+                        return <div key={idx} className="p-2 border-l border-gray-100 dark:border-background/5 text-center text-xs text-gray-400 dark:text-gray-500">—</div>;
                       })}
                     </div>
                     <div className="grid grid-cols-1 lg:grid-cols-5 p-4 items-center">
                       <div className="text-xs font-semibold text-gray-500 dark:text-gray-400">Bluetooth Connectivity</div>
-                      <div className="p-2 border-l border-gray-100 dark:border-[#f3ebdd]/5"></div>
+                      <div className="p-2 border-l border-gray-100 dark:border-background/5"></div>
                       {slots.map((slotId, idx) => {
                         if (slotId) {
                           const vehicle = vehicles.find(v => v.id === slotId)!;
-                          return <div key={idx} className="p-2 border-l border-gray-100 dark:border-[#f3ebdd]/5 text-center text-xs text-gray-900 dark:text-[#f3ebdd]">{vehicle.name.toLowerCase().includes('xsr') || vehicle.name.toLowerCase().includes('hornet') || vehicle.name.toLowerCase().includes('ntorq') ? 'Yes' : 'No'}</div>;
+                          return <div key={idx} className="p-2 border-l border-gray-100 dark:border-background/5 text-center text-xs text-gray-900 dark:text-primary-foreground">{vehicle.name.toLowerCase().includes('xsr') || vehicle.name.toLowerCase().includes('hornet') || vehicle.name.toLowerCase().includes('ntorq') ? 'Yes' : 'No'}</div>;
                         }
-                        return <div key={idx} className="p-2 border-l border-gray-100 dark:border-[#f3ebdd]/5 text-center text-xs text-gray-400 dark:text-gray-500">—</div>;
+                        return <div key={idx} className="p-2 border-l border-gray-100 dark:border-background/5 text-center text-xs text-gray-400 dark:text-gray-500">—</div>;
                       })}
                     </div>
                   </div>
@@ -533,21 +533,21 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
       {/* Selector Modal Overlay */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 dark:bg-black/75 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-          <div className="bg-[#f3ebdd] dark:bg-[#141b2b] border border-gray-200 dark:border-[#f3ebdd]/10 rounded-2xl w-full max-w-xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl relative">
+          <div className="bg-background dark:bg-[#141b2b] border border-gray-200 dark:border-background/10 rounded-2xl w-full max-w-xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl relative">
             <button 
               onClick={() => {
                 setIsModalOpen(false);
                 setActiveSlotIdx(null);
                 setSearchQuery('');
               }}
-              className="absolute top-4 right-4 bg-[#e8dfd1] dark:bg-[#f3ebdd]/5 hover:bg-gray-250 dark:hover:bg-[#f3ebdd]/10 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-[#f3ebdd] rounded-full p-2 transition-colors z-20"
+              className="absolute top-4 right-4 bg-[#e8dfd1] /5 hover:bg-gray-250 dark:hover:bg-background/10 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-primary-foreground rounded-full p-2 transition-colors z-20"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Modal Header */}
-            <div className="p-6 border-b border-gray-100 dark:border-[#f3ebdd]/5">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-[#f3ebdd] mb-4 text-left">Select Your Brand or Model</h2>
+            <div className="p-6 border-b border-gray-100 dark:border-background/5">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-primary-foreground mb-4 text-left">Select Your Brand or Model</h2>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                 <input 
@@ -555,7 +555,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                   placeholder="Type to Select Brand or Model"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-[#f3ebdd] dark:bg-[#0d111b] border border-gray-250 dark:border-[#f3ebdd]/10 rounded-xl py-3 pl-10 pr-4 text-xs text-gray-900 dark:text-[#f3ebdd] placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                  className="w-full bg-background dark:bg-[#0d111b] border border-gray-250 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 text-xs text-gray-900 dark:text-primary-foreground placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
                 />
               </div>
             </div>
@@ -570,12 +570,12 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                   <div className="flex gap-4">
                     <div 
                       onClick={() => handleAddVehicle(vehicles[0].id)}
-                      className="bg-[#f3ebdd] dark:bg-[#1d273a]/40 border border-gray-200 dark:border-[#f3ebdd]/5 hover:border-gray-300 dark:hover:border-[#f3ebdd]/10 rounded-xl p-3 flex items-center gap-3 cursor-pointer transition-colors w-full sm:w-auto shadow-sm"
+                      className="bg-background dark:bg-[#1d273a]/40 border border-gray-200 dark:border-background/5 hover:border-gray-300 dark:hover:border-background/10 rounded-xl p-3 flex items-center gap-3 cursor-pointer transition-colors w-full sm:w-auto shadow-sm"
                     >
                       <img src={vehicles[0].imageUrl || '/honda-logo.svg'} className="h-10 w-12 object-contain" />
                       <div>
                         <span className="text-[9px] tracking-wide text-gray-500 dark:text-gray-400 font-semibold block">{vehicles[0].brand}</span>
-                        <span className="text-xs font-bold text-gray-900 dark:text-[#f3ebdd]">{vehicles[0].name}</span>
+                        <span className="text-xs font-bold text-gray-900 dark:text-primary-foreground">{vehicles[0].name}</span>
                       </div>
                     </div>
                   </div>
@@ -592,11 +592,11 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                       <div 
                         key={v.id}
                         onClick={() => handleAddVehicle(v.id)}
-                        className="p-3 bg-[#f3ebdd] dark:bg-[#0d111b] border border-gray-200 dark:border-[#f3ebdd]/5 hover:border-[#c1291A] rounded-xl flex items-center justify-between cursor-pointer transition-colors"
+                        className="p-3 bg-background dark:bg-[#0d111b] border border-gray-200 dark:border-background/5 hover:border-primary rounded-xl flex items-center justify-between cursor-pointer transition-colors"
                       >
                         <div>
                           <span className="text-[9px] uppercase tracking-wider text-gray-500 dark:text-gray-400 font-bold">{v.brand}</span>
-                          <h4 className="text-sm font-bold text-gray-900 dark:text-[#f3ebdd] mt-0.5">{v.name}</h4>
+                          <h4 className="text-sm font-bold text-gray-900 dark:text-primary-foreground mt-0.5">{v.name}</h4>
                         </div>
                         <span className="text-xs text-red-500 font-semibold">NPR {v.price.toLocaleString('en-IN')}</span>
                       </div>
@@ -611,24 +611,24 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                       const isExpanded = expandedBrand === brand;
                       const brandVehicles = vehicles.filter(v => v.brand === brand);
                       return (
-                        <div key={brand} className="border border-gray-200 dark:border-[#f3ebdd]/5 rounded-xl overflow-hidden shadow-sm">
+                        <div key={brand} className="border border-gray-200 dark:border-background/5 rounded-xl overflow-hidden shadow-sm">
                           <button
                             onClick={() => setExpandedBrand(isExpanded ? null : brand)}
-                            className="w-full flex items-center justify-between p-3.5 bg-[#f3ebdd] dark:bg-[#0d111b] hover:bg-[#e8dfd1] dark:hover:bg-[#1a2335]/40 transition-colors text-left"
+                            className="w-full flex items-center justify-between p-3.5 bg-background dark:bg-[#0d111b] hover:bg-[#e8dfd1] dark:hover:bg-[#1a2335]/40 transition-colors text-left"
                           >
-                            <span className="font-bold text-sm text-gray-900 dark:text-[#f3ebdd]">{brand}</span>
+                            <span className="font-bold text-sm text-gray-900 dark:text-primary-foreground">{brand}</span>
                             {isExpanded ? <ChevronUp className="w-4 h-4 text-gray-500 dark:text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />}
                           </button>
                           
                           {isExpanded && (
-                            <div className="p-3 bg-[#f3ebdd] dark:bg-[#0d111b]/80 border-t border-gray-200 dark:border-[#f3ebdd]/5 divide-y divide-gray-100 dark:divide-white/5 max-h-48 overflow-y-auto">
+                            <div className="p-3 bg-background dark:bg-[#0d111b]/80 border-t border-gray-200 dark:border-background/5 divide-y divide-gray-100 dark:divide-white/5 max-h-48 overflow-y-auto">
                               {brandVehicles.map(v => (
                                 <div
                                   key={v.id}
                                   onClick={() => handleAddVehicle(v.id)}
-                                  className="py-2.5 px-1.5 hover:bg-[#f3ebdd] dark:hover:bg-[#f3ebdd]/5 rounded cursor-pointer transition-colors flex items-center justify-between"
+                                  className="py-2.5 px-1.5 hover:bg-background dark:hover:bg-background/5 rounded cursor-pointer transition-colors flex items-center justify-between"
                                 >
-                                  <span className="text-xs text-gray-800 dark:text-[#f3ebdd] font-medium">{v.name}</span>
+                                  <span className="text-xs text-gray-800 dark:text-primary-foreground font-medium">{v.name}</span>
                                   <span className="text-[10px] text-red-500 font-bold">NPR {v.price.toLocaleString('en-IN')}</span>
                                 </div>
                               ))}

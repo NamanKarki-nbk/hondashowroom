@@ -20,8 +20,8 @@ export default function BigWingVehicleSpecs({ specs, vehicleSlug = "nx-200", fal
     <section id="specs" className="py-24 px-6 bg-[#050505] transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-black text-[#f3ebdd] uppercase tracking-tight mb-4">
-            Technical <span className="text-[#c1291A]">Specifications</span>
+          <h2 className="text-4xl md:text-5xl font-black text-primary-foreground uppercase tracking-tight mb-4">
+            Technical <span className="text-primary">Specifications</span>
           </h2>
         </div>
 
@@ -41,13 +41,13 @@ export default function BigWingVehicleSpecs({ specs, vehicleSlug = "nx-200", fal
                     onClick={() => setActiveCategory(activeCategory === category ? "" : category)}
                     className={`w-full flex items-center justify-between p-5 md:p-6 transition-all ${
                       isActive 
-                        ? 'bg-red-950/20 text-[#c1291A]' 
-                        : 'bg-[#121212] hover:bg-gray-900 text-gray-300 hover:text-[#f3ebdd]'
+                        ? 'bg-red-950/20 text-primary' 
+                        : 'bg-[#121212] hover:bg-gray-900 text-gray-300 hover:text-primary-foreground'
                     }`}
                   >
                     <span className="font-bold text-lg md:text-xl uppercase tracking-wider">{category.replace(/_/g, ' ')}</span>
                     <div className={`p-2 rounded-full transition-colors ${
-                      isActive ? 'bg-[#c1291A]/20 text-[#c1291A]' : 'bg-[#1A1A1A] text-gray-400'
+                      isActive ? 'bg-primary/20 text-primary' : 'bg-[#1A1A1A] text-gray-400'
                     }`}>
                       <ChevronDown className={`w-5 h-5 transition-transform ${isActive ? 'rotate-180' : ''}`} />
                     </div>
@@ -66,7 +66,7 @@ export default function BigWingVehicleSpecs({ specs, vehicleSlug = "nx-200", fal
                             {specs[category].map((item, idx) => (
                               <li key={idx} className="flex justify-between items-start gap-4 border-b border-gray-800 pb-3 last:border-0 last:pb-0">
                                 <span className="text-gray-400 font-medium">{item.label}</span>
-                                <span className="text-[#f3ebdd] font-bold text-right">{item.value}</span>
+                                <span className="text-primary-foreground font-bold text-right">{item.value}</span>
                               </li>
                             ))}
                           </ul>

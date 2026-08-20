@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bodyRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E52B1E" />
+      <stop offset="100%" stop-color="#9B110E" />
+    </linearGradient>
+    <linearGradient id="darkGray" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#333338" />
+      <stop offset="100%" stop-color="#18181B" />
+    </linearGradient>
+    <linearGradient id="wheelMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#555" />
+      <stop offset="100%" stop-color="#111" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="15" stdDeviation="12" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <!-- Wheels -->
+    <!-- Rear Wheel -->
+    <circle cx="230" cy="340" r="85" fill="#18181B"/>
+    <circle cx="230" cy="340" r="60" fill="url(#wheelMetal)" stroke="#333" stroke-width="4"/>
+    <circle cx="230" cy="340" r="25" fill="#111"/>
+    <circle cx="230" cy="340" r="10" fill="#888"/>
+    <line x1="230" y1="280" x2="230" y2="400" stroke="#444" stroke-width="3"/>
+    <line x1="170" y1="340" x2="290" y2="340" stroke="#444" stroke-width="3"/>
+
+    <!-- Front Wheel -->
+    <circle cx="580" cy="340" r="90" fill="#18181B"/>
+    <circle cx="580" cy="340" r="65" fill="url(#wheelMetal)" stroke="#333" stroke-width="4"/>
+    <circle cx="580" cy="340" r="28" fill="#111"/>
+    <circle cx="580" cy="340" r="12" fill="#c1291A"/>
+    <line x1="580" y1="275" x2="580" y2="405" stroke="#444" stroke-width="3"/>
+    <line x1="515" y1="340" x2="645" y2="340" stroke="#444" stroke-width="3"/>
+
+    <!-- Front Telescopic Fork -->
+    <path d="M545,210 L575,335" stroke="#71717A" stroke-width="14" stroke-linecap="round"/>
+    <path d="M555,230 L578,335" stroke="#18181B" stroke-width="6" stroke-linecap="round"/>
+
+    <!-- Main Chassis & Body Panels -->
+    <!-- Underbody Engine Cover -->
+    <path d="M230,340 Q320,360 420,330 L430,270 L250,260 Z" fill="url(#darkGray)"/>
+
+    <!-- Main Body Panel (Red) -->
+    <path d="M200,280 Q190,200 270,160 Q380,150 450,210 L490,260 L440,320 Q340,340 230,320 Z" fill="url(#bodyRed)"/>
+    
+    <!-- Seat Structure -->
+    <path d="M210,210 Q280,180 390,195 Q420,200 420,225 Q350,240 220,240 Z" fill="#111113" stroke="#27272A" stroke-width="2"/>
+    <path d="M215,212 Q280,185 385,200" stroke="#3F3F46" stroke-width="3" fill="none"/>
+
+    <!-- Handlebar & Headlamp Cowl -->
+    <path d="M470,190 L520,110 Q540,95 575,120 L585,145 L525,240 Z" fill="url(#darkGray)"/>
+    <!-- Red Front Apron -->
+    <path d="M510,135 L575,125 Q620,170 610,250 L545,300 L490,220 Z" fill="url(#bodyRed)"/>
+
+    <!-- Sporty Dio Graphics & Decals -->
+    <path d="M530,160 L590,185 L560,240 Z" fill="#111" opacity="0.4"/>
+    <path d="M300,210 L380,215 L350,240 Z" fill="#FFF" opacity="0.85"/>
+    <text x="310" y="230" font-family="Arial, sans-serif" font-weight="900" font-size="22" font-style="italic" fill="#111">DIO</text>
+    <text x="355" y="228" font-family="Arial, sans-serif" font-weight="900" font-size="12" fill="#c1291A">110</text>
+
+    <!-- LED Headlamp Unit -->
+    <polygon points="560,180 595,190 580,230 545,210" fill="#E0F2FE" stroke="#38BDF8" stroke-width="2"/>
+    <polygon points="565,185 590,193 578,223 550,208" fill="#FFF" opacity="0.9"/>
+
+    <!-- Front Mudguard -->
+    <path d="M530,290 Q580,270 620,310 L590,325 Q560,295 530,305 Z" fill="url(#bodyRed)"/>
+
+    <!-- Exhaust Pipe & Muffler -->
+    <rect x="230" y="300" width="130" height="32" rx="12" fill="#27272A" stroke="#52525B" stroke-width="2"/>
+    <rect x="345" y="306" width="20" height="20" rx="4" fill="#A1A1AA"/>
+
+    <!-- Footrest Platform -->
+    <path d="M420,270 L500,265 L480,295 L410,290 Z" fill="#18181B" stroke="#3F3F46"/>
+
+    <!-- Handle Grip & Mirror -->
+    <path d="M545,95 L530,75 L500,78" stroke="#18181B" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <ellipse cx="495" cy="78" rx="20" ry="12" fill="#27272A" stroke="#52525B" stroke-width="2"/>
+  </g>
+</svg>

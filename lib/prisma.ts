@@ -2,14 +2,14 @@ import { PrismaClient } from '@/app/generated/prisma'
 import { Pool } from 'pg'
 import { PrismaPg } from '@prisma/adapter-pg'
 
-const connectionString = `${process.env.DATABASE_URL}`
-const pool = new Pool({ connectionString })
+const connectionString = `${process.env.DATABASE_URL}`.replace(/^["']|["']$/g, '')
+const pool = new Pool({ connectionString, host: '127.0.0.1', port: 5432 })
 const adapter = new PrismaPg(pool)
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
+  prisma_v3: PrismaClient | undefined
 }
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter })
+export const prisma = globalForPrisma.prisma_v3 ?? new PrismaClient({ adapter })
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma_v3 = prisma

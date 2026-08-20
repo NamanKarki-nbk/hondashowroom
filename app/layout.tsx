@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { Toaster } from "sonner";
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           enableSystem={false}
         >
           {children}
+          <Toaster richColors position="top-right" />
         </ThemeProvider>
       </body>
     </html>

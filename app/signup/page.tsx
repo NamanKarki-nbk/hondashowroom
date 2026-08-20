@@ -45,6 +45,9 @@ export default function SignupPage() {
         localStorage.setItem('isLoggedIn', 'true');
         router.push("/");
         router.refresh();
+      } else if (loginRes.status === 403) {
+        // Unverified, redirect to OTP verification
+        router.push(`/verify-otp?identifier=${encodeURIComponent(email)}`);
       } else {
         router.push("/login"); // Redirect to login if auto-login fails
       }
@@ -56,11 +59,11 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3ebdd] dark:bg-[#0B0B0C] flex flex-col items-center justify-center p-6 relative overflow-hidden py-12">
+    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] flex flex-col items-center justify-center p-6 relative overflow-hidden py-12">
       {/* Background ambient lighting */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#c1291A]/10 blur-[150px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary/10 blur-[150px] rounded-full pointer-events-none"></div>
 
-      <Link href="/" className="absolute top-8 left-8 text-gray-500 hover:text-gray-900 dark:hover:text-[#f3ebdd] flex items-center gap-2 transition-colors z-20 font-medium">
+      <Link href="/" className="absolute top-8 left-8 text-gray-500 hover:text-gray-900 dark:hover:text-primary-foreground flex items-center gap-2 transition-colors z-20 font-medium">
         <ArrowLeft className="w-4 h-4" /> Back to Showroom
       </Link>
 
@@ -92,7 +95,7 @@ export default function SignupPage() {
                   required
                   value={firstName}
                   onChange={e => setFirstName(e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white focus:border-[#c1291A] focus:ring-1 focus:ring-[#c1291A] outline-none transition-all placeholder:text-gray-400"
+                  className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-gray-400"
                   placeholder="John"
                 />
               </div>
@@ -106,7 +109,7 @@ export default function SignupPage() {
                   required
                   value={lastName}
                   onChange={e => setLastName(e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white focus:border-[#c1291A] focus:ring-1 focus:ring-[#c1291A] outline-none transition-all placeholder:text-gray-400"
+                  className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-gray-400"
                   placeholder="Doe"
                 />
               </div>
@@ -122,7 +125,7 @@ export default function SignupPage() {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white focus:border-[#c1291A] focus:ring-1 focus:ring-[#c1291A] outline-none transition-all placeholder:text-gray-400"
+                className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-gray-400"
                 placeholder="name@example.com"
               />
             </div>
@@ -137,13 +140,13 @@ export default function SignupPage() {
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white focus:border-[#c1291A] focus:ring-1 focus:ring-[#c1291A] outline-none transition-all placeholder:text-gray-400"
+                className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-gray-400"
                 placeholder="••••••••"
               />
             </div>
           </div>
 
-          <button disabled={loading} type="submit" className="w-full bg-[#c1291A] hover:bg-[#a02014] text-white py-3.5 rounded-xl font-bold text-base transition-all shadow-lg shadow-[#c1291A]/20 mt-4 disabled:opacity-50">
+          <button disabled={loading} type="submit" className="w-full bg-primary hover:bg-primary-hover text-white py-3.5 rounded-xl font-bold text-base transition-all shadow-lg shadow-primary/20 mt-4 disabled:opacity-50">
              {loading ? "Creating account..." : "Register"}
           </button>
         </form>
@@ -169,7 +172,7 @@ export default function SignupPage() {
         </div>
 
         <p className="mt-8 text-center text-sm font-medium text-gray-600 dark:text-gray-400">
-          Already have an account? <Link href="/login" className="text-[#c1291A] font-extrabold hover:underline">Login</Link>
+          Already have an account? <Link href="/login" className="text-primary font-extrabold hover:underline">Login</Link>
         </p>
       </div>
     </div>

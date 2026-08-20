@@ -38,11 +38,15 @@ export default function LoginPage() {
       });
       const data = await res.json();
       
-      if (!res.ok) throw new Error(data.error || "Login failed");
-      
-      localStorage.setItem('isLoggedIn', 'true');
-      router.push("/");
-      router.refresh();
+      if (res.ok) {
+        localStorage.setItem('isLoggedIn', 'true');
+        router.push("/");
+        router.refresh();
+      } else if (res.status === 403) {
+        router.push(`/verify-otp?identifier=${encodeURIComponent(email)}`);
+      } else {
+        throw new Error(data.error || "Login failed");
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -98,11 +102,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3ebdd] dark:bg-[#0B0B0C] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] flex flex-col items-center justify-center p-6 relative overflow-hidden">
       {/* Background ambient lighting */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#c1291A]/10 blur-[150px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary/10 blur-[150px] rounded-full pointer-events-none"></div>
 
-      <Link href="/" className="absolute top-8 left-8 text-gray-500 hover:text-gray-900 dark:hover:text-[#f3ebdd] flex items-center gap-2 transition-colors z-20 font-medium">
+      <Link href="/" className="absolute top-8 left-8 text-gray-500 hover:text-gray-900 dark:hover:text-primary-foreground flex items-center gap-2 transition-colors z-20 font-medium">
         <ArrowLeft className="w-4 h-4" /> Back to Showroom
       </Link>
 
@@ -134,7 +138,7 @@ export default function LoginPage() {
                   required
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white focus:border-[#c1291A] focus:ring-1 focus:ring-[#c1291A] outline-none transition-all placeholder:text-gray-400"
+                  className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-gray-400"
                   placeholder="name@example.com"
                 />
               </div>
@@ -143,7 +147,7 @@ export default function LoginPage() {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-sm font-bold text-gray-700 dark:text-gray-300">Password</label>
-                <Link href="#" className="text-xs text-[#c1291A] hover:text-[#a02014] font-bold transition-colors">Forgot Password?</Link>
+                <Link href="#" className="text-xs text-primary hover:text-primary-hover font-bold transition-colors">Forgot Password?</Link>
               </div>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -152,13 +156,13 @@ export default function LoginPage() {
                   required
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white focus:border-[#c1291A] focus:ring-1 focus:ring-[#c1291A] outline-none transition-all placeholder:text-gray-400"
+                  className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-gray-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-gray-400"
                   placeholder="••••••••"
                 />
               </div>
             </div>
 
-            <button disabled={loading} type="submit" className="w-full bg-[#c1291A] hover:bg-[#a02014] text-white py-3.5 rounded-xl font-bold text-base transition-all shadow-lg shadow-[#c1291A]/20 mt-4 disabled:opacity-50">
+            <button disabled={loading} type="submit" className="w-full bg-primary hover:bg-primary-hover text-white py-3.5 rounded-xl font-bold text-base transition-all shadow-lg shadow-primary/20 mt-4 disabled:opacity-50">
                {loading ? "Signing in..." : "Login"}
             </button>
           </form>
@@ -182,7 +186,7 @@ export default function LoginPage() {
                      required
                      value={phone}
                      onChange={e => setPhone(e.target.value)}
-                     className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-r-xl py-3 pl-10 pr-4 text-gray-900 dark:text-white focus:border-[#c1291A] focus:ring-1 focus:ring-[#c1291A] outline-none transition-all placeholder:text-gray-400"
+                     className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-r-xl py-3 pl-10 pr-4 text-gray-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-gray-400"
                      placeholder="98XXXXXXX"
                    />
                  </div>
@@ -200,7 +204,7 @@ export default function LoginPage() {
             <div>
               <div className="flex justify-between items-center mb-2">
                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300">Enter OTP</label>
-                 <button type="button" onClick={() => setOtpSent(false)} className="text-xs text-[#c1291A] hover:text-[#a02014] font-bold transition-colors">Change Number</button>
+                 <button type="button" onClick={() => setOtpSent(false)} className="text-xs text-primary hover:text-primary-hover font-bold transition-colors">Change Number</button>
               </div>
               <div className="relative">
                  <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -210,7 +214,7 @@ export default function LoginPage() {
                    maxLength={6}
                    value={otp}
                    onChange={e => setOtp(e.target.value.replace(/\D/g, ''))}
-                   className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-center tracking-widest text-xl font-bold text-gray-900 dark:text-white focus:border-[#c1291A] focus:ring-1 focus:ring-[#c1291A] outline-none transition-all placeholder:text-gray-300"
+                   className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-center tracking-widest text-xl font-bold text-gray-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-gray-300"
                    placeholder="------"
                  />
               </div>
@@ -249,7 +253,7 @@ export default function LoginPage() {
         )}
 
         <p className="mt-8 text-center text-sm font-medium text-gray-600 dark:text-gray-400">
-          Don't have an account? <Link href="/signup" className="text-[#c1291A] font-extrabold hover:underline">Register Now</Link>
+          Don't have an account? <Link href="/signup" className="text-primary font-extrabold hover:underline">Register Now</Link>
         </p>
       </div>
     </div>

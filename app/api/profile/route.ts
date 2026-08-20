@@ -17,27 +17,11 @@ export async function GET(req: NextRequest) {
         fullName: true,
         email: true,
         phone: true,
-        bio: true,
         avatarUrl: true,
         address: true,
         gender: true,
         dobAd: true,
         dobBs: true,
-        
-        citizenshipVerified: true,
-        citizenshipNumber: true,
-        citizenshipFront: true,
-        citizenshipBack: true,
-        
-        licenseVerified: true,
-        licenseNumber: true,
-        licenseFront: true,
-        licenseBack: true,
-        
-        nationalIdVerified: true,
-        nationalIdNumber: true,
-        nationalIdFront: true,
-        nationalIdBack: true,
         
         createdAt: true
       }
@@ -63,7 +47,7 @@ export async function PATCH(req: NextRequest) {
     
     // Whitelist allowed update fields
     const allowedUpdates = [
-      "fullName", "email", "phone", "bio", "avatarUrl", "address", 
+      "fullName", "email", "phone", "avatarUrl", "address", 
       "gender", "dobAd", "dobBs",
       "citizenshipVerified", "citizenshipNumber", "citizenshipFront", "citizenshipBack",
       "licenseVerified", "licenseNumber", "licenseFront", "licenseBack",
@@ -89,24 +73,11 @@ export async function PATCH(req: NextRequest) {
         fullName: true,
         email: true,
         phone: true,
-        bio: true,
         avatarUrl: true,
         address: true,
         gender: true,
         dobAd: true,
         dobBs: true,
-        citizenshipVerified: true,
-        citizenshipNumber: true,
-        citizenshipFront: true,
-        citizenshipBack: true,
-        licenseVerified: true,
-        licenseNumber: true,
-        licenseFront: true,
-        licenseBack: true,
-        nationalIdVerified: true,
-        nationalIdNumber: true,
-        nationalIdFront: true,
-        nationalIdBack: true,
       }
     });
 

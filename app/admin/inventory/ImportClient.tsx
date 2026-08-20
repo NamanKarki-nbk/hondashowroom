@@ -8,6 +8,12 @@ export default function InventoryImport() {
   const [file, setFile] = useState<File | null>(null);
   const [isParsing, setIsParsing] = useState(false);
   const [parsedData, setParsedData] = useState<any>(null);
+  const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
+
+  const showNotification = (message: string, type: 'success' | 'error') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 4000);
+  };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -37,11 +43,11 @@ export default function InventoryImport() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3ebdd] dark:bg-[#0B0B0C] text-gray-100 p-8 selection:bg-[#c1291A] selection:text-[#f3ebdd]">
+    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] text-gray-100 p-8 selection:bg-primary selection:text-primary-foreground">
       <div className="max-w-5xl mx-auto space-y-8">
         
         <header>
-          <h1 className="text-3xl font-extrabold text-[#f3ebdd] tracking-tight">Distributor PDF Import</h1>
+          <h1 className="text-3xl font-extrabold text-primary-foreground tracking-tight">Distributor PDF Import</h1>
           <p className="text-gray-400 mt-1">Upload Syakar Trading Co. invoices to automatically update inventory.</p>
         </header>
 
@@ -51,20 +57,20 @@ export default function InventoryImport() {
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
           className={`border-2 border-dashed rounded-3xl p-16 text-center transition-all ${
-            isDragging ? "border-[#c1291A] bg-[#c1291A]/5 scale-[1.02]" : "border-slate-700 bg-slate-900/40 hover:border-slate-500 hover:bg-slate-900/60"
+            isDragging ? "border-primary bg-primary/5 scale-[1.02]" : "border-slate-700 bg-slate-900/40 hover:border-slate-500 hover:bg-slate-900/60"
           }`}
         >
           <div className="flex justify-center mb-4">
              {isParsing ? (
-                <div className="animate-spin w-16 h-16 border-4 border-[#c1291A] border-t-transparent rounded-full"></div>
+                <div className="animate-spin w-16 h-16 border-4 border-primary border-t-transparent rounded-full"></div>
              ) : file ? (
                 <FileText className="w-16 h-16 text-green-500" />
              ) : (
-                <UploadCloud className="w-16 h-16 text-gray-500 group-hover:text-[#c1291A] transition-colors" />
+                <UploadCloud className="w-16 h-16 text-gray-500 group-hover:text-primary transition-colors" />
              )}
           </div>
           
-          <h3 className="text-xl font-bold text-[#f3ebdd] mb-2">
+          <h3 className="text-xl font-bold text-primary-foreground mb-2">
             {isParsing ? "Parsing Document..." : file ? file.name : "Drag & Drop PDF Invoice Here"}
           </h3>
           <p className="text-gray-400 text-sm">
@@ -75,13 +81,36 @@ export default function InventoryImport() {
         {/* Parsed Data Preview */}
         {parsedData && (
           <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-[#c1291A]"></div>
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-primary"></div>
             
             <div className="flex justify-between items-center mb-6">
-               <h2 className="text-xl font-bold text-[#f3ebdd] flex items-center gap-2">
+               <h2 className="text-xl font-bold text-primary-foreground flex items-center gap-2">
                   <Database className="w-5 h-5 text-gray-400" /> Parsed Inventory Preview
                </h2>
-               <button className="bg-[#c1291A] hover:bg-[#a02014] text-[#f3ebdd] px-6 py-2.5 rounded-xl font-bold transition-colors shadow-lg shadow-[#c1291A]/20 text-sm">
+               <button 
+                  onClick={async () => {
+                    const btn = document.getElementById('commitBtn');
+                    if (btn) btn.innerHTML = 'Committing...';
+                    try {
+                      const res = await fetch('/api/admin/inventory/import', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ vehicles: parsedData })
+                      });
+                      if (res.ok) {
+                        showNotification('Inventory successfully updated!', 'success');
+                        setParsedData(null);
+                        setFile(null);
+                      } else {
+                        showNotification('Failed to commit to database.', 'error');
+                      }
+                    } catch (e) {
+                      showNotification('Error communicating with server.', 'error');
+                    }
+                  }}
+                  id="commitBtn"
+                  className="bg-primary hover:bg-primary-hover text-primary-foreground px-6 py-2.5 rounded-xl font-bold transition-colors shadow-lg shadow-primary/20 text-sm"
+               >
                   Commit to Database
                </button>
             </div>
@@ -99,9 +128,9 @@ export default function InventoryImport() {
                 </thead>
                 <tbody className="divide-y divide-slate-800/50">
                   {parsedData.map((item: any, idx: number) => (
-                    <tr key={idx} className="hover:bg-[#f3ebdd]/5 transition-colors">
+                    <tr key={idx} className="hover:bg-background/5 transition-colors">
                       <td className="py-3 font-mono text-sm text-gray-300">{item.vin}</td>
-                      <td className="py-3 text-[#f3ebdd] font-medium">{item.model}</td>
+                      <td className="py-3 text-primary-foreground font-medium">{item.model}</td>
                       <td className="py-3 text-gray-400">{item.color}</td>
                       <td className="py-3 text-center">
                         <span className={`font-bold ${item.age > 60 ? 'text-red-500' : item.age > 30 ? 'text-yellow-500' : 'text-green-500'}`}>
