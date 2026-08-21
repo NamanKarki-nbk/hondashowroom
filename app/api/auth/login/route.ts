@@ -24,7 +24,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    if (!user.isVerified) {
+    const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@honda.com";
+    
+    if (!user.isVerified && user.email?.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
       return NextResponse.json({ error: "Please complete OTP verification before logging in.", isVerified: false }, { status: 403 });
     }
 
