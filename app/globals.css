@@ -12,18 +12,18 @@
 }
 
 :root {
-  --background: #f3ebdd;
-  --foreground: #171717;
-  --primary: #c1291A;
-  --primary-hover: #a02014;
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --primary: #CC0000;
+  --primary-hover: #A30000;
   --primary-foreground: #ffffff;
 }
 
 .dark {
-  --background: #0B0B0C;
-  --foreground: #f3ebdd;
-  --primary: #c1291A;
-  --primary-hover: #a02014;
+  --background: #020617;
+  --foreground: #f8fafc;
+  --primary: #CC0000;
+  --primary-hover: #A30000;
   --primary-foreground: #ffffff;
 }
 

@@ -73,8 +73,8 @@ const DESIGN_COMFORT_ITEMS: DesignCard[] = [
 
 export default function DioDesignComfort() {
   return (
-    <section id="design-comfort" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-[#0E0E10] border-t border-gray-200 dark:border-gray-800 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto">
+    <section id="design-comfort" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 transition-colors duration-300">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 text-primary text-xs font-black tracking-widest uppercase mb-3">
@@ -95,7 +95,7 @@ export default function DioDesignComfort() {
             return (
               <div
                 key={item.id}
-                className="group bg-white dark:bg-[#141416] rounded-3xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm hover:shadow-xl hover:border-primary/40 transition-all duration-300 flex flex-col justify-between"
+                className="group bg-white dark:bg-slate-900 rounded-3xl border border-gray-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-xl hover:border-primary/40 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   {/* Top Header */}
@@ -118,7 +118,7 @@ export default function DioDesignComfort() {
                 </div>
 
                 {/* Card Visual Banner */}
-                <div className="relative h-44 w-full bg-gray-100 dark:bg-[#1A1A1E] rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800">
+                <div className="relative h-44 w-full bg-gray-100 dark:bg-slate-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-slate-800">
                   <ImageWithFallback
                     src={item.image}
                     fallbackSrc={item.fallbackImage}

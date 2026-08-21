@@ -42,7 +42,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
   });
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background pt-28 pb-20">
       
       {/* Hero Banner (Image 4) */}
       <div className="relative w-full h-[60vh] min-h-[400px] bg-[#111] overflow-hidden">
@@ -54,7 +54,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
            />
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent flex items-center">
-          <div className="max-w-7xl mx-auto px-6 w-full">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 w-full">
             <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-6xl font-black text-white mb-2 uppercase max-w-2xl">
               THE {product.name.toUpperCase()}.
             </h1>
@@ -82,7 +82,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-12">
         
         {/* Specs Header (Image 3) */}
         <div className="flex flex-col md:flex-row items-center gap-12 mb-16">
@@ -97,7 +97,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
                 <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
              </div>
 
-             <div className="flex gap-6 border-t border-gray-200 dark:border-gray-800 pt-4 mb-6">
+             <div className="flex gap-6 border-t border-gray-200 dark:border-slate-800 pt-4 mb-6">
                <div>
                  <p className="font-black text-foreground text-lg">{specs.cc}</p>
                  <p className="text-[10px] text-gray-500 uppercase">Cubic Capacity</p>
@@ -139,7 +139,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
                 <button 
                   key={p} 
                   onClick={() => setPlan(p as any)}
-                  className={`flex-1 py-4 text-center font-medium transition-colors ${plan === p ? "border-b-4 border-blue-600 bg-gray-50 dark:bg-[#1A1A1A] text-foreground" : "text-gray-500 hover:text-foreground"}`}
+                  className={`flex-1 py-4 text-center font-medium transition-colors ${plan === p ? "border-b-4 border-blue-600 bg-gray-50 dark:bg-slate-900 text-foreground" : "text-gray-500 hover:text-foreground"}`}
                 >
                   Honda {p} Plan
                 </button>

@@ -43,7 +43,7 @@ export default function ServiceBookingPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 py-12">
+    <main className="min-h-screen bg-gray-50 pt-28 pb-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="text-center mb-12">
@@ -81,11 +81,11 @@ export default function ServiceBookingPage() {
                 <div className="space-y-6">
                   <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 border-b pb-2">Customer Details</h3>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Full Name <span className="text-red-500">*</span></label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Full Name <span className="text-primary">*</span></label>
                     <input type="text" name="fullName" required className="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number <span className="text-red-500">*</span></label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number <span className="text-primary">*</span></label>
                     <input type="tel" name="phone" required className="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary" />
                   </div>
                 </div>
@@ -109,7 +109,7 @@ export default function ServiceBookingPage() {
                 <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 border-b pb-2 mb-6">Service Requirements</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Type of Service <span className="text-red-500">*</span></label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Type of Service <span className="text-primary">*</span></label>
                     <select name="serviceType" required className="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-primary focus:border-primary">
                       <option value="">-- Select Service Type --</option>
                       <option value="Free Servicing">Free Servicing</option>
@@ -119,7 +119,7 @@ export default function ServiceBookingPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Preferred Date <span className="text-red-500">*</span></label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Preferred Date <span className="text-primary">*</span></label>
                     <div className="relative">
                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                       <input 

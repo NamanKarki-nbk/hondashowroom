@@ -191,8 +191,8 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
   }, [activeVehicles]);
 
   return (
-    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] text-gray-900 dark:text-primary-foreground pt-28 pb-20 font-sans transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="min-h-screen bg-background dark:bg-slate-950 text-gray-900 dark:text-primary-foreground pt-28 pb-20 font-sans transition-colors duration-300">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         
         <AnimatePresence mode="wait">
           {!isComparing ? (
@@ -231,7 +231,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                                 <X className="w-3 h-3 sm:w-4 sm:h-4" />
                               </button>
                               
-                              <div className="w-16 h-16 sm:w-28 sm:h-28 relative flex items-center justify-center mb-2 sm:mb-4 bg-white dark:bg-[#111] rounded-full sm:rounded-none">
+                              <div className="w-16 h-16 sm:w-28 sm:h-28 relative flex items-center justify-center mb-2 sm:mb-4 bg-white dark:bg-slate-950 rounded-full sm:rounded-none">
                                 <img 
                                   src={vehicle.imageUrl || '/honda-logo.svg'} 
                                   alt={vehicle.name} 
@@ -293,7 +293,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                 <h2 className="text-2xl md:text-3xl font-semibold font-bold mb-6 text-gray-900 dark:text-white">Popular Comparisons</h2>
                 
                 {/* Popular Tabs */}
-                <div className="flex border-b border-gray-300 dark:border-gray-800 gap-8 mb-8 text-sm font-bold uppercase tracking-wide">
+                <div className="flex border-b border-gray-300 dark:border-slate-800 gap-8 mb-8 text-sm font-bold uppercase tracking-wide">
                   {(['BIKES', 'SCOOTERS', ...(recentComparisons.length > 0 ? ['RECENT'] : [])] as const).map(tab => (
                     <button
                       key={tab}
@@ -319,13 +319,13 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                     const extraCount = itemIds.length - 2;
                     if (!v1 || !v2) return null;
                     return (
-                      <div key={idx} className="min-w-[320px] max-w-[350px] shrink-0 snap-start bg-white dark:bg-[#0B0B0C] border border-gray-300 dark:border-gray-700 rounded-2xl flex flex-col hover:shadow-md transition-shadow relative">
+                      <div key={idx} className="min-w-[320px] max-w-[350px] shrink-0 snap-start bg-white dark:bg-slate-950 border border-gray-300 dark:border-gray-700 rounded-2xl flex flex-col hover:shadow-md transition-shadow relative">
                         {/* Top section: Vehicles side-by-side */}
                         <div className="flex relative p-4 pb-2">
                           {/* Vertical Divider */}
                           <div className="absolute top-4 bottom-4 w-px bg-gray-200 dark:bg-gray-800 left-1/2 -translate-x-1/2"></div>
                           {/* VS Badge */}
-                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0B0B0C] border border-gray-300 dark:border-gray-600 text-gray-900 text-[10px] font-bold p-1 rounded-full z-10 w-7 h-7 flex items-center justify-center">
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-950 border border-gray-300 dark:border-gray-600 text-gray-900 text-[10px] font-bold p-1 rounded-full z-10 w-7 h-7 flex items-center justify-center">
                             VS
                           </div>
                           
@@ -363,7 +363,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                               setSlots(newSlots as any);
                               setIsComparing(true);
                             }}
-                            className="w-full py-2.5 bg-white dark:bg-[#0B0B0C] border border-[#cd302b] rounded-md text-sm font-semibold text-[#cd302b] hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
+                            className="w-full py-2.5 bg-white dark:bg-slate-950 border border-[#cd302b] rounded-md text-sm font-semibold text-[#cd302b] hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
                           >
                             Compare {v1.name} & {v2.name} {extraCount > 0 ? `+${extraCount}` : ''}
                           </button>
@@ -371,13 +371,13 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                       </div>
                     );
                   }) : popularComparisons[popularTab].map((item, idx) => (
-                    <div key={idx} className="min-w-[320px] max-w-[350px] shrink-0 snap-start bg-white dark:bg-[#0B0B0C] border border-gray-300 dark:border-gray-700 rounded-2xl flex flex-col hover:shadow-md transition-shadow">
+                    <div key={idx} className="min-w-[320px] max-w-[350px] shrink-0 snap-start bg-white dark:bg-slate-950 border border-gray-300 dark:border-gray-700 rounded-2xl flex flex-col hover:shadow-md transition-shadow">
                       {/* Top section: Vehicles side-by-side */}
                       <div className="flex relative p-4 pb-2">
                         {/* Vertical Divider */}
                         <div className="absolute top-4 bottom-4 w-px bg-gray-200 dark:bg-gray-800 left-1/2 -translate-x-1/2"></div>
                         {/* VS Badge */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0B0B0C] border border-gray-300 dark:border-gray-600 text-gray-900 text-[10px] font-bold p-1 rounded-full z-10 w-7 h-7 flex items-center justify-center">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-slate-950 border border-gray-300 dark:border-gray-600 text-gray-900 text-[10px] font-bold p-1 rounded-full z-10 w-7 h-7 flex items-center justify-center">
                           VS
                         </div>
                         
@@ -404,7 +404,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                       <div className="p-4 pt-2 mt-auto">
                         <button
                           onClick={() => startPopularCompare(item.v1.id, item.v2.id)}
-                          className="w-full py-2.5 bg-white dark:bg-[#0B0B0C] border border-[#cd302b] rounded-md text-sm font-semibold text-[#cd302b] hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
+                          className="w-full py-2.5 bg-white dark:bg-slate-950 border border-[#cd302b] rounded-md text-sm font-semibold text-[#cd302b] hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
                         >
                           {item.label}
                         </button>
@@ -625,7 +625,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
       {/* Selector Modal Overlay */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-0 sm:p-4 backdrop-blur-sm">
-          <div className="bg-[#f0f0f0] dark:bg-[#0B0B0C] w-full max-w-xl h-full sm:h-auto sm:max-h-[85vh] sm:rounded-md overflow-hidden flex flex-col shadow-2xl relative">
+          <div className="bg-[#f0f0f0] dark:bg-slate-950 w-full max-w-xl h-full sm:h-auto sm:max-h-[85vh] sm:rounded-md overflow-hidden flex flex-col shadow-2xl relative">
             <button 
               onClick={() => {
                 setIsModalOpen(false);
@@ -638,7 +638,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
             </button>
 
             {/* Modal Header */}
-            <div className="p-4 pt-5 pb-0 bg-[#f0f0f0] dark:bg-[#0B0B0C]">
+            <div className="p-4 pt-5 pb-0 bg-[#f0f0f0] dark:bg-slate-950">
               <h2 className="text-xl md:text-2xl font-semibold font-bold text-gray-800 dark:text-white mb-4 text-left px-2">Select Your Brand or Model</h2>
               <div className="relative bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md overflow-hidden flex items-center shadow-sm">
                 <Search className="absolute left-3 w-5 h-5 text-gray-400" />
@@ -653,7 +653,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
             </div>
 
             {/* Modal Body */}
-            <div className="overflow-y-auto flex-1 bg-white dark:bg-[#111] mt-4">
+            <div className="overflow-y-auto flex-1 bg-white dark:bg-slate-950 mt-4">
               
               {searchQuery !== '' ? (
                 <div className="flex flex-col">
@@ -661,7 +661,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                     <div 
                       key={v.id}
                       onClick={() => handleAddVehicle(v.id)}
-                      className="p-4 border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 flex items-center justify-between cursor-pointer transition-colors"
+                      className="p-4 border-b border-gray-200 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-gray-900 flex items-center justify-between cursor-pointer transition-colors"
                     >
                       <div className="flex items-center gap-4">
                         <img src={v.imageUrl || '/honda-logo.svg'} className="w-12 h-8 object-contain" />
@@ -679,7 +679,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                 </div>
               ) : (
                 <div className="flex flex-col">
-                  <div className="px-4 py-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+                  <div className="px-4 py-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-slate-800">
                     <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">POPULAR BRANDS</span>
                   </div>
                   {brands.map(brand => {
@@ -691,10 +691,10 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                     if (brandLower === 'honda') brandLogo = '/honda-logo.svg';
 
                     return (
-                      <div key={brand} className="border-b border-gray-200 dark:border-gray-800">
+                      <div key={brand} className="border-b border-gray-200 dark:border-slate-800">
                         <button
                           onClick={() => setExpandedBrand(isExpanded ? null : brand)}
-                          className="w-full flex items-center justify-between p-4 bg-white dark:bg-[#111] hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors text-left"
+                          className="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-950 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors text-left"
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-16 h-8 flex justify-center items-center">
@@ -730,7 +730,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                   })}
                   
                   {/* OTHER BRANDS section placeholder as seen in image */}
-                  <div className="p-4 pt-6 pb-2 bg-white dark:bg-[#111]">
+                  <div className="p-4 pt-6 pb-2 bg-white dark:bg-slate-950">
                      <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">OTHER BRANDS</span>
                   </div>
                 </div>

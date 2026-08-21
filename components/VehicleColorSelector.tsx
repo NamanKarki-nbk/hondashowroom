@@ -38,7 +38,7 @@ export default function VehicleColorSelector({ vehicleName, colors, imageUrl }: 
         transition={{ duration: 0.6, ease: "easeOut" }}
       />
       
-      <div className="max-w-6xl mx-auto w-full relative z-10 flex flex-col items-center">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 w-full relative z-10 flex flex-col items-center">
         <div className="text-center mb-10 w-full">
           <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-extrabold uppercase tracking-tight text-white drop-shadow-md">Select Color</h2>
           <p className="text-gray-400 mt-2 text-lg">Personalize your {vehicleName}</p>

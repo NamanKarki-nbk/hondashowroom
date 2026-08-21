@@ -33,8 +33,8 @@ export default function HondaBlogSection({ blogs }: { blogs: BlogProps[] }) {
   const [featured, ...rest] = blogs;
 
   return (
-    <section className="py-24 px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px] bg-background dark:bg-[#0D0D0E]">
-      <div className="max-w-7xl mx-auto w-full">
+    <section className="py-24 px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px] bg-background dark:bg-slate-950">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 w-full">
 
         {/* Section Header */}
         <div className="flex items-end justify-between mb-12">
@@ -72,9 +72,9 @@ export default function HondaBlogSection({ blogs }: { blogs: BlogProps[] }) {
             className="lg:col-span-5"
           >
             <Link href={`/blog/${featured.slug}`} className="group block h-full">
-              <div className="bg-background dark:bg-[#111] rounded-3xl overflow-hidden border border-gray-200 dark:border-background/8 hover:shadow-2xl hover:border-red-200 dark:hover:border-red-900/40 transition-all duration-300 h-full flex flex-col">
+              <div className="bg-background dark:bg-slate-950 rounded-3xl overflow-hidden border border-gray-200 dark:border-background/8 hover:shadow-2xl hover:border-red-200 dark:hover:border-red-900/40 transition-all duration-300 h-full flex flex-col">
                 {/* Image */}
-                <div className="relative h-64 bg-[#e8dfd1] dark:bg-[#1A1A1A] overflow-hidden">
+                <div className="relative h-64 bg-[#e8dfd1] dark:bg-slate-900 overflow-hidden">
                   <img
                     src={featured.image}
                     alt={featured.title}
@@ -130,9 +130,9 @@ export default function HondaBlogSection({ blogs }: { blogs: BlogProps[] }) {
                 variants={cardVariants}
               >
                 <Link href={`/blog/${post.slug}`} className="group block">
-                  <div className="bg-background dark:bg-[#111] rounded-2xl border border-gray-200 dark:border-background/8 hover:shadow-xl hover:border-red-200 dark:hover:border-red-900/40 transition-all duration-300 flex gap-5 overflow-hidden">
+                  <div className="bg-background dark:bg-slate-950 rounded-2xl border border-gray-200 dark:border-background/8 hover:shadow-xl hover:border-red-200 dark:hover:border-red-900/40 transition-all duration-300 flex gap-5 overflow-hidden">
                     {/* Thumbnail */}
-                    <div className="w-36 flex-shrink-0 bg-[#e8dfd1] dark:bg-[#1A1A1A] overflow-hidden relative">
+                    <div className="w-36 flex-shrink-0 bg-[#e8dfd1] dark:bg-slate-900 overflow-hidden relative">
                       <img
                         src={post.image}
                         alt={post.title}

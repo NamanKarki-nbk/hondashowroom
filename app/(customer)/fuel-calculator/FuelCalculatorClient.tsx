@@ -77,8 +77,8 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
   const maxCost = Math.max(...chartData.map(d => d.cost), 1);
 
   return (
-    <div className="min-h-screen pt-28 pb-20 bg-background dark:bg-[#0B0B0C]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen pt-28 pb-20 bg-background dark:bg-slate-950">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         
         {/* Hero Section */}
         <div className="text-center mb-12">
@@ -112,7 +112,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="lg:col-span-5 bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-3xl p-8 shadow-xl"
+            className="lg:col-span-5 bg-background dark:bg-slate-950 border border-gray-200 dark:border-background/10 rounded-3xl p-8 shadow-xl"
           >
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-2xl md:text-3xl font-semibold font-bold text-gray-900 dark:text-primary-foreground flex items-center">
@@ -257,7 +257,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
             </div>
 
             {/* Savings Widget */}
-            <div className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-3xl p-6 shadow-lg flex items-center justify-between">
+            <div className="bg-background dark:bg-slate-950 border border-gray-200 dark:border-background/10 rounded-3xl p-6 shadow-lg flex items-center justify-between">
               <div>
                 <div className="flex items-center space-x-2 mb-2">
                   <TrendingDown className="w-5 h-5 text-green-500" />
@@ -277,7 +277,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
 
             {/* Tips Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-2xl p-4 flex items-start space-x-3">
+              <div className="bg-background dark:bg-slate-950 border border-gray-200 dark:border-background/10 rounded-2xl p-4 flex items-start space-x-3">
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg text-blue-500">
                   <Leaf className="w-5 h-5" />
                 </div>
@@ -286,7 +286,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
                   <p className="text-xs text-gray-500 dark:text-gray-400">Maintain a steady speed of 40-50 km/h for optimal mileage.</p>
                 </div>
               </div>
-              <div className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-2xl p-4 flex items-start space-x-3">
+              <div className="bg-background dark:bg-slate-950 border border-gray-200 dark:border-background/10 rounded-2xl p-4 flex items-start space-x-3">
                 <div className="bg-orange-50 dark:bg-orange-900/20 p-2 rounded-lg text-orange-500">
                   <Zap className="w-5 h-5" />
                 </div>
@@ -295,7 +295,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
                   <p className="text-xs text-gray-500 dark:text-gray-400">Check tyre pressure weekly. Low pressure increases fuel drag.</p>
                 </div>
               </div>
-              <div className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-2xl p-4 flex items-start space-x-3">
+              <div className="bg-background dark:bg-slate-950 border border-gray-200 dark:border-background/10 rounded-2xl p-4 flex items-start space-x-3">
                 <div className="bg-purple-50 dark:bg-purple-900/20 p-2 rounded-lg text-purple-500">
                   <RefreshCw className="w-5 h-5" />
                 </div>
@@ -313,7 +313,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-3xl p-8 shadow-xl"
+          className="bg-background dark:bg-slate-950 border border-gray-200 dark:border-background/10 rounded-3xl p-8 shadow-xl"
         >
           <div className="flex items-center space-x-3 mb-8">
             <BarChart2 className="w-6 h-6 text-primary" />

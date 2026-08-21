@@ -38,15 +38,15 @@ const LOCATIONS = [
 
 export default function LocationsPage() {
   return (
-    <main className="min-h-screen bg-background dark:bg-[#0B0B0C] py-24 text-gray-900 dark:text-primary-foreground transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-6">
+    <main className="min-h-screen bg-background dark:bg-slate-950 py-24 text-gray-900 dark:text-primary-foreground transition-colors duration-300">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         
         <div className="text-center mb-16">
-          <div className="w-16 h-16 bg-[#B83227]/10 text-[#B83227] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(184,50,39,0.3)]">
+          <div className="w-16 h-16 bg-[#CC0000]/10 text-[#CC0000] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(184,50,39,0.3)]">
             <MapPin className="w-8 h-8" />
           </div>
           <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-4">
-            Our <span className="text-[#B83227]">Locations</span>
+            Our <span className="text-[#CC0000]">Locations</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Find an authorized Society Enterprises Honda Showroom or Service Center near you.
@@ -61,16 +61,16 @@ export default function LocationsPage() {
                 key={idx} 
                 className={`p-6 rounded-3xl border transition-all duration-300 ${
                   loc.isMain 
-                    ? "bg-[#B83227] border-[#B83227] text-white shadow-xl shadow-[#B83227]/20 transform hover:-translate-y-1" 
+                    ? "bg-[#CC0000] border-[#CC0000] text-white shadow-xl shadow-[#B83227]/20 transform hover:-translate-y-1" 
                     : "bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-800 hover:shadow-xl dark:hover:border-slate-700 transform hover:-translate-y-1"
                 }`}
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className={`text-xl md:text-2xl font-semibold font-bold uppercase tracking-tight ${!loc.isMain && "text-gray-900 dark:text-white"}`}>{loc.name}</h3>
-                    <p className={`text-sm font-semibold uppercase tracking-wider mt-1 ${loc.isMain ? "text-red-200" : "text-[#B83227]"}`}>{loc.type}</p>
+                    <p className={`text-sm font-semibold uppercase tracking-wider mt-1 ${loc.isMain ? "text-red-200" : "text-[#CC0000]"}`}>{loc.type}</p>
                   </div>
-                  {loc.isMain && <span className="bg-white text-[#B83227] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">HQ</span>}
+                  {loc.isMain && <span className="bg-white text-[#CC0000] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">HQ</span>}
                 </div>
                 
                 <div className="space-y-4 mb-8">
@@ -94,7 +94,7 @@ export default function LocationsPage() {
 
                 <button className={`w-full py-3 rounded-xl font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors ${
                   loc.isMain 
-                    ? "bg-white text-[#B83227] hover:bg-gray-100" 
+                    ? "bg-white text-[#CC0000] hover:bg-gray-100" 
                     : "bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-700"
                 }`}>
                   <Navigation className="w-4 h-4" /> Get Directions
@@ -107,7 +107,7 @@ export default function LocationsPage() {
           <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-3xl border border-gray-200 dark:border-slate-800 p-2 overflow-hidden shadow-2xl h-[500px] lg:h-auto">
              <div className="w-full h-full bg-gray-200 dark:bg-slate-800 rounded-2xl overflow-hidden relative group">
                 <div className="absolute inset-0 flex items-center justify-center flex-col gap-4 text-gray-500 dark:text-gray-400 group-hover:scale-105 transition-transform duration-700">
-                   <MapPin className="w-16 h-16 text-[#B83227] opacity-50" />
+                   <MapPin className="w-16 h-16 text-[#CC0000] opacity-50" />
                    <p className="font-bold uppercase tracking-widest text-sm">Interactive Map Integration Here</p>
                 </div>
                 {/* Embedded Google Map goes here */}

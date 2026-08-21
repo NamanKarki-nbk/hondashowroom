@@ -11,7 +11,7 @@ const AMC_PLANS = [
     title: "1 Year",
     price: "1,500",
     savings: "2,635",
-    color: "bg-[#e8dfd1] dark:bg-[#1A1A1A] border-gray-200 dark:border-background/10",
+    color: "bg-[#e8dfd1] dark:bg-slate-900 border-gray-200 dark:border-background/10",
     headerColor: "text-gray-900 dark:text-primary-foreground",
     popular: false,
     features: [
@@ -47,7 +47,7 @@ const AMC_PLANS = [
     title: "5 Years",
     price: "5,000",
     savings: "13,850",
-    color: "bg-[#e8dfd1] dark:bg-[#1A1A1A] border-gray-200 dark:border-background/10",
+    color: "bg-[#e8dfd1] dark:bg-slate-900 border-gray-200 dark:border-background/10",
     headerColor: "text-gray-900 dark:text-primary-foreground",
     popular: false,
     features: [
@@ -67,11 +67,11 @@ const AMC_PLANS = [
 
 export default function AmcPage() {
   return (
-    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] pt-28 pb-24">
+    <div className="min-h-screen bg-background dark:bg-slate-950 pt-28 pb-24">
 
       {/* Hero */}
-      <div className="bg-background dark:bg-[#111] border-b border-gray-100 dark:border-background/5">
-        <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="bg-background dark:bg-slate-950 border-b border-gray-100 dark:border-background/5">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-12">
           <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
             <Link href="/" className="hover:text-primary flex items-center gap-1 transition-colors">
               <Home className="w-3.5 h-3.5" /> Home
@@ -102,7 +102,7 @@ export default function AmcPage() {
       </div>
 
       {/* Pricing Grid */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-16">
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black text-gray-900 dark:text-primary-foreground mb-4">Choose Your Protection Plan</h2>
           <p className="text-gray-500 max-w-2xl mx-auto">
@@ -178,7 +178,7 @@ export default function AmcPage() {
       </div>
       
       {/* CTA Section */}
-      <div className="max-w-7xl mx-auto px-6 pb-12">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 pb-12">
          <div className="bg-primary rounded-3xl p-8 md:p-12 text-primary-foreground flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
             {/* Background pattern */}
             <div className="absolute -right-20 -top-20 opacity-10">

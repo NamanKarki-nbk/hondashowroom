@@ -63,14 +63,14 @@ export default function PriceListPage() {
   );
 
   return (
-    <main className="min-h-screen bg-background pb-20">
+    <main className="min-h-screen bg-background pt-28 pb-20">
       {/* Hero Banner */}
       <div className="bg-[#111111] py-20 px-8 relative overflow-hidden">
         <div className="absolute inset-0 z-0">
            <img src="/images/price-list-bg.jpg" className="w-full h-full object-cover opacity-20" alt="Motorcycles" />
            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
         </div>
-        <div className="max-w-6xl mx-auto relative z-10">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 relative z-10">
           <p className="text-primary font-bold tracking-widest uppercase text-sm mb-4">Official Price List</p>
           <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-black text-primary-foreground mb-6 uppercase">
             Honda Nepal Pricing
@@ -89,7 +89,7 @@ export default function PriceListPage() {
             placeholder="Search by model or category..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#e8dfd1] dark:bg-[#1A1A1A] border-none text-foreground px-5 py-4 pl-12 rounded-full focus:ring-2 focus:ring-primary outline-none transition-shadow shadow-sm"
+            className="w-full bg-[#e8dfd1] dark:bg-slate-900 border-none text-foreground px-5 py-4 pl-12 rounded-full focus:ring-2 focus:ring-primary outline-none transition-shadow shadow-sm"
           />
           <Search className="w-5 h-5 text-gray-500 absolute left-4 top-1/2 -translate-y-1/2" />
         </div>
@@ -105,11 +105,11 @@ export default function PriceListPage() {
           </button>
           
           {expanded === "2wheelers" && (
-            <div className="bg-background dark:bg-[#1A1A1A] border border-gray-200 dark:border-gray-800 rounded-b-xl overflow-hidden shadow-sm">
+            <div className="bg-background dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-b-xl overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-gray-100 dark:bg-[#252525] border-b border-gray-200 dark:border-gray-800">
+                    <tr className="bg-gray-100 dark:bg-[#252525] border-b border-gray-200 dark:border-slate-800">
                       <th className="py-4 px-6 font-bold text-gray-600 dark:text-gray-300">Model Name</th>
                       <th className="py-4 px-6 font-bold text-gray-600 dark:text-gray-300">Category</th>
                       <th className="py-4 px-6 font-bold text-gray-600 dark:text-gray-300">Engine</th>
@@ -119,7 +119,7 @@ export default function PriceListPage() {
                   <tbody>
                     {filteredTwoWheelers.length > 0 ? (
                       filteredTwoWheelers.map((vehicle, index) => (
-                        <tr key={index} className="border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-[#222] transition-colors">
+                        <tr key={index} className="border-b border-gray-200 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-[#222] transition-colors">
                           <td className="py-4 px-6 font-bold text-foreground">{vehicle.model}</td>
                           <td className="py-4 px-6 text-gray-600 dark:text-gray-400">{vehicle.category}</td>
                           <td className="py-4 px-6 text-gray-600 dark:text-gray-400">{vehicle.cc}</td>
@@ -151,11 +151,11 @@ export default function PriceListPage() {
           </button>
           
           {expanded === "power" && (
-            <div className="bg-background dark:bg-[#1A1A1A] border border-gray-200 dark:border-gray-800 rounded-b-xl overflow-hidden shadow-sm">
+            <div className="bg-background dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-b-xl overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-gray-100 dark:bg-[#252525] border-b border-gray-200 dark:border-gray-800">
+                    <tr className="bg-gray-100 dark:bg-[#252525] border-b border-gray-200 dark:border-slate-800">
                       <th className="py-4 px-6 font-bold text-gray-600 dark:text-gray-300">Model Name</th>
                       <th className="py-4 px-6 font-bold text-gray-600 dark:text-gray-300">Product Type</th>
                       <th className="py-4 px-6 font-bold text-gray-600 dark:text-gray-300">Output</th>
@@ -165,7 +165,7 @@ export default function PriceListPage() {
                   <tbody>
                     {filteredPowerProducts.length > 0 ? (
                       filteredPowerProducts.map((product, index) => (
-                        <tr key={index} className="border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-[#222] transition-colors">
+                        <tr key={index} className="border-b border-gray-200 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-[#222] transition-colors">
                           <td className="py-4 px-6 font-bold text-foreground">{product.model}</td>
                           <td className="py-4 px-6 text-gray-600 dark:text-gray-400">{product.type}</td>
                           <td className="py-4 px-6 text-gray-600 dark:text-gray-400">{product.output}</td>

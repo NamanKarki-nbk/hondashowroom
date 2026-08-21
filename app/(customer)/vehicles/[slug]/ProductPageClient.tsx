@@ -70,7 +70,7 @@ export default function ProductPageClient({ vehicle }: { vehicle: ProductData })
         
         {/* Top Red Bar */}
         <div className="w-full bg-primary text-primary-foreground text-sm py-2">
-           <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 flex justify-between items-center">
               <div className="flex gap-4 font-semibold">
                  <Link href="/finance" className="hover:underline">Honda Finance</Link>
                  <span className="opacity-50">|</span>
@@ -86,7 +86,7 @@ export default function ProductPageClient({ vehicle }: { vehicle: ProductData })
         </div>
 
         {/* Main Nav (Product Context) */}
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
              <Link href="/" className="flex items-center space-x-3 group">
                <Logo className="w-10 h-10 group-hover:scale-105 transition-transform text-primary" />
@@ -154,7 +154,7 @@ export default function ProductPageClient({ vehicle }: { vehicle: ProductData })
                 {vehicle.variants && vehicle.variants.length > 0 && (
                   <div className="flex flex-col gap-3 mb-10 xl:mb-14">
                     {vehicle.variants.map((v, i) => (
-                      <div key={i} className="flex justify-between items-center bg-white dark:bg-[#1A1A1E] px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm w-full max-w-sm">
+                      <div key={i} className="flex justify-between items-center bg-white dark:bg-slate-900 px-5 py-3 rounded-xl border border-gray-200 dark:border-slate-800 shadow-sm w-full max-w-sm">
                         <span className="font-bold uppercase tracking-wider text-sm text-gray-700 dark:text-gray-300">{v.name}</span>
                         <span className="font-black text-primary text-lg">{v.price || `Rs. ${vehicle.price.toLocaleString('en-IN')}`}</span>
                       </div>
@@ -212,9 +212,9 @@ export default function ProductPageClient({ vehicle }: { vehicle: ProductData })
       <FaqSection />
 
       {/* Booking Form / Enquiry */}
-      <section id="book" className="py-24 px-6 bg-background dark:bg-[#090909] border-t border-gray-200 dark:border-gray-800 transition-colors duration-300">
+      <section id="book" className="py-24 px-6 bg-background dark:bg-[#090909] border-t border-gray-200 dark:border-slate-800 transition-colors duration-300">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-background dark:bg-[#111112] border border-gray-200 dark:border-gray-800 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden transition-colors duration-300">
+          <div className="bg-background dark:bg-[#111112] border border-gray-200 dark:border-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden transition-colors duration-300">
              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-bl-full pointer-events-none"></div>
              
              <div className="text-center mb-10 relative z-10">

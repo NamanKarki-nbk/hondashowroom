@@ -12,6 +12,7 @@ import HondaBlogSection from "@/components/HondaBlogSection";
 import ServicesGrid from "@/components/ServicesGrid";
 import AboutTestimonials from "@/components/AboutTestimonials";
 import FAQSection from "@/components/GeneralFAQ";
+import Reveal from "@/components/Reveal"; // We will create this component
 
 export default async function CustomerLandingPage() {
   const catalogs = await prisma.productCatalog.findMany();
@@ -67,7 +68,7 @@ export default async function CustomerLandingPage() {
   }));
 
   return (
-    <div className="min-h-screen bg-background  text-gray-900 dark:text-foreground font-sans selection:bg-primary selection:text-primary-foreground overflow-x-hidden transition-colors duration-300">
+    <div className="min-h-screen bg-background text-gray-900 dark:text-foreground font-sans selection:bg-primary selection:text-primary-foreground overflow-x-hidden transition-colors duration-300">
       {/* 1. Immersive Hero Section */}
       <div className="relative">
         <ClientOnly>
@@ -75,30 +76,39 @@ export default async function CustomerLandingPage() {
         </ClientOnly>
       </div>
 
-      {/* 2. Choose Your Product / Category Carousel */}
-      <CategoryCarousel products={products as any} />
+      <Reveal>
+        {/* 2. Choose Your Product / Category Carousel */}
+        <CategoryCarousel products={products as any} />
+      </Reveal>
 
-      {/* 3. Honda Blog / News */}
-      <HondaBlogSection blogs={blogs} />
+      <Reveal>
+        {/* 3. Honda Blog / News */}
+        <HondaBlogSection blogs={blogs} />
+      </Reveal>
 
-      {/* Accessories Section */}
-      <div id="accessories">
-        <ClientOnly>
-          <AccessoriesSection />
-        </ClientOnly>
-      </div>
+      <Reveal>
+        {/* Accessories Section */}
+        <div id="accessories">
+          <ClientOnly>
+            <AccessoriesSection />
+          </ClientOnly>
+        </div>
+      </Reveal>
 
-      {/* Services Grid */}
-      <ServicesGrid />
+      <Reveal>
+        {/* Services Grid */}
+        <ServicesGrid />
+      </Reveal>
 
-      {/* About & Testimonials */}
-      <AboutTestimonials />
+      <Reveal>
+        {/* About & Testimonials */}
+        <AboutTestimonials />
+      </Reveal>
 
-      {/* FAQ Section */}
-      <FAQSection />
-
-
-
+      <Reveal>
+        {/* FAQ Section */}
+        <FAQSection />
+      </Reveal>
 
     </div>
   );

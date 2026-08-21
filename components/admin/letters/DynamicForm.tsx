@@ -22,7 +22,7 @@ interface DynamicFormProps {
 const InputField = ({ label, id, placeholder, type = "text", icon: Icon, value, onChange }: { label: string, id: string, placeholder?: string, type?: string, icon?: any, value: string, onChange: (val: string) => void }) => (
   <div className="relative group mt-2">
     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-      {Icon && <Icon className="h-4 w-4 text-gray-400 group-focus-within:text-[#B83227] transition-colors" />}
+      {Icon && <Icon className="h-4 w-4 text-gray-400 group-focus-within:text-[#CC0000] transition-colors" />}
     </div>
     <input
       type={type}
@@ -30,9 +30,9 @@ const InputField = ({ label, id, placeholder, type = "text", icon: Icon, value, 
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder=" "
-      className={`block w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#B83227] focus:ring-1 focus:ring-[#B83227] transition-all peer ${Icon ? 'pl-10' : 'pl-4'}`}
+      className={`block w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#CC0000] focus:ring-1 focus:ring-[#CC0000] transition-all peer ${Icon ? 'pl-10' : 'pl-4'}`}
     />
-    <label htmlFor={id} className={`absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-gray-50 dark:bg-zinc-900 px-1 peer-focus:px-1 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 ${Icon ? 'left-9' : 'left-3'} peer-focus:text-[#B83227] pointer-events-none`}>
+    <label htmlFor={id} className={`absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-gray-50 dark:bg-slate-900 px-1 peer-focus:px-1 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 ${Icon ? 'left-9' : 'left-3'} peer-focus:text-[#CC0000] pointer-events-none`}>
       {label}
     </label>
   </div>
@@ -232,7 +232,7 @@ export default function DynamicForm({
               <div className="space-y-1.5">
                 <label className="block text-sm font-bold text-gray-700 dark:text-gray-300">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-[#B83227]" />
+                    <Calendar className="w-4 h-4 text-[#CC0000]" />
                     <span>Auto-fill Start Date</span>
                   </div>
                 </label>
@@ -244,7 +244,7 @@ export default function DynamicForm({
                     onClick={(e) => { try { e.currentTarget.showPicker(); } catch(err) {} }}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
                   />
-                  <div className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-4 py-2.5 flex items-center">
+                  <div className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-4 py-2.5 flex items-center">
                     {startDate || <span className="text-gray-400">YYYY-MM-DD</span>}
                   </div>
                 </div>
@@ -253,7 +253,7 @@ export default function DynamicForm({
               <div className="space-y-1.5">
                 <label className="block text-sm font-bold text-gray-700 dark:text-gray-300">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-[#B83227]" />
+                    <Calendar className="w-4 h-4 text-[#CC0000]" />
                     <span>Auto-fill End Date</span>
                   </div>
                 </label>
@@ -266,7 +266,7 @@ export default function DynamicForm({
                       onClick={(e) => { try { e.currentTarget.showPicker(); } catch(err) {} }}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
                     />
-                    <div className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-4 py-2.5 flex items-center h-full">
+                    <div className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-4 py-2.5 flex items-center h-full">
                       {endDate || <span className="text-gray-400">YYYY-MM-DD</span>}
                     </div>
                   </div>
@@ -277,15 +277,15 @@ export default function DynamicForm({
               </div>
             </div>
             
-            <div className="mt-6 border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden">
-              <div className="bg-gray-50 dark:bg-white/5 px-4 py-3 border-b border-gray-200 dark:border-zinc-800 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+            <div className="mt-6 border border-gray-200 dark:border-slate-800 rounded-lg overflow-hidden">
+              <div className="bg-gray-50 dark:bg-white/5 px-4 py-3 border-b border-gray-200 dark:border-slate-800 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                 <h4 className="text-sm font-bold text-gray-900 dark:text-white">STC Sales Bills</h4>
                 
                 <div className="flex flex-wrap gap-2 items-center">
                   <button 
                     type="button" 
                     onClick={handleAddBill}
-                    className="flex items-center gap-1.5 bg-white dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 hover:border-[#B83227] dark:hover:border-[#B83227] text-gray-700 dark:text-gray-300 hover:text-[#B83227] dark:hover:text-[#B83227] text-sm px-4 py-2 rounded-lg font-medium transition-all shadow-sm group"
+                    className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-800 hover:border-[#CC0000] dark:hover:border-[#CC0000] text-gray-700 dark:text-gray-300 hover:text-[#CC0000] dark:hover:text-[#CC0000] text-sm px-4 py-2 rounded-lg font-medium transition-all shadow-sm group"
                   >
                     <Plus className="w-4 h-4 transition-transform group-hover:rotate-90" /> 
                     <span>Add Manual Row</span>
@@ -294,7 +294,7 @@ export default function DynamicForm({
               </div>
               <div className="p-4 space-y-4">
                 {stcBills.map((bill: any, index: number) => (
-                  <div key={index} className={`grid grid-cols-1 md:grid-cols-5 gap-3 p-3 relative group transition-colors ${index % 2 === 0 ? 'bg-white dark:bg-[#111]' : 'bg-gray-50 dark:bg-zinc-900'} border-b border-gray-200 dark:border-white/5 last:border-0`}>
+                  <div key={index} className={`grid grid-cols-1 md:grid-cols-5 gap-3 p-3 relative group transition-colors ${index % 2 === 0 ? 'bg-white dark:bg-slate-950' : 'bg-gray-50 dark:bg-slate-900'} border-b border-gray-200 dark:border-white/5 last:border-0`}>
                     <button 
                       type="button"
                       onClick={() => handleRemoveBill(index)}
@@ -313,14 +313,14 @@ export default function DynamicForm({
                           onClick={(e) => { try { e.currentTarget.showPicker(); } catch(err) {} }}
                           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
                         />
-                        <div className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm flex items-center h-[38px]">
+                        <div className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm flex items-center h-[38px]">
                           {bill.depositDate || <span className="text-gray-400">YYYY-MM-DD</span>}
                         </div>
                       </div>
                     </div>
                     <div>
                       <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Amt Deposited</label>
-                      <input type="number" value={bill.amountDeposited} onChange={(e) => handleBillChange(index, 'amountDeposited', e.target.value)} className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#B83227]/50 transition-colors shadow-sm" placeholder="0.00" />
+                      <input type="number" value={bill.amountDeposited} onChange={(e) => handleBillChange(index, 'amountDeposited', e.target.value)} className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#CC0000]/50 transition-colors shadow-sm" placeholder="0.00" />
                     </div>
                     <div className="flex flex-col justify-center">
                       <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Bill Date</label>
@@ -332,7 +332,7 @@ export default function DynamicForm({
                     </div>
                     <div className="flex flex-col justify-center">
                       <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Bill Amount</label>
-                      <div className="text-sm text-[#B83227] font-bold">{bill.billAmount ? Number(bill.billAmount).toLocaleString() : '0.00'}</div>
+                      <div className="text-sm text-[#CC0000] font-bold">{bill.billAmount ? Number(bill.billAmount).toLocaleString() : '0.00'}</div>
                     </div>
                   </div>
                 ))}
@@ -374,8 +374,8 @@ export default function DynamicForm({
               <InputField label="Month (e.g. July 2026)" id="month" placeholder="July 2026" icon={Calendar} value={metadata['month'] || ''} onChange={(val) => handleMetaChange('month', val)} />
             </div>
 
-            <div className="mt-6 border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden">
-              <div className="bg-gray-50 dark:bg-white/5 px-4 py-3 border-b border-gray-200 dark:border-zinc-800">
+            <div className="mt-6 border border-gray-200 dark:border-slate-800 rounded-lg overflow-hidden">
+              <div className="bg-gray-50 dark:bg-white/5 px-4 py-3 border-b border-gray-200 dark:border-slate-800">
                 <h4 className="text-sm font-bold text-gray-900 dark:text-white">Coupon Counts</h4>
               </div>
               <div className="p-4 overflow-x-auto">
@@ -398,7 +398,7 @@ export default function DynamicForm({
                                 min="0"
                                 value={couponData[cat.key]?.[srv] || ''} 
                                 onChange={(e) => handleCouponChange(cat.key, srv, e.target.value)}
-                                className="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 focus:border-[#B83227] dark:focus:border-[#B83227] px-1 text-sm focus:outline-none transition-colors"
+                                className="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 focus:border-[#CC0000] dark:focus:border-[#CC0000] px-1 text-sm focus:outline-none transition-colors"
                                 placeholder="0"
                               />
                             ) : null}
@@ -439,12 +439,12 @@ export default function DynamicForm({
               <InputField label="Month (e.g. July 2026)" id="month" placeholder="July 2026" icon={Calendar} value={metadata['month'] || ''} onChange={(val) => handleMetaChange('month', val)} />
             </div>
 
-            <div className="flex justify-between items-center bg-gray-50 dark:bg-white/5 p-3 rounded-lg border border-gray-200 dark:border-zinc-800 mt-4">
+            <div className="flex justify-between items-center bg-gray-50 dark:bg-white/5 p-3 rounded-lg border border-gray-200 dark:border-slate-800 mt-4">
               <h3 className="font-bold text-gray-900 dark:text-white">Service Claims List</h3>
               <button 
                 type="button" 
                 onClick={handleAddClaim}
-                className="flex items-center gap-1.5 bg-white dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 hover:border-[#B83227] dark:hover:border-[#B83227] text-gray-700 dark:text-gray-300 hover:text-[#B83227] dark:hover:text-[#B83227] text-sm px-4 py-2 rounded-lg font-medium transition-all shadow-sm group"
+                className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-800 hover:border-[#CC0000] dark:hover:border-[#CC0000] text-gray-700 dark:text-gray-300 hover:text-[#CC0000] dark:hover:text-[#CC0000] text-sm px-4 py-2 rounded-lg font-medium transition-all shadow-sm group"
               >
                 <Plus className="w-4 h-4 transition-transform group-hover:rotate-90" /> 
                 <span>Add Row</span>
@@ -458,7 +458,7 @@ export default function DynamicForm({
                 </div>
               )}
               {claims.map((claim: any, index: number) => (
-                <div key={index} className="flex flex-col md:flex-row gap-3 items-start bg-white dark:bg-[#111] p-3 rounded-lg border border-gray-200 dark:border-zinc-800 relative">
+                <div key={index} className="flex flex-col md:flex-row gap-3 items-start bg-white dark:bg-slate-950 p-3 rounded-lg border border-gray-200 dark:border-slate-800 relative">
                   <button 
                     type="button" 
                     onClick={() => handleRemoveClaim(index)}
@@ -468,23 +468,23 @@ export default function DynamicForm({
                   </button>
                   <div className="flex-1 w-full">
                     <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Customer Name</label>
-                    <input type="text" value={claim.customerName} onChange={(e) => handleClaimChange(index, 'customerName', e.target.value)} className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#B83227]/50" />
+                    <input type="text" value={claim.customerName} onChange={(e) => handleClaimChange(index, 'customerName', e.target.value)} className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#CC0000]/50" />
                   </div>
                   <div className="w-full md:w-32">
                     <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Book No.</label>
-                    <input type="text" value={claim.bookNo} onChange={(e) => handleClaimChange(index, 'bookNo', e.target.value)} className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#B83227]/50" />
+                    <input type="text" value={claim.bookNo} onChange={(e) => handleClaimChange(index, 'bookNo', e.target.value)} className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#CC0000]/50" />
                   </div>
                   <div className="w-full md:w-32">
                     <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Servicing No.</label>
-                    <input type="text" value={claim.servicingNo} onChange={(e) => handleClaimChange(index, 'servicingNo', e.target.value)} className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#B83227]/50" placeholder="e.g. 2nd" />
+                    <input type="text" value={claim.servicingNo} onChange={(e) => handleClaimChange(index, 'servicingNo', e.target.value)} className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#CC0000]/50" placeholder="e.g. 2nd" />
                   </div>
                   <div className="w-full md:w-32">
                     <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Bill No.</label>
-                    <input type="text" value={claim.billNo} onChange={(e) => handleClaimChange(index, 'billNo', e.target.value)} className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#B83227]/50" />
+                    <input type="text" value={claim.billNo} onChange={(e) => handleClaimChange(index, 'billNo', e.target.value)} className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#CC0000]/50" />
                   </div>
                   <div className="w-full md:w-32">
                     <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Bill Amount</label>
-                    <input type="number" value={claim.amount} onChange={(e) => handleClaimChange(index, 'amount', e.target.value)} className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#B83227]/50" placeholder="0.00" />
+                    <input type="number" value={claim.amount} onChange={(e) => handleClaimChange(index, 'amount', e.target.value)} className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[#CC0000]/50" placeholder="0.00" />
                   </div>
                 </div>
               ))}
@@ -530,7 +530,7 @@ export default function DynamicForm({
               <InputField label="Check Number" id="checkNo" placeholder="e.g. 1041246271" icon={Hash} value={metadata['checkNo'] || ''} onChange={(val) => handleMetaChange('checkNo', val)} />
             </div>
 
-            <div className="mt-4 border border-gray-200 dark:border-zinc-800 rounded-lg overflow-hidden">
+            <div className="mt-4 border border-gray-200 dark:border-slate-800 rounded-lg overflow-hidden">
               {staffList.length === 0 ? (
                 <div className="p-4 text-center text-sm text-gray-500">Loading staff data... If this persists, please refresh the page.</div>
               ) : (
@@ -552,7 +552,7 @@ export default function DynamicForm({
                             type="number"
                             value={claim.salary}
                             onChange={(e) => handleSalaryChange(index, e.target.value)}
-                            className="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 focus:outline-none focus:border-[#B83227] px-1 py-1"
+                            className="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 focus:outline-none focus:border-[#CC0000] px-1 py-1"
                             placeholder="0"
                           />
                         </td>
@@ -564,7 +564,7 @@ export default function DynamicForm({
                 </table>
               )}
               {staffList.length > 0 && (
-                <div className="bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-zinc-800 p-3 flex justify-end">
+                <div className="bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-slate-800 p-3 flex justify-end">
                   <button
                     onClick={async () => {
                       const btn = document.getElementById('save-salaries-btn');
@@ -593,7 +593,7 @@ export default function DynamicForm({
                     }}
                     id="save-salaries-btn"
                     type="button"
-                    className="px-4 py-1.5 bg-[#B83227] text-white text-xs rounded hover:bg-[#962920] transition-colors disabled:opacity-50"
+                    className="px-4 py-1.5 bg-[#CC0000] text-white text-xs rounded hover:bg-[#962920] transition-colors disabled:opacity-50"
                   >
                     Save Updated Salaries
                   </button>
@@ -622,7 +622,7 @@ export default function DynamicForm({
               <select
                 value={metadata['transferLedger'] || ''}
                 onChange={(e) => handleMetaChange('transferLedger', e.target.value)}
-                className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-4 py-[11px] text-sm focus:outline-none focus:border-[#B83227] focus:ring-1 focus:ring-[#B83227] transition-all"
+                className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-4 py-[11px] text-sm focus:outline-none focus:border-[#CC0000] focus:ring-1 focus:ring-[#CC0000] transition-all"
               >
                 <option value="" disabled>Select Destination...</option>
                 <option value="CASH LEDGER">Cash Ledger</option>
@@ -676,7 +676,7 @@ export default function DynamicForm({
                 <select
                   value={metadata.warrantyType || 'Battery Warranty Claim'}
                   onChange={(e) => handleMetaChange('warrantyType', e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#B83227]/50"
+                  className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#CC0000]/50"
                 >
                   <option value="Battery Warranty Claim">Battery Warranty Claim</option>
                   <option value="Parts Warranty Claim">Parts Warranty Claim</option>
@@ -684,13 +684,13 @@ export default function DynamicForm({
               </div>
             </div>
 
-            <div className="border border-gray-200 dark:border-zinc-800 rounded-xl overflow-hidden">
-              <div className="bg-gray-50 dark:bg-zinc-900 px-4 py-3 border-b border-gray-200 dark:border-zinc-800 flex justify-between items-center">
+            <div className="border border-gray-200 dark:border-slate-800 rounded-xl overflow-hidden">
+              <div className="bg-gray-50 dark:bg-slate-900 px-4 py-3 border-b border-gray-200 dark:border-slate-800 flex justify-between items-center">
                 <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                  <ListPlus className="w-4 h-4 text-[#B83227]" />
+                  <ListPlus className="w-4 h-4 text-[#CC0000]" />
                   Service Claims List
                 </h3>
-                <button type="button" onClick={handleAddClaim} className="flex items-center gap-1.5 text-sm bg-[#B83227] text-white px-3 py-1.5 rounded-lg hover:bg-red-700 transition-colors">
+                <button type="button" onClick={handleAddClaim} className="flex items-center gap-1.5 text-sm bg-[#CC0000] text-white px-3 py-1.5 rounded-lg hover:bg-red-700 transition-colors">
                   <Plus className="w-4 h-4" /> Add Row
                 </button>
               </div>
@@ -702,7 +702,7 @@ export default function DynamicForm({
                 ) : (
                   claims.map((claim: any, index: number) => (
                     <div key={index} className="relative p-4 rounded-xl border border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.02] grid grid-cols-1 md:grid-cols-4 gap-4 group">
-                      <button type="button" onClick={() => handleRemoveClaim(index)} className="absolute -top-2.5 -right-2.5 w-6 h-6 bg-white dark:bg-zinc-800 text-red-500 rounded-full border border-gray-200 dark:border-zinc-800 flex items-center justify-center opacity-0 group-hover:opacity-100 shadow-sm hover:bg-red-50 transition-all">
+                      <button type="button" onClick={() => handleRemoveClaim(index)} className="absolute -top-2.5 -right-2.5 w-6 h-6 bg-white dark:bg-zinc-800 text-primary rounded-full border border-gray-200 dark:border-slate-800 flex items-center justify-center opacity-0 group-hover:opacity-100 shadow-sm hover:bg-red-50 transition-all">
                         <X className="w-3.5 h-3.5" />
                       </button>
                       <InputField label="Customer Name" id={`name-${index}`} placeholder="e.g. MAUSAMI MIBHAK" icon={User} value={claim.customerName} onChange={(val) => handleClaimChange(index, 'customerName', val)} />
@@ -724,7 +724,7 @@ export default function DynamicForm({
   };
 
   return (
-    <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm flex flex-col h-full">
+    <div className="bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-xl p-6 shadow-sm flex flex-col h-full">
       <h2 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-white mb-6">Letter Details</h2>
       
       <div className="space-y-5 flex-grow">
@@ -736,7 +736,7 @@ export default function DynamicForm({
           <select
             value={docType}
             onChange={(e) => setDocType(e.target.value as DocCategory)}
-            className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#B83227]/50"
+            className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#CC0000]/50"
           >
             {DOC_CATEGORIES.map((cat) => (
               <option key={cat} value={cat}>
@@ -757,13 +757,13 @@ export default function DynamicForm({
               onChange={(e) => setRecipient(e.target.value)}
               placeholder="e.g. Syakar Trading Company Pvt. Ltd."
               rows={2}
-              className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#B83227]/50 resize-none"
+              className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#CC0000]/50 resize-none"
             />
           </div>
         )}
 
         {/* Dynamic Fields based on docType */}
-        <div className="pt-4 border-t border-gray-200 dark:border-zinc-800 space-y-4">
+        <div className="pt-4 border-t border-gray-200 dark:border-slate-800 space-y-4">
           <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Dynamic Fields</h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -772,11 +772,11 @@ export default function DynamicForm({
         </div>
       </div>
 
-      <div className="mt-8 pt-4 border-t border-gray-200 dark:border-zinc-800">
+      <div className="mt-8 pt-4 border-t border-gray-200 dark:border-slate-800">
         <button
           onClick={onSubmit}
           disabled={isSubmitting || (!recipient && docType !== 'Vehicle Purchase Cash Incentive Claim' && docType !== 'Free Service Coupon Claim' && docType !== 'Warranty Claim Letter' && docType !== 'Bank Salary Deposit Request' && docType !== 'Salesman Incentive Claim' && docType !== 'Transfer Claim Amount to Cash or BG Ledger' && docType !== '6 Free Service With Engine Oil Claim' && docType !== '2 Years Free Service With Engine Oil and Parts Claim' && docType !== 'Payment Request Letter for Syakar Hire Purchase')}
-          className="w-full bg-[#B83227] hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+          className="w-full bg-[#CC0000] hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
         >
           {isSubmitting ? (
             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

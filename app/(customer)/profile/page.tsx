@@ -433,7 +433,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-[#0B0B0C] flex flex-col pt-[120px]">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex flex-col pt-[120px]">
         <div className="flex-1 flex items-center justify-center">
            <Loader2 className="w-10 h-10 text-primary animate-spin" />
         </div>
@@ -458,18 +458,18 @@ export default function ProfilePage() {
   const hasAnyVerification = formData.citizenshipVerified || formData.licenseVerified || formData.nationalIdVerified;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0B0B0C] font-sans pt-[80px] lg:pt-[100px] pb-16">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 font-sans pt-[80px] lg:pt-[100px] pb-16">
       
       {/* Breadcrumbs */}
-      <div className="bg-white dark:bg-[#111111] border-b border-gray-200 dark:border-slate-800 py-4 px-6 md:px-10">
-        <div className="max-w-7xl mx-auto flex items-center text-sm text-gray-500 dark:text-gray-400 space-x-2">
+      <div className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 py-4 px-6 md:px-10">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 flex items-center text-sm text-gray-500 dark:text-gray-400 space-x-2">
           <Link href="/" className="hover:text-primary transition-colors flex items-center gap-1.5"><Home className="w-4 h-4" /> Home</Link>
           <ChevronRight className="w-4 h-4" />
           <span className="text-gray-900 dark:text-white font-medium">My Profile</span>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-10 mt-10 space-y-8">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 mt-10 space-y-8">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -494,7 +494,7 @@ export default function ProfilePage() {
         <form onSubmit={handleSubmit} className="space-y-10">
           
           {/* SECTION 1: Personal Information */}
-          <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none p-6 md:p-10 shadow-sm relative">
+          <div className="bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-none p-6 md:p-10 shadow-sm relative">
             
             {hasAnyVerification && (
               <div className="absolute top-6 right-6 md:top-10 md:right-10 flex items-center gap-1.5 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-slate-800 px-3 py-1.5 rounded-full">
@@ -546,7 +546,7 @@ export default function ProfilePage() {
                   value={formData.fullName} 
                   onChange={handleInputChange} 
                   disabled={hasAnyVerification}
-                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
+                  className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
                   placeholder="John Doe" 
                 />
               </div>
@@ -561,7 +561,7 @@ export default function ProfilePage() {
                   value={formData.gender} 
                   onChange={handleInputChange} 
                   disabled={hasAnyVerification}
-                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3.5 text-sm focus:border-primary outline-none transition-colors dark:text-white font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3.5 text-sm focus:border-primary outline-none transition-colors dark:text-white font-medium disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <option value="MALE">Male</option>
                   <option value="FEMALE">Female</option>
@@ -580,7 +580,7 @@ export default function ProfilePage() {
                   value={formData.dobAd} 
                   onChange={handleInputChange} 
                   disabled={hasAnyVerification}
-                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
+                  className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
                   placeholder="YYYY MMM DD" 
                 />
               </div>
@@ -598,7 +598,7 @@ export default function ProfilePage() {
                     value={formData.email} 
                     onChange={handleInputChange} 
                     disabled={lockEmail}
-                    className="flex-1 bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
+                    className="flex-1 bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
                     placeholder="you@example.com" 
                   />
                   {!lockEmail && formData.email !== initialState.email && (
@@ -626,7 +626,7 @@ export default function ProfilePage() {
                     value={formData.phone} 
                     onChange={handleInputChange} 
                     disabled={lockPhone}
-                    className="flex-1 bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
+                    className="flex-1 bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
                     placeholder="+977 98XXXXXXXX" 
                   />
                   {!lockPhone && formData.phone !== initialState.phone && (
@@ -650,7 +650,7 @@ export default function ProfilePage() {
                   name="address" 
                   value={formData.address} 
                   onChange={handleInputChange} 
-                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all" 
+                  className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all" 
                   placeholder="Kathmandu, Nepal" 
                 />
               </div>
@@ -664,7 +664,7 @@ export default function ProfilePage() {
                   value={formData.bio} 
                   onChange={handleInputChange} 
                   rows={3} 
-                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all resize-none" 
+                  className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all resize-none" 
                   placeholder="Tell us a little about your riding experience..."
                 ></textarea>
               </div>
@@ -672,7 +672,7 @@ export default function ProfilePage() {
           </div>
 
           {/* SECTION 2: Multi-Document KYC Verification */}
-          <div className="bg-white dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none shadow-sm relative overflow-hidden">
+          <div className="bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-none shadow-sm relative overflow-hidden">
             
             <div className="p-6 md:p-10 pb-0">
               <div className="border-l-4 border-primary pl-4 mb-6 flex items-center justify-between">
@@ -706,7 +706,7 @@ export default function ProfilePage() {
               ))}
             </div>
 
-            <div className="p-6 md:p-10 pt-8 bg-gray-50/50 dark:bg-[#0B0B0C]/50">
+            <div className="p-6 md:p-10 pt-8 bg-gray-50/50 dark:bg-slate-950/50">
               {isCurrentTabVerified ? (
                 /* Verified State for Active Tab */
                 <div className="space-y-8 animate-in fade-in zoom-in duration-500">
@@ -808,7 +808,7 @@ export default function ProfilePage() {
                     </button>
                   </div>
 
-                  <div className="bg-gray-50 dark:bg-[#111111] border border-gray-200 dark:border-slate-800 rounded-none p-6 relative">
+                  <div className="bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-none p-6 relative">
                     {isScanning && (
                       <div className="absolute inset-0 z-10 bg-white/60 dark:bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center">
                         <div className="relative"><div className="absolute inset-0 border-t-2 border-primary rounded-full animate-spin"></div><ShieldCheck className="w-12 h-12 text-primary opacity-50 animate-pulse" /></div>
@@ -896,7 +896,7 @@ export default function ProfilePage() {
       {/* OTP Verification Modal */}
       {showOtpModal && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#111111] w-full max-w-md border border-gray-200 dark:border-slate-800 p-8 shadow-2xl animate-in fade-in zoom-in duration-200">
+          <div className="bg-white dark:bg-slate-950 w-full max-w-md border border-gray-200 dark:border-slate-800 p-8 shadow-2xl animate-in fade-in zoom-in duration-200">
             <div className="text-center mb-6">
               <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Smartphone className="w-8 h-8 text-primary" />
@@ -910,7 +910,7 @@ export default function ProfilePage() {
               value={otpValue}
               onChange={(e) => setOtpValue(e.target.value)}
               placeholder="Enter 6-digit code"
-              className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-300 dark:border-slate-700 text-center text-2xl md:text-3xl font-semibold tracking-[0.5em] font-mono py-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-gray-900 dark:text-white mb-6"
+              className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-300 dark:border-slate-700 text-center text-2xl md:text-3xl font-semibold tracking-[0.5em] font-mono py-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-gray-900 dark:text-white mb-6"
             />
 
             <div className="flex gap-4">

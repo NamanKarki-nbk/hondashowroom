@@ -63,8 +63,8 @@ export default function Dio125VariantComparison({
   });
 
   return (
-    <section id="variants" className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#0C0C0E] border-t border-gray-200 dark:border-gray-800 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto">
+    <section id="variants" className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 transition-colors duration-300">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 text-primary text-xs font-black tracking-widest uppercase mb-3">
@@ -92,7 +92,7 @@ export default function Dio125VariantComparison({
                 className={`cursor-pointer p-6 sm:p-8 rounded-3xl border transition-all duration-300 relative overflow-hidden flex flex-col justify-between ${
                   isSelected
                     ? "bg-red-50/40 dark:bg-red-950/20 border-primary shadow-xl scale-[1.01]"
-                    : "bg-gray-50 dark:bg-[#141416] border-gray-200 dark:border-gray-800 hover:border-gray-400 dark:hover:border-gray-700"
+                    : "bg-gray-50 dark:bg-slate-900 border-gray-200 dark:border-slate-800 hover:border-gray-400 dark:hover:border-gray-700"
                 }`}
               >
                 <div>
@@ -118,7 +118,7 @@ export default function Dio125VariantComparison({
                   </div>
 
                   {/* Preview Image */}
-                  <div className="relative h-48 w-full flex items-center justify-center my-4 bg-white/60 dark:bg-[#1C1C20]/60 rounded-2xl p-2 border border-gray-200/60 dark:border-gray-800/60">
+                  <div className="relative h-48 w-full flex items-center justify-center my-4 bg-white/60 dark:bg-[#1C1C20]/60 rounded-2xl p-2 border border-gray-200/60 dark:border-slate-800/60">
                     <ImageWithFallback
                       src={variant.image}
                       fallbackSrc="/inventory/honda-dio-125.png"
@@ -147,8 +147,8 @@ export default function Dio125VariantComparison({
         </div>
 
         {/* High-Fidelity Comparison Table */}
-        <div className="bg-gray-50 dark:bg-[#141416] border border-gray-200 dark:border-gray-800 rounded-3xl overflow-hidden shadow-2xl">
-          <div className="p-6 bg-gray-100 dark:bg-[#18181B] border-b border-gray-200 dark:border-gray-800 grid grid-cols-12 items-center text-xs sm:text-sm font-black uppercase tracking-wider">
+        <div className="bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+          <div className="p-6 bg-gray-100 dark:bg-[#18181B] border-b border-gray-200 dark:border-slate-800 grid grid-cols-12 items-center text-xs sm:text-sm font-black uppercase tracking-wider">
             <div className="col-span-4 text-gray-500">Specification</div>
             <div className="col-span-4 text-foreground text-center">STD</div>
             <div className="col-span-4 text-primary text-center">H-SMART</div>

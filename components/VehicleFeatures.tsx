@@ -11,7 +11,7 @@ export default function VehicleFeatures({ features }: { features: Feature[] }) {
   if (!features || features.length === 0) return null;
 
   return (
-    <section id="features" className="py-24 px-6 bg-background  border-t border-gray-100 dark:border-gray-800 transition-colors duration-300 min-h-screen flex items-center">
+    <section id="features" className="py-24 px-6 bg-background  border-t border-gray-100 dark:border-slate-800 transition-colors duration-300 min-h-screen flex items-center">
       <div className="max-w-[1600px] mx-auto w-full">
         <div className="text-center mb-16 xl:mb-24">
           <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl xl:text-6xl font-extrabold text-gray-900 dark:text-primary-foreground uppercase tracking-tight">Key Features</h2>

@@ -43,7 +43,7 @@ export default function InventoryImport() {
   };
 
   return (
-    <div className="min-h-screen bg-background dark:bg-zinc-950 text-gray-100 p-8 selection:bg-primary selection:text-primary-foreground">
+    <div className="min-h-screen bg-background dark:bg-slate-950 text-gray-100 p-8 selection:bg-primary selection:text-primary-foreground">
       <div className="max-w-5xl mx-auto space-y-8">
         
         <header>
@@ -133,13 +133,13 @@ export default function InventoryImport() {
                       <td className="py-3 text-primary-foreground font-medium">{item.model}</td>
                       <td className="py-3 text-gray-400">{item.color}</td>
                       <td className="py-3 text-center">
-                        <span className={`font-bold ${item.age > 60 ? 'text-red-500' : item.age > 30 ? 'text-yellow-500' : 'text-green-500'}`}>
+                        <span className={`font-bold ${item.age > 60 ? 'text-primary' : item.age > 30 ? 'text-yellow-500' : 'text-green-500'}`}>
                           {item.age}
                         </span>
                       </td>
                       <td className="py-3">
                         {item.age > 60 ? (
-                          <span className="flex items-center gap-1 text-xs font-bold text-red-500 bg-red-500/10 px-2 py-1 rounded w-max">
+                          <span className="flex items-center gap-1 text-xs font-bold text-primary bg-red-500/10 px-2 py-1 rounded w-max">
                             <AlertTriangle className="w-3 h-3" /> {item.status}
                           </span>
                         ) : item.age > 30 ? (

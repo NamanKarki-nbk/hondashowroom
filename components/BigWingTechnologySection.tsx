@@ -8,6 +8,7 @@ export interface Feature {
   image: string;
 }
 import Logo from "@/components/Logo";
+import Link from "next/link";
 
 interface Section {
   title: string;
@@ -171,7 +172,7 @@ export default function BigWingTechnologySection({
 
         {/* Feature Text layer */}
         <div className="absolute inset-0 z-20 pointer-events-none">
-          <div className="max-w-7xl mx-auto h-full relative">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 h-full relative">
             {flatFeatures.map((feature, index) => {
               const start = feature.absoluteSlot / totalSlots;
               const mid = (feature.absoluteSlot + 0.5) / totalSlots;

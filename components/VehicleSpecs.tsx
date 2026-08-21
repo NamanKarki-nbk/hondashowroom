@@ -26,7 +26,7 @@ export default function VehicleSpecs({ specs, vehicleSlug = "dio-125", fallbackI
         {/* Top Controls Area */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-16 xl:mb-24 gap-6 px-4 lg:px-12">
           {/* Pill Tabs */}
-          <div className="bg-background dark:bg-[#111112] p-2 rounded-full flex overflow-x-auto hide-scrollbar border border-gray-100 dark:border-gray-800 w-full lg:w-auto">
+          <div className="bg-background dark:bg-[#111112] p-2 rounded-full flex overflow-x-auto hide-scrollbar border border-gray-100 dark:border-slate-800 w-full lg:w-auto">
             {specKeys.map(tab => (
               <button 
                 key={tab}
@@ -62,7 +62,7 @@ export default function VehicleSpecs({ specs, vehicleSlug = "dio-125", fallbackI
                     className="space-y-6 xl:space-y-8"
                   >
                     {specs[activeSpecTab]?.map((spec, idx) => (
-                       <div key={idx} className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-4 xl:pb-6">
+                       <div key={idx} className="flex justify-between items-center border-b border-gray-100 dark:border-slate-800 pb-4 xl:pb-6">
                           <span className="text-gray-500 dark:text-gray-400 font-medium text-lg xl:text-2xl">{spec.label}:</span>
                           <span className="text-gray-800 dark:text-gray-200 font-bold text-lg xl:text-2xl">{spec.value}</span>
                        </div>

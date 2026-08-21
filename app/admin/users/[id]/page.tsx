@@ -25,7 +25,7 @@ export default async function UserDetailsPage({ params }: UserDetailsPageProps) 
   }
 
   return (
-    <div className="bg-zinc-50 dark:bg-zinc-950 p-4 md:p-8 text-gray-900 dark:text-gray-100 font-sans h-full transition-colors duration-300">
+    <div className="bg-zinc-50 dark:bg-slate-950 p-4 md:p-8 text-gray-900 dark:text-gray-100 font-sans h-full transition-colors duration-300">
       <div className="max-w-4xl mx-auto">
         <Link href="/admin/users" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-primary mb-6 transition-colors font-medium">
           <ArrowLeft className="w-4 h-4" /> Back to Users

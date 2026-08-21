@@ -14,15 +14,15 @@ export default async function GalleryPage() {
   });
 
   return (
-    <main className="min-h-screen bg-background dark:bg-[#0B0B0C] py-24 text-gray-900 dark:text-primary-foreground transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-6">
+    <main className="min-h-screen bg-background dark:bg-slate-950 py-24 text-gray-900 dark:text-primary-foreground transition-colors duration-300">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         
         <div className="text-center mb-16">
-          <div className="w-16 h-16 bg-[#B83227]/10 text-[#B83227] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(184,50,39,0.3)]">
+          <div className="w-16 h-16 bg-[#CC0000]/10 text-[#CC0000] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(184,50,39,0.3)]">
             <Camera className="w-8 h-8" />
           </div>
           <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl lg:text-6xl font-black uppercase tracking-tight mb-4 text-gray-900 dark:text-white">
-            Happy <span className="text-[#B83227]">Customers</span>
+            Happy <span className="text-[#CC0000]">Customers</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Welcome to the Honda Family! Check out the joyful moments of our customers taking delivery of their new rides.
@@ -39,7 +39,7 @@ export default async function GalleryPage() {
                   alt={`Delivery to ${delivery.customerName}`}
                   className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute top-4 left-4 bg-[#B83227] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-md uppercase tracking-wider">
+                <div className="absolute top-4 left-4 bg-[#CC0000] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-md uppercase tracking-wider">
                   {delivery.vehicleName}
                 </div>
               </div>
@@ -60,7 +60,7 @@ export default async function GalleryPage() {
                   </p>
                 )}
                 
-                <p className="text-xs text-[#B83227] font-bold uppercase tracking-wider">
+                <p className="text-xs text-[#CC0000] font-bold uppercase tracking-wider">
                   Delivered on {new Date(delivery.deliveredAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </p>
               </div>

@@ -114,7 +114,7 @@ export default function ExchangePage() {
     }, 100);
   };
 
-  const inputClass = 'bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-xl py-3.5 px-4 focus:ring-2 focus:ring-[#B83227] outline-none text-gray-900 dark:text-primary-foreground w-full text-sm font-semibold transition-all duration-200';
+  const inputClass = 'bg-background dark:bg-slate-950 border border-gray-200 dark:border-background/10 rounded-xl py-3.5 px-4 focus:ring-2 focus:ring-[#CC0000] outline-none text-gray-900 dark:text-primary-foreground w-full text-sm font-semibold transition-all duration-200';
   const labelClass = 'text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-2 block';
 
   // Schema Markup
@@ -132,24 +132,24 @@ export default function ExchangePage() {
   };
 
   return (
-    <main className="min-h-screen bg-background dark:bg-[#0B0B0C] pt-28 pb-20 font-sans transition-colors duration-300">
+    <main className="min-h-screen bg-background dark:bg-slate-950 pt-28 pb-20 font-sans transition-colors duration-300">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }} />
       
       {/* Hero Section */}
-      <div className="relative max-w-7xl mx-auto px-6 mb-16">
+      <div className="relative max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 mb-16">
         <nav className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-sm mb-8 font-medium">
-          <Link href="/" className="hover:text-[#B83227] transition-colors">Home</Link>
+          <Link href="/" className="hover:text-[#CC0000] transition-colors">Home</Link>
           <ChevronRight className="w-3.5 h-3.5" />
           <span className="text-gray-900 dark:text-primary-foreground">Valuation Calculator</span>
         </nav>
 
         <div className="text-center lg:text-left flex flex-col lg:flex-row items-center gap-12">
           <div className="flex-1">
-            <div className="inline-flex items-center gap-2 bg-[#B83227]/10 text-[#B83227] px-4 py-2 rounded-full text-sm font-bold tracking-wider uppercase mb-6">
+            <div className="inline-flex items-center gap-2 bg-[#CC0000]/10 text-[#CC0000] px-4 py-2 rounded-full text-sm font-bold tracking-wider uppercase mb-6">
               <Calculator className="w-4 h-4" /> 100% Free • AI Market Data
             </div>
             <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-6 leading-tight">
-              Get Accurate <span className="text-[#B83227]">Used Bike</span><br />Valuation in Seconds.
+              Get Accurate <span className="text-[#CC0000]">Used Bike</span><br />Valuation in Seconds.
             </h1>
             <p className="text-gray-600 dark:text-gray-400 text-lg md:text-xl font-medium max-w-2xl mx-auto lg:mx-0">
               Check the best resale value of your old bike instantly before selling or exchanging.
@@ -158,13 +158,13 @@ export default function ExchangePage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* Calculator Form */}
         <div className="lg:col-span-7 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#B83227]/5 rounded-full blur-3xl -z-10"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#CC0000]/5 rounded-full blur-3xl -z-10"></div>
           
           <h2 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight mb-8 flex items-center gap-3">
-            <Car className="text-[#B83227]" /> Enter Vehicle Details
+            <Car className="text-[#CC0000]" /> Enter Vehicle Details
           </h2>
           
           <div className="space-y-6">
@@ -211,7 +211,7 @@ export default function ExchangePage() {
 
             <div>
               <label className={labelClass}>
-                Total Kilometers Driven: <span className="text-[#B83227]">{kms.toLocaleString()} km</span>
+                Total Kilometers Driven: <span className="text-[#CC0000]">{kms.toLocaleString()} km</span>
               </label>
               <input 
                 type="range" 
@@ -228,7 +228,7 @@ export default function ExchangePage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-gray-100 dark:border-gray-800">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-gray-100 dark:border-slate-800">
               <div>
                 <label className={labelClass}>Ownership</label>
                 <div className="flex gap-2">
@@ -236,7 +236,7 @@ export default function ExchangePage() {
                     <button 
                       key={o}
                       onClick={() => setOwner(o)}
-                      className={`flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors border ${owner === o ? 'bg-[#B83227] text-white border-[#B83227]' : 'bg-transparent text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:border-gray-400'}`}
+                      className={`flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors border ${owner === o ? 'bg-[#CC0000] text-white border-[#CC0000]' : 'bg-transparent text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:border-gray-400'}`}
                     >
                       {o.split(' ')[0]}
                     </button>
@@ -250,7 +250,7 @@ export default function ExchangePage() {
                     <button 
                       key={c}
                       onClick={() => setCondition(c)}
-                      className={`flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors border ${condition === c ? 'bg-[#B83227] text-white border-[#B83227]' : 'bg-transparent text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:border-gray-400'}`}
+                      className={`flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors border ${condition === c ? 'bg-[#CC0000] text-white border-[#CC0000]' : 'bg-transparent text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:border-gray-400'}`}
                     >
                       {c}
                     </button>
@@ -262,7 +262,7 @@ export default function ExchangePage() {
             <button
               onClick={calculateValuation}
               disabled={!brand || !model || !variant}
-              className="w-full bg-[#B83227] hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed text-white font-black py-4 rounded-xl uppercase tracking-wider transition-all duration-300 shadow-xl shadow-[#B83227]/20 flex items-center justify-center gap-2 mt-4"
+              className="w-full bg-[#CC0000] hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed text-white font-black py-4 rounded-xl uppercase tracking-wider transition-all duration-300 shadow-xl shadow-[#B83227]/20 flex items-center justify-center gap-2 mt-4"
             >
               <Calculator className="w-5 h-5" /> Calculate Valuation
             </button>
@@ -272,39 +272,39 @@ export default function ExchangePage() {
         {/* Right Column / Results & Info */}
         <div className="lg:col-span-5 space-y-8" id="valuation-result">
           {showResult && valuation ? (
-            <div className="bg-white dark:bg-slate-900 border-2 border-[#B83227] rounded-3xl p-6 sm:p-8 shadow-2xl shadow-[#B83227]/10 animate-fade-in-up">
-              <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-100 dark:border-gray-800">
+            <div className="bg-white dark:bg-slate-900 border-2 border-[#CC0000] rounded-3xl p-6 sm:p-8 shadow-2xl shadow-[#B83227]/10 animate-fade-in-up">
+              <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-100 dark:border-slate-800">
                 <div>
                   <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Your Bike</div>
                   <h3 className="text-xl md:text-2xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight">{brand} {model}</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">{variant} • {year} • {owner}</p>
                 </div>
-                <div className="bg-background dark:bg-[#111] px-4 py-2 rounded-xl text-center">
+                <div className="bg-background dark:bg-slate-950 px-4 py-2 rounded-xl text-center">
                   <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Condition</div>
-                  <div className="text-sm font-black text-[#B83227] uppercase">{condition}</div>
+                  <div className="text-sm font-black text-[#CC0000] uppercase">{condition}</div>
                 </div>
               </div>
 
               <div className="text-center mb-8">
                 <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">Estimated Market Value</p>
                 <div className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold sm:text-5xl font-black text-gray-900 dark:text-white tracking-tighter">
-                  NPR {Math.round(valuation.min).toLocaleString()} <span className="text-[#B83227]">-</span> NPR {Math.round(valuation.max).toLocaleString()}
+                  NPR {Math.round(valuation.min).toLocaleString()} <span className="text-[#CC0000]">-</span> NPR {Math.round(valuation.max).toLocaleString()}
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="bg-background dark:bg-[#111] p-4 rounded-2xl text-center">
+                <div className="bg-background dark:bg-slate-950 p-4 rounded-2xl text-center">
                   <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Fair Value</div>
                   <div className="text-lg font-black text-gray-900 dark:text-white">NPR {Math.round(valuation.fair).toLocaleString()}</div>
                 </div>
-                <div className="bg-background dark:bg-[#111] p-4 rounded-2xl text-center">
+                <div className="bg-background dark:bg-slate-950 p-4 rounded-2xl text-center">
                   <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Best Value</div>
                   <div className="text-lg font-black text-gray-900 dark:text-white">NPR {Math.round(valuation.best).toLocaleString()}</div>
                 </div>
               </div>
 
               <div className="space-y-3">
-                <Link href="/contact" className="w-full flex items-center justify-center gap-2 bg-[#B83227] hover:bg-primary-hover text-white font-bold py-3.5 rounded-xl uppercase tracking-wider transition-colors shadow-lg shadow-[#B83227]/20">
+                <Link href="/contact" className="w-full flex items-center justify-center gap-2 bg-[#CC0000] hover:bg-primary-hover text-white font-bold py-3.5 rounded-xl uppercase tracking-wider transition-colors shadow-lg shadow-[#B83227]/20">
                   <Car className="w-5 h-5" /> Sell / Exchange Your Bike
                 </Link>
                 <button className="w-full flex items-center justify-center gap-2 bg-background hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-900 dark:text-white font-bold py-3.5 rounded-xl uppercase tracking-wider transition-colors">
@@ -313,7 +313,7 @@ export default function ExchangePage() {
               </div>
             </div>
           ) : (
-            <div className="bg-[#B83227] rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden h-full flex flex-col justify-center min-h-[400px]">
+            <div className="bg-[#CC0000] rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden h-full flex flex-col justify-center min-h-[400px]">
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -z-10"></div>
               <Activity className="w-16 h-16 text-white/50 mb-6" />
               <h3 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black uppercase tracking-tight mb-4">Ready to find out?</h3>
@@ -326,16 +326,17 @@ export default function ExchangePage() {
       </div>
 
       {/* Reference Matrix & FAQ */}
-      <div className="max-w-7xl mx-auto px-6 mt-20 grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 mt-20 grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Matrix */}
         <div>
           <h3 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight mb-6 flex items-center gap-2">
-            <TrendingDown className="text-[#B83227]" /> Reference Prices
+            <TrendingDown className="text-[#CC0000]" /> Reference Prices
           </h3>
           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-gray-200 dark:border-slate-800 overflow-hidden shadow-xl">
+            <div className="overflow-x-auto w-full">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-background dark:bg-[#111]">
+                <tr className="bg-background dark:bg-slate-950">
                   <th className="py-4 px-6 text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-widest border-b border-gray-200 dark:border-slate-800">Model</th>
                   <th className="py-4 px-6 text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-widest border-b border-gray-200 dark:border-slate-800">Age</th>
                   <th className="py-4 px-6 text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-widest border-b border-gray-200 dark:border-slate-800">Avg Value</th>
@@ -345,32 +346,33 @@ export default function ExchangePage() {
                 <tr className="border-b border-gray-100 dark:border-slate-800">
                   <td className="py-4 px-6 text-sm font-bold text-gray-900 dark:text-white">Honda Shine BS6</td>
                   <td className="py-4 px-6 text-sm text-gray-600 dark:text-gray-400">3 Years</td>
-                  <td className="py-4 px-6 text-sm font-black text-[#B83227]">~ NPR 182,000</td>
+                  <td className="py-4 px-6 text-sm font-black text-[#CC0000]">~ NPR 182,000</td>
                 </tr>
                 <tr className="border-b border-gray-100 dark:border-slate-800">
                   <td className="py-4 px-6 text-sm font-bold text-gray-900 dark:text-white">Royal Enfield Classic 350</td>
                   <td className="py-4 px-6 text-sm text-gray-600 dark:text-gray-400">4 Years</td>
-                  <td className="py-4 px-6 text-sm font-black text-[#B83227]">~ NPR 350,000</td>
+                  <td className="py-4 px-6 text-sm font-black text-[#CC0000]">~ NPR 350,000</td>
                 </tr>
                 <tr className="border-b border-gray-100 dark:border-slate-800">
                   <td className="py-4 px-6 text-sm font-bold text-gray-900 dark:text-white">Yamaha FZ-S V3</td>
                   <td className="py-4 px-6 text-sm text-gray-600 dark:text-gray-400">2 Years</td>
-                  <td className="py-4 px-6 text-sm font-black text-[#B83227]">~ NPR 305,000</td>
+                  <td className="py-4 px-6 text-sm font-black text-[#CC0000]">~ NPR 305,000</td>
                 </tr>
                 <tr>
                   <td className="py-4 px-6 text-sm font-bold text-gray-900 dark:text-white">Bajaj Pulsar 150</td>
                   <td className="py-4 px-6 text-sm text-gray-600 dark:text-gray-400">5 Years</td>
-                  <td className="py-4 px-6 text-sm font-black text-[#B83227]">~ NPR 150,000</td>
+                  <td className="py-4 px-6 text-sm font-black text-[#CC0000]">~ NPR 150,000</td>
                 </tr>
               </tbody>
             </table>
+            </div>
           </div>
         </div>
 
         {/* FAQ */}
         <div>
           <h3 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight mb-6 flex items-center gap-2">
-            <HelpCircle className="text-[#B83227]" /> Frequently Asked Questions
+            <HelpCircle className="text-[#CC0000]" /> Frequently Asked Questions
           </h3>
           <div className="space-y-4">
             <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-md">

@@ -168,7 +168,7 @@ export default function VehicleInventoryTable() {
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="bg-white dark:bg-zinc-900 rounded-2xl p-3 flex flex-col sm:flex-row gap-3 shadow-sm border border-gray-100 dark:border-zinc-800">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-3 flex flex-col sm:flex-row gap-3 shadow-sm border border-gray-100 dark:border-slate-800">
         <div className="relative flex-1">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
@@ -185,11 +185,11 @@ export default function VehicleInventoryTable() {
       </div>
 
       {/* Main Table Card */}
-      <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm border border-gray-100 dark:border-zinc-800 overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-800 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-gray-100 dark:border-zinc-800 text-[10px] font-black uppercase tracking-widest text-gray-400">
+              <tr className="border-b border-gray-100 dark:border-slate-800 text-[10px] font-black uppercase tracking-widest text-gray-400">
                 <th className="py-5 px-6 whitespace-nowrap">Page No.</th>
                 <th className="py-5 px-6 whitespace-nowrap">Model Details</th>
                 <th className="py-5 px-6 whitespace-nowrap">VIN | Engine No</th>
@@ -197,7 +197,7 @@ export default function VehicleInventoryTable() {
                 <th className="py-5 px-6 whitespace-nowrap">Days In Stock</th>
                 <th className="py-5 px-6 whitespace-nowrap">Price (Selling)</th>
                 <th className="py-5 px-6 whitespace-nowrap">Status</th>
-                <th className="py-5 px-6 whitespace-nowrap text-right sticky right-0 bg-white dark:bg-zinc-900 border-l border-gray-100 dark:border-zinc-800 z-10">Actions</th>
+                <th className="py-5 px-6 whitespace-nowrap text-right sticky right-0 bg-white dark:bg-slate-900 border-l border-gray-100 dark:border-slate-800 z-10">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
@@ -215,7 +215,7 @@ export default function VehicleInventoryTable() {
                 </tr>
               ) : (
                 items.map((item, idx) => (
-                  <tr key={item.id} className={`group hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors ${idx % 2 === 0 ? 'bg-transparent' : 'bg-zinc-50 dark:bg-zinc-900'}`}>
+                  <tr key={item.id} className={`group hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors ${idx % 2 === 0 ? 'bg-transparent' : 'bg-zinc-50 dark:bg-slate-900'}`}>
                     <td className="py-4 px-6 text-xs font-bold text-gray-600 dark:text-gray-400">
                       {item.indexNo || "-"}
                     </td>
@@ -253,7 +253,7 @@ export default function VehicleInventoryTable() {
                         In Stock
                       </span>
                     </td>
-                    <td className="py-4 px-6 text-right sticky right-0 bg-white dark:bg-zinc-900 border-l border-gray-100 dark:border-zinc-800 z-10 transition-colors group-hover:bg-gray-50 dark:group-hover:bg-zinc-800">
+                    <td className="py-4 px-6 text-right sticky right-0 bg-white dark:bg-slate-900 border-l border-gray-100 dark:border-slate-800 z-10 transition-colors group-hover:bg-gray-50 dark:group-hover:bg-zinc-800">
                       <Link href={`/admin/sales?vehicleId=${item.id}`}>
                         <button className="bg-primary hover:bg-red-800 text-white px-5 py-1.5 rounded text-xs font-bold uppercase tracking-wider shadow-sm transition-colors">
                           Sell
@@ -271,10 +271,10 @@ export default function VehicleInventoryTable() {
       {/* Premium Preview Modal for Parsed Vehicles */}
       {parsedVehicles && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 transition-all duration-300 animate-in fade-in zoom-in-95">
-          <div className="bg-white dark:bg-zinc-950 rounded-3xl shadow-2xl border border-gray-200 dark:border-zinc-800 w-full max-w-6xl max-h-[92vh] flex flex-col overflow-hidden ring-1 ring-black/5 dark:ring-white/10">
+          <div className="bg-white dark:bg-slate-950 rounded-3xl shadow-2xl border border-gray-200 dark:border-slate-800 w-full max-w-6xl max-h-[92vh] flex flex-col overflow-hidden ring-1 ring-black/5 dark:ring-white/10">
             
             {/* Header Area with Subtle Gradient */}
-            <div className="p-6 md:px-8 border-b border-gray-100 dark:border-zinc-800 bg-gradient-to-r from-gray-50 to-white dark:from-[#151515] dark:to-[#0B0B0C] relative">
+            <div className="p-6 md:px-8 border-b border-gray-100 dark:border-slate-800 bg-gradient-to-r from-gray-50 to-white dark:from-[#151515] dark:to-[#0B0B0C] relative">
               <button 
                 onClick={() => {
                   setParsedVehicles(null);
@@ -298,7 +298,7 @@ export default function VehicleInventoryTable() {
               {/* Invoice Meta Cards */}
               {parsedInvoice && (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-                  <div className="flex flex-col bg-white dark:bg-white/5 p-4 rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-md hover:border-red-100 dark:hover:border-red-500/30 transition-all group">
+                  <div className="flex flex-col bg-white dark:bg-white/5 p-4 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-red-100 dark:hover:border-red-500/30 transition-all group">
                     <div className="flex items-center gap-2 text-gray-400 mb-1 group-hover:text-primary dark:group-hover:text-red-400 transition-colors">
                       <Receipt size={14} />
                       <p className="text-[11px] uppercase font-bold tracking-wider">Invoice No</p>
@@ -306,7 +306,7 @@ export default function VehicleInventoryTable() {
                     <p className="font-mono text-base font-black text-gray-900 dark:text-white">{parsedInvoice.invoiceNo}</p>
                   </div>
                   
-                  <div className="flex flex-col bg-white dark:bg-white/5 p-4 rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-md hover:border-red-100 dark:hover:border-red-500/30 transition-all group">
+                  <div className="flex flex-col bg-white dark:bg-white/5 p-4 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-red-100 dark:hover:border-red-500/30 transition-all group">
                     <div className="flex items-center gap-2 text-gray-400 mb-1 group-hover:text-primary dark:group-hover:text-red-400 transition-colors">
                       <Tag size={14} />
                       <p className="text-[11px] uppercase font-bold tracking-wider">Total Amount</p>
@@ -316,7 +316,7 @@ export default function VehicleInventoryTable() {
                     </p>
                   </div>
 
-                  <div className="flex flex-col bg-white dark:bg-white/5 p-4 rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-md hover:border-red-100 dark:hover:border-red-500/30 transition-all group">
+                  <div className="flex flex-col bg-white dark:bg-white/5 p-4 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-red-100 dark:hover:border-red-500/30 transition-all group">
                     <div className="flex items-center gap-2 text-gray-400 mb-1 group-hover:text-primary dark:group-hover:text-red-400 transition-colors">
                       <Info size={14} />
                       <p className="text-[11px] uppercase font-bold tracking-wider">Purchase Type</p>
@@ -324,7 +324,7 @@ export default function VehicleInventoryTable() {
                     <p className="text-base font-black text-gray-900 dark:text-white">{parsedInvoice.purchaseType}</p>
                   </div>
 
-                  <div className="flex flex-col bg-white dark:bg-white/5 p-4 rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-md hover:border-red-100 dark:hover:border-red-500/30 transition-all group">
+                  <div className="flex flex-col bg-white dark:bg-white/5 p-4 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-red-100 dark:hover:border-red-500/30 transition-all group">
                     <div className="flex items-center gap-2 text-gray-400 mb-1 group-hover:text-primary dark:group-hover:text-red-400 transition-colors">
                       <Calendar size={14} />
                       <p className="text-[11px] uppercase font-bold tracking-wider">Invoice Date</p>
@@ -336,18 +336,18 @@ export default function VehicleInventoryTable() {
             </div>
             
             {/* Table Area */}
-            <div className="flex-1 overflow-y-auto bg-[#f8f9fa] dark:bg-zinc-950 p-4 md:p-8">
-              <div className="bg-white dark:bg-[#121212] rounded-2xl border border-gray-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+            <div className="flex-1 overflow-y-auto bg-[#f8f9fa] dark:bg-slate-950 p-4 md:p-8">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 overflow-hidden shadow-sm">
                 <table className="w-full text-left text-sm border-collapse">
                   <thead className="bg-gray-50/90 dark:bg-white/5 backdrop-blur-md sticky top-0 z-10">
                     <tr>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-zinc-800">#</th>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-zinc-800">Category</th>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-zinc-800">Model Name</th>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-zinc-800">VIN / Chassis</th>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-zinc-800">Engine No</th>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-zinc-800">Colour</th>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-zinc-800">Purchase Price</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">#</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Category</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Model Name</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">VIN / Chassis</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Engine No</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Colour</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Purchase Price</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 dark:divide-white/5">
@@ -379,7 +379,7 @@ export default function VehicleInventoryTable() {
             </div>
 
             {/* Footer Area */}
-            <div className="p-6 md:px-8 border-t border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="p-6 md:px-8 border-t border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="text-sm font-medium text-gray-500">
                 You are about to securely index <span className="font-bold text-gray-900 dark:text-white">{parsedVehicles.length} vehicles</span>.
               </div>

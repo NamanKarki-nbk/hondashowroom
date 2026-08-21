@@ -6,12 +6,12 @@ export default async function ShopPage() {
   const products = await prisma.productCatalog.findMany();
 
   return (
-    <main className="min-h-screen bg-background dark:bg-[#0B0B0C] pt-28 pb-20">
-      <div className="max-w-7xl mx-auto px-6">
+    <main className="min-h-screen bg-background dark:bg-slate-950 pt-28 pb-20">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold font-extrabold text-gray-900 dark:text-primary-foreground tracking-tight uppercase mb-8">
           Shop Honda Products
         </h1>
-        <Suspense fallback={<div className="animate-pulse h-96 bg-[#e8dfd1] dark:bg-[#111] rounded-2xl w-full"></div>}>
+        <Suspense fallback={<div className="animate-pulse h-96 bg-[#e8dfd1] dark:bg-slate-950 rounded-2xl w-full"></div>}>
           <ShopClient initialProducts={products} />
         </Suspense>
       </div>

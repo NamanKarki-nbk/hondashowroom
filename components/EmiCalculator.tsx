@@ -83,7 +83,7 @@ export default function EmiCalculator({
               Enquire now <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
             <button className="text-primary-foreground hover:text-gray-300 text-sm font-semibold flex items-center gap-1.5">
-              Get brochure <Download className="w-3.5 h-3.5 text-red-500" />
+              Get brochure <Download className="w-3.5 h-3.5 text-primary" />
             </button>
           </div>
 

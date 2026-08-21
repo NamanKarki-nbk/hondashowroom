@@ -95,7 +95,7 @@ export default function DioHeroSection({
               transition={{ duration: 0.4, delay: 0.15 }}
               className="flex flex-col gap-3 max-w-xl"
             >
-              <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-gray-800 shadow-lg flex flex-wrap items-center justify-between gap-4">
+              <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 shadow-lg flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <span className="text-xs text-gray-500 uppercase font-extrabold tracking-wider block mb-1">
                     Standard Variant (STD)
@@ -117,7 +117,7 @@ export default function DioHeroSection({
                 </button>
               </div>
 
-              <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-gray-800 shadow-lg flex flex-wrap items-center justify-between gap-4">
+              <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 shadow-lg flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <span className="text-xs text-gray-500 uppercase font-extrabold tracking-wider block mb-1">
                     {titleSub === "125" ? "Smart Variant (H-SMART)" : "Deluxe Variant (DLX)"}
@@ -141,22 +141,22 @@ export default function DioHeroSection({
               transition={{ duration: 0.4, delay: 0.25 }}
               className="grid grid-cols-2 sm:grid-cols-4 gap-3"
             >
-              <div className="p-3.5 rounded-xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-gray-800 text-center shadow-sm">
+              <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 text-center shadow-sm">
                 <Gauge className="w-5 h-5 mx-auto mb-1 text-primary" />
                 <span className="block text-xs font-bold text-gray-500">Engine</span>
                 <span className="text-sm font-black text-foreground">{engineCc}</span>
               </div>
-              <div className="p-3.5 rounded-xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-gray-800 text-center shadow-sm">
+              <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 text-center shadow-sm">
                 <Flame className="w-5 h-5 mx-auto mb-1 text-primary" />
                 <span className="block text-xs font-bold text-gray-500">Max Power</span>
                 <span className="text-sm font-black text-foreground">{maxPower}</span>
               </div>
-              <div className="p-3.5 rounded-xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-gray-800 text-center shadow-sm">
+              <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 text-center shadow-sm">
                 <Zap className="w-5 h-5 mx-auto mb-1 text-primary" />
                 <span className="block text-xs font-bold text-gray-500">Max Torque</span>
                 <span className="text-sm font-black text-foreground">{maxTorque}</span>
               </div>
-              <div className="p-3.5 rounded-xl bg-white dark:bg-[#141416] border border-gray-200 dark:border-gray-800 text-center shadow-sm">
+              <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 text-center shadow-sm">
                 <ShieldCheck className="w-5 h-5 mx-auto mb-1 text-primary" />
                 <span className="block text-xs font-bold text-gray-500">Mileage</span>
                 <span className="text-sm font-black text-foreground">{mileage}</span>
@@ -211,7 +211,7 @@ export default function DioHeroSection({
               </div>
 
               {/* Segment-First Tech Badge Bar */}
-              <div className="mt-2 w-full bg-white/90 dark:bg-[#141416]/90 backdrop-blur border border-gray-200 dark:border-gray-800 rounded-2xl p-3.5 shadow-xl flex items-center justify-between">
+              <div className="mt-2 w-full bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-slate-800 rounded-2xl p-3.5 shadow-xl flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-black text-xs uppercase shadow-sm">
                     eSP

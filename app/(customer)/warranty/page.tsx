@@ -24,11 +24,11 @@ const EXTENDED_WARRANTY = [
 
 export default function WarrantyPage() {
   return (
-    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] pt-28 pb-24">
+    <div className="min-h-screen bg-background dark:bg-slate-950 pt-28 pb-24">
 
       {/* Hero */}
-      <div className="bg-background dark:bg-[#111] border-b border-gray-100 dark:border-background/5">
-        <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="bg-background dark:bg-slate-950 border-b border-gray-100 dark:border-background/5">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-12">
           <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
             <Link href="/" className="hover:text-primary flex items-center gap-1 transition-colors">
               <Home className="w-3.5 h-3.5" /> Home
@@ -59,14 +59,14 @@ export default function WarrantyPage() {
       </div>
 
       {/* Warranty Comparison */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
           
           {/* Standard Warranty */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-background dark:bg-[#1A1A1A] rounded-3xl border border-gray-200 dark:border-background/10 p-8 shadow-lg flex flex-col h-full"
+            className="bg-background dark:bg-slate-900 rounded-3xl border border-gray-200 dark:border-background/10 p-8 shadow-lg flex flex-col h-full"
           >
             <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100 dark:border-background/10">
               <div className="w-12 h-12 rounded-xl bg-[#e8dfd1] dark:bg-[#2A2A2A] flex items-center justify-center">
@@ -128,8 +128,8 @@ export default function WarrantyPage() {
       </div>
 
       {/* Benefits Grid */}
-      <div className="bg-background dark:bg-[#111] py-20 border-y border-gray-100 dark:border-background/5">
-        <div className="max-w-7xl mx-auto px-6">
+      <div className="bg-background dark:bg-slate-950 py-20 border-y border-gray-100 dark:border-background/5">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
           <div className="text-center mb-16">
             <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black text-gray-900 dark:text-primary-foreground mb-4">Why Choose Honda Shield?</h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
@@ -138,7 +138,7 @@ export default function WarrantyPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-background dark:bg-[#1A1A1A] p-8 rounded-3xl text-center border border-gray-100 dark:border-background/5">
+            <div className="bg-background dark:bg-slate-900 p-8 rounded-3xl text-center border border-gray-100 dark:border-background/5">
               <div className="w-16 h-16 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 mx-auto flex items-center justify-center mb-6">
                 <Clock className="w-8 h-8" />
               </div>
@@ -146,7 +146,7 @@ export default function WarrantyPage() {
               <p className="text-gray-500">Coverage extends well beyond the standard factory warranty, protecting you for years to come.</p>
             </div>
 
-            <div className="bg-background dark:bg-[#1A1A1A] p-8 rounded-3xl text-center border border-gray-100 dark:border-background/5">
+            <div className="bg-background dark:bg-slate-900 p-8 rounded-3xl text-center border border-gray-100 dark:border-background/5">
               <div className="w-16 h-16 rounded-full bg-green-50 dark:bg-green-900/20 text-green-600 mx-auto flex items-center justify-center mb-6">
                 <Settings className="w-8 h-8" />
               </div>
@@ -154,7 +154,7 @@ export default function WarrantyPage() {
               <p className="text-gray-500">Any required replacements are guaranteed to be 100% Genuine Honda parts fitted by experts.</p>
             </div>
 
-            <div className="bg-background dark:bg-[#1A1A1A] p-8 rounded-3xl text-center border border-gray-100 dark:border-background/5">
+            <div className="bg-background dark:bg-slate-900 p-8 rounded-3xl text-center border border-gray-100 dark:border-background/5">
               <div className="w-16 h-16 rounded-full bg-amber-50 dark:bg-amber-900/20 text-amber-600 mx-auto flex items-center justify-center mb-6">
                 <Zap className="w-8 h-8" />
               </div>

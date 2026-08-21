@@ -4,7 +4,7 @@ import React, { useCallback, useState, useEffect, useMemo } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import VehicleCard from "./VehicleCard";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export type Product = {
   id: string;
@@ -29,7 +29,6 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
     return index === -1 ? 999 : index;
   };
 
-  // Group products by category and sort them according to requirements
   const scooters = products
     .filter((p) => p.category === "SCOOTERS")
     .sort((a, b) => getSortIndex(a.name, scooterOrder) - getSortIndex(b.name, scooterOrder));
@@ -44,12 +43,11 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
     { id: "SCOOTERS", label: "SCOOTERS", data: scooters },
     { id: "MOTORCYCLES", label: "MOTORCYCLES", data: motorcycles },
     { id: "POWER", label: "POWER PRODUCTS", data: power },
-  ].filter((tab) => tab.data.length > 0), [products]); // eslint-disable-line react-hooks/exhaustive-deps
+  ].filter((tab) => tab.data.length > 0), [products]);
 
   const [activeTab, setActiveTab] = useState("SCOOTERS");
 
   useEffect(() => {
-    // Check if there's a tab parameter in the URL
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
       const tabParam = urlParams.get('tab');
@@ -61,7 +59,6 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
     }
   }, [TABS, activeTab]);
 
-  // Listen for hash/query changes without reloading
   useEffect(() => {
     const handlePopState = () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -93,76 +90,89 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
   if (TABS.length === 0) return null;
 
   return (
-    <section className="py-12 md:py-16 lg:py-24 px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px] relative overflow-hidden min-h-[500px]">
-      <div className="w-full mx-auto">
-        <div className="text-center mb-12 px-6">
-          <h2 className="text-2xl md:text-3xl font-semibold sm:text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight uppercase mb-8">
-            Choose Your Product
+    <section className="py-16 md:py-24 lg:py-32 w-full bg-[#FAF6F0] dark:bg-slate-950 transition-colors duration-300">
+      <div className="px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px] relative overflow-hidden min-h-[500px]">
+        <div className="text-center mb-16 px-6">
+          <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white tracking-tighter uppercase mb-10">
+            Explore Models
           </h2>
 
-          {/* Tabs */}
-          <div className="flex flex-wrap justify-center gap-4 border-b border-gray-200 dark:border-zinc-800 pb-4">
-            {TABS.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`text-lg font-bold px-4 py-2 transition-colors relative ${activeTab === tab.id ? "text-primary" : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"}`}
-              >
-                {tab.label}
-                {activeTab === tab.id && (
-                  <motion.div
-                    layoutId="underline"
-                    className="absolute left-0 bottom-[-17px] w-full h-1 bg-primary"
-                  />
-                )}
-              </button>
-            ))}
+          {/* Premium Segmented Control Tabs */}
+          <div className="inline-flex items-center justify-center p-1.5 bg-gray-200/50 dark:bg-white/5 backdrop-blur-md rounded-2xl border border-gray-300/50 dark:border-white/10 shadow-inner">
+            {TABS.map((tab) => {
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`relative px-6 py-3 md:px-8 md:py-3.5 text-xs md:text-sm font-bold uppercase tracking-widest rounded-xl transition-colors duration-300 ${isActive ? "text-gray-900 dark:text-gray-900" : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"}`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeTabIndicator"
+                      className="absolute inset-0 bg-white dark:bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(255,255,255,0.2)]"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  <span className="relative z-10">{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Carousel — key forces full remount when tab changes so Embla picks up new slides */}
+        {/* Carousel */}
         <div className="relative">
-          <div className="overflow-hidden" ref={emblaRef} key={activeTab}>
-            <div className="flex touch-pan-y -ml-6 py-4">
-              {activeData.map((vehicle) => (
-                <motion.div
-                  key={vehicle.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.33%] min-w-0 pl-6"
-                >
-                  <VehicleCard
-                    title={vehicle.name}
-                    priceNpr={vehicle.price}
-                    category={
-                      vehicle.category === "POWER_PRODUCTS"
-                        ? "Power Product"
-                        : vehicle.category === "AUTOMOBILES"
-                          ? "Automobile"
-                          : vehicle.category === "SCOOTERS"
-                            ? "Scooter"
-                            : "Motorcycle"
-                    }
-                    slug={vehicle.id}
-                    imageUrl={vehicle.imageUrl}
-                  />
-                </motion.div>
-              ))}
-            </div>
+          <div className="overflow-hidden" ref={emblaRef}>
+            <AnimatePresence mode="wait">
+              <motion.div 
+                key={activeTab}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="flex touch-pan-y -ml-6 py-4"
+              >
+                {activeData.map((vehicle, index) => (
+                  <motion.div
+                    key={vehicle.id}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4, delay: index * 0.05 }}
+                    className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.33%] xl:flex-[0_0_25%] min-w-0 pl-6 pb-8"
+                  >
+                    <VehicleCard
+                      title={vehicle.name}
+                      priceNpr={vehicle.price}
+                      category={
+                        vehicle.category === "POWER_PRODUCTS"
+                          ? "Power Product"
+                          : vehicle.category === "AUTOMOBILES"
+                            ? "Automobile"
+                            : vehicle.category === "SCOOTERS"
+                              ? "Scooter"
+                              : "Motorcycle"
+                      }
+                      slug={vehicle.id}
+                      imageUrl={vehicle.imageUrl}
+                    />
+                  </motion.div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           <button
             onClick={scrollPrev}
-            className="absolute -left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-background hover:bg-[#e8dfd1] border border-gray-200 rounded-full flex items-center justify-center text-gray-800 shadow-xl transition-colors z-10 hidden sm:flex"
+            className="absolute -left-4 md:-left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-full flex items-center justify-center text-gray-800 dark:text-white shadow-xl hover:scale-110 hover:bg-white dark:hover:bg-slate-700 transition-all z-10 hidden sm:flex group"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
           </button>
           <button
             onClick={scrollNext}
-            className="absolute -right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-background hover:bg-[#e8dfd1] border border-gray-200 rounded-full flex items-center justify-center text-gray-800 shadow-xl transition-colors z-10 hidden sm:flex"
+            className="absolute -right-4 md:-right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-full flex items-center justify-center text-gray-800 dark:text-white shadow-xl hover:scale-110 hover:bg-white dark:hover:bg-slate-700 transition-all z-10 hidden sm:flex group"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
           </button>
         </div>
       </div>

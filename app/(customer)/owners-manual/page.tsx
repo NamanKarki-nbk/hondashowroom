@@ -20,7 +20,7 @@ export default async function OwnersManualPage() {
 
       {/* Hero Banner */}
       <div className="bg-[#242938]">
-        <div className="max-w-7xl mx-auto px-6 pt-6 pb-2">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 pt-6 pb-2">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-[#868ea3] mb-4">
             <Link href="/" className="hover:text-primary-foreground flex items-center gap-1 transition-colors">
@@ -32,7 +32,7 @@ export default async function OwnersManualPage() {
         </div>
         
         {/* Banner Image */}
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
           <img 
             src="/images/owner-manual-bg.jpg" 
             alt="Owners Manual Banner"
@@ -44,7 +44,7 @@ export default async function OwnersManualPage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-12">
         <OwnersManualClient products={products} />
       </div>
     </main>

@@ -110,11 +110,11 @@ export default function TestRidePage() {
   };
 
   const inputClass =
-    'bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary outline-none text-gray-900 dark:text-primary-foreground w-full text-sm transition-all duration-200';
+    'bg-background dark:bg-slate-950 border border-gray-200 dark:border-background/10 rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary outline-none text-gray-900 dark:text-primary-foreground w-full text-sm transition-all duration-200';
   const labelClass = 'text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 block';
 
   return (
-    <main className="min-h-screen bg-background dark:bg-[#0B0B0C] pt-28 pb-20">
+    <main className="min-h-screen bg-background dark:bg-slate-950 pt-28 pb-20">
       {/* Hero Banner */}
       <div className="relative overflow-hidden bg-gradient-to-br from-primary via-[#c0151f] to-[#8b0000] py-14 px-6 mb-12">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuMDYiLz48L3N2Zz4=')] opacity-40" />
@@ -143,7 +143,7 @@ export default function TestRidePage() {
           {FEATURES.map(({ icon: Icon, title, desc }) => (
             <div
               key={title}
-              className="bg-background dark:bg-[#111] rounded-2xl border border-gray-200 dark:border-background/10 p-6 text-center shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+              className="bg-background dark:bg-slate-950 rounded-2xl border border-gray-200 dark:border-background/10 p-6 text-center shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
             >
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
                 <Icon className="w-6 h-6 text-primary" />
@@ -156,7 +156,7 @@ export default function TestRidePage() {
 
         {submitted ? (
           /* ── Success Card ── */
-          <div className="bg-background dark:bg-[#111] rounded-2xl border border-gray-200 dark:border-background/10 shadow-xl overflow-hidden">
+          <div className="bg-background dark:bg-slate-950 rounded-2xl border border-gray-200 dark:border-background/10 shadow-xl overflow-hidden">
             <div className="bg-gradient-to-br from-emerald-500 to-green-600 p-8 text-center">
               <CheckCircle className="w-16 h-16 text-primary-foreground mx-auto mb-4" />
               <h2 className="text-2xl md:text-3xl font-semibold font-bold text-primary-foreground mb-1">Test Ride Scheduled!</h2>
@@ -188,7 +188,7 @@ export default function TestRidePage() {
           </div>
         ) : (
           /* ── Form Card ── */
-          <div className="bg-background dark:bg-[#111] rounded-2xl border border-gray-200 dark:border-background/10 shadow-xl p-8">
+          <div className="bg-background dark:bg-slate-950 rounded-2xl border border-gray-200 dark:border-background/10 shadow-xl p-8">
             <h2 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-primary-foreground mb-1">
               Schedule Your Test Ride
             </h2>

@@ -16,58 +16,53 @@ interface VehicleCardProps {
   onBookClick?: () => void;
 }
 
-/**
- * A reusable card component for displaying a vehicle in a grid.
- * 
- * Features:
- * - Hover animations (lift effect and image scale).
- * - Displays category badge, vehicle title, starting price, and engine capacity (cc).
- * - Links dynamically to the individual vehicle details page via the `slug`.
- * - Shows color swatches if available.
- * 
- * @param {VehicleCardProps} props - The properties of the vehicle.
- * @returns {JSX.Element} The rendered vehicle card component.
- */
 export default function VehicleCard({ title, priceNpr, cc, slug, category, imageUrl, colors, onQuoteClick, onBookClick }: VehicleCardProps) {
   return (
-    <Link href={`/vehicles/${slug}`} className="block group">
-      <div className="bg-background border border-gray-200 dark:border-zinc-800 rounded-3xl overflow-hidden hover:shadow-2xl dark:hover:shadow-zinc-900/50 transition-all duration-300 relative group-hover:-translate-y-1">
+    <Link href={`/vehicles/${slug}`} className="block group h-full">
+      <div className="flex flex-col h-full bg-white/70 dark:bg-white/5 backdrop-blur-xl border border-gray-200/60 dark:border-white/10 rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.02)] dark:hover:shadow-[0_20px_40px_rgba(255,255,255,0.05)] transition-all duration-500 relative group-hover:-translate-y-2">
         
         {/* Top Badge */}
-        <div className="absolute top-4 left-4 z-10">
-          <span className="bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+        <div className="absolute top-5 left-5 z-10">
+          <span className="bg-white/90 dark:bg-black/50 backdrop-blur-md text-primary dark:text-primary-foreground border border-gray-100 dark:border-white/10 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm">
             {category}
           </span>
         </div>
 
-        {/* Image Container */}
-        <div className="h-64 relative bg-background flex items-center justify-center p-6 overflow-hidden">
-           <div className="absolute inset-0 bg-gradient-to-t from-gray-100 dark:from-zinc-900/50 to-transparent opacity-50"></div>
+        {/* Image Container with Soft Radial Gradient */}
+        <div className="relative h-64 md:h-72 w-full flex items-center justify-center p-8 overflow-hidden bg-gradient-to-b from-gray-50/50 to-transparent dark:from-white/[0.02] dark:to-transparent">
+           {/* Glow Effect behind image */}
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-primary/10 dark:bg-primary/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+           
            {imageUrl ? (
              // eslint-disable-next-line @next/next/no-img-element
              <img 
                src={imageUrl} 
                alt={title} 
                onError={(e) => { e.currentTarget.src = category.toLowerCase().includes('scooter') ? '/images/scooter-placeholder.jpg' : '/images/bike-placeholder.jpg'; }}
-               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" 
+               className="w-full h-full object-contain relative z-10 group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 drop-shadow-xl" 
              />
            ) : (
-             <div className="w-40 h-24 bg-gray-300 rounded-xl rotate-[-10deg] shadow-lg group-hover:scale-110 transition-transform duration-500"></div>
+             <div className="w-40 h-24 bg-gray-200 dark:bg-gray-800 rounded-2xl rotate-[-5deg] shadow-lg group-hover:scale-110 group-hover:rotate-0 transition-all duration-500 relative z-10"></div>
            )}
         </div>
 
         {/* Content */}
-        <div className="p-6">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary transition-colors line-clamp-1">{title}</h3>
-            {cc && <span className="text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-zinc-800 px-2 py-1 rounded-md border border-gray-200 dark:border-zinc-700">{cc} cc</span>}
+        <div className="p-6 md:p-8 flex flex-col flex-1 bg-white/40 dark:bg-black/20 border-t border-gray-100/50 dark:border-white/5">
+          <div className="flex justify-between items-start mb-3">
+            <h3 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white group-hover:text-primary transition-colors tracking-tight line-clamp-1">
+              {title}
+            </h3>
+            {cc && (
+              <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-white/10 px-2 py-1 rounded-md border border-gray-200/50 dark:border-white/5 uppercase tracking-widest shrink-0 ml-3">
+                {cc} cc
+              </span>
+            )}
           </div>
           
           {/* Color Picker / Swatches */}
           {colors && colors.length > 0 && (
-            <div className="flex items-center gap-1.5 mb-4">
+            <div className="flex items-center gap-2 mb-6">
               {colors.slice(0, 4).map((color, idx) => {
-                // Determine a hex color based on name keywords
                 let hex = "#333333";
                 const lower = color.toLowerCase();
                 if (lower.includes("red")) hex = "#c1291A";
@@ -82,37 +77,33 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
                   <div 
                     key={idx} 
                     title={color}
-                    className="w-4 h-4 rounded-full border border-gray-300 shadow-sm transition-transform hover:scale-125 cursor-pointer"
+                    className="w-4 h-4 rounded-full border border-gray-200 dark:border-gray-700 shadow-sm transition-transform hover:scale-125 cursor-pointer ring-2 ring-transparent hover:ring-gray-300 dark:hover:ring-gray-600"
                     style={{ backgroundColor: hex }}
                   />
                 );
               })}
-              {colors.length > 4 && <span className="text-[10px] text-gray-500 font-bold">+{colors.length - 4}</span>}
+              {colors.length > 4 && <span className="text-[10px] text-gray-400 font-bold ml-1">+{colors.length - 4}</span>}
             </div>
           )}
 
-          <div className="mt-4 flex items-center justify-between">
-             <div>
-                <p className="text-xs text-gray-500 uppercase font-semibold">Starting at</p>
-                <p className="text-lg font-black text-gray-900 dark:text-white">
-                  Rs. {priceNpr.toLocaleString('en-IN')}
-                </p>
-             </div>
-             <div className="w-10 h-10 rounded-full bg-background group-hover:bg-primary flex items-center justify-center transition-colors">
-                <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-primary-foreground transition-colors" />
-             </div>
+          <div className="mt-auto pt-2">
+             <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold tracking-widest mb-1">Starting at</p>
+             <p className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">
+               Rs. {priceNpr.toLocaleString('en-IN')}
+             </p>
           </div>
 
-          <div className="mt-4 flex gap-2">
+          <div className="mt-6 flex gap-3">
             <button 
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onQuoteClick && onQuoteClick(); }}
-              className="flex-1 bg-white border border-gray-300 hover:border-[#B83227] text-gray-800 hover:text-[#B83227] py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-colors"
+              className="group/btn flex-1 flex items-center justify-center gap-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-900 dark:text-white py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300"
             >
               Get Quote
+              <ArrowRight className="w-3.5 h-3.5 opacity-50 group-hover/btn:opacity-100 group-hover/btn:translate-x-1 transition-all duration-300" />
             </button>
             <button 
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onBookClick && onBookClick(); }}
-              className="flex-1 bg-[#B83227] hover:bg-primary-hover text-white py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-colors shadow-sm"
+              className="flex-1 bg-primary hover:bg-primary-hover text-white py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300 shadow-[0_4px_14px_0_rgba(239,68,68,0.39)] hover:shadow-[0_6px_20px_rgba(239,68,68,0.23)] hover:-translate-y-0.5"
             >
               Pre-Book
             </button>

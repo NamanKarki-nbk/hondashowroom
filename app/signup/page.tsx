@@ -59,7 +59,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] flex flex-col items-center justify-center p-6 relative overflow-hidden py-12">
+    <div className="min-h-screen bg-background dark:bg-slate-950 flex flex-col items-center justify-center p-6 relative overflow-hidden py-12">
       {/* Background ambient lighting */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary/10 blur-[150px] rounded-full pointer-events-none"></div>
 
@@ -67,7 +67,7 @@ export default function SignupPage() {
         <ArrowLeft className="w-4 h-4" /> Back to Showroom
       </Link>
 
-      <div className="w-full max-w-md bg-white dark:bg-[#151517] border border-gray-200 dark:border-gray-800 rounded-3xl p-10 shadow-2xl relative z-10">
+      <div className="w-full max-w-md bg-white dark:bg-[#151517] border border-gray-200 dark:border-slate-800 rounded-3xl p-10 shadow-2xl relative z-10">
         <div className="flex flex-col items-center mb-8 text-center">
            <div className="flex justify-center mb-8">
               <Link href="/">
@@ -156,7 +156,7 @@ export default function SignupPage() {
         <div className="mt-8">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
+              <div className="w-full border-t border-gray-200 dark:border-slate-800"></div>
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-4 bg-white dark:bg-[#151517] text-gray-500 font-bold uppercase tracking-wide text-xs">Or register with</span>

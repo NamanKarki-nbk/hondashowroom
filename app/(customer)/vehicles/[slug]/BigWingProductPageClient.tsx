@@ -72,7 +72,7 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
         
         {/* Top Red Bar */}
         <div className="w-full bg-primary text-primary-foreground text-sm py-2">
-           <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 flex justify-between items-center">
               <div className="flex gap-4 font-semibold">
                  <Link href="/honda-finance-from-home" className="hover:underline">Honda Finance From Home</Link>
                  <span className="opacity-50">|</span>
@@ -88,7 +88,7 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
         </div>
 
         {/* Main Nav (Product Context) */}
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
              <Link href="/" className="flex items-center space-x-3 group">
                <Logo className="w-10 h-10 group-hover:scale-105 transition-transform text-primary" />

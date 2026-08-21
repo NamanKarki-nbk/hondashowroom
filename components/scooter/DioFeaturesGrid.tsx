@@ -97,7 +97,7 @@ export default function DioFeaturesGrid({ features }: { features?: FeatureCard[]
 
   return (
     <section id="features" className="py-24 px-4 sm:px-6 lg:px-8 bg-background transition-colors duration-300">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 text-primary text-xs font-black tracking-widest uppercase mb-3">
@@ -118,7 +118,7 @@ export default function DioFeaturesGrid({ features }: { features?: FeatureCard[]
             return (
               <div
                 key={feat.id}
-                className="group relative bg-white dark:bg-[#141416] rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-2xl hover:border-primary/50 transition-all duration-300 flex flex-col justify-between"
+                className="group relative bg-white dark:bg-slate-900 rounded-3xl border border-gray-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-2xl hover:border-primary/50 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   {/* Feature Image Banner */}
@@ -137,7 +137,7 @@ export default function DioFeaturesGrid({ features }: { features?: FeatureCard[]
                     )}
 
                     {/* Icon Badge */}
-                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-xl bg-white/95 dark:bg-black/90 text-primary flex items-center justify-center shadow-lg border border-gray-200 dark:border-gray-800">
+                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-xl bg-white/95 dark:bg-black/90 text-primary flex items-center justify-center shadow-lg border border-gray-200 dark:border-slate-800">
                       <Icon className="w-5 h-5" />
                     </div>
                   </div>

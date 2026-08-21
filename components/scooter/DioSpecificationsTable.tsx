@@ -117,8 +117,8 @@ export default function DioSpecificationsTable({ vehicle }: DioSpecificationsTab
   }, [displayCategories, activeTab]);
 
   return (
-    <section id="specs" className="py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#0C0C0E] border-t border-gray-200 dark:border-gray-800 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto">
+    <section id="specs" className="py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 transition-colors duration-300">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 text-primary text-xs font-black tracking-widest uppercase mb-3">
@@ -144,7 +144,7 @@ export default function DioSpecificationsTable({ vehicle }: DioSpecificationsTab
                 className={`px-5 py-3.5 rounded-2xl font-extrabold text-xs sm:text-sm uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-2.5 border ${
                   isActive
                     ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/25 scale-[1.02]"
-                    : "bg-gray-100 dark:bg-[#141416] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-800 hover:text-foreground hover:bg-gray-200 dark:hover:bg-gray-800"
+                    : "bg-gray-100 dark:bg-slate-900 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-800 hover:text-foreground hover:bg-gray-200 dark:hover:bg-gray-800"
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -155,8 +155,8 @@ export default function DioSpecificationsTable({ vehicle }: DioSpecificationsTab
         </div>
 
         {/* Specs Table Container */}
-        <div className="bg-gray-50 dark:bg-[#141416] border border-gray-200 dark:border-gray-800 rounded-3xl overflow-hidden shadow-xl">
-          <div className="p-6 sm:p-8 bg-gray-100 dark:bg-[#18181B] border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
+        <div className="bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-xl">
+          <div className="p-6 sm:p-8 bg-gray-100 dark:bg-[#18181B] border-b border-gray-200 dark:border-slate-800 flex items-center justify-between">
             <h3 className="text-xl md:text-2xl font-semibold font-black uppercase text-foreground tracking-tight flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5 text-primary" /> {currentCategory.name}
             </h3>

@@ -56,7 +56,7 @@ export default function NewLetterPage() {
       <nav className="flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 mb-4 px-1">
         <Link 
           href="/admin/dashboard" 
-          className="flex items-center gap-1.5 hover:text-[#B83227] transition-colors"
+          className="flex items-center gap-1.5 hover:text-[#CC0000] transition-colors"
         >
           <Home className="w-4 h-4" />
           <span className="hidden sm:inline">Dashboard</span>
@@ -66,14 +66,14 @@ export default function NewLetterPage() {
         
         <Link 
           href="/admin/letters" 
-          className="hover:text-[#B83227] transition-colors"
+          className="hover:text-[#CC0000] transition-colors"
         >
           Official Letters
         </Link>
         
         <ChevronRight className="w-4 h-4 mx-2 text-gray-300 dark:text-gray-700" />
         
-        <span className="text-[#B83227] bg-[#B83227]/10 dark:bg-[#B83227]/20 px-2.5 py-1 rounded-md font-bold">
+        <span className="text-[#CC0000] bg-[#CC0000]/10 dark:bg-[#CC0000]/20 px-2.5 py-1 rounded-md font-bold">
           Generate New
         </span>
       </nav>

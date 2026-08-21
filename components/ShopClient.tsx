@@ -180,7 +180,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
   }, [products, searchQuery, selectedCategories, ccRange, priceRange, sortBy]);
 
   return (
-    <div className="flex flex-col bg-background dark:bg-[#0B0B0C] min-h-screen">
+    <div className="flex flex-col bg-background dark:bg-slate-950 min-h-screen">
       
       {/* Expandable Filter Bar */}
       <div className="bg-[#1c1c1c] text-white">

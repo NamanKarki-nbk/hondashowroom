@@ -55,7 +55,7 @@ export default function AccessoriesClient({ initialAccessories }: AccessoriesCli
 
   return (
     <div className="min-h-screen text-foreground pt-24 pb-16 font-sans">
-      <div className={`max-w-7xl mx-auto px-6 transition-all duration-500 ${hasSelection ? 'pt-8' : 'pt-40 pb-40'}`}>
+      <div className={`max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 transition-all duration-500 ${hasSelection ? 'pt-8' : 'pt-40 pb-40'}`}>
         
         {/* Filter Wizard */}
         <div className={`flex flex-col items-center justify-center space-y-6 transition-all duration-500 ${hasSelection ? 'mb-16' : ''}`}>
@@ -114,7 +114,7 @@ export default function AccessoriesClient({ initialAccessories }: AccessoriesCli
               <p className="text-gray-500 dark:text-gray-400 text-sm">Premium add-ons and protection solutions for your Honda vehicle.</p>
             </div>
 
-            <div className="border-b border-gray-200 dark:border-gray-800 pb-3 mb-8">
+            <div className="border-b border-gray-200 dark:border-slate-800 pb-3 mb-8">
               <h2 className="text-xl md:text-2xl font-semibold font-bold">
                 Results <span className="text-blue-600 dark:text-blue-400">{filteredAccessories.length}</span>
               </h2>
@@ -123,7 +123,7 @@ export default function AccessoriesClient({ initialAccessories }: AccessoriesCli
             {filteredAccessories.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredAccessories.map((item) => (
-                  <div key={item.id} className="bg-white dark:bg-[#1A1A1A] rounded-xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 dark:border-white/10 group">
+                  <div key={item.id} className="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 dark:border-white/10 group">
                     <div className="relative h-48 bg-white flex items-center justify-center p-4">
                       <Image
                         src={item.imageUrl}
@@ -166,7 +166,7 @@ export default function AccessoriesClient({ initialAccessories }: AccessoriesCli
                 ))}
               </div>
             ) : (
-              <div className="text-center py-20 bg-white dark:bg-[#1A1A1A] rounded-xl border border-gray-100 dark:border-white/10 shadow-sm">
+              <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-white/10 shadow-sm">
                 <p className="text-gray-500 dark:text-gray-400 text-lg">No accessories found for {vehicleModel}.</p>
                 <button 
                   onClick={() => setVehicleModel(null)}

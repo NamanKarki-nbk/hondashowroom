@@ -88,8 +88,8 @@ export default function DioTechnologySection() {
   const activeModule = TECH_MODULES.find((m) => m.id === activeTechId) || TECH_MODULES[0];
 
   return (
-    <section id="technology" className="py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#0C0C0E] border-t border-gray-200 dark:border-gray-800 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto">
+    <section id="technology" className="py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 transition-colors duration-300">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 text-primary text-xs font-black tracking-widest uppercase mb-3">
@@ -115,7 +115,7 @@ export default function DioTechnologySection() {
                 className={`p-4 rounded-2xl font-black text-xs uppercase tracking-wider transition-all border flex flex-col items-center justify-center gap-2 text-center ${
                   isActive
                     ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/25 scale-[1.02]"
-                    : "bg-gray-50 dark:bg-[#141416] text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-foreground"
+                    : "bg-gray-50 dark:bg-slate-900 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-800 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-foreground"
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -126,7 +126,7 @@ export default function DioTechnologySection() {
         </div>
 
         {/* Active Module Showcase Card */}
-        <div className="bg-gray-50 dark:bg-[#141416] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 sm:p-10 shadow-2xl">
+        <div className="bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left: Text & Features List */}
             <div className="lg:col-span-7 space-y-6">
@@ -157,7 +157,7 @@ export default function DioTechnologySection() {
 
             {/* Right: Technical Visual Banner */}
             <div className="lg:col-span-5 relative flex items-center justify-center">
-              <div className="relative w-full h-64 sm:h-80 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1C1C20] shadow-md p-4 flex items-center justify-center">
+              <div className="relative w-full h-64 sm:h-80 rounded-2xl overflow-hidden border border-gray-200 dark:border-slate-800 bg-white dark:bg-[#1C1C20] shadow-md p-4 flex items-center justify-center">
                 <ImageWithFallback
                   src={activeModule.image}
                   fallbackSrc={activeModule.fallbackImage}

@@ -28,15 +28,15 @@ export default async function SparePartsPage({
   });
 
   return (
-    <main className="min-h-screen bg-background dark:bg-[#0B0B0C] py-24 text-gray-900 dark:text-primary-foreground transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-6">
+    <main className="min-h-screen bg-background dark:bg-slate-950 py-24 text-gray-900 dark:text-primary-foreground transition-colors duration-300">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         
         <div className="text-center mb-16">
-          <div className="w-16 h-16 bg-[#B83227]/10 text-[#B83227] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(184,50,39,0.3)]">
+          <div className="w-16 h-16 bg-[#CC0000]/10 text-[#CC0000] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(184,50,39,0.3)]">
             <Package className="w-8 h-8" />
           </div>
           <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-4">
-            Honda Genuine <span className="text-[#B83227]">Parts</span>
+            Honda Genuine <span className="text-[#CC0000]">Parts</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Ensure your vehicle runs perfectly with 100% authentic Honda spare parts and accessories.
@@ -52,11 +52,11 @@ export default async function SparePartsPage({
               name="query"
               defaultValue={query}
               placeholder="Search by part name, part number, or category..." 
-              className="w-full pl-16 pr-36 py-5 rounded-full border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-inner focus:ring-2 focus:ring-[#B83227] focus:border-[#B83227] text-gray-900 dark:text-white outline-none backdrop-blur-sm transition-all"
+              className="w-full pl-16 pr-36 py-5 rounded-full border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-inner focus:ring-2 focus:ring-[#CC0000] focus:border-[#CC0000] text-gray-900 dark:text-white outline-none backdrop-blur-sm transition-all"
             />
             <button 
               type="submit" 
-              className="absolute right-3 bg-[#B83227] hover:bg-primary-hover text-white px-8 py-3 rounded-full font-bold uppercase tracking-wider transition-colors shadow-lg shadow-[#B83227]/20"
+              className="absolute right-3 bg-[#CC0000] hover:bg-primary-hover text-white px-8 py-3 rounded-full font-bold uppercase tracking-wider transition-colors shadow-lg shadow-[#B83227]/20"
             >
               Search
             </button>
@@ -96,7 +96,7 @@ export default async function SparePartsPage({
                       <td className="p-5 text-gray-500 dark:text-gray-400 text-sm font-medium">
                         <span className="bg-gray-100 dark:bg-slate-800 px-3 py-1.5 rounded-full text-xs">{part.category}</span>
                       </td>
-                      <td className="p-5 text-right font-black text-[#B83227] text-lg">
+                      <td className="p-5 text-right font-black text-[#CC0000] text-lg">
                         {formatNPRPrice(part.price)}
                       </td>
                       <td className="p-5 text-center">
@@ -114,13 +114,13 @@ export default async function SparePartsPage({
           )}
         </div>
 
-        <div className="mt-16 bg-[#B83227] rounded-3xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center justify-between shadow-2xl relative overflow-hidden">
+        <div className="mt-16 bg-[#CC0000] rounded-3xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center justify-between shadow-2xl relative overflow-hidden">
            <div className="absolute right-0 top-0 w-64 h-64 bg-black/10 rounded-full blur-3xl pointer-events-none"></div>
            <div className="relative z-10 max-w-2xl mb-8 md:mb-0 text-center md:text-left">
               <h3 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black uppercase tracking-tight mb-2">Need Help Finding A Part?</h3>
               <p className="text-red-100 font-medium">Our technicians can help you identify exactly what you need. Upload a photo of your damaged part or provide your chassis number.</p>
            </div>
-           <button className="relative z-10 bg-white text-[#B83227] px-8 py-4 rounded-xl font-bold uppercase tracking-wider hover:bg-gray-100 transition-colors shadow-xl whitespace-nowrap">
+           <button className="relative z-10 bg-white text-[#CC0000] px-8 py-4 rounded-xl font-bold uppercase tracking-wider hover:bg-gray-100 transition-colors shadow-xl whitespace-nowrap">
               Contact Support
            </button>
         </div>

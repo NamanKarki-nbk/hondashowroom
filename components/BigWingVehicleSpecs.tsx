@@ -18,7 +18,7 @@ export default function BigWingVehicleSpecs({ specs, vehicleSlug = "nx-200", fal
 
   return (
     <section id="specs" className="py-24 px-6 bg-[#050505] transition-colors duration-300">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         <div className="text-center mb-16">
           <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-black text-primary-foreground uppercase tracking-tight mb-4">
             Technical <span className="text-primary">Specifications</span>

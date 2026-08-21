@@ -90,11 +90,11 @@ export default async function FinancePage() {
   });
 
   return (
-    <main className="min-h-screen bg-background dark:bg-[#0B0B0C] py-24 text-gray-900 dark:text-primary-foreground transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-6">
+    <main className="min-h-screen bg-background dark:bg-slate-950 py-24 text-gray-900 dark:text-primary-foreground transition-colors duration-300">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         <div className="mb-16 text-center lg:text-left">
           <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-4">
-            CALCULATE YOUR <span className="text-[#B83227]">MONTHLY PAYMENTS</span><br />AND DRIVE HOME JOY.
+            CALCULATE YOUR <span className="text-[#CC0000]">MONTHLY PAYMENTS</span><br />AND DRIVE HOME JOY.
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-lg uppercase tracking-wider font-bold">
             EXPLORE MORE WAYS TO OWN YOUR HONDA.

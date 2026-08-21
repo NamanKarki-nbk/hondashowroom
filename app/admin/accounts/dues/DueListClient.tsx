@@ -58,7 +58,7 @@ export default function DueListClient({ initialDues }: { initialDues: any[] }) {
     }
   };
 
-  const inputClasses = "w-full bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all";
+  const inputClasses = "w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all";
 
   return (
     <div>
@@ -70,12 +70,12 @@ export default function DueListClient({ initialDues }: { initialDues: any[] }) {
           placeholder="Search by customer name, phone, or invoice no..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500 shadow-sm"
+          className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500 shadow-sm"
         />
       </div>
 
       {/* Due List Table */}
-      <div className="bg-white dark:bg-[#111111] rounded-2xl shadow-xl border border-gray-100 dark:border-slate-800 overflow-hidden">
+      <div className="bg-white dark:bg-slate-950 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-800 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -85,7 +85,7 @@ export default function DueListClient({ initialDues }: { initialDues: any[] }) {
                 <th className="py-4 px-6 text-xs font-bold uppercase tracking-widest text-muted-foreground">Vehicle</th>
                 <th className="py-4 px-6 text-xs font-bold uppercase tracking-widest text-muted-foreground">Final Amount</th>
                 <th className="py-4 px-6 text-xs font-bold uppercase tracking-widest text-primary">Due Amount</th>
-                <th className="py-4 px-6 text-xs font-bold uppercase tracking-widest text-muted-foreground text-right sticky right-0 bg-gray-50/50 dark:bg-zinc-900/50 border-l border-gray-100 dark:border-zinc-800 z-10">Actions</th>
+                <th className="py-4 px-6 text-xs font-bold uppercase tracking-widest text-muted-foreground text-right sticky right-0 bg-gray-50/50 dark:bg-slate-900/50 border-l border-gray-100 dark:border-slate-800 z-10">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
@@ -115,7 +115,7 @@ export default function DueListClient({ initialDues }: { initialDues: any[] }) {
                     <td className="py-4 px-6 text-sm font-bold text-primary">
                       {formatNPR(tx.dueAmount)}
                     </td>
-                    <td className="py-4 px-6 text-right sticky right-0 bg-white dark:bg-zinc-900 border-l border-gray-100 dark:border-zinc-800 z-10 transition-colors group-hover:bg-gray-50 dark:group-hover:bg-zinc-800">
+                    <td className="py-4 px-6 text-right sticky right-0 bg-white dark:bg-slate-900 border-l border-gray-100 dark:border-slate-800 z-10 transition-colors group-hover:bg-gray-50 dark:group-hover:bg-zinc-800">
                       <button 
                         onClick={() => handleOpenPayment(tx)}
                         className="bg-primary hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wider transition-colors inline-flex items-center gap-2 shadow-md shadow-red-500/20"
@@ -134,7 +134,7 @@ export default function DueListClient({ initialDues }: { initialDues: any[] }) {
       {/* Add Payment Modal */}
       {selectedTx && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-[#111111] rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-gray-200 dark:border-slate-800 animate-in zoom-in-95 duration-200">
+          <div className="bg-white dark:bg-slate-950 rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-gray-200 dark:border-slate-800 animate-in zoom-in-95 duration-200">
             <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center bg-gray-50 dark:bg-slate-900/50">
               <h2 className="text-xl md:text-2xl font-semibold font-black text-foreground uppercase tracking-tight flex items-center gap-2">
                 <Wallet className="w-6 h-6 text-primary" /> Record Payment

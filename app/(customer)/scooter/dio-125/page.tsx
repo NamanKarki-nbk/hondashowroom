@@ -98,11 +98,11 @@ export default function HondaDio125Page({ vehicle, stdPrice, dlxPrice }: HondaDi
 
   return (
     // -mt-[90px] cancels the parent customer layout pt-[90px] padding, pulling page to top:0
-    <div className="-mt-[90px] min-h-screen bg-background text-foreground transition-colors duration-300">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       
       {/* Sticky Top Header Bar */}
-      <header className="w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/95 fixed top-0 z-40 shadow-sm border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+      <header className="w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/95 fixed top-0 z-40 shadow-sm border-b border-gray-200 dark:border-slate-800 transition-colors duration-300">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 h-14 sm:h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center space-x-2 group">
               <Logo className="w-8 h-8 group-hover:scale-105 transition-transform text-primary" />
@@ -223,7 +223,7 @@ export default function HondaDio125Page({ vehicle, stdPrice, dlxPrice }: HondaDi
       {/* Booking / Test Ride Modal */}
       {isBookingOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-[#141416] border border-gray-200 dark:border-gray-800 w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl relative">
             <button
               onClick={() => setIsBookingOpen(false)}
               className="absolute top-4 right-4 p-2 text-gray-400 hover:text-foreground rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"

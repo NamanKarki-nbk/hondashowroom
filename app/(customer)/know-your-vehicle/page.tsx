@@ -236,14 +236,14 @@ function ComponentModal({ comp, onClose }: { comp: Component; onClose: () => voi
 
         {/* Modal Panel */}
         <motion.div
-          className="relative bg-background dark:bg-[#111] rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-background/10 flex flex-col"
+          className="relative bg-background dark:bg-slate-950 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-background/10 flex flex-col"
           initial={{ opacity: 0, scale: 0.92, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.92, y: 30 }}
           transition={{ type: "spring", stiffness: 280, damping: 28 }}
         >
           {/* Sticky Header */}
-          <div className="sticky top-0 z-10 bg-background dark:bg-[#111] border-b border-gray-100 dark:border-background/10 px-6 py-4 flex items-center justify-between rounded-t-3xl">
+          <div className="sticky top-0 z-10 bg-background dark:bg-slate-950 border-b border-gray-100 dark:border-background/10 px-6 py-4 flex items-center justify-between rounded-t-3xl">
             <div className="flex items-center gap-3">
               <div className={`w-11 h-11 rounded-2xl flex items-center justify-center border ${comp.iconBg} ${comp.color}`}>
                 <comp.icon className="w-5 h-5" />
@@ -306,7 +306,7 @@ function ComponentModal({ comp, onClose }: { comp: Component; onClose: () => voi
           </div>
 
           {/* CTA Footer */}
-          <div className="sticky bottom-0 bg-background dark:bg-[#111] border-t border-gray-100 dark:border-background/10 px-6 py-4 flex gap-3 rounded-b-3xl">
+          <div className="sticky bottom-0 bg-background dark:bg-slate-950 border-t border-gray-100 dark:border-background/10 px-6 py-4 flex gap-3 rounded-b-3xl">
             <Link
               href="/book-now"
               className="flex-1 bg-primary text-primary-foreground text-sm font-bold px-5 py-3 rounded-xl hover:bg-primary-hover transition-colors text-center"
@@ -331,7 +331,7 @@ export default function KnowYourVehiclePage() {
   const [activeModal, setActiveModal] = useState<Component | null>(null);
 
   return (
-    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] pt-28 pb-24">
+    <div className="min-h-screen bg-background dark:bg-slate-950 pt-28 pb-24">
 
       {/* Modal */}
       {activeModal && (
@@ -339,8 +339,8 @@ export default function KnowYourVehiclePage() {
       )}
 
       {/* Hero */}
-      <div className="bg-background dark:bg-[#111] border-b border-gray-100 dark:border-background/5">
-        <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="bg-background dark:bg-slate-950 border-b border-gray-100 dark:border-background/5">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-12">
           <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
             <Link href="/" className="hover:text-primary flex items-center gap-1 transition-colors">
               <Home className="w-3.5 h-3.5" /> Home
@@ -388,7 +388,7 @@ export default function KnowYourVehiclePage() {
       </div>
 
       {/* Characters intro banner */}
-      <div className="max-w-7xl mx-auto px-6 py-10">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-10">
         <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-[#111] dark:to-[#1a1a1a] rounded-3xl border border-gray-200 dark:border-background/10 p-8">
           <h2 className="text-center text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-primary-foreground mb-2">Your Maintenance Guide Characters</h2>
           <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-8">Click "Read More" on any component card to follow their conversation and learn about your Honda</p>
@@ -421,8 +421,8 @@ export default function KnowYourVehiclePage() {
       </div>
 
       {/* Critical Components Grid */}
-      <div className="bg-background dark:bg-[#111] py-20 border-y border-gray-100 dark:border-background/5">
-        <div className="max-w-7xl mx-auto px-6">
+      <div className="bg-background dark:bg-slate-950 py-20 border-y border-gray-100 dark:border-background/5">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
           <div className="text-center mb-14">
             <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-black text-gray-900 dark:text-primary-foreground mb-4">Critical Components to Monitor</h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
@@ -438,7 +438,7 @@ export default function KnowYourVehiclePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.08 }}
-                className="bg-background dark:bg-[#1A1A1A] rounded-3xl border border-gray-100 dark:border-background/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden group"
+                className="bg-background dark:bg-slate-900 rounded-3xl border border-gray-100 dark:border-background/5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden group"
               >
                 {/* Card image */}
                 {comp.cardImage ? (
@@ -498,7 +498,7 @@ export default function KnowYourVehiclePage() {
       </div>
 
       {/* CTA Section */}
-      <div className="max-w-7xl mx-auto px-6 py-20">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-gray-900 dark:bg-[#161616] rounded-3xl p-10 flex flex-col justify-between items-start relative overflow-hidden group">
             <div className="relative z-10">

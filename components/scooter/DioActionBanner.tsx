@@ -19,11 +19,11 @@ export default function DioActionBanner({ onBookNow, onTestRide }: DioActionBann
   const estimatedMonthlyEmi = Math.round((loanAmount * (1 + interestRate * (tenure / 12))) / tenure);
 
   return (
-    <section id="emi-calculator" className="py-20 px-4 sm:px-6 lg:px-8 bg-background border-t border-gray-200 dark:border-gray-800 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto space-y-16">
+    <section id="emi-calculator" className="py-20 px-4 sm:px-6 lg:px-8 bg-background border-t border-gray-200 dark:border-slate-800 transition-colors duration-300">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 space-y-16">
         
         {/* Interactive EMI Estimation Preview Box */}
-        <div className="bg-white dark:bg-[#141416] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-bl-full pointer-events-none" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
@@ -82,7 +82,7 @@ export default function DioActionBanner({ onBookNow, onTestRide }: DioActionBann
             </div>
 
             {/* Right: EMI Output Box */}
-            <div className="lg:col-span-5 bg-gray-50 dark:bg-[#1C1C20] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 text-center space-y-4">
+            <div className="lg:col-span-5 bg-gray-50 dark:bg-[#1C1C20] border border-gray-200 dark:border-slate-800 rounded-2xl p-6 text-center space-y-4">
               <span className="text-xs font-black uppercase tracking-widest text-gray-500 block">
                 Estimated Monthly EMI
               </span>
@@ -91,7 +91,7 @@ export default function DioActionBanner({ onBookNow, onTestRide }: DioActionBann
                 <span className="text-xs font-normal text-gray-500 block mt-1">/ month for {tenure} months</span>
               </div>
 
-              <div className="pt-2 border-t border-gray-200 dark:border-gray-800 text-xs space-y-1 text-gray-500">
+              <div className="pt-2 border-t border-gray-200 dark:border-slate-800 text-xs space-y-1 text-gray-500">
                 <div className="flex justify-between">
                   <span>Loan Principal:</span>
                   <span className="font-bold text-foreground">NPR {loanAmount.toLocaleString("en-IN")}</span>

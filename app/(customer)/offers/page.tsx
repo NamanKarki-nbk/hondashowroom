@@ -72,11 +72,11 @@ export default function OffersPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] pt-28 pb-24">
+    <div className="min-h-screen bg-background dark:bg-slate-950 pt-28 pb-24">
 
       {/* Hero */}
-      <div className="bg-background dark:bg-[#111] border-b border-gray-100 dark:border-background/5">
-        <div className="max-w-7xl mx-auto px-6 py-10">
+      <div className="bg-background dark:bg-slate-950 border-b border-gray-100 dark:border-background/5">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-10">
           <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
             <Link href="/" className="hover:text-primary flex items-center gap-1 transition-colors">
               <Home className="w-3.5 h-3.5" /> Home
@@ -102,7 +102,7 @@ export default function OffersPage() {
       </div>
 
       {/* Offers Grid */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-12">
         <h2 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-primary-foreground mb-8">Active Promotions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
           {OFFERS.map((offer) => {
@@ -110,7 +110,7 @@ export default function OffersPage() {
             return (
               <div
                 key={offer.id}
-                className={`relative bg-background dark:bg-[#111] rounded-2xl border overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl ${
+                className={`relative bg-background dark:bg-slate-950 rounded-2xl border overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl ${
                   offer.highlight
                     ? "border-primary shadow-lg shadow-red-100 dark:shadow-red-900/20"
                     : "border-gray-200 dark:border-background/8"
@@ -123,7 +123,7 @@ export default function OffersPage() {
                 )}
                 <div className={`p-6 ${offer.highlight ? "mt-7" : ""}`}>
                   <div className="flex items-start justify-between gap-4 mb-4">
-                    <div className="w-12 h-12 bg-background dark:bg-[#1A1A1A] rounded-xl flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-background dark:bg-slate-900 rounded-xl flex items-center justify-center flex-shrink-0">
                       <Icon className="w-6 h-6 text-primary" />
                     </div>
                     <span className={`${offer.badgeColor} text-primary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wider`}>
@@ -137,7 +137,7 @@ export default function OffersPage() {
 
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {offer.models.map((m) => (
-                      <span key={m} className="text-xs bg-[#e8dfd1] dark:bg-[#1A1A1A] text-gray-600 dark:text-gray-400 px-2.5 py-1 rounded-full">
+                      <span key={m} className="text-xs bg-[#e8dfd1] dark:bg-slate-900 text-gray-600 dark:text-gray-400 px-2.5 py-1 rounded-full">
                         {m}
                       </span>
                     ))}
@@ -162,7 +162,7 @@ export default function OffersPage() {
 
         {/* Application Form */}
         <div id="apply-form" className="max-w-2xl mx-auto">
-          <div className="bg-background dark:bg-[#111] rounded-3xl border border-gray-200 dark:border-background/8 p-8 shadow-xl">
+          <div className="bg-background dark:bg-slate-950 rounded-3xl border border-gray-200 dark:border-background/8 p-8 shadow-xl">
             {submitted ? (
               <div className="flex flex-col items-center text-center py-8">
                 <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-5">
@@ -191,14 +191,14 @@ export default function OffersPage() {
                       <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 block">Full Name *</label>
                       <div className="relative">
                         <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                        <input required value={form.name} onChange={e => setForm(f => ({...f, name: e.target.value}))} placeholder="Your name" className="w-full bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none text-gray-900 dark:text-primary-foreground text-sm" />
+                        <input required value={form.name} onChange={e => setForm(f => ({...f, name: e.target.value}))} placeholder="Your name" className="w-full bg-background dark:bg-slate-950 border border-gray-200 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none text-gray-900 dark:text-primary-foreground text-sm" />
                       </div>
                     </div>
                     <div>
                       <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 block">Phone Number *</label>
                       <div className="relative">
                         <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                        <input required value={form.phone} onChange={e => setForm(f => ({...f, phone: e.target.value}))} placeholder="98XXXXXXXX" className="w-full bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none text-gray-900 dark:text-primary-foreground text-sm" />
+                        <input required value={form.phone} onChange={e => setForm(f => ({...f, phone: e.target.value}))} placeholder="98XXXXXXXX" className="w-full bg-background dark:bg-slate-950 border border-gray-200 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none text-gray-900 dark:text-primary-foreground text-sm" />
                       </div>
                     </div>
                   </div>
@@ -206,14 +206,14 @@ export default function OffersPage() {
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 block">Email Address</label>
                     <div className="relative">
                       <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <input type="email" value={form.email} onChange={e => setForm(f => ({...f, email: e.target.value}))} placeholder="you@example.com" className="w-full bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none text-gray-900 dark:text-primary-foreground text-sm" />
+                      <input type="email" value={form.email} onChange={e => setForm(f => ({...f, email: e.target.value}))} placeholder="you@example.com" className="w-full bg-background dark:bg-slate-950 border border-gray-200 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none text-gray-900 dark:text-primary-foreground text-sm" />
                     </div>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 block">Model Interested In *</label>
                     <div className="relative">
                       <Car className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <select required value={form.model} onChange={e => setForm(f => ({...f, model: e.target.value}))} className="w-full bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none text-gray-900 dark:text-primary-foreground text-sm appearance-none">
+                      <select required value={form.model} onChange={e => setForm(f => ({...f, model: e.target.value}))} className="w-full bg-background dark:bg-slate-950 border border-gray-200 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none text-gray-900 dark:text-primary-foreground text-sm appearance-none">
                         <option value="">Select a model</option>
                         {MODELS.map(m => <option key={m} value={m}>{m}</option>)}
                       </select>
@@ -223,7 +223,7 @@ export default function OffersPage() {
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 block">Message / Offer You're Interested In</label>
                     <div className="relative">
                       <MessageSquare className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
-                      <textarea rows={3} value={form.message} onChange={e => setForm(f => ({...f, message: e.target.value}))} placeholder="Tell us which offer you'd like to avail..." className="w-full bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none text-gray-900 dark:text-primary-foreground text-sm resize-none" />
+                      <textarea rows={3} value={form.message} onChange={e => setForm(f => ({...f, message: e.target.value}))} placeholder="Tell us which offer you'd like to avail..." className="w-full bg-background dark:bg-slate-950 border border-gray-200 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-primary outline-none text-gray-900 dark:text-primary-foreground text-sm resize-none" />
                     </div>
                   </div>
                   <button type="submit" disabled={loading} className="w-full bg-primary hover:bg-primary-hover disabled:opacity-70 text-primary-foreground py-3.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2">

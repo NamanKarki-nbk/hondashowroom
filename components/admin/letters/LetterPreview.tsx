@@ -25,13 +25,13 @@ export default function LetterPreview({ docType, recipient, metadata }: LetterPr
   }, [docType, recipient, metadata]);
 
   return (
-    <div className="bg-[#E5E7EB] dark:bg-[#090909] rounded-2xl shadow-inner overflow-hidden h-full flex flex-col relative border border-gray-300 dark:border-zinc-800">
-      <div className="bg-white/80 dark:bg-black/50 backdrop-blur-md border-b border-gray-200 dark:border-zinc-800 px-5 py-4 flex justify-between items-center z-10">
+    <div className="bg-[#E5E7EB] dark:bg-[#090909] rounded-2xl shadow-inner overflow-hidden h-full flex flex-col relative border border-gray-300 dark:border-slate-800">
+      <div className="bg-white/80 dark:bg-black/50 backdrop-blur-md border-b border-gray-200 dark:border-slate-800 px-5 py-4 flex justify-between items-center z-10">
         <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]" />
           Live Document Preview
         </h3>
-        <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest bg-gray-100 dark:bg-zinc-900 px-3 py-1.5 rounded-full shadow-inner border border-gray-200 dark:border-zinc-800">Letter (8.5&quot; x 11&quot;)</span>
+        <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest bg-gray-100 dark:bg-slate-900 px-3 py-1.5 rounded-full shadow-inner border border-gray-200 dark:border-slate-800">Letter (8.5&quot; x 11&quot;)</span>
       </div>
       
       {/* Scrollable Letter Container */}
@@ -70,7 +70,7 @@ export default function LetterPreview({ docType, recipient, metadata }: LetterPr
                       <td className="border-none">
                         <div className="w-full text-center px-[1in] pb-[0.5in] pt-2 bg-white">
                           <p className="text-[13px] font-bold text-gray-800">
-                            <span className="text-[#B83227] font-black uppercase">SOCIETY ENTERPRISES PVT. LTD.</span>, Ganga Nagari, Damak-05, Jhapa, Nepal
+                            <span className="text-[#CC0000] font-black uppercase">SOCIETY ENTERPRISES PVT. LTD.</span>, Ganga Nagari, Damak-05, Jhapa, Nepal
                           </p>
                           <p className="text-[10px] font-semibold text-gray-700 mt-1">
                             <span className="font-bold text-black">Sales Division</span> Phone No.: 9801615250, 9801615251, E-mail: societyenterprises2024@gmail.com

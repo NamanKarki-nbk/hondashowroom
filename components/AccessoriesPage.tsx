@@ -28,7 +28,7 @@ export default function AccessoriesPage({ vehicleImageUrl, hotspots }: Accessori
 
   return (
     <section id="accessories" className="min-h-screen w-full flex flex-col justify-center items-center py-24 px-6 bg-gray-50 dark:bg-[#111112]">
-      <div className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center">
+      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 flex flex-col items-center justify-center">
         <div className="text-center mb-16">
           <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-black text-gray-900 dark:text-white mb-4">
             Explore Accessories
@@ -83,7 +83,7 @@ export default function AccessoriesPage({ vehicleImageUrl, hotspots }: Accessori
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                className="absolute z-20 bottom-0 md:bottom-auto md:right-0 bg-white dark:bg-[#1A1A1E] rounded-2xl shadow-2xl overflow-hidden w-full md:w-80 border border-gray-100 dark:border-gray-800 pointer-events-auto"
+                className="absolute z-20 bottom-0 md:bottom-auto md:right-0 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden w-full md:w-80 border border-gray-100 dark:border-slate-800 pointer-events-auto"
               >
                 <div className="relative h-48 bg-gray-100 dark:bg-gray-900 p-4">
                   <button 

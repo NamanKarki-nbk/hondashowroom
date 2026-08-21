@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ShoppingBag, ChevronRight } from "lucide-react";
+import { ShoppingBag, ChevronRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 const ACCESSORIES = [
@@ -38,29 +38,31 @@ const ACCESSORIES = [
 
 export default function AccessoriesSection() {
   return (
-    <section className="py-24 px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px] bg-background overflow-hidden">
-      <div className="w-full">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 xl:mb-24 gap-8">
+    <section className="py-24 w-full bg-[#FAF6F0] dark:bg-slate-950 transition-colors duration-300">
+      <div className="px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px]">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 xl:mb-20 gap-8">
           <div>
-            <div className="inline-flex items-center space-x-2 bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 rounded-full px-4 py-1.5 xl:px-6 xl:py-2 mb-6 text-sm xl:text-lg font-medium text-primary dark:text-red-400">
-              <ShoppingBag className="w-4 h-4 xl:w-5 xl:h-5" />
+            <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-full px-5 py-2 mb-6 text-sm font-bold tracking-widest uppercase text-primary">
+              <ShoppingBag className="w-4 h-4" />
               <span>Genuine Accessories</span>
             </div>
             
-            <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] uppercase">
-              EXPLORE <span className="text-primary">ACCESSORIES</span>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white tracking-tighter uppercase leading-[1.1]">
+              Explore <span className="text-primary">Accessories</span>
             </h2>
           </div>
           
-          <Link href="/accessories" className="inline-flex items-center space-x-2 text-gray-900 dark:text-white font-bold hover:text-primary dark:hover:text-primary transition-colors group text-lg xl:text-xl">
+          <Link href="/accessories" className="group flex items-center gap-4 text-gray-900 dark:text-white font-bold hover:text-primary dark:hover:text-primary transition-colors text-lg uppercase tracking-wider shrink-0">
             <span>View Catalog</span>
-            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-zinc-800 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all">
-              <ChevronRight className="w-5 h-5" />
+            <div className="w-12 h-12 rounded-full bg-white dark:bg-white/10 shadow-sm border border-gray-200 dark:border-white/10 flex items-center justify-center group-hover:bg-primary group-hover:border-primary group-hover:text-white transition-all duration-300 group-hover:scale-110">
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 xl:gap-12">
+        {/* 4-Column Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-8">
           {ACCESSORIES.map((item, idx) => (
             <motion.div
               key={item.id}
@@ -68,34 +70,40 @@ export default function AccessoriesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative bg-background rounded-3xl p-8 border border-gray-100 dark:border-zinc-800 hover:border-primary/30 dark:hover:border-primary/30 hover:shadow-2xl hover:shadow-red-900/5 transition-all duration-300 flex flex-col items-center text-center h-full"
+              className="group relative bg-white/70 dark:bg-white/5 backdrop-blur-xl rounded-[2rem] p-6 md:p-8 border border-gray-200/60 dark:border-white/10 hover:border-primary/50 dark:hover:border-primary/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(239,68,68,0.15)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.02)] transition-all duration-500 flex flex-col items-center text-center h-full hover:-translate-y-2 cursor-pointer"
             >
-              <div className="absolute top-6 left-6 bg-background px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-300 shadow-sm border border-gray-100 dark:border-zinc-700">
-                {item.tag}
+              {/* Badge */}
+              <div className="absolute top-6 left-6 z-10">
+                 <span className="bg-white/90 dark:bg-black/50 backdrop-blur-md text-gray-900 dark:text-white border border-gray-100 dark:border-white/10 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm">
+                   {item.tag}
+                 </span>
               </div>
               
-              <div className="h-48 xl:h-64 w-full flex items-center justify-center mb-8 relative">
+              {/* Product Preview Frame */}
+              <div className="h-48 xl:h-56 w-full flex items-center justify-center mb-8 relative mt-6">
                 {/* Background glow effect on hover */}
-                <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 rounded-full blur-2xl transition-colors duration-500" />
+                <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 rounded-full blur-2xl transition-colors duration-700 scale-75 group-hover:scale-100" />
                 
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src={item.image} 
                   alt={item.name}
-                  className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500 relative z-10"
+                  className="max-h-full max-w-full object-contain relative z-10 group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-700 drop-shadow-xl"
                   onError={(e) => {
-                    // Fallback to an inline SVG placeholder if image fails to load
-                    (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" fill="%23f3f4f6"><rect width="200" height="200" fill="%23e5e7eb"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="16" fill="%236b7280">Accessory</text></svg>';
+                    (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" fill="none"><rect width="200" height="200" rx="100" fill="%23f3f4f6" fill-opacity="0.1"/><path d="M100 130L65 80h70L100 130z" fill="%239ca3af" opacity="0.5"/></svg>';
                   }}
                 />
               </div>
               
-              <div className="mt-auto w-full">
-                <h3 className="text-xl md:text-2xl font-semibold xl:text-2xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors">{item.name}</h3>
-                <p className="text-gray-500 dark:text-gray-400 font-medium text-lg xl:text-xl">{item.price}</p>
+              {/* Product Info */}
+              <div className="mt-auto w-full flex flex-col items-center">
+                <h3 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors tracking-tight line-clamp-1">{item.name}</h3>
+                <p className="text-gray-500 dark:text-gray-400 font-bold tracking-widest text-lg mb-6">{item.price}</p>
                 
-                <button className="w-full mt-6 bg-background border-2 border-gray-200 dark:border-zinc-700 text-gray-900 dark:text-white font-bold py-3 rounded-xl hover:border-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300">
+                {/* Action Button */}
+                <button className="w-full flex items-center justify-center gap-2 bg-gray-100 dark:bg-white/10 group-hover:bg-primary text-gray-900 dark:text-white group-hover:text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-widest transition-all duration-300 shadow-sm group-hover:shadow-[0_4px_14px_0_rgba(239,68,68,0.39)]">
                   Add to Cart
+                  <ShoppingBag className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
                 </button>
               </div>
             </motion.div>

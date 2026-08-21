@@ -68,7 +68,7 @@ export default function VerifyOtpPage() {
     <main className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8 pt-28">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <ShieldCheck className="w-16 h-16 text-[#B83227]" />
+          <ShieldCheck className="w-16 h-16 text-[#CC0000]" />
         </div>
         <h2 className="mt-6 text-center text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-extrabold text-foreground uppercase tracking-tight">
           Verify Your Account
@@ -79,7 +79,7 @@ export default function VerifyOtpPage() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white dark:bg-[#1A1A1A] py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-200 dark:border-gray-800">
+        <div className="bg-white dark:bg-slate-900 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-200 dark:border-slate-800">
           <form className="space-y-6" onSubmit={handleVerify}>
             
             {error && (
@@ -112,7 +112,7 @@ export default function VerifyOtpPage() {
                   type="button"
                   onClick={handleRequestOtp}
                   disabled={loading || !identifier}
-                  className="whitespace-nowrap px-4 py-2 border border-transparent text-sm font-medium rounded-md text-[#B83227] bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40"
+                  className="whitespace-nowrap px-4 py-2 border border-transparent text-sm font-medium rounded-md text-[#CC0000] bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40"
                 >
                   Send OTP
                 </button>
@@ -131,7 +131,7 @@ export default function VerifyOtpPage() {
                   maxLength={6}
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#B83227] focus:border-[#B83227] sm:text-sm bg-white dark:bg-black text-center text-2xl md:text-3xl font-semibold tracking-widest"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#CC0000] focus:border-[#CC0000] sm:text-sm bg-white dark:bg-black text-center text-2xl md:text-3xl font-semibold tracking-widest"
                   placeholder="------"
                 />
               </div>
@@ -141,7 +141,7 @@ export default function VerifyOtpPage() {
               <button
                 type="submit"
                 disabled={loading || otp.length < 6}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#B83227] hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#B83227] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#CC0000] hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#CC0000] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Verify Account"}
               </button>

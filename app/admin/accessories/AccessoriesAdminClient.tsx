@@ -123,7 +123,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
         </button>
       </div>
 
-      <div className="bg-white dark:bg-[#1a1a1a] shadow rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-800">
+      <div className="bg-white dark:bg-[#1a1a1a] shadow rounded-lg overflow-hidden border border-gray-200 dark:border-slate-800">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -138,7 +138,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
             </thead>
             <tbody>
               {accessories.map((item) => (
-                <tr key={item.id} className="border-b border-gray-100 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800">
+                <tr key={item.id} className="border-b border-gray-100 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-zinc-800">
                   <td className="p-4">
                     <div className="w-16 h-12 relative bg-gray-100 dark:bg-gray-800 rounded">
                       <Image 
@@ -198,7 +198,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
       {isModalOpen && currentAccessory && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-[#1a1a1a] rounded-xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-zinc-800">
+            <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-slate-800">
               <h2 className="text-xl md:text-2xl font-semibold font-bold">
                 {currentAccessory.id ? "Edit Accessory" : "Add New Accessory"}
               </h2>
@@ -315,7 +315,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
                 </select>
               </div>
 
-              <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-gray-200 dark:border-zinc-800">
+              <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-gray-200 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={handleCloseModal}
