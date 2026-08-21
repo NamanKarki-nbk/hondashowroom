@@ -84,8 +84,13 @@ export default function Header() {
       <div className="w-full px-4 md:px-12 lg:px-16 h-20 flex items-center justify-between gap-2 md:gap-4 min-w-0">
         <div className="flex items-center min-w-0">
            <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden text-gray-800 dark:text-gray-200 p-1 md:p-2 mr-1 md:mr-2 flex-shrink-0"><Menu className="w-6 h-6" /></button>
-           <Link href="/" className="flex items-center group min-w-0">
-             <Logo className="h-5 md:h-8 max-w-[50vw] md:max-w-none group-hover:scale-105 transition-transform text-primary object-contain" />
+           <Link href="/" className="flex items-center group">
+             {/* Mobile Logo: Cropped to show only "HONDA The Power of Dreams" */}
+             <div className="md:hidden w-[150px] overflow-hidden flex items-center shrink-0">
+                <img src="/honda-logo.svg" alt="Honda" className="h-6 w-auto max-w-none object-left shrink-0" />
+             </div>
+             {/* Desktop Logo */}
+             <Logo className="hidden md:block h-7 lg:h-8 max-w-none group-hover:scale-105 transition-transform text-primary object-contain" />
            </Link>
         </div>
 
