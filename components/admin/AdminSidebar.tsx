@@ -25,7 +25,6 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
     { name: "Accessories", href: "/admin/accessories", icon: Package },
     { name: "POS", href: "/admin/pos", icon: ShoppingCart },
     { name: "Letters", href: "/admin/letters", icon: FileText },
-    { name: "Settings", href: "/admin/settings", icon: Settings },
   ];
 
   return (

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { TrendingUp, Package, DollarSign, Calendar as CalendarIcon, Users, ArrowUpRight } from "lucide-react";
 
 const KPI_DATA = [
@@ -102,9 +103,11 @@ export default function AdminDashboard() {
                  </div>
                ))}
             </div>
-            <button className="w-full mt-6 bg-gray-100 dark:bg-background/5 hover:bg-gray-200 dark:hover:bg-background/10 text-gray-900 dark:text-primary-foreground py-3 rounded-xl text-sm font-semibold transition-colors">
-               View Full Calendar
-            </button>
+            <Link href="/admin/sales-calendar" className="block mt-6">
+              <button className="w-full bg-gray-100 dark:bg-background/5 hover:bg-gray-200 dark:hover:bg-background/10 text-gray-900 dark:text-primary-foreground py-3 rounded-xl text-sm font-semibold transition-colors">
+                 View Full Calendar
+              </button>
+            </Link>
           </div>
 
         </div>

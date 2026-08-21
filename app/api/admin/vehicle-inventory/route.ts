@@ -8,9 +8,7 @@ export async function GET(req: Request) {
     const search = searchParams.get('search')?.toLowerCase() || '';
 
     // Fetch all vehicle inventory items
-    const inventoryItems = await prisma.vehicleInventory.findMany({
-      orderBy: { createdAt: 'desc' }
-    });
+    const inventoryItems = await prisma.vehicleInventory.findMany({});
 
     // Fetch vehicles to map prices
     const vehicles = await prisma.vehicle.findMany({
@@ -48,6 +46,29 @@ export async function GET(req: Request) {
         item.engineNo.toLowerCase().includes(search) ||
         (item.indexNo && item.indexNo.toLowerCase().includes(search))
       );
+    });
+
+    // Custom sort to handle alphanumeric indexNo like 'D1-P1', 'D1-P10', 'D1-P2' correctly
+    filteredItems.sort((a, b) => {
+      if (!a.indexNo && !b.indexNo) return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      if (!a.indexNo) return 1;
+      if (!b.indexNo) return -1;
+
+      const parseIndex = (idx: string) => {
+        const match = idx.match(/^([A-Za-z0-9]+)-P(\d+)$/i);
+        if (match) {
+          return { prefix: match[1], num: parseInt(match[2], 10) };
+        }
+        return { prefix: idx, num: 0 };
+      };
+
+      const parsedA = parseIndex(a.indexNo);
+      const parsedB = parseIndex(b.indexNo);
+
+      if (parsedA.prefix === parsedB.prefix) {
+        return parsedA.num - parsedB.num;
+      }
+      return parsedA.prefix.localeCompare(parsedB.prefix);
     });
 
     return NextResponse.json(filteredItems);

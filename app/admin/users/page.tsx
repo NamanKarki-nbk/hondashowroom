@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { Users, Mail, Phone, Calendar, Search, ShieldCheck, AlertCircle } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export const metadata = {
   title: "Admin | User Management",
@@ -104,7 +105,9 @@ export default async function AdminUsersPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <button className="text-sm text-primary hover:text-white transition-colors font-medium">View Details</button>
+                      <Link href={`/admin/users/${user.id}`}>
+                        <button className="text-sm text-primary hover:text-white transition-colors font-medium">View Details</button>
+                      </Link>
                     </td>
                   </tr>
                 ))}
