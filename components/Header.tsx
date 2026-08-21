@@ -55,14 +55,14 @@ export default function Header() {
 
   return (
     <>
-      <div className="fixed top-2 md:top-4 left-0 w-full z-50 flex justify-center px-4 md:px-8 pointer-events-none">
+      <div className="fixed top-2 md:top-4 left-0 w-full z-50 flex justify-center px-2 sm:px-4 md:px-8 pointer-events-none">
         <header className="w-full max-w-[1600px] bg-white/75 dark:bg-black/50 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.05)] pointer-events-auto transition-all duration-300">
-          <div className="h-16 flex items-center justify-between px-6 xl:px-8">
+          <div className="h-16 flex items-center justify-between px-3 sm:px-6 xl:px-8">
             {/* Logo */}
-            <div className="flex items-center min-w-0 shrink-0">
+            <div className="flex items-center min-w-0 shrink">
               <Link href="/" className="flex items-center group">
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Logo className="h-6 md:h-7 lg:h-8 max-w-none text-primary object-contain" />
+                  <Logo className="w-[180px] sm:w-[220px] md:w-auto h-auto md:h-7 lg:h-8 max-w-full text-primary object-contain" />
                 </motion.div>
               </Link>
             </div>
