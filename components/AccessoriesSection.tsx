@@ -42,7 +42,7 @@ export default function AccessoriesSection() {
       <div className="w-full">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 xl:mb-24 gap-8">
           <div>
-            <div className="inline-flex items-center space-x-2 bg-red-50 border border-red-100 rounded-full px-4 py-1.5 xl:px-6 xl:py-2 mb-6 text-sm xl:text-lg font-medium text-primary">
+            <div className="inline-flex items-center space-x-2 bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 rounded-full px-4 py-1.5 xl:px-6 xl:py-2 mb-6 text-sm xl:text-lg font-medium text-primary dark:text-red-400">
               <ShoppingBag className="w-4 h-4 xl:w-5 xl:h-5" />
               <span>Genuine Accessories</span>
             </div>
@@ -52,9 +52,9 @@ export default function AccessoriesSection() {
             </h2>
           </div>
           
-          <Link href="/accessories" className="inline-flex items-center space-x-2 text-gray-900 font-bold hover:text-primary transition-colors group text-lg xl:text-xl">
+          <Link href="/accessories" className="inline-flex items-center space-x-2 text-gray-900 dark:text-white font-bold hover:text-primary dark:hover:text-primary transition-colors group text-lg xl:text-xl">
             <span>View Catalog</span>
-            <div className="w-10 h-10 rounded-full bg-[#e8dfd1] flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-zinc-800 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all">
               <ChevronRight className="w-5 h-5" />
             </div>
           </Link>
@@ -68,9 +68,9 @@ export default function AccessoriesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative bg-background rounded-3xl p-8 border border-gray-100 hover:border-primary/30 hover:shadow-2xl hover:shadow-red-900/5 transition-all duration-300 flex flex-col items-center text-center h-full"
+              className="group relative bg-background rounded-3xl p-8 border border-gray-100 dark:border-zinc-800 hover:border-primary/30 dark:hover:border-primary/30 hover:shadow-2xl hover:shadow-red-900/5 transition-all duration-300 flex flex-col items-center text-center h-full"
             >
-              <div className="absolute top-6 left-6 bg-background px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-gray-600 shadow-sm border border-gray-100">
+              <div className="absolute top-6 left-6 bg-background px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-300 shadow-sm border border-gray-100 dark:border-zinc-700">
                 {item.tag}
               </div>
               
@@ -91,10 +91,10 @@ export default function AccessoriesSection() {
               </div>
               
               <div className="mt-auto w-full">
-                <h3 className="text-xl md:text-2xl font-semibold xl:text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">{item.name}</h3>
-                <p className="text-gray-500 font-medium text-lg xl:text-xl">{item.price}</p>
+                <h3 className="text-xl md:text-2xl font-semibold xl:text-2xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors">{item.name}</h3>
+                <p className="text-gray-500 dark:text-gray-400 font-medium text-lg xl:text-xl">{item.price}</p>
                 
-                <button className="w-full mt-6 bg-background border-2 border-gray-200 text-gray-900 font-bold py-3 rounded-xl hover:border-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300">
+                <button className="w-full mt-6 bg-background border-2 border-gray-200 dark:border-zinc-700 text-gray-900 dark:text-white font-bold py-3 rounded-xl hover:border-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300">
                   Add to Cart
                 </button>
               </div>

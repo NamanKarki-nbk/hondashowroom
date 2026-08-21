@@ -96,17 +96,17 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
     <section className="py-12 md:py-16 lg:py-24 px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px] relative overflow-hidden min-h-[500px]">
       <div className="w-full mx-auto">
         <div className="text-center mb-12 px-6">
-          <h2 className="text-2xl md:text-3xl font-semibold sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight uppercase mb-8">
+          <h2 className="text-2xl md:text-3xl font-semibold sm:text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight uppercase mb-8">
             Choose Your Product
           </h2>
 
           {/* Tabs */}
-          <div className="flex flex-wrap justify-center gap-4 border-b border-gray-200 pb-4">
+          <div className="flex flex-wrap justify-center gap-4 border-b border-gray-200 dark:border-zinc-800 pb-4">
             {TABS.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`text-lg font-bold px-4 py-2 transition-colors relative ${activeTab === tab.id ? "text-primary" : "text-gray-500 hover:text-gray-900"}`}
+                className={`text-lg font-bold px-4 py-2 transition-colors relative ${activeTab === tab.id ? "text-primary" : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"}`}
               >
                 {tab.label}
                 {activeTab === tab.id && (
