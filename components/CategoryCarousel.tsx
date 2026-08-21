@@ -21,7 +21,7 @@ interface CategoryCarouselProps {
 
 export default function CategoryCarousel({ products }: CategoryCarouselProps) {
   const scooterOrder = ["dio bs6 110", "dio bs6 125"];
-  const motorcycleOrder = ["cb shine bs6", "honda shine bs6", "sp shine bs6", "nx 200", "hornet"];
+  const motorcycleOrder = ["honda shine", "honda sp", "hornet", "nx 200"];
 
   const getSortIndex = (name: string, orderArray: string[]) => {
     const lowerName = name.toLowerCase();

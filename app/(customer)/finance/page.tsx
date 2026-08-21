@@ -63,6 +63,32 @@ export default async function FinancePage() {
     };
   });
 
+  const financeOrder = [
+    "dio bs6 std",
+    "dio bs6 dlx",
+    "dio 125 std",
+    "dio 125 dlx smart",
+    "shine 125 drs bs6",
+    "shine 125 dss bs6",
+    "sp 125 drs bs6",
+    "sp 125 dss bs6",
+    "hornet",
+    "nx 200"
+  ];
+
+  modelsData.sort((a, b) => {
+    const aLower = a.modelName.toLowerCase();
+    const bLower = b.modelName.toLowerCase();
+    
+    const aIndex = financeOrder.findIndex(o => aLower.includes(o));
+    const bIndex = financeOrder.findIndex(o => bLower.includes(o));
+    
+    const aSort = aIndex === -1 ? 999 : aIndex;
+    const bSort = bIndex === -1 ? 999 : bIndex;
+    
+    return aSort - bSort;
+  });
+
   return (
     <main className="min-h-screen bg-background dark:bg-[#0B0B0C] py-24 text-gray-900 dark:text-primary-foreground transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6">
