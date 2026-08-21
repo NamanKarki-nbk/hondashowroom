@@ -55,9 +55,10 @@ export default function Header() {
   if (!mounted) return null;
 
   return (
-    <header className="w-full bg-background /95 backdrop-blur supports-[backdrop-filter]:bg-background/95 fixed top-0 z-50 shadow-md dark:shadow-white/5 transition-colors duration-300">
+    <>
+    <header className="w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/95 fixed top-0 z-50 shadow-md dark:shadow-white/5 transition-colors duration-300">
       {/* Top Red Bar (from honda.com.np) */}
-      <div className="w-full bg-primary text-primary-foreground text-sm py-2">
+      <div className="hidden md:block w-full bg-primary text-primary-foreground text-sm py-2">
          <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
             <div className="hidden md:flex gap-4 font-semibold">
                <Link href="/finance" className="hover:underline">Honda Finance</Link>
@@ -142,6 +143,8 @@ export default function Header() {
         </div>
       </div>
       
+    </header>
+    
       {/* Mobile Drawer */}
       <div className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
@@ -177,6 +180,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-    </header>
+    </>
   );
 }
