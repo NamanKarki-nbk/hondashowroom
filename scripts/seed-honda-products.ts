@@ -7,14 +7,7 @@ const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
-export const HONDA_VEHICLE_MODELS = [
-  { name: "Honda Dio BS6", cc: 110, price: 230000, baseInsurance: 1500, category: "SCOOTER", colors: ["#ff0000", "#0000ff"] },
-  { name: "Honda Grazia BS6", cc: 125, price: 245000, baseInsurance: 1600, category: "SCOOTER", colors: ["#ffcc00", "#000000"] },
-  { name: "Honda Shine SP", cc: 125, price: 250000, baseInsurance: 1600, category: "MOTORCYCLE", colors: ["#000000", "#ff0000"] },
-  { name: "Honda Hornet 2.0", cc: 184, price: 360000, baseInsurance: 2000, category: "MOTORCYCLE", colors: ["#ff0000", "#0000ff"] },
-  { name: "Honda XR 150L", cc: 150, price: 650000, baseInsurance: 2500, category: "MOTORCYCLE", colors: ["#ff0000"] },
-  { name: "Honda CRF 300L", cc: 300, price: 1950000, baseInsurance: 4500, category: "MOTORCYCLE", colors: ["#ff0000"] },
-];
+export const HONDA_VEHICLE_MODELS: any[] = [];
 const bikesAndScooters = HONDA_VEHICLE_MODELS;
 
 const serviceCharges = [
