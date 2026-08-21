@@ -125,10 +125,10 @@ export default function Header() {
               </form>
 
               {/* Auth Icon */}
-              <div className="hidden md:block relative group py-2">
-                <Link href={isLoggedIn ? "/profile" : "/login"} className="p-2 rounded-full bg-gray-100/50 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-primary transition-colors flex items-center justify-center">
-                   <User className="w-5 h-5" />
-                </Link>
+              <div className={`hidden md:block relative py-2 ${isLoggedIn ? 'group' : ''}`}>
+                <button onClick={() => router.push(isLoggedIn ? "/profile" : "/login")} className="p-2 rounded-full bg-gray-100/50 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-primary transition-colors flex items-center justify-center cursor-pointer">
+                   <User className="w-5 h-5 pointer-events-none" />
+                </button>
                 {/* Auth Dropdown */}
                 {isLoggedIn && (
                   <div className="absolute top-[90%] right-0 pt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
