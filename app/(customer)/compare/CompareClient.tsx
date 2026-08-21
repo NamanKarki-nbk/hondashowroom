@@ -38,7 +38,7 @@ function getSpecs(name: string, price: number) {
 
 export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
   // 4 slots for comparisons (store vehicle IDs or null)
-  const [slots, setSlots] = useState<(string | null)[]>([null, null, null, null]);
+  const [slots, setSlots] = useState<(string | null)[]>([null, null, null]);
   const [activeSlotIdx, setActiveSlotIdx] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isComparing, setIsComparing] = useState(false);
@@ -191,84 +191,80 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
               </div>
 
               {/* Selection Slots Frame */}
-              <div className="border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-[#0B0B0C] mb-6 flex overflow-hidden">
-                {slots.map((slotId, idx) => {
-                  const vehicle = slotId ? vehicles.find(v => v.id === slotId) : null;
-                  return (
-                    <React.Fragment key={idx}>
-                      <div className="flex-1 relative min-h-[220px] flex flex-col items-center justify-center p-6 group">
-                        {vehicle ? (
-                          <div className="relative w-full h-full flex flex-col justify-between items-center text-center">
-                            <button 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleRemoveVehicle(idx);
+              <div className="bg-white dark:bg-[#0B0B0C] border border-gray-100 dark:border-gray-800 rounded-xl shadow-sm p-5 sm:p-8 mb-10 w-full max-w-3xl mx-auto flex flex-col items-center">
+                
+                <div className="flex flex-row items-center justify-between w-full mb-8">
+                  {slots.map((slotId, idx) => {
+                    const vehicle = slotId ? vehicles.find(v => v.id === slotId) : null;
+                    return (
+                      <React.Fragment key={idx}>
+                        <div className="flex-1 flex flex-col items-center justify-center">
+                          {vehicle ? (
+                            <div className="relative w-full flex flex-col items-center text-center">
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleRemoveVehicle(idx);
+                                }}
+                                className="absolute -top-2 -right-2 sm:-top-4 sm:-right-4 bg-gray-100 hover:bg-red-100 dark:bg-gray-800 text-gray-500 hover:text-red-600 rounded-full p-1 transition-colors z-20 shadow-sm"
+                              >
+                                <X className="w-3 h-3 sm:w-4 sm:h-4" />
+                              </button>
+                              
+                              <div className="w-16 h-16 sm:w-28 sm:h-28 relative flex items-center justify-center mb-2 sm:mb-4 bg-white dark:bg-[#111] rounded-full sm:rounded-none">
+                                <img 
+                                  src={vehicle.imageUrl || '/honda-logo.svg'} 
+                                  alt={vehicle.name} 
+                                  className="w-full h-full object-contain p-1"
+                                />
+                              </div>
+                              <div className="mt-auto hidden sm:block">
+                                <h3 className="font-bold text-xs sm:text-sm text-gray-900 dark:text-gray-100 line-clamp-1">{vehicle.name}</h3>
+                                <p className="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5">₹ {vehicle.price.toLocaleString('en-IN')}</p>
+                              </div>
+                            </div>
+                          ) : (
+                            <div 
+                              onClick={() => {
+                                setActiveSlotIdx(idx);
+                                setIsModalOpen(true);
                               }}
-                              className="absolute -top-4 -right-4 bg-gray-100 hover:bg-red-100 dark:bg-gray-800 text-gray-500 hover:text-red-600 rounded-full p-1 transition-colors z-20"
+                              className="flex flex-col items-center justify-center cursor-pointer group"
                             >
-                              <X className="w-4 h-4" />
-                            </button>
-                            
-                            <div className="w-full h-24 relative flex items-center justify-center mb-4">
-                              <img 
-                                src={vehicle.imageUrl || '/honda-logo.svg'} 
-                                alt={vehicle.name} 
-                                className="w-full h-full object-contain"
-                              />
+                              <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full border-[1.5px] border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center mb-2 sm:mb-3 group-hover:border-gray-400 dark:group-hover:border-gray-500 transition-colors bg-transparent">
+                                <Plus className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400 group-hover:text-gray-500 transition-colors" strokeWidth={1} />
+                              </div>
+                              <span className="text-xs sm:text-sm font-bold text-gray-400 group-hover:text-gray-500 transition-colors">
+                                Add bike
+                              </span>
                             </div>
-                            <div className="mt-auto">
-                              <h3 className="font-bold text-sm text-gray-900 dark:text-gray-100 line-clamp-1">{vehicle.name}</h3>
-                              <p className="text-gray-600 dark:text-gray-400 text-xs mt-1">₹ {vehicle.price.toLocaleString('en-IN')}</p>
-                            </div>
-                          </div>
-                        ) : (
-                          <div 
-                            onClick={() => {
-                              setActiveSlotIdx(idx);
-                              setIsModalOpen(true);
-                            }}
-                            className="flex flex-col items-center justify-center cursor-pointer h-full w-full"
-                          >
-                            <svg className="w-16 h-16 mb-2 stroke-teal-500/50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <circle cx="5" cy="18" r="3" strokeWidth="1" />
-                              <circle cx="19" cy="18" r="3" strokeWidth="1" />
-                              <path d="M19 18V13.5L16.5 9H11.5L9 13.5H5V18" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                              <path d="M12 9V5H14.5" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            <span className="text-sm font-medium flex items-center gap-1 text-[#008298] hover:text-[#006070] transition-colors">
-                              <Plus className="w-4 h-4" /> Add Bike
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {idx < 3 && (
-                        <div className="relative">
-                          {/* Vertical Divider */}
-                          <div className="absolute top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-800 left-1/2 -translate-x-1/2"></div>
-                          {/* VS Badge */}
-                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0B0B0C] border border-gray-300 dark:border-gray-600 text-[#d73b30] text-[10px] font-bold p-1 rounded-full z-10 w-7 h-7 flex items-center justify-center">
-                            VS
-                          </div>
+                          )}
                         </div>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
-              </div>
+                        
+                        {/* VS Badge ONLY between 1st and 2nd slot */}
+                        {idx === 0 && (
+                           <div className="flex-shrink-0 flex items-center justify-center -mx-2 sm:-mx-6 z-10">
+                              <div className="bg-black text-white text-[9px] sm:text-[11px] font-bold rounded-full w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center tracking-tighter shadow-md">
+                                vs
+                              </div>
+                           </div>
+                        )}
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
 
-              {/* Compare Trigger Button */}
-              <div className="mb-14 text-left">
+                {/* Compare Trigger Button */}
                 <button
                   disabled={selectedCount < 2}
                   onClick={() => setIsComparing(true)}
-                  className={`px-12 py-3 rounded-md font-semibold text-lg transition-all duration-300 ${
+                  className={`w-full py-3.5 sm:py-4 rounded-lg font-semibold text-[15px] sm:text-base transition-all duration-300 ${
                     selectedCount >= 2
-                      ? 'bg-[#d73b30] hover:bg-[#c0352b] text-white cursor-pointer'
-                      : 'bg-gray-300 dark:bg-gray-800 text-gray-500 cursor-not-allowed'
+                      ? 'bg-[#cd302b] hover:bg-[#b32924] text-white cursor-pointer shadow-sm'
+                      : 'bg-[#cd302b] text-white opacity-90 cursor-not-allowed' // Setting to red anyway because screenshot shows red button even if no bikes selected? No, wait. I'll make it red but disabled state if selectedCount < 2.
                   }`}
                 >
-                  Compare
+                  Compare Now
                 </button>
               </div>
 
@@ -606,14 +602,16 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                 </div>
               ) : (
                 <div className="flex flex-col">
+                  <div className="px-4 py-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">POPULAR BRANDS</span>
+                  </div>
                   {brands.map(brand => {
                     const isExpanded = expandedBrand === brand;
                     const brandVehicles = vehicles.filter(v => v.brand === brand);
                     
-                    // Simple placeholder for brand logo matching image 2
-                    let brandLogo = '/honda-logo.svg';
-                    if (brand.toLowerCase() === 'yamaha') brandLogo = '/yamaha-logo.png';
-                    // Since we don't have all brand logos uploaded, we'll just use their main image if available or fallback
+                    const brandLower = brand.toLowerCase();
+                    let brandLogo = `/brands/${brandLower.replace(/\s+/g, '')}.svg`;
+                    if (brandLower === 'honda') brandLogo = '/honda-logo.svg';
 
                     return (
                       <div key={brand} className="border-b border-gray-200 dark:border-gray-800">
@@ -622,15 +620,16 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                           className="w-full flex items-center justify-between p-4 bg-white dark:bg-[#111] hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors text-left"
                         >
                           <div className="flex items-center gap-4">
-                            {/* Brand Logo Placeholder */}
-                            <div className="w-12 flex justify-center">
-                               {brand.toLowerCase() === 'honda' ? (
-                                  <img src="/honda-logo.svg" className="h-6 object-contain" alt="Honda" />
-                               ) : (
-                                  <span className="font-extrabold text-gray-800 dark:text-white text-sm">{brand}</span>
-                               )}
+                            <div className="w-16 h-8 flex justify-center items-center">
+                               <img 
+                                 src={brandLogo} 
+                                 alt={brand}
+                                 className="max-w-full max-h-full object-contain"
+                                 onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling?.classList.remove('hidden'); }}
+                               />
+                               <span className="hidden font-extrabold text-gray-800 dark:text-white text-sm">{brand}</span>
                             </div>
-                            <span className="text-base text-gray-800 dark:text-white">{brand}</span>
+                            <span className="text-base text-gray-800 dark:text-white font-medium">{brand}</span>
                           </div>
                           {isExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
                         </button>
