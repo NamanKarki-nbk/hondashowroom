@@ -75,15 +75,15 @@ export default function ProductTable() {
   };
 
   return (
-    <div className="bg-white dark:bg-[#111] rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden shadow-sm">
+    <div className="bg-white dark:bg-[#111] rounded-xl border border-gray-200 dark:border-zinc-800 overflow-hidden shadow-sm">
       {/* Toolbar */}
-      <div className="p-4 border-b border-gray-200 dark:border-white/10 flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="p-4 border-b border-gray-200 dark:border-zinc-800 flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="flex items-center gap-2 w-full md:w-auto">
           <Filter className="w-5 h-5 text-gray-500" />
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#B83227] w-full md:w-48"
+            className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#B83227] w-full md:w-48"
           >
             <option value="ALL">All Categories</option>
             <option value="MOTORCYCLE">Motorcycles</option>
@@ -100,7 +100,7 @@ export default function ProductTable() {
             placeholder="Search products..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white rounded-lg pl-9 pr-4 py-2 outline-none focus:ring-2 focus:ring-[#B83227]"
+            className="w-full bg-gray-50 dark:bg-black border border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-white rounded-lg pl-9 pr-4 py-2 outline-none focus:ring-2 focus:ring-[#B83227]"
           />
         </div>
       </div>
@@ -114,7 +114,7 @@ export default function ProductTable() {
               <th className="px-4 py-3">Category</th>
               <th className="px-4 py-3">Price (NPR)</th>
               <th className="px-4 py-3">Stock Status</th>
-              <th className="px-4 py-3 text-right">Actions</th>
+              <th className="px-4 py-3 text-right sticky right-0 bg-gray-50 dark:bg-zinc-900 border-l border-gray-200 dark:border-zinc-800 z-10">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -132,7 +132,7 @@ export default function ProductTable() {
               </tr>
             ) : (
               products.map((p) => (
-                <tr key={p.id} className="border-b border-gray-200 dark:border-white/10 last:border-0 hover:bg-gray-50 dark:hover:bg-white/5">
+                <tr key={p.id} className="group border-b border-gray-200 dark:border-zinc-800 last:border-0 hover:bg-gray-50 dark:hover:bg-zinc-900">
                   <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">
                     {p.name}
                     {p.category === "SPARE_PART" && p.specs?.partNumber && (
@@ -172,7 +172,7 @@ export default function ProductTable() {
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-3 text-right sticky right-0 bg-white dark:bg-zinc-950 border-l border-gray-200 dark:border-zinc-800 z-10 transition-colors group-hover:bg-gray-50 dark:group-hover:bg-zinc-900">
                     {editingId === p.id ? (
                       <div className="flex items-center justify-end gap-2">
                         <button onClick={() => handleSave(p.id)} className="p-1.5 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg">
@@ -183,7 +183,7 @@ export default function ProductTable() {
                         </button>
                       </div>
                     ) : (
-                      <button onClick={() => handleEditClick(p)} className="p-1.5 text-gray-500 hover:text-[#B83227] hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors">
+                      <button onClick={() => handleEditClick(p)} className="p-1.5 text-gray-500 hover:text-[#cd302b] hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors">
                         <Edit2 className="w-4 h-4" />
                       </button>
                     )}

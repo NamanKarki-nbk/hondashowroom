@@ -31,7 +31,7 @@ interface VehicleCardProps {
 export default function VehicleCard({ title, priceNpr, cc, slug, category, imageUrl, colors, onQuoteClick, onBookClick }: VehicleCardProps) {
   return (
     <Link href={`/vehicles/${slug}`} className="block group">
-      <div className="bg-background border border-gray-200 rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300 relative group-hover:-translate-y-1">
+      <div className="bg-background border border-gray-200 dark:border-zinc-800 rounded-3xl overflow-hidden hover:shadow-2xl dark:hover:shadow-zinc-900/50 transition-all duration-300 relative group-hover:-translate-y-1">
         
         {/* Top Badge */}
         <div className="absolute top-4 left-4 z-10">
@@ -42,7 +42,7 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
 
         {/* Image Container */}
         <div className="h-64 relative bg-background flex items-center justify-center p-6 overflow-hidden">
-           <div className="absolute inset-0 bg-gradient-to-t from-gray-100 to-transparent opacity-50"></div>
+           <div className="absolute inset-0 bg-gradient-to-t from-gray-100 dark:from-zinc-900/50 to-transparent opacity-50"></div>
            {imageUrl ? (
              // eslint-disable-next-line @next/next/no-img-element
              <img 
@@ -59,8 +59,8 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
         {/* Content */}
         <div className="p-6">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-1">{title}</h3>
-            {cc && <span className="text-xs font-medium text-gray-500 bg-[#e8dfd1] px-2 py-1 rounded-md">{cc} cc</span>}
+            <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary transition-colors line-clamp-1">{title}</h3>
+            {cc && <span className="text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-zinc-800 px-2 py-1 rounded-md border border-gray-200 dark:border-zinc-700">{cc} cc</span>}
           </div>
           
           {/* Color Picker / Swatches */}
@@ -94,7 +94,7 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
           <div className="mt-4 flex items-center justify-between">
              <div>
                 <p className="text-xs text-gray-500 uppercase font-semibold">Starting at</p>
-                <p className="text-lg font-black text-gray-900">
+                <p className="text-lg font-black text-gray-900 dark:text-white">
                   Rs. {priceNpr.toLocaleString('en-IN')}
                 </p>
              </div>

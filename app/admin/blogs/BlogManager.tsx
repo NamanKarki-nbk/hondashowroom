@@ -114,7 +114,7 @@ export default function BlogManager() {
   );
 
   return (
-    <div className="bg-white dark:bg-[#1A1A1E] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+    <div className="bg-white dark:bg-[#1A1A1E] rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
           <h2 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -131,7 +131,7 @@ export default function BlogManager() {
               placeholder="Search blogs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-gray-800 rounded-xl text-sm focus:ring-2 focus:ring-primary outline-none"
+              className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-xl text-sm focus:ring-2 focus:ring-primary outline-none"
             />
           </div>
           <button
@@ -145,7 +145,7 @@ export default function BlogManager() {
 
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm whitespace-nowrap">
-          <thead className="text-gray-500 bg-gray-50 dark:bg-[#0B0B0C]/50 border-y border-gray-100 dark:border-gray-800">
+          <thead className="text-gray-500 bg-gray-50 dark:bg-zinc-950/50 border-y border-gray-100 dark:border-zinc-800">
             <tr>
               <th className="px-4 py-3 font-medium">Post</th>
               <th className="px-4 py-3 font-medium">Author</th>
@@ -209,7 +209,7 @@ export default function BlogManager() {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-white dark:bg-[#141416] w-full max-w-2xl rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-            <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
+            <div className="px-6 py-4 border-b border-gray-100 dark:border-zinc-800 flex justify-between items-center">
               <h3 className="font-bold text-lg text-gray-900 dark:text-white">
                 {editingId ? 'Edit Post' : 'Add New Post'}
               </h3>
@@ -226,7 +226,7 @@ export default function BlogManager() {
                   value={formData.title}
                   onChange={e => setFormData({...formData, title: e.target.value})}
                   placeholder="Post Title..."
-                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-gray-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
+                  className="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
                 />
               </div>
 
@@ -238,7 +238,7 @@ export default function BlogManager() {
                     value={formData.author}
                     onChange={e => setFormData({...formData, author: e.target.value})}
                     placeholder="e.g. Naman"
-                    className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-gray-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
+                    className="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
                   />
                 </div>
                 <div>
@@ -248,7 +248,7 @@ export default function BlogManager() {
                     value={formData.imageUrl}
                     onChange={e => setFormData({...formData, imageUrl: e.target.value})}
                     placeholder="https://..."
-                    className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-gray-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
+                    className="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
                   />
                 </div>
               </div>
@@ -261,7 +261,7 @@ export default function BlogManager() {
                   onChange={e => setFormData({...formData, content: e.target.value})}
                   placeholder="Write your article here..."
                   rows={8}
-                  className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-200 dark:border-gray-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none resize-y"
+                  className="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none resize-y"
                 />
               </div>
 

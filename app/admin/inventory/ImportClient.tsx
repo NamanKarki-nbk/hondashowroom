@@ -43,7 +43,7 @@ export default function InventoryImport() {
   };
 
   return (
-    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] text-gray-100 p-8 selection:bg-primary selection:text-primary-foreground">
+    <div className="min-h-screen bg-background dark:bg-zinc-950 text-gray-100 p-8 selection:bg-primary selection:text-primary-foreground">
       <div className="max-w-5xl mx-auto space-y-8">
         
         <header>

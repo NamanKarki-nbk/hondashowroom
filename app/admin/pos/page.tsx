@@ -24,7 +24,7 @@ export default function AdminPOS() {
   const commission = activeVehicle ? Math.round(activeVehicle.price * 0.015) : 0;
 
   return (
-    <div className="min-h-screen bg-background dark:bg-[#0B0B0C] text-gray-100 p-8">
+    <div className="min-h-screen bg-background dark:bg-zinc-950 text-gray-100 p-8">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-extrabold text-primary-foreground mb-8">Point of Sale (POS) Terminal</h1>
 

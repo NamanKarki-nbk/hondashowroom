@@ -49,7 +49,7 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
         `}
       >
         {/* Sidebar Header */}
-        <div className="h-20 flex items-center justify-between px-4 border-b border-white/10 shrink-0">
+        <div className="h-20 flex items-center justify-between px-4 border-b border-zinc-800 shrink-0">
           <Link href="/admin/dashboard" className={`flex items-center gap-3 overflow-hidden ${isCollapsed ? 'justify-center w-full' : ''}`}>
             <Logo className="h-8 text-primary shrink-0" />
             {!isCollapsed && <span className="font-black text-xl md:text-2xl font-semibold uppercase tracking-tight whitespace-nowrap">Admin</span>}
@@ -90,7 +90,7 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-4 border-t border-white/10 shrink-0 flex flex-col gap-2">
+        <div className="p-4 border-t border-zinc-800 shrink-0 flex flex-col gap-2">
           {!isCollapsed && (
             <div className="px-3 py-2 text-xs text-gray-500 font-medium">
               Society Enterprises

@@ -51,7 +51,6 @@ export default function Header() {
     router.refresh();
   };
 
-  if (pathname?.includes('/vehicles/') || pathname?.includes('/scooter/')) return null;
   if (!mounted) return null;
 
   return (

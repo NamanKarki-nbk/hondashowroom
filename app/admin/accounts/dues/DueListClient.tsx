@@ -58,7 +58,7 @@ export default function DueListClient({ initialDues }: { initialDues: any[] }) {
     }
   };
 
-  const inputClasses = "w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 text-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all";
+  const inputClasses = "w-full bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all";
 
   return (
     <div>
@@ -70,7 +70,7 @@ export default function DueListClient({ initialDues }: { initialDues: any[] }) {
           placeholder="Search by customer name, phone, or invoice no..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl pl-12 pr-4 py-4 text-foreground focus:outline-none focus:border-red-500 shadow-sm"
+          className="w-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-zinc-500 focus:outline-none focus:border-red-500 shadow-sm"
         />
       </div>
 
@@ -85,10 +85,10 @@ export default function DueListClient({ initialDues }: { initialDues: any[] }) {
                 <th className="py-4 px-6 text-xs font-bold uppercase tracking-widest text-muted-foreground">Vehicle</th>
                 <th className="py-4 px-6 text-xs font-bold uppercase tracking-widest text-muted-foreground">Final Amount</th>
                 <th className="py-4 px-6 text-xs font-bold uppercase tracking-widest text-primary">Due Amount</th>
-                <th className="py-4 px-6 text-xs font-bold uppercase tracking-widest text-muted-foreground text-right">Actions</th>
+                <th className="py-4 px-6 text-xs font-bold uppercase tracking-widest text-muted-foreground text-right sticky right-0 bg-gray-50/50 dark:bg-zinc-900/50 border-l border-gray-100 dark:border-zinc-800 z-10">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-slate-800">
+            <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
               {filteredDues.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-12 text-center text-gray-500">
@@ -97,7 +97,7 @@ export default function DueListClient({ initialDues }: { initialDues: any[] }) {
                 </tr>
               ) : (
                 filteredDues.map((tx) => (
-                  <tr key={tx.id} className="hover:bg-gray-50 dark:hover:bg-slate-900/50 transition-colors">
+                  <tr key={tx.id} className="group hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors">
                     <td className="py-4 px-6 text-sm text-gray-600 dark:text-gray-300">
                       {format(new Date(tx.createdAt), 'MMM dd, yyyy')}
                     </td>
@@ -115,7 +115,7 @@ export default function DueListClient({ initialDues }: { initialDues: any[] }) {
                     <td className="py-4 px-6 text-sm font-bold text-primary">
                       {formatNPR(tx.dueAmount)}
                     </td>
-                    <td className="py-4 px-6 text-right">
+                    <td className="py-4 px-6 text-right sticky right-0 bg-white dark:bg-zinc-900 border-l border-gray-100 dark:border-zinc-800 z-10 transition-colors group-hover:bg-gray-50 dark:group-hover:bg-zinc-800">
                       <button 
                         onClick={() => handleOpenPayment(tx)}
                         className="bg-primary hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wider transition-colors inline-flex items-center gap-2 shadow-md shadow-red-500/20"

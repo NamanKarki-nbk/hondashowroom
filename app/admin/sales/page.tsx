@@ -41,7 +41,7 @@ export default async function SalesPage() {
         </p>
       </div>
 
-      <div className="bg-white dark:bg-[#111] p-6 rounded-xl border border-gray-200 dark:border-white/10 shadow-sm">
+      <div className="bg-white dark:bg-[#111] p-6 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm">
         <React.Suspense fallback={<div className="h-40 flex items-center justify-center">Loading form...</div>}>
           <SalesForm customers={customers} vehicles={vehicles} />
         </React.Suspense>

@@ -25,13 +25,13 @@ export default function LetterPreview({ docType, recipient, metadata }: LetterPr
   }, [docType, recipient, metadata]);
 
   return (
-    <div className="bg-[#E5E7EB] dark:bg-[#090909] rounded-2xl shadow-inner overflow-hidden h-full flex flex-col relative border border-gray-300 dark:border-gray-800">
-      <div className="bg-white/80 dark:bg-black/50 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 px-5 py-4 flex justify-between items-center z-10">
+    <div className="bg-[#E5E7EB] dark:bg-[#090909] rounded-2xl shadow-inner overflow-hidden h-full flex flex-col relative border border-gray-300 dark:border-zinc-800">
+      <div className="bg-white/80 dark:bg-black/50 backdrop-blur-md border-b border-gray-200 dark:border-zinc-800 px-5 py-4 flex justify-between items-center z-10">
         <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]" />
           Live Document Preview
         </h3>
-        <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest bg-gray-100 dark:bg-[#1A1A1A] px-3 py-1.5 rounded-full shadow-inner border border-gray-200 dark:border-gray-800">Letter (8.5&quot; x 11&quot;)</span>
+        <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest bg-gray-100 dark:bg-zinc-900 px-3 py-1.5 rounded-full shadow-inner border border-gray-200 dark:border-zinc-800">Letter (8.5&quot; x 11&quot;)</span>
       </div>
       
       {/* Scrollable Letter Container */}

@@ -123,7 +123,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
         </button>
       </div>
 
-      <div className="bg-white dark:bg-[#1a1a1a] shadow rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+      <div className="bg-white dark:bg-[#1a1a1a] shadow rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-800">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -138,7 +138,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
             </thead>
             <tbody>
               {accessories.map((item) => (
-                <tr key={item.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-[#222]">
+                <tr key={item.id} className="border-b border-gray-100 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800">
                   <td className="p-4">
                     <div className="w-16 h-12 relative bg-gray-100 dark:bg-gray-800 rounded">
                       <Image 
@@ -198,7 +198,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
       {isModalOpen && currentAccessory && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-[#1a1a1a] rounded-xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-800">
+            <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-zinc-800">
               <h2 className="text-xl md:text-2xl font-semibold font-bold">
                 {currentAccessory.id ? "Edit Accessory" : "Add New Accessory"}
               </h2>
@@ -215,7 +215,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
                   required
                   value={currentAccessory.name}
                   onChange={(e) => setCurrentAccessory({ ...currentAccessory, name: e.target.value })}
-                  className="w-full bg-gray-50 dark:bg-[#222] border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
+                  className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
                   placeholder="e.g. Engine Guard"
                 />
               </div>
@@ -227,7 +227,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
                      type="text"
                      value={currentAccessory.partNo || ""}
                      onChange={(e) => setCurrentAccessory({ ...currentAccessory, partNo: e.target.value })}
-                     className="w-full bg-gray-50 dark:bg-[#222] border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
+                     className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
                      placeholder="e.g. 08R01K4FD00ZA"
                    />
                  </div>
@@ -239,7 +239,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
                      min="0"
                      value={currentAccessory.price}
                      onChange={(e) => setCurrentAccessory({ ...currentAccessory, price: Number(e.target.value) })}
-                     className="w-full bg-gray-50 dark:bg-[#222] border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
+                     className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
                    />
                  </div>
               </div>
@@ -252,7 +252,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
                     required
                     value={currentAccessory.category}
                     onChange={(e) => setCurrentAccessory({ ...currentAccessory, category: e.target.value })}
-                    className="w-full bg-gray-50 dark:bg-[#222] border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
+                    className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
                     placeholder="e.g. Leg Guard"
                   />
                 </div>
@@ -261,7 +261,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
                   <select
                     value={currentAccessory.vehicleType}
                     onChange={(e) => setCurrentAccessory({ ...currentAccessory, vehicleType: e.target.value })}
-                    className="w-full bg-gray-50 dark:bg-[#222] border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
+                    className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
                   >
                     <option value="Universal">Universal</option>
                     <option value="scooter">Scooter</option>
@@ -276,7 +276,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
                   type="text"
                   value={compatInput}
                   onChange={(e) => setCompatInput(e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-[#222] border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
+                  className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
                   placeholder="e.g. Activa 6G, Dio 125, CB350"
                 />
               </div>
@@ -288,7 +288,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
                   required
                   value={currentAccessory.imageUrl}
                   onChange={(e) => setCurrentAccessory({ ...currentAccessory, imageUrl: e.target.value })}
-                  className="w-full bg-gray-50 dark:bg-[#222] border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
+                  className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
                   placeholder="https://..."
                 />
               </div>
@@ -299,7 +299,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
                   rows={2}
                   value={currentAccessory.description || ""}
                   onChange={(e) => setCurrentAccessory({ ...currentAccessory, description: e.target.value })}
-                  className="w-full bg-gray-50 dark:bg-[#222] border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
+                  className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
                 />
               </div>
 
@@ -308,14 +308,14 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
                 <select
                   value={currentAccessory.stockStatus}
                   onChange={(e) => setCurrentAccessory({ ...currentAccessory, stockStatus: e.target.value })}
-                  className="w-full bg-gray-50 dark:bg-[#222] border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
+                  className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
                 >
                   <option value="IN_STOCK">In Stock</option>
                   <option value="OUT_OF_STOCK">Out of Stock</option>
                 </select>
               </div>
 
-              <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+              <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-gray-200 dark:border-zinc-800">
                 <button
                   type="button"
                   onClick={handleCloseModal}

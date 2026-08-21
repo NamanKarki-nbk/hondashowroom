@@ -12,7 +12,7 @@ export default async function AdminUsersPage() {
   });
 
   return (
-    <div className="bg-[#0B0B0C] p-8 text-primary-foreground font-sans h-full">
+    <div className="bg-zinc-950 p-8 text-primary-foreground font-sans h-full">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>

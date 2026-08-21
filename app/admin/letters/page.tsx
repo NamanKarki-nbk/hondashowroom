@@ -33,7 +33,7 @@ export default async function LettersPage() {
         </Link>
       </div>
 
-      <div className="bg-white dark:bg-[#111] rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden shadow-sm">
+      <div className="bg-white dark:bg-[#111] rounded-xl border border-gray-200 dark:border-zinc-800 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
             <thead className="bg-gray-50 dark:bg-white/5 text-gray-700 dark:text-gray-300 font-medium">
@@ -54,7 +54,7 @@ export default async function LettersPage() {
                 </tr>
               ) : (
                 letters.map((letter) => (
-                  <tr key={letter.id} className="border-b border-gray-200 dark:border-white/10 last:border-0 hover:bg-gray-50 dark:hover:bg-white/5">
+                  <tr key={letter.id} className="border-b border-gray-200 dark:border-zinc-800 last:border-0 hover:bg-gray-50 dark:hover:bg-white/5">
                     <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">
                       {letter.letterNo}
                     </td>
