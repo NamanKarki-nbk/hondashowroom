@@ -18,7 +18,7 @@ export default async function CustomerLayout({
       <Header />
       <FloatingActionBar />
       <FloatingChatbot />
-      <main className="flex-1 pt-[116px]">
+      <main className="flex-1 pt-[116px] pb-[72px] md:pb-0">
         {children}
       </main>
       <Footer />

@@ -32,7 +32,7 @@ export default function FloatingChatbot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div className="fixed bottom-[84px] md:bottom-6 right-4 md:right-6 z-50 flex flex-col items-end">
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -40,7 +40,7 @@ export default function FloatingChatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="mb-4 w-[340px] shadow-2xl rounded-xl overflow-hidden flex flex-col bg-[#FAF5F5]"
+            className="mb-4 w-[calc(100vw-2rem)] sm:w-[340px] max-h-[80vh] shadow-2xl rounded-xl overflow-hidden flex flex-col bg-[#FAF5F5]"
           >
             {/* Header */}
             <div className="px-5 py-5 pb-3">

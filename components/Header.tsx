@@ -86,7 +86,7 @@ export default function Header() {
            <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden text-gray-800 dark:text-gray-200 p-1 md:p-2 mr-1 md:mr-2 flex-shrink-0"><Menu className="w-6 h-6" /></button>
            <Link href="/" className="flex items-center group">
              {/* Mobile Logo: Cropped to show only "HONDA The Power of Dreams" */}
-             <div className="md:hidden w-[150px] overflow-hidden flex items-center shrink-0">
+             <div className="md:hidden w-36 overflow-hidden flex items-center shrink-0">
                 <img src="/honda-logo.svg" alt="Honda" className="h-6 w-auto max-w-none object-left shrink-0" />
              </div>
              {/* Desktop Logo */}
@@ -145,7 +145,7 @@ export default function Header() {
       {/* Mobile Drawer */}
       <div className={`fixed inset-0 z-[100] lg:hidden transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
-        <div className={`absolute top-0 bottom-0 left-0 w-[80%] max-w-sm bg-background dark:bg-[#111] shadow-2xl transition-transform duration-300 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} overflow-y-auto`}>
+        <div className={`absolute top-0 bottom-0 left-0 w-4/5 max-w-sm bg-background dark:bg-[#111] shadow-2xl transition-transform duration-300 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} overflow-y-auto`}>
           <div className="p-6 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
             <Logo className="h-6 text-primary" />
             <button onClick={() => setIsMobileMenuOpen(false)} className="text-gray-500 hover:text-primary">
@@ -165,6 +165,8 @@ export default function Header() {
             <Link href="/shop" onClick={() => setIsMobileMenuOpen(false)}>Shop</Link>
             <Link href="/compare" onClick={() => setIsMobileMenuOpen(false)}>Compare</Link>
             <Link href="/finance" onClick={() => setIsMobileMenuOpen(false)}>Finance</Link>
+            <Link href="/offers" onClick={() => setIsMobileMenuOpen(false)}>Special Offers</Link>
+            <Link href="/service-booking" onClick={() => setIsMobileMenuOpen(false)}>Service Booking</Link>
             <Link href="/accessories" onClick={() => setIsMobileMenuOpen(false)}>Accessories</Link>
             <Link href="/amc" onClick={() => setIsMobileMenuOpen(false)}>AMC Book</Link>
             <Link href="/know-your-vehicle" onClick={() => setIsMobileMenuOpen(false)}>Know Your Vehicle</Link>

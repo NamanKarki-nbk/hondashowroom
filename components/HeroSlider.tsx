@@ -110,7 +110,7 @@ export default function HeroSlider() {
             </div>
 
             {/* Bottom Left Price */}
-            <div className="absolute left-8 md:left-24 bottom-12 z-20">
+            <div className="absolute left-8 md:left-24 bottom-[100px] md:bottom-12 z-20">
                <motion.div
                   key={`price-${selectedIndex === index}`}
                   initial={{ opacity: 0, y: 20 }}
