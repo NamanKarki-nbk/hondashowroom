@@ -62,7 +62,7 @@ export default function Header() {
             <div className="flex items-center min-w-0 shrink">
               <Link href="/" className="flex items-center group">
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Logo className="w-[180px] sm:w-[220px] md:w-auto h-auto md:h-7 lg:h-8 max-w-full text-primary object-contain" />
+                  <Logo className="h-4 sm:h-5 md:h-6 lg:h-7 shrink text-primary" />
                 </motion.div>
               </Link>
             </div>
