@@ -57,7 +57,7 @@ export async function initWhatsApp() {
 }
 
 // Auto-init on file import
-initWhatsApp();
+// Auto-init on file import is disabled to prevent Vercel build crash
 
 export async function getWhatsAppQR() {
   if (!global._waSock) await initWhatsApp();

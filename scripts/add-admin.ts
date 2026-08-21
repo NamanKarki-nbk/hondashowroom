@@ -1,7 +1,12 @@
-import { PrismaClient } from "./app/generated/prisma";
+import { PrismaClient } from "../app/generated/prisma/client";
+import { Pool } from 'pg';
+import { PrismaPg } from '@prisma/adapter-pg';
 import bcrypt from "bcrypt";
 
-const prisma = new PrismaClient();
+const connectionString = process.env.DATABASE_URL;
+const pool = new Pool({ connectionString });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   const adminEmail = "admin@honda.com";
@@ -20,9 +25,8 @@ async function main() {
       fullName: "System Admin",
       passwordHash,
       phone: "0000000000",
-      citizenshipVerified: true,
-      licenseVerified: true,
-      nationalIdVerified: true,
+      isVerified: true,
+      role: "ADMIN",
     },
   });
 
