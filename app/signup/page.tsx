@@ -69,8 +69,8 @@ export default function SignupPage() {
 
       <div className="w-full max-w-md bg-white dark:bg-[#151517] border border-gray-200 dark:border-slate-800 rounded-3xl p-10 shadow-2xl relative z-10">
         <div className="flex flex-col items-center mb-8 text-center">
-           <Link href="/" className="bg-black border border-gray-800 p-3 sm:p-4 rounded-xl sm:rounded-2xl mb-6 shadow-lg max-w-full w-full sm:w-[90%] flex items-center justify-center overflow-hidden hover:opacity-90 transition-opacity">
-              <Logo className="max-w-full h-auto max-h-8 sm:max-h-10" />
+           <Link href="/" className="bg-black border border-gray-800 p-3 sm:p-4 rounded-xl sm:rounded-2xl mb-6 shadow-lg max-w-full w-full flex items-center justify-center overflow-hidden hover:opacity-90 transition-opacity">
+              <Logo className="max-w-full h-auto max-h-12 !text-white" />
            </Link>
            <h1 className="text-2xl md:text-3xl font-semibold font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">Create an Account</h1>
            <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
