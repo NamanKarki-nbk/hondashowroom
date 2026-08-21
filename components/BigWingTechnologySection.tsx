@@ -115,7 +115,9 @@ export default function BigWingTechnologySection({
           className="absolute top-8 left-8 md:top-12 md:left-12 z-20 flex items-center gap-4"
         >
           <div className="bg-[#111111] p-2 flex flex-col items-center justify-center w-14 h-14">
-             <Logo className="w-8 h-8" />
+            <Link href="/">
+              <Logo className="w-8 h-8" />
+            </Link>
              <div className="text-primary-foreground text-[8px] font-bold uppercase tracking-wider mt-1">Honda</div>
           </div>
           <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-5xl font-black text-primary-foreground">{vehicleName}</h2>

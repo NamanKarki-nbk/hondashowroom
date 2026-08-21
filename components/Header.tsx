@@ -147,7 +147,9 @@ export default function Header() {
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
         <div className={`absolute top-0 bottom-0 left-0 w-4/5 max-w-sm bg-background dark:bg-[#111] shadow-2xl transition-transform duration-300 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} overflow-y-auto`}>
           <div className="p-6 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
-            <Logo className="h-6 text-primary" />
+            <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+              <Logo className="h-6 text-primary" />
+            </Link>
             <button onClick={() => setIsMobileMenuOpen(false)} className="text-gray-500 hover:text-primary">
               <X className="w-6 h-6" />
             </button>
