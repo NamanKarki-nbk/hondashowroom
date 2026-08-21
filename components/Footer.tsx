@@ -15,7 +15,7 @@ export default function Footer() {
   if (!mounted) return null;
 
   return (
-    <footer className="w-full bg-[#FAF6F0] dark:bg-slate-950 transition-colors duration-300 border-t border-gray-200/60 dark:border-white/5">
+    <footer className="w-full bg-[#FAF6F0] dark:bg-slate-950 transition-colors duration-300 border-t border-gray-200/60 dark:border-white/5 pb-[84px] md:pb-0">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 py-12 md:py-20">
         
         {/* Main Footer Row */}
