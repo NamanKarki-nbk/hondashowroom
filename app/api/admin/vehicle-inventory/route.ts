@@ -66,9 +66,9 @@ export async function GET(req: Request) {
       const parsedB = parseIndex(b.indexNo);
 
       if (parsedA.prefix === parsedB.prefix) {
-        return parsedB.num - parsedA.num; // Descending order
+        return parsedA.num - parsedB.num; // Ascending order
       }
-      return parsedB.prefix.localeCompare(parsedA.prefix); // Descending order
+      return parsedA.prefix.localeCompare(parsedB.prefix); // Ascending order
     });
 
     return NextResponse.json(filteredItems);
