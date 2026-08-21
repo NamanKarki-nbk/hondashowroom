@@ -9,7 +9,7 @@ export default async function AdminAccessoriesPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Manage Accessories</h1>
+      <h1 className="text-2xl md:text-3xl font-semibold font-bold mb-6">Manage Accessories</h1>
       <AccessoriesAdminClient initialAccessories={accessories} />
     </div>
   );

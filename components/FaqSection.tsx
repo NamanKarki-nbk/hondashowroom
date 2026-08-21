@@ -34,7 +34,7 @@ export default function FaqSection() {
     <section className="py-24 px-6 bg-background border-t border-gray-100">
       <div className="max-w-[1200px] mx-auto w-full">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6 text-gray-900 uppercase">
+          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6 text-gray-900 uppercase">
             FREQUENTLY ASKED <span className="text-primary">QUESTIONS</span>
           </h2>
           <p className="text-lg xl:text-2xl text-gray-600">Got questions? We've got answers to help you ride with confidence.</p>

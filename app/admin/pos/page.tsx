@@ -26,7 +26,7 @@ export default function AdminPOS() {
   return (
     <div className="min-h-screen bg-background dark:bg-[#0B0B0C] text-gray-100 p-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-extrabold text-primary-foreground mb-8">Point of Sale (POS) Terminal</h1>
+        <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-extrabold text-primary-foreground mb-8">Point of Sale (POS) Terminal</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
@@ -35,7 +35,7 @@ export default function AdminPOS() {
             
             {/* VIN Search */}
             <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 shadow-lg">
-              <h2 className="text-xl font-bold text-primary-foreground mb-4 flex items-center gap-2">
+              <h2 className="text-xl md:text-2xl font-semibold font-bold text-primary-foreground mb-4 flex items-center gap-2">
                 <Search className="w-5 h-5 text-primary" /> Scan or Enter VIN/Chassis
               </h2>
               <div className="flex gap-4">
@@ -58,7 +58,7 @@ export default function AdminPOS() {
                     <h3 className="text-lg font-bold text-green-400">{activeVehicle.model}</h3>
                     <p className="text-sm text-gray-400 mt-1">VIN: {activeVehicle.vin}</p>
                     <p className="text-sm text-gray-400">Status: {activeVehicle.status}</p>
-                    <div className="text-xl font-black text-primary-foreground mt-2">Rs. {activeVehicle.price.toLocaleString()}</div>
+                    <div className="text-xl md:text-2xl font-semibold font-black text-primary-foreground mt-2">Rs. {activeVehicle.price.toLocaleString()}</div>
                   </div>
                 </div>
               )}
@@ -66,7 +66,7 @@ export default function AdminPOS() {
 
             {/* Customer Linkage */}
             <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 shadow-lg">
-              <h2 className="text-xl font-bold text-primary-foreground mb-4 flex items-center gap-2">
+              <h2 className="text-xl md:text-2xl font-semibold font-bold text-primary-foreground mb-4 flex items-center gap-2">
                 <UserPlus className="w-5 h-5 text-primary" /> Link Customer Profile
               </h2>
               <div className="space-y-4">
@@ -80,7 +80,7 @@ export default function AdminPOS() {
 
             {/* Payment Method */}
             <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 shadow-lg">
-              <h2 className="text-xl font-bold text-primary-foreground mb-4 flex items-center gap-2">
+              <h2 className="text-xl md:text-2xl font-semibold font-bold text-primary-foreground mb-4 flex items-center gap-2">
                 <CreditCard className="w-5 h-5 text-primary" /> Payment Method
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -105,7 +105,7 @@ export default function AdminPOS() {
           {/* Right Column: Checkout & Invoice */}
           <div className="lg:col-span-5">
             <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 shadow-lg sticky top-8">
-              <h2 className="text-xl font-bold text-primary-foreground mb-6 flex items-center gap-2">
+              <h2 className="text-xl md:text-2xl font-semibold font-bold text-primary-foreground mb-6 flex items-center gap-2">
                 <Calculator className="w-5 h-5 text-primary" /> Transaction Summary
               </h2>
               
@@ -126,7 +126,7 @@ export default function AdminPOS() {
                 <div className="border-t border-slate-700 pt-4 mt-4">
                    <div className="flex justify-between items-end">
                       <span className="text-gray-400 text-sm">Total Receivable</span>
-                      <span className="text-3xl font-black text-primary">
+                      <span className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black text-primary">
                         Rs. {activeVehicle ? activeVehicle.price.toLocaleString() : "0"}
                       </span>
                    </div>

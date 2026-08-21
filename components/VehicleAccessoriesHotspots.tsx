@@ -30,7 +30,7 @@ export default function VehicleAccessoriesHotspots({ vehicleImageUrl, hotspots }
     <section id="accessories" className="py-24 px-6 bg-gray-50 dark:bg-[#111112]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4">
+          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-black text-gray-900 dark:text-white mb-4">
             Explore Accessories
           </h2>
           <p className="text-gray-500 max-w-2xl mx-auto text-lg">
@@ -100,7 +100,7 @@ export default function VehicleAccessoriesHotspots({ vehicleImageUrl, hotspots }
                   />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-black text-foreground mb-2">{activeHotspot.accessory.name}</h3>
+                  <h3 className="text-xl md:text-2xl font-semibold font-black text-foreground mb-2">{activeHotspot.accessory.name}</h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-3">
                     {activeHotspot.accessory.description}
                   </p>

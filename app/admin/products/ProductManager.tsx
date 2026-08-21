@@ -126,7 +126,7 @@ export default function ProductManager() {
     <div className="bg-white dark:bg-[#1A1A1E] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <h2 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <Package className="w-6 h-6 text-primary" /> Product Catalog
           </h2>
           <p className="text-sm text-gray-500 mt-1">Manage product models and categories for the website.</p>

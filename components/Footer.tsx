@@ -27,7 +27,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="flex items-center space-x-3">
            <Logo className="w-8 h-8 text-primary" />
-           <span className="text-gray-800 dark:text-gray-200 font-bold text-xl text-center md:text-left">Society Enterprises</span>
+           <span className="text-gray-800 dark:text-gray-200 font-bold text-xl md:text-2xl font-semibold text-center md:text-left">Society Enterprises</span>
         </div>
         <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 text-gray-600 dark:text-gray-400 font-medium w-full md:w-auto">
            <a href="tel:01-5367368" className="flex items-center justify-center md:justify-start gap-2 hover:text-primary"><Phone className="w-4 h-4" /> 01-5367368</a>

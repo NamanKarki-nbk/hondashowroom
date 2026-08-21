@@ -355,7 +355,7 @@ export default function KnowYourVehiclePage() {
                 <span className="w-6 h-0.5 bg-primary rounded-full" />
                 Right to Repair &amp; Maintenance
               </div>
-              <h1 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight leading-tight">
+              <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight leading-tight">
                 Periodic Maintenance for Safe, Reliable Riding
               </h1>
               <p className="text-gray-500 dark:text-gray-400 mt-4 text-lg">
@@ -390,7 +390,7 @@ export default function KnowYourVehiclePage() {
       {/* Characters intro banner */}
       <div className="max-w-7xl mx-auto px-6 py-10">
         <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-[#111] dark:to-[#1a1a1a] rounded-3xl border border-gray-200 dark:border-background/10 p-8">
-          <h2 className="text-center text-2xl font-black text-gray-900 dark:text-primary-foreground mb-2">Your Maintenance Guide Characters</h2>
+          <h2 className="text-center text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-primary-foreground mb-2">Your Maintenance Guide Characters</h2>
           <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-8">Click "Read More" on any component card to follow their conversation and learn about your Honda</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {(["benly", "dream", "cub"] as CharacterKey[]).map((key) => {
@@ -424,7 +424,7 @@ export default function KnowYourVehiclePage() {
       <div className="bg-background dark:bg-[#111] py-20 border-y border-gray-100 dark:border-background/5">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-primary-foreground mb-4">Critical Components to Monitor</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-black text-gray-900 dark:text-primary-foreground mb-4">Critical Components to Monitor</h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
               Click <strong>"Read More"</strong> to follow Ms. Benly, Dr. Dream, and Mr. Cub as they walk you through each component in a fun conversation.
             </p>
@@ -502,7 +502,7 @@ export default function KnowYourVehiclePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-gray-900 dark:bg-[#161616] rounded-3xl p-10 flex flex-col justify-between items-start relative overflow-hidden group">
             <div className="relative z-10">
-              <h3 className="text-2xl font-black text-primary-foreground mb-4">Always Use Genuine Honda Parts</h3>
+              <h3 className="text-2xl md:text-3xl font-semibold font-black text-primary-foreground mb-4">Always Use Genuine Honda Parts</h3>
               <p className="text-gray-400 mb-8 max-w-md">
                 Non-genuine parts can compromise your safety and vehicle performance. Insist on Honda Genuine Parts for guaranteed reliability and perfect fit.
               </p>
@@ -515,7 +515,7 @@ export default function KnowYourVehiclePage() {
 
           <div className="bg-primary rounded-3xl p-10 flex flex-col justify-between items-start relative overflow-hidden group">
             <div className="relative z-10">
-              <h3 className="text-2xl font-black text-primary-foreground mb-4">Protect with Extended Warranty</h3>
+              <h3 className="text-2xl md:text-3xl font-semibold font-black text-primary-foreground mb-4">Protect with Extended Warranty</h3>
               <p className="text-red-100 mb-8 max-w-md">
                 Secure your peace of mind against unexpected repair costs. Our extended warranty packages cover major mechanical and electrical components.
               </p>

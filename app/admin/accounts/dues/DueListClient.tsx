@@ -136,7 +136,7 @@ export default function DueListClient({ initialDues }: { initialDues: any[] }) {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-[#111111] rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-gray-200 dark:border-slate-800 animate-in zoom-in-95 duration-200">
             <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center bg-gray-50 dark:bg-slate-900/50">
-              <h2 className="text-xl font-black text-foreground uppercase tracking-tight flex items-center gap-2">
+              <h2 className="text-xl md:text-2xl font-semibold font-black text-foreground uppercase tracking-tight flex items-center gap-2">
                 <Wallet className="w-6 h-6 text-primary" /> Record Payment
               </h2>
               <button 
@@ -152,7 +152,7 @@ export default function DueListClient({ initialDues }: { initialDues: any[] }) {
               <div className="bg-red-50 dark:bg-red-500/10 p-4 rounded-xl border border-red-100 dark:border-red-500/20 flex justify-between items-center">
                 <div>
                   <p className="text-xs font-bold text-red-600/70 dark:text-red-400 uppercase tracking-widest">Total Due Amount</p>
-                  <p className="text-2xl font-black text-primary mt-1">{formatNPR(selectedTx.dueAmount)}</p>
+                  <p className="text-2xl md:text-3xl font-semibold font-black text-primary mt-1">{formatNPR(selectedTx.dueAmount)}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Customer</p>
@@ -177,7 +177,7 @@ export default function DueListClient({ initialDues }: { initialDues: any[] }) {
                   max={selectedTx.dueAmount}
                   value={paymentAmount || ""}
                   onChange={(e) => setPaymentAmount(Number(e.target.value))}
-                  className={`${inputClasses} text-xl font-bold text-green-600 dark:text-green-500 h-14`}
+                  className={`${inputClasses} text-xl md:text-2xl font-semibold font-bold text-green-600 dark:text-green-500 h-14`}
                 />
               </div>
 

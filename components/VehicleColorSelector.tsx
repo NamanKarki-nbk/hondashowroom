@@ -40,7 +40,7 @@ export default function VehicleColorSelector({ vehicleName, colors, imageUrl }: 
       
       <div className="max-w-6xl mx-auto w-full relative z-10 flex flex-col items-center">
         <div className="text-center mb-10 w-full">
-          <h2 className="text-4xl md:text-5xl font-extrabold uppercase tracking-tight text-white drop-shadow-md">Select Color</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-extrabold uppercase tracking-tight text-white drop-shadow-md">Select Color</h2>
           <p className="text-gray-400 mt-2 text-lg">Personalize your {vehicleName}</p>
         </div>
 
@@ -54,7 +54,7 @@ export default function VehicleColorSelector({ vehicleName, colors, imageUrl }: 
         >
           {/* Header section with Badges */}
           <div className="w-full flex flex-col sm:flex-row justify-between items-center mb-8 min-h-[40px]">
-            <h3 className="text-2xl md:text-3xl font-bold text-white tracking-wide">
+            <h3 className="text-2xl md:text-3xl font-semibold md:text-3xl font-bold text-white tracking-wide">
               {activeColorObj.name}
             </h3>
             <div className="flex gap-3 mt-4 sm:mt-0">

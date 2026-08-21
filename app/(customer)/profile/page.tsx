@@ -467,7 +467,7 @@ export default function ProfilePage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight uppercase">My Profile</h1>
+            <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold font-black text-gray-900 dark:text-white tracking-tight uppercase">My Profile</h1>
             <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm md:text-base">Manage your personal information and multi-document verification.</p>
           </div>
           {hasAnyVerification && (
@@ -496,7 +496,7 @@ export default function ProfilePage() {
             )}
 
             <div className="border-l-4 border-primary pl-4 mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white uppercase tracking-tight">Personal Details</h2>
+              <h2 className="text-2xl md:text-3xl font-semibold font-bold text-gray-900 dark:text-white uppercase tracking-tight">Personal Details</h2>
             </div>
             
             <div className="flex flex-col sm:flex-row items-center gap-8 mb-10 pb-10 border-b border-gray-100 dark:border-slate-800">
@@ -511,7 +511,7 @@ export default function ProfilePage() {
                 {formData.avatarUrl ? (
                   <img src={formData.avatarUrl} alt="Avatar" className="w-32 h-32 rounded-full object-cover border-4 border-gray-50 dark:border-slate-900 shadow-md group-hover:opacity-75 transition-opacity" />
                 ) : (
-                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-red-600 flex items-center justify-center text-white text-4xl font-bold shadow-md group-hover:opacity-75 transition-opacity">
+                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-red-600 flex items-center justify-center text-white text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold font-bold shadow-md group-hover:opacity-75 transition-opacity">
                     {formData.fullName ? formData.fullName.charAt(0).toUpperCase() : (formData.email ? formData.email.charAt(0).toUpperCase() : "U")}
                   </div>
                 )}
@@ -521,7 +521,7 @@ export default function ProfilePage() {
               </div>
               
               <div className="text-center sm:text-left flex-1 w-full">
-                <h2 className="text-2xl font-black text-gray-900 dark:text-white uppercase">{formData.fullName || "Your Name"}</h2>
+                <h2 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-white uppercase">{formData.fullName || "Your Name"}</h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-5">Click your avatar to upload a new profile picture from your gallery.</p>
               </div>
             </div>
@@ -670,7 +670,7 @@ export default function ProfilePage() {
             <div className="p-6 md:p-10 pb-0">
               <div className="border-l-4 border-primary pl-4 mb-6 flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white uppercase tracking-tight">Identity Documents</h2>
+                  <h2 className="text-2xl md:text-3xl font-semibold font-bold text-gray-900 dark:text-white uppercase tracking-tight">Identity Documents</h2>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Verify multiple documents to increase your profile trust score.</p>
                 </div>
               </div>
@@ -894,7 +894,7 @@ export default function ProfilePage() {
               <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Smartphone className="w-8 h-8 text-primary" />
               </div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white uppercase tracking-wider">Verify Contact</h2>
+              <h2 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-white uppercase tracking-wider">Verify Contact</h2>
               <p className="text-sm text-gray-500 mt-2">Enter the OTP sent to <span className="font-bold text-gray-800 dark:text-gray-300">{pendingContactValue}</span></p>
             </div>
             
@@ -903,7 +903,7 @@ export default function ProfilePage() {
               value={otpValue}
               onChange={(e) => setOtpValue(e.target.value)}
               placeholder="Enter 6-digit code"
-              className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-300 dark:border-slate-700 text-center text-2xl tracking-[0.5em] font-mono py-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-gray-900 dark:text-white mb-6"
+              className="w-full bg-gray-50 dark:bg-[#0B0B0C] border border-gray-300 dark:border-slate-700 text-center text-2xl md:text-3xl font-semibold tracking-[0.5em] font-mono py-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-gray-900 dark:text-white mb-6"
             />
 
             <div className="flex gap-4">

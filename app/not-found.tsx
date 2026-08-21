@@ -19,7 +19,7 @@ export default function NotFound() {
          <h1 className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-4 tracking-tighter">
             404
          </h1>
-         <h2 className="text-3xl font-extrabold text-primary-foreground mb-4 uppercase italic">Engine Stalled</h2>
+         <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-extrabold text-primary-foreground mb-4 uppercase italic">Engine Stalled</h2>
          
          <p className="text-gray-400 max-w-md mx-auto mb-10 leading-relaxed text-lg">
             This page could not be found. It looks like you've navigated off the track. Let's get you back on the road.

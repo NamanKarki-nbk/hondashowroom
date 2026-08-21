@@ -128,7 +128,7 @@ export default function TestRidePage() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Bike className="w-10 h-10 text-primary-foreground/90" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-primary-foreground tracking-tight mb-3">
+          <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-black text-primary-foreground tracking-tight mb-3">
             Book a Test Ride
           </h1>
           <p className="text-primary-foreground/80 text-lg max-w-xl mx-auto">
@@ -159,7 +159,7 @@ export default function TestRidePage() {
           <div className="bg-background dark:bg-[#111] rounded-2xl border border-gray-200 dark:border-background/10 shadow-xl overflow-hidden">
             <div className="bg-gradient-to-br from-emerald-500 to-green-600 p-8 text-center">
               <CheckCircle className="w-16 h-16 text-primary-foreground mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-primary-foreground mb-1">Test Ride Scheduled!</h2>
+              <h2 className="text-2xl md:text-3xl font-semibold font-bold text-primary-foreground mb-1">Test Ride Scheduled!</h2>
               <p className="text-primary-foreground/80 text-sm">We look forward to seeing you at the showroom.</p>
             </div>
             <div className="p-8 text-center">
@@ -167,7 +167,7 @@ export default function TestRidePage() {
                 <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">
                   Test Ride ID
                 </span>
-                <span className="text-2xl font-black text-primary tracking-wider">{rideId}</span>
+                <span className="text-2xl md:text-3xl font-semibold font-black text-primary tracking-wider">{rideId}</span>
               </div>
               <p className="text-gray-600 dark:text-gray-300 text-base mb-4">
                 Your test ride has been scheduled! Our team will confirm your slot via phone.
@@ -189,7 +189,7 @@ export default function TestRidePage() {
         ) : (
           /* ── Form Card ── */
           <div className="bg-background dark:bg-[#111] rounded-2xl border border-gray-200 dark:border-background/10 shadow-xl p-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-primary-foreground mb-1">
+            <h2 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-primary-foreground mb-1">
               Schedule Your Test Ride
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">

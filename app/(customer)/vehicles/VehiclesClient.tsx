@@ -37,7 +37,7 @@ export default function VehiclesClient({ products }: { products: any[] }) {
                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <h2 className="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-1">
+            <h2 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight mb-1">
               {modalType === "quote" ? "Get A Quote" : "Pre-Book"}
             </h2>
             <p className="text-sm text-[#B83227] font-bold mb-6">{selectedVehicle.name}</p>
@@ -71,7 +71,7 @@ export default function VehiclesClient({ products }: { products: any[] }) {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-6">
           <div>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-[#111111] dark:text-primary-foreground tracking-tight mb-2">Vehicle Catalog</h1>
+            <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-extrabold text-[#111111] dark:text-primary-foreground tracking-tight mb-2">Vehicle Catalog</h1>
             <p className="text-gray-600 dark:text-gray-400">Explore our premium selection of Honda machines.</p>
           </div>
           

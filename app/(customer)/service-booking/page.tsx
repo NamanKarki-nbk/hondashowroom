@@ -50,10 +50,10 @@ export default function ServiceBookingPage() {
           <div className="w-16 h-16 bg-red-100 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
             <Wrench className="w-8 h-8" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+          <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-extrabold text-gray-900 mb-4">
             Book a <span className="text-primary">Service</span>
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl md:text-2xl font-semibold text-gray-600">
             Schedule your next maintenance at Society Enterprises. Genuine parts, certified mechanics.
           </p>
         </div>
@@ -62,7 +62,7 @@ export default function ServiceBookingPage() {
           {success ? (
             <div className="text-center py-12">
               <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-6" />
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Booking Confirmed!</h2>
+              <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-bold text-gray-900 mb-4">Booking Confirmed!</h2>
               <p className="text-gray-600 text-lg mb-8">
                 Your service appointment has been successfully requested. Our service advisor will call you to confirm the exact time slot.
               </p>
@@ -79,7 +79,7 @@ export default function ServiceBookingPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Customer Details */}
                 <div className="space-y-6">
-                  <h3 className="text-xl font-bold text-gray-900 border-b pb-2">Customer Details</h3>
+                  <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 border-b pb-2">Customer Details</h3>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Full Name <span className="text-red-500">*</span></label>
                     <input type="text" name="fullName" required className="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary" />
@@ -92,7 +92,7 @@ export default function ServiceBookingPage() {
 
                 {/* Vehicle Details */}
                 <div className="space-y-6">
-                  <h3 className="text-xl font-bold text-gray-900 border-b pb-2">Vehicle Details</h3>
+                  <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 border-b pb-2">Vehicle Details</h3>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Vehicle Number (e.g. Me 1 Pa 1234)</label>
                     <input type="text" name="vehicleNo" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary" />
@@ -106,7 +106,7 @@ export default function ServiceBookingPage() {
 
               {/* Service Requirements */}
               <div className="pt-6">
-                <h3 className="text-xl font-bold text-gray-900 border-b pb-2 mb-6">Service Requirements</h3>
+                <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 border-b pb-2 mb-6">Service Requirements</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Type of Service <span className="text-red-500">*</span></label>
@@ -138,7 +138,7 @@ export default function ServiceBookingPage() {
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="w-full bg-primary text-white py-4 px-6 rounded-lg font-bold text-xl hover:bg-red-700 transition-colors shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
+                  className="w-full bg-primary text-white py-4 px-6 rounded-lg font-bold text-xl md:text-2xl font-semibold hover:bg-red-700 transition-colors shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
                 >
                   {isSubmitting ? (
                     <><Loader2 className="w-6 h-6 mr-2 animate-spin" /> Processing...</>

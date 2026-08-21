@@ -41,7 +41,7 @@ export default function ServicesGrid() {
     <section className="py-12 md:py-16 lg:py-24 px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px] bg-background">
       <div className="w-full">
         <div className="text-center mb-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight uppercase">
+          <h2 className="text-2xl md:text-3xl font-semibold sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight uppercase">
             Our <span className="text-primary">Services</span>
           </h2>
           <p className="mt-4 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
@@ -64,7 +64,7 @@ export default function ServicesGrid() {
                 <div className="w-14 h-14 bg-background dark:bg-black rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
                   <Icon className="w-7 h-7 text-primary group-hover:text-white transition-colors" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{service.title}</h3>
+                <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-white mb-3">{service.title}</h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-6 flex-grow">{service.description}</p>
                 <Link
                   href={service.link}

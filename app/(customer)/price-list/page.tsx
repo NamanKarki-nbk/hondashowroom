@@ -72,7 +72,7 @@ export default function PriceListPage() {
         </div>
         <div className="max-w-6xl mx-auto relative z-10">
           <p className="text-primary font-bold tracking-widest uppercase text-sm mb-4">Official Price List</p>
-          <h1 className="text-4xl md:text-5xl font-black text-primary-foreground mb-6 uppercase">
+          <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-black text-primary-foreground mb-6 uppercase">
             Honda Nepal Pricing
           </h1>
           <p className="text-gray-400 max-w-xl text-lg">
@@ -100,7 +100,7 @@ export default function PriceListPage() {
             onClick={() => setExpanded(expanded === "2wheelers" ? (null as any) : "2wheelers")}
             className="w-full bg-[#111111] text-primary-foreground px-6 py-5 rounded-t-xl font-bold flex items-center justify-between transition-colors hover:bg-black"
           >
-            <span className="text-xl">Honda 2 Wheelers (Motorcycles & Scooters)</span>
+            <span className="text-xl md:text-2xl font-semibold">Honda 2 Wheelers (Motorcycles & Scooters)</span>
             {expanded === "2wheelers" ? <ChevronUp /> : <ChevronDown />}
           </button>
           
@@ -146,7 +146,7 @@ export default function PriceListPage() {
             onClick={() => setExpanded(expanded === "power" ? (null as any) : "power")}
             className="w-full bg-[#111111] text-primary-foreground px-6 py-5 rounded-t-xl font-bold flex items-center justify-between transition-colors hover:bg-black"
           >
-            <span className="text-xl">Honda Power Products (Generators, Water Pumps...)</span>
+            <span className="text-xl md:text-2xl font-semibold">Honda Power Products (Generators, Water Pumps...)</span>
             {expanded === "power" ? <ChevronUp /> : <ChevronDown />}
           </button>
           

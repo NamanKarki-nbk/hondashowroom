@@ -186,11 +186,11 @@ export default function SalesForm({ customers, vehicles }: { customers: Customer
         <div className="flex gap-8">
            <div>
              <p className="text-sm text-gray-500 uppercase font-bold tracking-wider">Final Amount</p>
-             <p className="text-3xl font-black text-[#B83227]">Rs. {finalAmount.toLocaleString()}</p>
+             <p className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black text-[#B83227]">Rs. {finalAmount.toLocaleString()}</p>
            </div>
            <div>
              <p className="text-sm text-gray-500 uppercase font-bold tracking-wider">Due Amount</p>
-             <p className="text-3xl font-black">Rs. {dueAmount.toLocaleString()}</p>
+             <p className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black">Rs. {dueAmount.toLocaleString()}</p>
            </div>
         </div>
 

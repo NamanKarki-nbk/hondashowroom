@@ -95,7 +95,7 @@ export default function DioTechnologySection() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 text-primary text-xs font-black tracking-widest uppercase mb-3">
             <Cpu className="w-4 h-4" /> Next-Gen Innovations
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-foreground uppercase tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold sm:text-4xl font-black text-foreground uppercase tracking-tight">
             Advanced Technology Suite
           </h2>
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2">
@@ -134,7 +134,7 @@ export default function DioTechnologySection() {
                 <span className="inline-block px-3 py-1 rounded-lg bg-red-100 dark:bg-red-950/60 text-primary text-xs font-black uppercase tracking-wider mb-3">
                   {activeModule.badge}
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-black text-foreground uppercase tracking-tight">
+                <h3 className="text-2xl md:text-3xl font-semibold sm:text-3xl font-black text-foreground uppercase tracking-tight">
                   {activeModule.headline}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">

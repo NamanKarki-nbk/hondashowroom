@@ -72,7 +72,7 @@ export default function SignupPage() {
            <div className="bg-black border border-gray-800 p-4 rounded-2xl mb-6 shadow-lg">
               <Logo className="w-10 h-10" />
            </div>
-           <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">Create an Account</h1>
+           <h1 className="text-2xl md:text-3xl font-semibold font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">Create an Account</h1>
            <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
              Join the Honda community today.
            </p>

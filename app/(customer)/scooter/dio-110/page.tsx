@@ -241,7 +241,7 @@ export default function HondaDio110Page({
                 <div className="w-16 h-16 bg-green-100 text-green-600 dark:bg-green-950/60 dark:text-green-400 rounded-full flex items-center justify-center mx-auto">
                   <ShieldCheck className="w-10 h-10" />
                 </div>
-                <h3 className="text-2xl font-black uppercase text-foreground">
+                <h3 className="text-2xl md:text-3xl font-semibold font-black uppercase text-foreground">
                   {bookingType === "book" ? "Booking Requested!" : "Test Ride Scheduled!"}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -254,7 +254,7 @@ export default function HondaDio110Page({
                   <span className="text-xs font-black uppercase tracking-widest text-primary block mb-1">
                     Honda Showroom Direct
                   </span>
-                  <h3 className="text-2xl font-black uppercase text-foreground">
+                  <h3 className="text-2xl md:text-3xl font-semibold font-black uppercase text-foreground">
                     {bookingType === "book" ? `Book ${selectedVariant}` : `Test Ride ${selectedVariant}`}
                   </h3>
                   <p className="text-xs text-gray-500 mt-1">

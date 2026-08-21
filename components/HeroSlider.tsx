@@ -92,7 +92,7 @@ export default function HeroSlider() {
                  <p className="text-primary font-bold tracking-[0.3em] text-[10px] sm:text-xs md:text-sm uppercase mb-2 md:mb-3">
                    {slide.subtitle}
                  </p>
-                 <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-[110px] xl:text-[130px] font-black text-gray-900 dark:text-primary-foreground tracking-tighter uppercase leading-none mb-3 sm:mb-4 md:mb-6 font-sans">
+                 <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold sm:text-5xl md:text-7xl lg:text-[110px] xl:text-[130px] font-black text-gray-900 dark:text-primary-foreground tracking-tighter uppercase leading-none mb-3 sm:mb-4 md:mb-6 font-sans">
                    {slide.title}
                  </h2>
                  <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base md:text-lg font-medium mb-4 md:mb-8 sm:max-w-none px-4 md:px-0">
@@ -119,7 +119,7 @@ export default function HeroSlider() {
                  <p className="text-gray-500 font-bold tracking-[0.2em] text-[10px] sm:text-xs md:text-sm uppercase mb-1 md:mb-2">
                    Starting At
                  </p>
-                 <p className="text-gray-900 dark:text-primary-foreground text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black font-sans">
+                 <p className="text-gray-900 dark:text-primary-foreground text-2xl md:text-3xl font-semibold sm:text-3xl md:text-4xl lg:text-5xl font-black font-sans">
                    {slide.price}
                  </p>
                </motion.div>

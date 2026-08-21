@@ -725,7 +725,7 @@ export default function DynamicForm({
 
   return (
     <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-white/10 rounded-xl p-6 shadow-sm flex flex-col h-full">
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Letter Details</h2>
+      <h2 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-white mb-6">Letter Details</h2>
       
       <div className="space-y-5 flex-grow">
         {/* Document Type Selection */}

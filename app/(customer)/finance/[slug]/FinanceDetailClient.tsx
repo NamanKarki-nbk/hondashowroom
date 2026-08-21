@@ -55,7 +55,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent flex items-center">
           <div className="max-w-7xl mx-auto px-6 w-full">
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-2 uppercase max-w-2xl">
+            <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-6xl font-black text-white mb-2 uppercase max-w-2xl">
               THE {product.name.toUpperCase()}.
             </h1>
             <p className="text-white text-lg font-bold">
@@ -74,7 +74,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
         <div className="flex items-center gap-4">
           <div className="h-[1px] w-32 bg-gray-400"></div>
           <div className="text-center">
-            <span className="block font-bold text-foreground text-xl tracking-widest uppercase">
+            <span className="block font-bold text-foreground text-xl md:text-2xl font-semibold tracking-widest uppercase">
               ONE STEP CLOSER TO YOUR {product.name.toUpperCase()}
             </span>
           </div>
@@ -87,7 +87,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
         {/* Specs Header (Image 3) */}
         <div className="flex flex-col md:flex-row items-center gap-12 mb-16">
            <div className="flex-1">
-             <h2 className="text-3xl font-black uppercase text-foreground mb-1">{product.name}</h2>
+             <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black uppercase text-foreground mb-1">{product.name}</h2>
              <p className="text-gray-500 uppercase text-sm mb-6">SUPERBIKE OF SUPERLATIVES</p>
              
              <div className="relative mb-6 max-w-sm">
@@ -130,7 +130,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
 
         {/* EMI Calculator (Image 5) */}
         <div className="mb-8">
-          <h2 className="text-3xl font-black uppercase text-foreground mb-6">EMI CALCULATOR</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black uppercase text-foreground mb-6">EMI CALCULATOR</h2>
           
           <div className="border border-gray-300 dark:border-gray-700 bg-background rounded-sm shadow-sm overflow-hidden">
             {/* Tabs */}
@@ -171,7 +171,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
               
               {/* Down Payment */}
               <div>
-                 <h3 className="text-xl font-bold text-foreground mb-6">Down Payment</h3>
+                 <h3 className="text-xl md:text-2xl font-semibold font-bold text-foreground mb-6">Down Payment</h3>
                  <div className="relative pt-6">
                    <div className="absolute right-0 top-0 font-bold text-foreground text-sm">
                      ₹ {downPayment.toLocaleString("en-IN")}/-
@@ -189,7 +189,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
 
               {/* Tenure */}
               <div>
-                 <h3 className="text-xl font-bold text-foreground mb-6">Tenure</h3>
+                 <h3 className="text-xl md:text-2xl font-semibold font-bold text-foreground mb-6">Tenure</h3>
                  <div className="relative pt-6">
                    <div className="absolute right-0 top-0 font-bold text-foreground text-sm">
                      {tenure} Months
@@ -207,7 +207,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
 
               {/* Bullet Percentage (Only if plan is Bullet) */}
               <div className={`transition-opacity duration-300 ${plan === "Bullet" ? "opacity-100" : "opacity-30 pointer-events-none"}`}>
-                 <h3 className="text-xl font-bold text-foreground mb-6">Annual Bullet Percentage</h3>
+                 <h3 className="text-xl md:text-2xl font-semibold font-bold text-foreground mb-6">Annual Bullet Percentage</h3>
                  <div className="relative pt-6">
                    <div className="absolute right-0 top-0 font-bold text-foreground text-sm">
                      {bulletPct} %

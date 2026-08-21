@@ -109,7 +109,7 @@ export default function BookNowPage() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <CalendarCheck className="w-10 h-10 text-primary-foreground/90" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-primary-foreground tracking-tight mb-3">
+          <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-black text-primary-foreground tracking-tight mb-3">
             Book Your Honda
           </h1>
           <p className="text-primary-foreground/80 text-lg max-w-xl mx-auto">
@@ -124,7 +124,7 @@ export default function BookNowPage() {
           <div className="bg-background dark:bg-[#111] rounded-2xl border border-gray-200 dark:border-background/10 shadow-xl overflow-hidden">
             <div className="bg-gradient-to-br from-emerald-500 to-green-600 p-8 text-center">
               <CheckCircle2 className="w-16 h-16 text-primary-foreground mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-primary-foreground mb-1">Booking Confirmed!</h2>
+              <h2 className="text-2xl md:text-3xl font-semibold font-bold text-primary-foreground mb-1">Booking Confirmed!</h2>
               <p className="text-primary-foreground/80 text-sm">We're excited to have you on board.</p>
             </div>
             <div className="p-8 text-center">
@@ -132,7 +132,7 @@ export default function BookNowPage() {
                 <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">
                   Booking Reference
                 </span>
-                <span className="text-3xl font-black text-primary tracking-wider">
+                <span className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black text-primary tracking-wider">
                   #{bookingRef}
                 </span>
               </div>
@@ -156,7 +156,7 @@ export default function BookNowPage() {
         ) : (
           /* ── Form Card ── */
           <div className="bg-background dark:bg-[#111] rounded-2xl border border-gray-200 dark:border-background/10 shadow-xl p-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-primary-foreground mb-1">
+            <h2 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-primary-foreground mb-1">
               Booking Details
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">

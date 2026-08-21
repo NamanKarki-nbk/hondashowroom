@@ -24,7 +24,7 @@ export default function AboutTestimonials() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight uppercase mb-4 sm:mb-6">
+            <h2 className="text-2xl md:text-3xl font-semibold sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight uppercase mb-4 sm:mb-6">
               A Legacy of <span className="text-primary">Trust</span>
             </h2>
             <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-8">
@@ -37,7 +37,7 @@ export default function AboutTestimonials() {
                 return (
                   <div key={index} className="flex flex-col">
                     <Icon className="w-8 h-8 text-primary mb-3" />
-                    <span className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mb-1">{stat.value}</span>
+                    <span className="text-2xl md:text-3xl font-semibold sm:text-3xl font-black text-gray-900 dark:text-white mb-1">{stat.value}</span>
                     <span className="text-sm text-gray-500 font-bold uppercase tracking-wider">{stat.label}</span>
                   </div>
                 );

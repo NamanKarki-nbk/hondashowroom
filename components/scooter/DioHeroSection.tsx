@@ -75,10 +75,10 @@ export default function DioHeroSection({
               </div>
 
               {/* Main Display Headline */}
-              <h1 className="text-5xl sm:text-7xl md:text-[5.5rem] font-black tracking-tight text-foreground uppercase leading-none mb-2">
+              <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-6xl font-bold tracking-tight sm:text-7xl md:text-[5.5rem] font-black tracking-tight text-foreground uppercase leading-none mb-2">
                 {titleMain} <span className="text-primary">{titleSub}</span>
               </h1>
-              <p className="text-2xl sm:text-4xl font-bold italic text-primary mt-4 mb-6 tracking-wide">
+              <p className="text-2xl md:text-3xl font-semibold sm:text-4xl font-bold italic text-primary mt-4 mb-6 tracking-wide">
                 {tagline}
               </p>
 
@@ -101,7 +101,7 @@ export default function DioHeroSection({
                     Standard Variant (STD)
                   </span>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl sm:text-3xl font-black text-primary">
+                    <span className="text-2xl md:text-3xl font-semibold sm:text-3xl font-black text-primary">
                       {stdPrice || basePrice}*
                     </span>
                   </div>
@@ -123,7 +123,7 @@ export default function DioHeroSection({
                     {titleSub === "125" ? "Smart Variant (H-SMART)" : "Deluxe Variant (DLX)"}
                   </span>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl sm:text-3xl font-black text-primary">
+                    <span className="text-2xl md:text-3xl font-semibold sm:text-3xl font-black text-primary">
                       {dlxPrice || "NPR 2,84,900"}*
                     </span>
                   </div>

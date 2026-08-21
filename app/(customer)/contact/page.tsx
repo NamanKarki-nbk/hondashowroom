@@ -46,10 +46,10 @@ export default function ContactPage() {
         
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+          <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-extrabold text-gray-900 mb-4">
             Get in <span className="text-primary">Touch</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl font-semibold text-gray-600 max-w-2xl mx-auto">
             Have questions about a new vehicle, finance options, or need to schedule a service? We are here to help!
           </p>
         </div>
@@ -58,7 +58,7 @@ export default function ContactPage() {
           
           {/* Contact Info & Map */}
           <div className="bg-gray-900 text-white p-8 md:p-12">
-            <h2 className="text-3xl font-bold mb-8 text-white">Contact Information</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-bold mb-8 text-white">Contact Information</h2>
             
             <div className="space-y-6 mb-12">
               <div className="flex items-start">
@@ -100,11 +100,11 @@ export default function ContactPage() {
 
           {/* Form */}
           <div className="p-8 md:p-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">Send an Inquiry</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-bold text-gray-900 mb-8">Send an Inquiry</h2>
             
             {success ? (
               <div className="bg-green-50 text-green-800 border border-green-200 rounded-xl p-6 text-center">
-                <h3 className="text-xl font-bold mb-2">Thank You!</h3>
+                <h3 className="text-xl md:text-2xl font-semibold font-bold mb-2">Thank You!</h3>
                 <p>Your inquiry has been received. Our sales team will contact you shortly.</p>
                 <button 
                   onClick={() => setSuccess(false)}

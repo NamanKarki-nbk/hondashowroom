@@ -35,7 +35,7 @@ export default async function SparePartsPage({
           <div className="w-16 h-16 bg-[#B83227]/10 text-[#B83227] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(184,50,39,0.3)]">
             <Package className="w-8 h-8" />
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-4">
+          <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-4">
             Honda Genuine <span className="text-[#B83227]">Parts</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
@@ -68,7 +68,7 @@ export default async function SparePartsPage({
           {spareParts.length === 0 ? (
             <div className="p-16 text-center text-gray-500 dark:text-gray-400">
               <Package className="w-16 h-16 mx-auto mb-6 text-gray-300 dark:text-gray-600" />
-              <p className="text-xl font-medium">No spare parts found matching "{query}".</p>
+              <p className="text-xl md:text-2xl font-semibold font-medium">No spare parts found matching "{query}".</p>
               <p className="mt-2">Try searching with a different term or part number.</p>
             </div>
           ) : (
@@ -117,7 +117,7 @@ export default async function SparePartsPage({
         <div className="mt-16 bg-[#B83227] rounded-3xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center justify-between shadow-2xl relative overflow-hidden">
            <div className="absolute right-0 top-0 w-64 h-64 bg-black/10 rounded-full blur-3xl pointer-events-none"></div>
            <div className="relative z-10 max-w-2xl mb-8 md:mb-0 text-center md:text-left">
-              <h3 className="text-3xl font-black uppercase tracking-tight mb-2">Need Help Finding A Part?</h3>
+              <h3 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black uppercase tracking-tight mb-2">Need Help Finding A Part?</h3>
               <p className="text-red-100 font-medium">Our technicians can help you identify exactly what you need. Upload a photo of your damaged part or provide your chassis number.</p>
            </div>
            <button className="relative z-10 bg-white text-[#B83227] px-8 py-4 rounded-xl font-bold uppercase tracking-wider hover:bg-gray-100 transition-colors shadow-xl whitespace-nowrap">

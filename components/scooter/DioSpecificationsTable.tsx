@@ -124,7 +124,7 @@ export default function DioSpecificationsTable({ vehicle }: DioSpecificationsTab
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 text-primary text-xs font-black tracking-widest uppercase mb-3">
             <Sliders className="w-4 h-4" /> Technical Data
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-foreground uppercase tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold sm:text-4xl font-black text-foreground uppercase tracking-tight">
             Technical Specifications
           </h2>
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2">
@@ -157,7 +157,7 @@ export default function DioSpecificationsTable({ vehicle }: DioSpecificationsTab
         {/* Specs Table Container */}
         <div className="bg-gray-50 dark:bg-[#141416] border border-gray-200 dark:border-gray-800 rounded-3xl overflow-hidden shadow-xl">
           <div className="p-6 sm:p-8 bg-gray-100 dark:bg-[#18181B] border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
-            <h3 className="text-xl font-black uppercase text-foreground tracking-tight flex items-center gap-2">
+            <h3 className="text-xl md:text-2xl font-semibold font-black uppercase text-foreground tracking-tight flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5 text-primary" /> {currentCategory.name}
             </h3>
             <span className="text-xs font-bold uppercase tracking-wider text-gray-500">

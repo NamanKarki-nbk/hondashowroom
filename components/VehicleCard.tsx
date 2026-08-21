@@ -59,7 +59,7 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
         {/* Content */}
         <div className="p-6">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-1">{title}</h3>
+            <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-1">{title}</h3>
             {cc && <span className="text-xs font-medium text-gray-500 bg-[#e8dfd1] px-2 py-1 rounded-md">{cc} cc</span>}
           </div>
           

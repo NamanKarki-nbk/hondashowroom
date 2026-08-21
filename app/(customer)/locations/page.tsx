@@ -45,7 +45,7 @@ export default function LocationsPage() {
           <div className="w-16 h-16 bg-[#B83227]/10 text-[#B83227] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_15px_rgba(184,50,39,0.3)]">
             <MapPin className="w-8 h-8" />
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-4">
+          <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-4">
             Our <span className="text-[#B83227]">Locations</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
@@ -67,7 +67,7 @@ export default function LocationsPage() {
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className={`text-xl font-bold uppercase tracking-tight ${!loc.isMain && "text-gray-900 dark:text-white"}`}>{loc.name}</h3>
+                    <h3 className={`text-xl md:text-2xl font-semibold font-bold uppercase tracking-tight ${!loc.isMain && "text-gray-900 dark:text-white"}`}>{loc.name}</h3>
                     <p className={`text-sm font-semibold uppercase tracking-wider mt-1 ${loc.isMain ? "text-red-200" : "text-[#B83227]"}`}>{loc.type}</p>
                   </div>
                   {loc.isMain && <span className="bg-white text-[#B83227] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">HQ</span>}

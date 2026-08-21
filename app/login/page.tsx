@@ -115,7 +115,7 @@ export default function LoginPage() {
            <div className="bg-black border border-gray-800 p-4 rounded-2xl mb-6 shadow-lg">
               <Logo className="w-10 h-10" />
            </div>
-           <h1 className="text-2xl font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">Welcome Back</h1>
+           <h1 className="text-2xl md:text-3xl font-semibold font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">Welcome Back</h1>
            <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
              Log in to your Honda account to continue.
            </p>
@@ -214,7 +214,7 @@ export default function LoginPage() {
                    maxLength={6}
                    value={otp}
                    onChange={e => setOtp(e.target.value.replace(/\D/g, ''))}
-                   className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-center tracking-widest text-xl font-bold text-gray-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-gray-300"
+                   className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-4 text-center tracking-widest text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-gray-300"
                    placeholder="------"
                  />
               </div>

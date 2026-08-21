@@ -92,7 +92,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-primary-foreground mb-4"
+            className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-bold text-gray-900 dark:text-primary-foreground mb-4"
           >
             Fuel Cost <span className="text-primary">Calculator</span>
           </motion.h1>
@@ -115,7 +115,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
             className="lg:col-span-5 bg-background dark:bg-[#111] border border-gray-200 dark:border-background/10 rounded-3xl p-8 shadow-xl"
           >
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-primary-foreground flex items-center">
+              <h2 className="text-2xl md:text-3xl font-semibold font-bold text-gray-900 dark:text-primary-foreground flex items-center">
                 <Calculator className="w-6 h-6 mr-3 text-primary" />
                 Your Details
               </h2>
@@ -150,7 +150,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Daily Distance (km)
                   </label>
-                  <span className="text-xl font-bold text-primary">{dailyDistance} km</span>
+                  <span className="text-xl md:text-2xl font-semibold font-bold text-primary">{dailyDistance} km</span>
                 </div>
                 <input
                   type="range"
@@ -172,7 +172,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Days Commuting Per Month
                   </label>
-                  <span className="text-xl font-bold text-primary">{daysPerMonth} days</span>
+                  <span className="text-xl md:text-2xl font-semibold font-bold text-primary">{daysPerMonth} days</span>
                 </div>
                 <input
                   type="range"
@@ -234,23 +234,23 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
               <div className="relative z-10">
                 <h3 className="text-red-100 font-semibold mb-2 text-lg">Monthly Fuel Cost</h3>
                 <div className="flex items-baseline space-x-2">
-                  <span className="text-4xl font-bold">NPR</span>
-                  <span className="text-6xl md:text-7xl font-black tracking-tighter">
+                  <span className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold font-bold">NPR</span>
+                  <span className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-6xl font-bold tracking-tight md:text-7xl font-black tracking-tighter">
                     {monthlyCost.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                   </span>
                 </div>
                 <div className="mt-8 pt-8 border-t border-red-500/30 grid grid-cols-2 md:grid-cols-3 gap-6">
                   <div>
                     <p className="text-red-200 text-sm mb-1">Yearly Cost</p>
-                    <p className="text-2xl font-bold">NPR {yearlyCost.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</p>
+                    <p className="text-2xl md:text-3xl font-semibold font-bold">NPR {yearlyCost.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</p>
                   </div>
                   <div>
                     <p className="text-red-200 text-sm mb-1">Cost Per Km</p>
-                    <p className="text-2xl font-bold">NPR {costPerKm.toFixed(2)}</p>
+                    <p className="text-2xl md:text-3xl font-semibold font-bold">NPR {costPerKm.toFixed(2)}</p>
                   </div>
                   <div className="hidden md:block">
                     <p className="text-red-200 text-sm mb-1">Fuel Consumed</p>
-                    <p className="text-2xl font-bold">{monthlyLitres.toFixed(1)} Litres/mo</p>
+                    <p className="text-2xl md:text-3xl font-semibold font-bold">{monthlyLitres.toFixed(1)} Litres/mo</p>
                   </div>
                 </div>
               </div>
@@ -266,7 +266,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
                 <p className="text-sm text-gray-500 dark:text-gray-400">Compared to an average car (12 kmpl)</p>
               </div>
               <div className="text-right">
-                <span className="block text-3xl font-black text-green-500">
+                <span className="block text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black text-green-500">
                   NPR {yearlySavings.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                 </span>
                 <span className="text-xs font-semibold uppercase tracking-wider text-green-600/70 dark:text-green-400/70">
@@ -317,7 +317,7 @@ export default function FuelCalculatorClient({ vehicles }: { vehicles: Vehicle[]
         >
           <div className="flex items-center space-x-3 mb-8">
             <BarChart2 className="w-6 h-6 text-primary" />
-            <h3 className="text-xl font-bold text-gray-900 dark:text-primary-foreground">Monthly Cost Comparison</h3>
+            <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-primary-foreground">Monthly Cost Comparison</h3>
           </div>
           
           <div className="space-y-4">

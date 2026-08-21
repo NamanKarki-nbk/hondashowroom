@@ -68,13 +68,13 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
                  className="w-full h-auto object-contain relative z-10 drop-shadow-xl max-h-64"
                />
                <div className="mt-6 text-center relative z-10">
-                 <h2 className="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tight">{selectedModel.modelName}</h2>
+                 <h2 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight">{selectedModel.modelName}</h2>
                  <p className="text-[#B83227] font-bold text-lg mt-1">Ex-showroom NPR {selectedModel.minPrice.toLocaleString()}</p>
                </div>
             </div>
 
             <div className="md:w-1/2 p-8 bg-background dark:bg-[#151516] flex flex-col justify-center">
-               <h3 className="text-xl font-bold uppercase tracking-tight mb-6 text-gray-900 dark:text-white">Finance Plan Breakdown</h3>
+               <h3 className="text-xl md:text-2xl font-semibold font-bold uppercase tracking-tight mb-6 text-gray-900 dark:text-white">Finance Plan Breakdown</h3>
                
                <div className="space-y-6">
                  <div>
@@ -144,7 +144,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
                     </div>
                     <div className="flex justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                       <span className="text-gray-900 dark:text-white font-bold uppercase tracking-wider">EMI / Month</span>
-                      <span className="text-2xl font-black text-[#B83227]">Rs. {selectedPlan.emi.toLocaleString()}</span>
+                      <span className="text-2xl md:text-3xl font-semibold font-black text-[#B83227]">Rs. {selectedPlan.emi.toLocaleString()}</span>
                     </div>
                  </div>
 
@@ -191,7 +191,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {filteredModels.map(model => (
             <div key={model.modelName} className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 p-8 rounded-3xl flex flex-col group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
-              <h3 className="font-black text-xl text-gray-900 dark:text-white uppercase tracking-tight mb-1">{model.modelName}</h3>
+              <h3 className="font-black text-xl md:text-2xl font-semibold text-gray-900 dark:text-white uppercase tracking-tight mb-1">{model.modelName}</h3>
               <p className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">
                 (60% DP / 12 Months)
               </p>

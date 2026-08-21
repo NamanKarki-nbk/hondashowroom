@@ -103,7 +103,7 @@ export default function DioFeaturesGrid({ features }: { features?: FeatureCard[]
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 text-primary text-xs font-black tracking-widest uppercase mb-3">
             <Sparkles className="w-4 h-4" /> Cutting-Edge Innovations
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-foreground uppercase tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold sm:text-5xl font-black text-foreground uppercase tracking-tight">
             Key Highlights & Features
           </h2>
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-3">

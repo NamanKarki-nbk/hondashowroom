@@ -182,7 +182,7 @@ export default function EmiCalculator({
 
           {/* Text — top left of card */}
           <div className="relative z-10 p-8 lg:p-10">
-            <h2 className="text-3xl lg:text-4xl font-extrabold text-primary-foreground mb-1">{vehicleName}</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold lg:text-4xl font-extrabold text-primary-foreground mb-1">{vehicleName}</h2>
             <p className="text-gray-400 text-xs mb-7">*Ex-Showroom Delhi ₹ {initialPrice.toLocaleString("en-IN")}</p>
 
             {/* Loan Amount & Total Interest — right aligned values */}

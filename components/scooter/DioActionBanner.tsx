@@ -33,7 +33,7 @@ export default function DioActionBanner({ onBookNow, onTestRide }: DioActionBann
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 text-primary text-xs font-black tracking-widest uppercase mb-2">
                   <Calculator className="w-4 h-4" /> Finance Estimator
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-black text-foreground uppercase tracking-tight">
+                <h3 className="text-2xl md:text-3xl font-semibold sm:text-3xl font-black text-foreground uppercase tracking-tight">
                   Honda Dio 110 EMI Calculator
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-500 mt-1">
@@ -86,7 +86,7 @@ export default function DioActionBanner({ onBookNow, onTestRide }: DioActionBann
               <span className="text-xs font-black uppercase tracking-widest text-gray-500 block">
                 Estimated Monthly EMI
               </span>
-              <div className="text-4xl sm:text-5xl font-black text-primary">
+              <div className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold sm:text-5xl font-black text-primary">
                 NPR {estimatedMonthlyEmi.toLocaleString("en-IN")}
                 <span className="text-xs font-normal text-gray-500 block mt-1">/ month for {tenure} months</span>
               </div>
@@ -115,7 +115,7 @@ export default function DioActionBanner({ onBookNow, onTestRide }: DioActionBann
         {/* Call-To-Action Banner */}
         <div className="bg-gradient-to-r from-red-900 via-primary to-red-800 text-white rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="space-y-3 text-center md:text-left max-w-xl">
-            <h3 className="text-3xl sm:text-4xl font-black uppercase tracking-tight leading-tight">
+            <h3 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold sm:text-4xl font-black uppercase tracking-tight leading-tight">
               Ready to Ride The New Honda Dio?
             </h3>
             <p className="text-sm sm:text-base text-red-100 leading-relaxed">

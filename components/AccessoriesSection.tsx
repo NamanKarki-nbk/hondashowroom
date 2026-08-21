@@ -47,7 +47,7 @@ export default function AccessoriesSection() {
               <span>Genuine Accessories</span>
             </div>
             
-            <h2 className="text-4xl md:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] uppercase">
+            <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] uppercase">
               EXPLORE <span className="text-primary">ACCESSORIES</span>
             </h2>
           </div>
@@ -91,7 +91,7 @@ export default function AccessoriesSection() {
               </div>
               
               <div className="mt-auto w-full">
-                <h3 className="text-xl xl:text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">{item.name}</h3>
+                <h3 className="text-xl md:text-2xl font-semibold xl:text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">{item.name}</h3>
                 <p className="text-gray-500 font-medium text-lg xl:text-xl">{item.price}</p>
                 
                 <button className="w-full mt-6 bg-background border-2 border-gray-200 text-gray-900 font-bold py-3 rounded-xl hover:border-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300">

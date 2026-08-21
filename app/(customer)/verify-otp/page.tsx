@@ -70,7 +70,7 @@ export default function VerifyOtpPage() {
         <div className="flex justify-center">
           <ShieldCheck className="w-16 h-16 text-[#B83227]" />
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground uppercase tracking-tight">
+        <h2 className="mt-6 text-center text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-extrabold text-foreground uppercase tracking-tight">
           Verify Your Account
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
@@ -131,7 +131,7 @@ export default function VerifyOtpPage() {
                   maxLength={6}
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#B83227] focus:border-[#B83227] sm:text-sm bg-white dark:bg-black text-center text-2xl tracking-widest"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#B83227] focus:border-[#B83227] sm:text-sm bg-white dark:bg-black text-center text-2xl md:text-3xl font-semibold tracking-widest"
                   placeholder="------"
                 />
               </div>

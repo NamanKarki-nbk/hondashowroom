@@ -70,7 +70,7 @@ export default function Dio125VariantComparison({
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 text-primary text-xs font-black tracking-widest uppercase mb-3">
             <Sparkles className="w-4 h-4" /> Compare Model Trims
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-foreground uppercase tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold sm:text-4xl font-black text-foreground uppercase tracking-tight">
             Choose Your Bold Look
           </h2>
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2">
@@ -109,10 +109,10 @@ export default function Dio125VariantComparison({
                     )}
                   </div>
 
-                  <h3 className="text-2xl font-black text-foreground uppercase tracking-tight">
+                  <h3 className="text-2xl md:text-3xl font-semibold font-black text-foreground uppercase tracking-tight">
                     {variant.name}
                   </h3>
-                  <div className="text-2xl font-black text-primary mt-1 mb-4">
+                  <div className="text-2xl md:text-3xl font-semibold font-black text-primary mt-1 mb-4">
                     {variant.price}
                     <span className="text-xs font-normal text-gray-500 block">Ex-Showroom Price</span>
                   </div>

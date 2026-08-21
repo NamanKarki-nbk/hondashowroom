@@ -177,7 +177,7 @@ export default function OwnersManualClient({ products }: { products: Product[] }
           {submittedModels.map((item) => (
             <div key={item.id} className="flex flex-col gap-6">
               {submittedModels.length > 1 && (
-                <h2 className="text-xl font-bold text-[#5b8cff] border-b border-background/5 pb-2">
+                <h2 className="text-xl md:text-2xl font-semibold font-bold text-[#5b8cff] border-b border-background/5 pb-2">
                   {item.name}
                 </h2>
               )}

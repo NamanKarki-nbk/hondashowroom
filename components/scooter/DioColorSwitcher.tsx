@@ -164,7 +164,7 @@ export default function DioColorSwitcher({ onSelectColor }: DioColorSwitcherProp
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[1.1] text-foreground mb-4"
+              className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[1.1] text-foreground mb-4"
             >
               Signature <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-red-500">
@@ -305,7 +305,7 @@ export default function DioColorSwitcher({ onSelectColor }: DioColorSwitcherProp
                     {selectedColor.badge}
                   </span>
                 )}
-                <h4 className="text-xl md:text-2xl font-black text-foreground leading-tight mb-1">
+                <h4 className="text-xl md:text-2xl font-semibold md:text-2xl font-black text-foreground leading-tight mb-1">
                   {selectedColor.name}
                 </h4>
                 <p className="text-xs font-medium text-gray-500 uppercase tracking-widest">

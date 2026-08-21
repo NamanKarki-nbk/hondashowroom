@@ -8,7 +8,7 @@ export default async function ShopPage() {
   return (
     <main className="min-h-screen bg-background dark:bg-[#0B0B0C] pt-28 pb-20">
       <div className="max-w-7xl mx-auto px-6">
-        <h1 className="text-4xl font-extrabold text-gray-900 dark:text-primary-foreground tracking-tight uppercase mb-8">
+        <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold font-extrabold text-gray-900 dark:text-primary-foreground tracking-tight uppercase mb-8">
           Shop Honda Products
         </h1>
         <Suspense fallback={<div className="animate-pulse h-96 bg-[#e8dfd1] dark:bg-[#111] rounded-2xl w-full"></div>}>

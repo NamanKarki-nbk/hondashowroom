@@ -133,7 +133,7 @@ export default function VehicleInventoryTable() {
       {/* Header Area */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
+          <h1 className="text-2xl md:text-3xl font-semibold md:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
             Vehicle Inventory
           </h1>
           <p className="text-sm text-gray-500 mt-1">
@@ -281,7 +281,7 @@ export default function VehicleInventoryTable() {
                   <FileCheck size={24} strokeWidth={2.5} />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 tracking-tight">Review Invoice Extraction</h2>
+                  <h2 className="text-2xl md:text-3xl font-semibold font-black text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 tracking-tight">Review Invoice Extraction</h2>
                   <p className="text-sm text-gray-500 font-medium">Verify the parsed records before committing to the database. Everything looks good!</p>
                 </div>
               </div>

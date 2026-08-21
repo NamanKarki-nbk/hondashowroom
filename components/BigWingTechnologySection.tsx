@@ -118,14 +118,14 @@ export default function BigWingTechnologySection({
              <Logo className="w-8 h-8" />
              <div className="text-primary-foreground text-[8px] font-bold uppercase tracking-wider mt-1">Honda</div>
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-primary-foreground">{vehicleName}</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-5xl font-black text-primary-foreground">{vehicleName}</h2>
         </motion.div>
 
         <motion.div 
           style={{ opacity: useTransform(scrollYProgress, [0.05, 0.1], [0, 1]) }}
           className="absolute top-8 left-8 md:top-12 md:left-12 z-20"
         >
-          <h2 className="text-3xl md:text-5xl font-black text-primary-foreground">{activeTitle}</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-5xl font-black text-primary-foreground">{activeTitle}</h2>
         </motion.div>
 
         {/* Concentric Circles behind the bike */}

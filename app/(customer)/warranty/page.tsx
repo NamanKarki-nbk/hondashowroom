@@ -43,7 +43,7 @@ export default function WarrantyPage() {
                 <span className="w-6 h-0.5 bg-primary rounded-full" />
                 Honda Shield
               </div>
-              <h1 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight leading-tight">
+              <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight leading-tight">
                 Ride with Complete Peace of Mind
               </h1>
               <p className="text-gray-500 dark:text-gray-400 mt-4 text-lg">
@@ -73,7 +73,7 @@ export default function WarrantyPage() {
                 <ShieldCheck className="w-6 h-6 text-gray-700 dark:text-gray-300" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-primary-foreground">Standard Warranty</h2>
+                <h2 className="text-2xl md:text-3xl font-semibold font-bold text-gray-900 dark:text-primary-foreground">Standard Warranty</h2>
                 <p className="text-sm text-gray-500">Included with every new Honda</p>
               </div>
             </div>
@@ -103,7 +103,7 @@ export default function WarrantyPage() {
                 <Shield className="w-6 h-6 text-primary-foreground" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-primary-foreground">Honda Shield</h2>
+                <h2 className="text-2xl md:text-3xl font-semibold font-bold text-gray-900 dark:text-primary-foreground">Honda Shield</h2>
                 <p className="text-sm text-primary font-semibold">Extended Warranty Program</p>
               </div>
             </div>
@@ -131,7 +131,7 @@ export default function WarrantyPage() {
       <div className="bg-background dark:bg-[#111] py-20 border-y border-gray-100 dark:border-background/5">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-black text-gray-900 dark:text-primary-foreground mb-4">Why Choose Honda Shield?</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black text-gray-900 dark:text-primary-foreground mb-4">Why Choose Honda Shield?</h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
               Protect yourself against inflation in parts and labor costs while ensuring your vehicle is serviced exclusively by trained Honda technicians.
             </p>
@@ -142,7 +142,7 @@ export default function WarrantyPage() {
               <div className="w-16 h-16 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 mx-auto flex items-center justify-center mb-6">
                 <Clock className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-primary-foreground mb-2">Long-Term Protection</h3>
+              <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-primary-foreground mb-2">Long-Term Protection</h3>
               <p className="text-gray-500">Coverage extends well beyond the standard factory warranty, protecting you for years to come.</p>
             </div>
 
@@ -150,7 +150,7 @@ export default function WarrantyPage() {
               <div className="w-16 h-16 rounded-full bg-green-50 dark:bg-green-900/20 text-green-600 mx-auto flex items-center justify-center mb-6">
                 <Settings className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-primary-foreground mb-2">Genuine Parts</h3>
+              <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-primary-foreground mb-2">Genuine Parts</h3>
               <p className="text-gray-500">Any required replacements are guaranteed to be 100% Genuine Honda parts fitted by experts.</p>
             </div>
 
@@ -158,7 +158,7 @@ export default function WarrantyPage() {
               <div className="w-16 h-16 rounded-full bg-amber-50 dark:bg-amber-900/20 text-amber-600 mx-auto flex items-center justify-center mb-6">
                 <Zap className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-primary-foreground mb-2">Higher Resale Value</h3>
+              <h3 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-primary-foreground mb-2">Higher Resale Value</h3>
               <p className="text-gray-500">The extended warranty is transferable, making your vehicle significantly more attractive to future buyers.</p>
             </div>
           </div>

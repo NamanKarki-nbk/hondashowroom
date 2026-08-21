@@ -285,7 +285,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
         {filteredProducts.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[400px] opacity-60">
              <Search className="w-10 h-10 mb-4" />
-             <h3 className="text-xl font-normal mb-2">No models found</h3>
+             <h3 className="text-xl md:text-2xl font-semibold font-normal mb-2">No models found</h3>
              <p className="text-sm">Try adjusting your filters.</p>
              <button onClick={() => { setSelectedCategories([]); setCcRange([100,350]); setPriceRange([0,5000000]); setSearchQuery(""); }} className="mt-4 text-primary font-bold underline">Reset Filters</button>
           </div>

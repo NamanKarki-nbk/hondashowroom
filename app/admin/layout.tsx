@@ -29,7 +29,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             >
               <Menu className="w-6 h-6" />
             </button>
-            <h1 className="text-xl font-black uppercase tracking-tight hidden sm:block">Admin Portal</h1>
+            <h1 className="text-xl md:text-2xl font-semibold font-black uppercase tracking-tight hidden sm:block">Admin Portal</h1>
           </div>
           
           <div className="flex items-center gap-4">

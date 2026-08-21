@@ -43,7 +43,7 @@ export default function HondaBlogSection({ blogs }: { blogs: BlogProps[] }) {
               <span className="w-6 h-0.5 bg-primary rounded-full" />
               Honda Blog
             </span>
-            <h2 className="text-3xl lg:text-4xl font-black text-gray-900 dark:text-primary-foreground leading-tight">
+            <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold lg:text-4xl font-black text-gray-900 dark:text-primary-foreground leading-tight">
               News, Tips &amp; Stories
             </h2>
             <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm max-w-md">
@@ -104,7 +104,7 @@ export default function HondaBlogSection({ blogs }: { blogs: BlogProps[] }) {
                     <span>·</span>
                     <span>{featured.date}</span>
                   </div>
-                  <h3 className="text-xl font-black text-gray-900 dark:text-primary-foreground leading-snug mb-3 group-hover:text-primary transition-colors">
+                  <h3 className="text-xl md:text-2xl font-semibold font-black text-gray-900 dark:text-primary-foreground leading-snug mb-3 group-hover:text-primary transition-colors">
                     {featured.title}
                   </h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed flex-1">

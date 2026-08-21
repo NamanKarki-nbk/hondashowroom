@@ -34,7 +34,7 @@ export default function FAQSection() {
     <section className="py-12 md:py-16 lg:py-24 px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px] bg-background">
       <div className="w-full max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight uppercase">
+          <h2 className="text-2xl md:text-3xl font-semibold sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight uppercase">
             Frequently Asked <span className="text-primary">Questions</span>
           </h2>
         </div>

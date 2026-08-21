@@ -204,7 +204,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
               exit={{ opacity: 0 }}
             >
               <div className="mb-10 text-left">
-                <h1 className="text-3xl font-extrabold mb-3">Compare Bikes</h1>
+                <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-extrabold mb-3">Compare Bikes</h1>
                 <p className="text-gray-600 dark:text-gray-400 text-sm max-w-4xl leading-relaxed">
                   Are you confused between multiple bikes to choose from? Not sure what features should you compare? Don't worry, bike comparison was never so easy. Compare prices, mileage, power, performance, and 100s of other features at once to choose the one that suits your needs. Compare multiple bikes at once to find the best one.
                 </p>
@@ -290,7 +290,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
 
               {/* Popular Comparisons Frame */}
               <div className="text-left">
-                <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Popular Comparisons</h2>
+                <h2 className="text-2xl md:text-3xl font-semibold font-bold mb-6 text-gray-900 dark:text-white">Popular Comparisons</h2>
                 
                 {/* Popular Tabs */}
                 <div className="flex border-b border-gray-300 dark:border-gray-800 gap-8 mb-8 text-sm font-bold uppercase tracking-wide">
@@ -431,7 +431,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                 >
                   Back
                 </button>
-                <h1 className="text-2xl font-extrabold text-gray-900 dark:text-primary-foreground">
+                <h1 className="text-2xl md:text-3xl font-semibold font-extrabold text-gray-900 dark:text-primary-foreground">
                   {activeNonNullVehicles.map(v => v.name).join(" vs ")}
                 </h1>
               </div>
@@ -639,7 +639,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
 
             {/* Modal Header */}
             <div className="p-4 pt-5 pb-0 bg-[#f0f0f0] dark:bg-[#0B0B0C]">
-              <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 text-left px-2">Select Your Brand or Model</h2>
+              <h2 className="text-xl md:text-2xl font-semibold font-bold text-gray-800 dark:text-white mb-4 text-left px-2">Select Your Brand or Model</h2>
               <div className="relative bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md overflow-hidden flex items-center shadow-sm">
                 <Search className="absolute left-3 w-5 h-5 text-gray-400" />
                 <input 

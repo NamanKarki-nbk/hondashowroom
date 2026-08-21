@@ -16,7 +16,7 @@ export default async function AdminUsersPage() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold flex items-center gap-3">
+            <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-bold flex items-center gap-3">
               <Users className="w-8 h-8 text-primary" />
               User Management
             </h1>

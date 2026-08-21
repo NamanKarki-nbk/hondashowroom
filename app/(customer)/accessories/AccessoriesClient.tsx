@@ -60,7 +60,7 @@ export default function AccessoriesClient({ initialAccessories }: AccessoriesCli
         {/* Filter Wizard */}
         <div className={`flex flex-col items-center justify-center space-y-6 transition-all duration-500 ${hasSelection ? 'mb-16' : ''}`}>
           
-          <div className="flex items-center text-xl md:text-2xl font-medium">
+          <div className="flex items-center text-xl md:text-2xl font-semibold md:text-2xl font-medium">
             <span>What </span>
             <div className="relative mx-3 group">
               <select 
@@ -80,7 +80,7 @@ export default function AccessoriesClient({ initialAccessories }: AccessoriesCli
             <span> do you have?</span>
           </div>
 
-          <div className={`flex items-center text-xl md:text-2xl font-medium transition-opacity duration-300 ${vehicleType ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
+          <div className={`flex items-center text-xl md:text-2xl font-semibold md:text-2xl font-medium transition-opacity duration-300 ${vehicleType ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
             <span>Choose your Vehicle Model </span>
             <div className="relative mx-3 group">
               <select 
@@ -110,12 +110,12 @@ export default function AccessoriesClient({ initialAccessories }: AccessoriesCli
         {hasSelection && (
           <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
             <div className="mb-10">
-              <h1 className="text-3xl font-bold mb-2">Vehicle Accessories</h1>
+              <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-bold mb-2">Vehicle Accessories</h1>
               <p className="text-gray-500 dark:text-gray-400 text-sm">Premium add-ons and protection solutions for your Honda vehicle.</p>
             </div>
 
             <div className="border-b border-gray-200 dark:border-gray-800 pb-3 mb-8">
-              <h2 className="text-xl font-bold">
+              <h2 className="text-xl md:text-2xl font-semibold font-bold">
                 Results <span className="text-blue-600 dark:text-blue-400">{filteredAccessories.length}</span>
               </h2>
             </div>

@@ -199,7 +199,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-[#1a1a1a] rounded-xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-800">
-              <h2 className="text-xl font-bold">
+              <h2 className="text-xl md:text-2xl font-semibold font-bold">
                 {currentAccessory.id ? "Edit Accessory" : "Add New Accessory"}
               </h2>
               <button onClick={handleCloseModal} className="text-gray-500 hover:text-gray-800 dark:hover:text-white">

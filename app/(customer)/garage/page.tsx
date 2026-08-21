@@ -41,7 +41,7 @@ export default function GaragePage() {
           </div>
           <div className="relative z-10 flex-1 text-center md:text-left">
              <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-                <h1 className="text-3xl font-extrabold text-primary-foreground tracking-tight">{MOCK_USER.name}</h1>
+                <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-extrabold text-primary-foreground tracking-tight">{MOCK_USER.name}</h1>
                 {MOCK_USER.isVerified && (
                   <div className="flex items-center text-xs font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded border border-green-500/20">
                      <ShieldCheck className="w-3 h-3 mr-1" /> OCR VERIFIED
@@ -61,12 +61,12 @@ export default function GaragePage() {
           
           {/* 3D Vehicle Showcase */}
           <div className="lg:col-span-5 space-y-6">
-            <h2 className="text-2xl font-bold text-primary-foreground flex items-center gap-2">
+            <h2 className="text-2xl md:text-3xl font-semibold font-bold text-primary-foreground flex items-center gap-2">
                <Settings className="w-6 h-6 text-primary" /> My Garage
             </h2>
             <div className="bg-gradient-to-br from-slate-900 to-black border border-slate-800 rounded-3xl p-6 relative overflow-hidden h-[450px]">
                <div className="absolute top-6 left-6 z-10">
-                  <h3 className="text-2xl font-black text-primary-foreground">{activeVehicle.model}</h3>
+                  <h3 className="text-2xl md:text-3xl font-semibold font-black text-primary-foreground">{activeVehicle.model}</h3>
                   <p className="text-xs text-gray-500 font-mono mt-1">VIN: {activeVehicle.vin}</p>
                   <p className="text-xs text-gray-500 mt-1">Purchased: {activeVehicle.purchaseDate}</p>
                </div>
@@ -80,7 +80,7 @@ export default function GaragePage() {
           {/* Service Timeline */}
           <div className="lg:col-span-7 space-y-6">
             <div className="flex justify-between items-end">
-               <h2 className="text-2xl font-bold text-primary-foreground flex items-center gap-2">
+               <h2 className="text-2xl md:text-3xl font-semibold font-bold text-primary-foreground flex items-center gap-2">
                   <Wrench className="w-6 h-6 text-primary" /> Service History
                </h2>
                <button className="text-sm font-semibold text-primary hover:text-primary-foreground transition-colors">Book Next Service</button>

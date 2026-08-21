@@ -52,7 +52,7 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
         <div className="h-20 flex items-center justify-between px-4 border-b border-white/10 shrink-0">
           <Link href="/admin/dashboard" className={`flex items-center gap-3 overflow-hidden ${isCollapsed ? 'justify-center w-full' : ''}`}>
             <Logo className="h-8 text-primary shrink-0" />
-            {!isCollapsed && <span className="font-black text-xl uppercase tracking-tight whitespace-nowrap">Admin</span>}
+            {!isCollapsed && <span className="font-black text-xl md:text-2xl font-semibold uppercase tracking-tight whitespace-nowrap">Admin</span>}
           </Link>
           
           <button 

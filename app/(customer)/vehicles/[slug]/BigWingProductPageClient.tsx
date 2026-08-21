@@ -143,13 +143,13 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
             {/* Text Content */}
             <div className="lg:col-span-5 order-2 lg:order-1">
               <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
-                <h1 className="text-6xl md:text-7xl xl:text-[7rem] font-black text-primary-foreground tracking-tighter mb-4 uppercase leading-none">
+                <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-6xl font-bold tracking-tight md:text-7xl xl:text-[7rem] font-black text-primary-foreground tracking-tighter mb-4 uppercase leading-none">
                   {vehicle.name}
                 </h1>
-                <p className="text-2xl xl:text-4xl text-primary font-bold italic mb-8 xl:mb-12 tracking-wide">
+                <p className="text-2xl md:text-3xl font-semibold xl:text-4xl text-primary font-bold italic mb-8 xl:mb-12 tracking-wide">
                   "{vehicle.tagline}"
                 </p>
-                <div className="text-4xl xl:text-6xl font-black text-primary-foreground mb-10 xl:mb-16 font-sans">
+                <div className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold xl:text-6xl font-black text-primary-foreground mb-10 xl:mb-16 font-sans">
                    Starting At Rs. {vehicle.price.toLocaleString('en-IN')}
                 </div>
                 
@@ -214,7 +214,7 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-bl-full pointer-events-none"></div>
              
              <div className="text-center mb-10 relative z-10">
-               <h3 className="text-3xl font-extrabold text-primary-foreground mb-4 uppercase tracking-tight flex items-center justify-center gap-3">
+               <h3 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-extrabold text-primary-foreground mb-4 uppercase tracking-tight flex items-center justify-center gap-3">
                   <CalendarClock className="w-8 h-8 text-primary" />
                   Enquire Now
                </h3>

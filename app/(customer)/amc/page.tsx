@@ -86,7 +86,7 @@ export default function AmcPage() {
                 <span className="w-6 h-0.5 bg-primary rounded-full" />
                 Annual Maintenance Contract
               </div>
-              <h1 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight leading-tight">
+              <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold lg:text-5xl font-black text-gray-900 dark:text-primary-foreground tracking-tight leading-tight">
                 Honda Service Contract
               </h1>
               <p className="text-gray-500 dark:text-gray-400 mt-4 text-lg">
@@ -104,7 +104,7 @@ export default function AmcPage() {
       {/* Pricing Grid */}
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-black text-gray-900 dark:text-primary-foreground mb-4">Choose Your Protection Plan</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black text-gray-900 dark:text-primary-foreground mb-4">Choose Your Protection Plan</h2>
           <p className="text-gray-500 max-w-2xl mx-auto">
             Select the contract duration that best fits your riding needs. The longer the contract, the higher your overall savings.
           </p>
@@ -126,13 +126,13 @@ export default function AmcPage() {
               )}
               
               <div className="text-center mb-8 border-b border-gray-200 dark:border-background/10 pb-8">
-                <h3 className={`text-2xl font-black mb-2 ${plan.headerColor}`}>
+                <h3 className={`text-2xl md:text-3xl font-semibold font-black mb-2 ${plan.headerColor}`}>
                   Honda Service Contract ({plan.title})
                 </h3>
                 <div className="text-gray-500 text-sm mb-4">Purchase Amount</div>
                 <div className="flex items-center justify-center gap-1">
-                  <span className="text-xl font-bold text-gray-400">Rs.</span>
-                  <span className={`text-5xl font-black ${plan.headerColor}`}>{plan.price}</span>
+                  <span className="text-xl md:text-2xl font-semibold font-bold text-gray-400">Rs.</span>
+                  <span className={`text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-6xl font-bold tracking-tight font-black ${plan.headerColor}`}>{plan.price}</span>
                   <span className="text-gray-400 font-medium">/-</span>
                 </div>
               </div>
@@ -162,7 +162,7 @@ export default function AmcPage() {
               <div className="mt-8 pt-8 border-t border-gray-200 dark:border-background/10">
                 <div className={`rounded-xl p-4 text-center ${plan.popular ? 'bg-primary text-primary-foreground' : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400'}`}>
                   <div className="text-sm font-bold opacity-90 mb-1">Total Customer Saving</div>
-                  <div className="text-2xl font-black">Rs. {plan.savings}/-</div>
+                  <div className="text-2xl md:text-3xl font-semibold font-black">Rs. {plan.savings}/-</div>
                 </div>
                 <Link href="/book-now?service=amc" className={`w-full block text-center py-4 rounded-xl font-bold transition-colors mt-4 ${
                   plan.popular 
@@ -186,7 +186,7 @@ export default function AmcPage() {
             </div>
             
             <div className="relative z-10 max-w-2xl">
-               <h3 className="text-2xl md:text-3xl font-black mb-3">Ready to protect your Honda?</h3>
+               <h3 className="text-2xl md:text-3xl font-semibold md:text-3xl font-black mb-3">Ready to protect your Honda?</h3>
                <p className="text-primary-foreground/80">
                   Visit our showroom today to purchase your Honda Service Contract book and start enjoying lifetime priority service and incredible discounts immediately.
                </p>

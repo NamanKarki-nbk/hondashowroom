@@ -148,7 +148,7 @@ export default function ExchangePage() {
             <div className="inline-flex items-center gap-2 bg-[#B83227]/10 text-[#B83227] px-4 py-2 rounded-full text-sm font-bold tracking-wider uppercase mb-6">
               <Calculator className="w-4 h-4" /> 100% Free • AI Market Data
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-6 leading-tight">
+            <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-6 leading-tight">
               Get Accurate <span className="text-[#B83227]">Used Bike</span><br />Valuation in Seconds.
             </h1>
             <p className="text-gray-600 dark:text-gray-400 text-lg md:text-xl font-medium max-w-2xl mx-auto lg:mx-0">
@@ -163,7 +163,7 @@ export default function ExchangePage() {
         <div className="lg:col-span-7 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#B83227]/5 rounded-full blur-3xl -z-10"></div>
           
-          <h2 className="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-8 flex items-center gap-3">
+          <h2 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight mb-8 flex items-center gap-3">
             <Car className="text-[#B83227]" /> Enter Vehicle Details
           </h2>
           
@@ -276,7 +276,7 @@ export default function ExchangePage() {
               <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-100 dark:border-gray-800">
                 <div>
                   <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Your Bike</div>
-                  <h3 className="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight">{brand} {model}</h3>
+                  <h3 className="text-xl md:text-2xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight">{brand} {model}</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">{variant} • {year} • {owner}</p>
                 </div>
                 <div className="bg-background dark:bg-[#111] px-4 py-2 rounded-xl text-center">
@@ -287,7 +287,7 @@ export default function ExchangePage() {
 
               <div className="text-center mb-8">
                 <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">Estimated Market Value</p>
-                <div className="text-4xl sm:text-5xl font-black text-gray-900 dark:text-white tracking-tighter">
+                <div className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold sm:text-5xl font-black text-gray-900 dark:text-white tracking-tighter">
                   NPR {Math.round(valuation.min).toLocaleString()} <span className="text-[#B83227]">-</span> NPR {Math.round(valuation.max).toLocaleString()}
                 </div>
               </div>
@@ -316,7 +316,7 @@ export default function ExchangePage() {
             <div className="bg-[#B83227] rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden h-full flex flex-col justify-center min-h-[400px]">
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -z-10"></div>
               <Activity className="w-16 h-16 text-white/50 mb-6" />
-              <h3 className="text-3xl font-black uppercase tracking-tight mb-4">Ready to find out?</h3>
+              <h3 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-black uppercase tracking-tight mb-4">Ready to find out?</h3>
               <p className="text-white/80 font-medium text-lg">
                 Fill in the details of your vehicle on the left to get an instant, AI-driven market valuation range based on real-world depreciation data.
               </p>
@@ -329,7 +329,7 @@ export default function ExchangePage() {
       <div className="max-w-7xl mx-auto px-6 mt-20 grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Matrix */}
         <div>
-          <h3 className="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-6 flex items-center gap-2">
+          <h3 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight mb-6 flex items-center gap-2">
             <TrendingDown className="text-[#B83227]" /> Reference Prices
           </h3>
           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-gray-200 dark:border-slate-800 overflow-hidden shadow-xl">
@@ -369,7 +369,7 @@ export default function ExchangePage() {
 
         {/* FAQ */}
         <div>
-          <h3 className="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tight mb-6 flex items-center gap-2">
+          <h3 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight mb-6 flex items-center gap-2">
             <HelpCircle className="text-[#B83227]" /> Frequently Asked Questions
           </h3>
           <div className="space-y-4">

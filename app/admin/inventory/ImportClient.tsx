@@ -47,7 +47,7 @@ export default function InventoryImport() {
       <div className="max-w-5xl mx-auto space-y-8">
         
         <header>
-          <h1 className="text-3xl font-extrabold text-primary-foreground tracking-tight">Distributor PDF Import</h1>
+          <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-extrabold text-primary-foreground tracking-tight">Distributor PDF Import</h1>
           <p className="text-gray-400 mt-1">Upload Syakar Trading Co. invoices to automatically update inventory.</p>
         </header>
 
@@ -70,7 +70,7 @@ export default function InventoryImport() {
              )}
           </div>
           
-          <h3 className="text-xl font-bold text-primary-foreground mb-2">
+          <h3 className="text-xl md:text-2xl font-semibold font-bold text-primary-foreground mb-2">
             {isParsing ? "Parsing Document..." : file ? file.name : "Drag & Drop PDF Invoice Here"}
           </h3>
           <p className="text-gray-400 text-sm">
@@ -84,7 +84,7 @@ export default function InventoryImport() {
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-primary"></div>
             
             <div className="flex justify-between items-center mb-6">
-               <h2 className="text-xl font-bold text-primary-foreground flex items-center gap-2">
+               <h2 className="text-xl md:text-2xl font-semibold font-bold text-primary-foreground flex items-center gap-2">
                   <Database className="w-5 h-5 text-gray-400" /> Parsed Inventory Preview
                </h2>
                <button 
