@@ -112,8 +112,8 @@ export default function LoginPage() {
 
       <div className="w-full max-w-md bg-white dark:bg-[#151517] border border-gray-200 dark:border-slate-800 rounded-3xl p-10 shadow-2xl relative z-10">
         <div className="flex flex-col items-center mb-8 text-center">
-           <div className="bg-black border border-gray-800 p-4 rounded-2xl mb-6 shadow-lg">
-              <Logo className="w-10 h-10" />
+           <div className="bg-black border border-gray-800 p-3 sm:p-4 rounded-xl sm:rounded-2xl mb-6 shadow-lg max-w-full w-full sm:w-[90%] flex items-center justify-center overflow-hidden">
+              <Logo className="max-w-full h-auto max-h-8 sm:max-h-10" />
            </div>
            <h1 className="text-2xl md:text-3xl font-semibold font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">Welcome Back</h1>
            <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
