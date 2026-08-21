@@ -124,10 +124,13 @@ export default function Header() {
                 </button>
               </form>
 
-              {/* Auth Icon */}
+              {/* Auth Button */}
               <div className={`relative py-2 ${isLoggedIn ? 'group' : ''}`}>
-                <Link href={isLoggedIn ? "/profile" : "/login"} className="p-2 rounded-full bg-gray-100/50 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-primary transition-colors flex items-center justify-center cursor-pointer">
-                   <User className="w-5 h-5 pointer-events-none" />
+                <Link href={isLoggedIn ? "/profile" : "/login"} className="p-2 lg:px-4 lg:py-2 rounded-full lg:rounded-xl bg-gray-100/50 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-primary transition-colors flex items-center justify-center cursor-pointer gap-2">
+                   <User className="w-5 h-5 pointer-events-none shrink-0" />
+                   <span className="hidden lg:block text-xs xl:text-sm font-bold uppercase tracking-wide pointer-events-none">
+                     {isLoggedIn ? "Profile" : "Login"}
+                   </span>
                 </Link>
                 {/* Auth Dropdown */}
                 {isLoggedIn && (
