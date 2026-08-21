@@ -19,18 +19,27 @@ const NavLink = ({ href, children }: { href: string, children: React.ReactNode }
   );
 };
 
-export default function Header() {
+export default function Header({ initialIsLoggedIn = false }: { initialIsLoggedIn?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(initialIsLoggedIn);
   const [mounted, setMounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true');
-  }, []);
+    // If the server tells us we're logged in/out, sync local storage to match
+    if (initialIsLoggedIn !== (localStorage.getItem('isLoggedIn') === 'true')) {
+      if (initialIsLoggedIn) {
+        localStorage.setItem('isLoggedIn', 'true');
+      } else {
+        localStorage.removeItem('isLoggedIn');
+      }
+    }
+    // Also respect local changes for instant client-side updates
+    setIsLoggedIn(initialIsLoggedIn || localStorage.getItem('isLoggedIn') === 'true');
+  }, [initialIsLoggedIn]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

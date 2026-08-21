@@ -15,7 +15,7 @@ export default async function CustomerLayout({
 
   return (
     <>
-      <Header />
+      <Header initialIsLoggedIn={hasSession} />
       <FloatingActionBar />
       <FloatingChatbot />
       <main className="flex-1 pb-[72px] md:pb-0">
