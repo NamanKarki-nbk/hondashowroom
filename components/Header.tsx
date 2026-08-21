@@ -59,7 +59,7 @@ export default function Header() {
       {/* Top Red Bar (from honda.com.np) */}
       <div className="w-full bg-primary text-primary-foreground text-sm py-2">
          <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            <div className="flex gap-4 font-semibold">
+            <div className="hidden md:flex gap-4 font-semibold">
                <Link href="/finance" className="hover:underline">Honda Finance</Link>
                <span className="opacity-50">|</span>
                <Link href="/offers" className="hover:underline">Special Offers</Link>
@@ -81,11 +81,11 @@ export default function Header() {
       </div>
 
       {/* Main Nav (Header) */}
-      <div className="w-full px-6 md:px-12 lg:px-16 h-20 flex items-center justify-between gap-4">
-        <div className="flex items-center flex-shrink-0">
-           <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden text-gray-800 dark:text-gray-200 p-2 mr-2"><Menu className="w-6 h-6" /></button>
-           <Link href="/" className="flex items-center group">
-             <Logo className="h-6 md:h-8 group-hover:scale-105 transition-transform text-primary flex-shrink-0" />
+      <div className="w-full px-4 md:px-12 lg:px-16 h-20 flex items-center justify-between gap-2 md:gap-4 min-w-0">
+        <div className="flex items-center min-w-0">
+           <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden text-gray-800 dark:text-gray-200 p-1 md:p-2 mr-1 md:mr-2 flex-shrink-0"><Menu className="w-6 h-6" /></button>
+           <Link href="/" className="flex items-center group min-w-0">
+             <Logo className="h-5 md:h-8 max-w-[50vw] md:max-w-none group-hover:scale-105 transition-transform text-primary object-contain" />
            </Link>
         </div>
 
