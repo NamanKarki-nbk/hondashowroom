@@ -55,7 +55,27 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
   const [openAccordions, setOpenAccordions] = useState<string[]>([
     'Power & Performance', 'Brakes & Wheels', 'Suspensions & Chassis', 'Dimensions', 'Warranty and Services'
   ]);
-  const [popularTab, setPopularTab] = useState<'BIKES' | 'SCOOTERS'>('BIKES');
+  const [popularTab, setPopularTab] = useState<'BIKES' | 'SCOOTERS' | 'RECENT'>('BIKES');
+  const [recentComparisons, setRecentComparisons] = useState<string[][]>([]);
+
+  React.useEffect(() => {
+    const saved = localStorage.getItem('recentComparisons');
+    if (saved) {
+      try {
+        setRecentComparisons(JSON.parse(saved));
+      } catch (e) {}
+    }
+  }, []);
+
+  const handleCompareNow = () => {
+    const selectedIds = slots.filter(Boolean) as string[];
+    if (selectedIds.length >= 2) {
+      const newRecent = [selectedIds, ...recentComparisons.filter(arr => JSON.stringify(arr) !== JSON.stringify(selectedIds))].slice(0, 5);
+      setRecentComparisons(newRecent);
+      localStorage.setItem('recentComparisons', JSON.stringify(newRecent));
+      setIsComparing(true);
+    }
+  };
 
   // Helper to check if slot count is sufficient
   const selectedCount = slots.filter(Boolean).length;
@@ -257,11 +277,11 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                 {/* Compare Trigger Button */}
                 <button
                   disabled={selectedCount < 2}
-                  onClick={() => setIsComparing(true)}
+                  onClick={handleCompareNow}
                   className={`w-full py-3.5 sm:py-4 rounded-lg font-semibold text-[15px] sm:text-base transition-all duration-300 ${
                     selectedCount >= 2
                       ? 'bg-[#cd302b] hover:bg-[#b32924] text-white cursor-pointer shadow-sm'
-                      : 'bg-[#cd302b] text-white opacity-90 cursor-not-allowed' // Setting to red anyway because screenshot shows red button even if no bikes selected? No, wait. I'll make it red but disabled state if selectedCount < 2.
+                      : 'bg-[#cd302b] text-white opacity-90 cursor-not-allowed'
                   }`}
                 >
                   Compare Now
@@ -274,33 +294,90 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                 
                 {/* Popular Tabs */}
                 <div className="flex border-b border-gray-300 dark:border-gray-800 gap-8 mb-8 text-sm font-bold uppercase tracking-wide">
-                  {(['BIKES', 'SCOOTERS'] as const).map(tab => (
+                  {(['BIKES', 'SCOOTERS', ...(recentComparisons.length > 0 ? ['RECENT'] : [])] as const).map(tab => (
                     <button
                       key={tab}
-                      onClick={() => setPopularTab(tab)}
+                      onClick={() => setPopularTab(tab as typeof popularTab)}
                       className={`pb-3 transition-all relative ${
                         popularTab === tab 
-                          ? 'text-[#008298] dark:text-[#00a8c2]' 
+                          ? 'text-[#cd302b] dark:text-[#cc0000]' 
                           : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200'
                       }`}
                     >
                       {tab}
                       {popularTab === tab && (
-                        <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#008298] dark:bg-[#00a8c2] rounded-t-sm"></span>
+                        <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#cd302b] dark:bg-[#cc0000] rounded-t-sm"></span>
                       )}
                     </button>
                   ))}
                 </div>
 
                 <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 scrollbar-hide">
-                  {popularComparisons[popularTab].map((item, idx) => (
+                  {popularTab === 'RECENT' ? recentComparisons.map((itemIds, idx) => {
+                    const v1 = vehicles.find(v => v.id === itemIds[0]);
+                    const v2 = vehicles.find(v => v.id === itemIds[1]);
+                    const extraCount = itemIds.length - 2;
+                    if (!v1 || !v2) return null;
+                    return (
+                      <div key={idx} className="min-w-[320px] max-w-[350px] shrink-0 snap-start bg-white dark:bg-[#0B0B0C] border border-gray-300 dark:border-gray-700 rounded-2xl flex flex-col hover:shadow-md transition-shadow relative">
+                        {/* Top section: Vehicles side-by-side */}
+                        <div className="flex relative p-4 pb-2">
+                          {/* Vertical Divider */}
+                          <div className="absolute top-4 bottom-4 w-px bg-gray-200 dark:bg-gray-800 left-1/2 -translate-x-1/2"></div>
+                          {/* VS Badge */}
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0B0B0C] border border-gray-300 dark:border-gray-600 text-gray-900 text-[10px] font-bold p-1 rounded-full z-10 w-7 h-7 flex items-center justify-center">
+                            VS
+                          </div>
+                          
+                          {/* Vehicle 1 */}
+                          <div className="flex-1 flex flex-col items-start pr-4">
+                            <img src={v1.imageUrl || '/honda-logo.svg'} className="w-full h-20 object-contain mb-3" />
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400">{v1.brand}</span>
+                            <h4 className="text-base font-bold text-gray-900 dark:text-white line-clamp-1">{v1.name}</h4>
+                            <span className="text-sm font-semibold text-gray-900 dark:text-white mt-1">₹ {v1.price.toLocaleString('en-IN')}</span>
+                            <span className="text-xs text-gray-400">Onwards</span>
+                          </div>
+                          
+                          {/* Vehicle 2 */}
+                          <div className="flex-1 flex flex-col items-start pl-4">
+                            <img src={v2.imageUrl || '/honda-logo.svg'} className="w-full h-20 object-contain mb-3" />
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400">{v2.brand}</span>
+                            <h4 className="text-base font-bold text-gray-900 dark:text-white line-clamp-1">{v2.name}</h4>
+                            <span className="text-sm font-semibold text-gray-900 dark:text-white mt-1">₹ {v2.price.toLocaleString('en-IN')}</span>
+                            <span className="text-xs text-gray-400">Onwards</span>
+                          </div>
+                        </div>
+                        
+                        {extraCount > 0 && (
+                          <div className="absolute top-2 right-2 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-[10px] font-bold px-2 py-1 rounded-full border border-gray-200 dark:border-gray-700">
+                            +{extraCount} more
+                          </div>
+                        )}
+
+                        {/* Bottom section: Action button */}
+                        <div className="p-4 pt-2 mt-auto">
+                          <button
+                            onClick={() => {
+                              const newSlots = [null, null, null, null];
+                              itemIds.forEach((id, i) => { if (i < 4) newSlots[i] = (id as any); });
+                              setSlots(newSlots as any);
+                              setIsComparing(true);
+                            }}
+                            className="w-full py-2.5 bg-white dark:bg-[#0B0B0C] border border-[#cd302b] rounded-md text-sm font-semibold text-[#cd302b] hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
+                          >
+                            Compare {v1.name} & {v2.name} {extraCount > 0 ? `+${extraCount}` : ''}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  }) : popularComparisons[popularTab].map((item, idx) => (
                     <div key={idx} className="min-w-[320px] max-w-[350px] shrink-0 snap-start bg-white dark:bg-[#0B0B0C] border border-gray-300 dark:border-gray-700 rounded-2xl flex flex-col hover:shadow-md transition-shadow">
                       {/* Top section: Vehicles side-by-side */}
                       <div className="flex relative p-4 pb-2">
                         {/* Vertical Divider */}
                         <div className="absolute top-4 bottom-4 w-px bg-gray-200 dark:bg-gray-800 left-1/2 -translate-x-1/2"></div>
                         {/* VS Badge */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0B0B0C] border border-gray-300 dark:border-gray-600 text-[#d73b30] text-[10px] font-bold p-1 rounded-full z-10 w-7 h-7 flex items-center justify-center">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0B0B0C] border border-gray-300 dark:border-gray-600 text-gray-900 text-[10px] font-bold p-1 rounded-full z-10 w-7 h-7 flex items-center justify-center">
                           VS
                         </div>
                         
@@ -327,7 +404,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                       <div className="p-4 pt-2 mt-auto">
                         <button
                           onClick={() => startPopularCompare(item.v1.id, item.v2.id)}
-                          className="w-full py-2.5 bg-white dark:bg-[#0B0B0C] border border-[#008298] rounded-md text-sm font-semibold text-[#008298] hover:bg-teal-50 dark:hover:bg-teal-900/10 transition-colors"
+                          className="w-full py-2.5 bg-white dark:bg-[#0B0B0C] border border-[#cd302b] rounded-md text-sm font-semibold text-[#cd302b] hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
                         >
                           {item.label}
                         </button>
