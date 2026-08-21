@@ -83,7 +83,6 @@ export default function Header() {
       {/* Main Nav (Header) */}
       <div className="w-full px-4 md:px-12 lg:px-16 h-20 flex items-center justify-between gap-2 md:gap-4 min-w-0">
         <div className="flex items-center min-w-0">
-           <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden text-gray-800 dark:text-gray-200 p-1 md:p-2 mr-1 md:mr-2 flex-shrink-0"><Menu className="w-6 h-6" /></button>
            <Link href="/" className="flex items-center group">
              {/* Mobile Logo: Cropped to show only "HONDA The Power of Dreams" */}
              <div className="md:hidden w-36 overflow-hidden flex items-center shrink-0">
@@ -132,13 +131,14 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center space-x-2 md:space-x-4 flex-shrink-0">
-          <form onSubmit={handleSearch} className="hidden xl:flex relative w-48">
-             <input type="search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search Honda" className="w-full bg-[#e8dfd1] dark:bg-gray-800 border-none rounded-full py-2 pl-4 pr-10 text-sm focus:ring-2 focus:ring-primary outline-none placeholder:text-gray-400" />
-             <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary">
-               <Search className="w-4 h-4" />
-             </button>
+          <form onSubmit={handleSearch} className="relative hidden xl:block w-48 2xl:w-64">
+            <input type="search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search Honda..." className="w-full bg-gray-100 dark:bg-gray-800 border-none rounded-full py-2 pl-4 pr-10 text-sm focus:ring-2 focus:ring-primary outline-none transition-all placeholder:text-gray-500" />
+            <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary">
+              <Search className="w-4 h-4" />
+            </button>
           </form>
           <ThemeToggle />
+          <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden text-gray-800 dark:text-gray-200 p-1 flex-shrink-0 ml-2"><Menu className="w-6 h-6" /></button>
         </div>
       </div>
       

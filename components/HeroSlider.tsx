@@ -67,7 +67,7 @@ export default function HeroSlider() {
       <div className="h-full" ref={emblaRef}>
       <div className="flex h-full touch-pan-y">
         {SLIDES.map((slide, index) => (
-          <div key={slide.id} className="relative flex-[0_0_100%] min-w-0 h-full p-6 lg:p-16">
+          <div key={slide.id} className="relative flex-[0_0_100%] min-w-0 h-full p-4 sm:p-6 lg:p-16 flex flex-col-reverse md:flex-row items-center justify-center md:justify-between pt-10 md:pt-0 pb-20 md:pb-0">
             
             {/* Giant Background Watermark Image */}
             <div className="absolute inset-0 z-0 flex items-center justify-center opacity-5 dark:opacity-10 pointer-events-none overflow-hidden">
@@ -80,65 +80,65 @@ export default function HeroSlider() {
               />
             </div>
 
-            {/* Left Content */}
-            <div className="absolute left-4 sm:left-8 md:left-24 top-1/2 -translate-y-1/2 z-20">
+            {/* Left/Top Content (Text and Price) */}
+            <div className="z-20 flex flex-col items-center md:items-start text-center md:text-left w-full md:w-1/2 md:pl-8 lg:pl-16">
                <motion.div
                   key={`content-${selectedIndex === index}`}
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
+                  className="w-full flex flex-col items-center md:items-start"
                >
-                 <p className="text-primary font-bold tracking-[0.3em] text-[10px] sm:text-xs md:text-sm uppercase mb-3">
+                 <p className="text-primary font-bold tracking-[0.3em] text-[10px] sm:text-xs md:text-sm uppercase mb-2 md:mb-3">
                    {slide.subtitle}
                  </p>
-                 <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-[130px] font-black text-gray-900 dark:text-primary-foreground tracking-tighter uppercase leading-none mb-4 sm:mb-6 font-sans">
+                 <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-[110px] xl:text-[130px] font-black text-gray-900 dark:text-primary-foreground tracking-tighter uppercase leading-none mb-3 sm:mb-4 md:mb-6 font-sans">
                    {slide.title}
                  </h2>
-                 <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base md:text-lg font-medium mb-6 sm:mb-10 max-w-[200px] sm:max-w-none">
+                 <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base md:text-lg font-medium mb-4 md:mb-8 sm:max-w-none px-4 md:px-0">
                    {slide.tagline}
                  </p>
                  
-                 <div className="flex items-center gap-4">
-                   <Link href={slide.link} className="bg-primary text-primary-foreground px-8 py-3 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-wider transition-colors hover:bg-primary-hover">
+                 <div className="flex items-center justify-center md:justify-start gap-3 md:gap-4 mb-6 md:mb-12">
+                   <Link href={slide.link} className="bg-primary text-primary-foreground px-6 py-2.5 md:px-10 md:py-4 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider transition-colors hover:bg-primary-hover">
                       Book Now
                    </Link>
-                   <Link href={slide.link} className="bg-transparent border border-gray-900 dark:border-background text-gray-900 dark:text-primary-foreground px-8 py-3 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-wider transition-colors hover:bg-gray-900 hover:text-primary-foreground dark:hover:bg-background dark:hover:text-black">
+                   <Link href={slide.link} className="bg-transparent border border-gray-900 dark:border-background text-gray-900 dark:text-primary-foreground px-6 py-2.5 md:px-10 md:py-4 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-wider transition-colors hover:bg-gray-900 hover:text-primary-foreground dark:hover:bg-background dark:hover:text-black">
                       Test Ride
                    </Link>
                  </div>
                </motion.div>
-            </div>
 
-            {/* Bottom Left Price */}
-            <div className="absolute left-8 md:left-24 bottom-[100px] md:bottom-12 z-20">
                <motion.div
                   key={`price-${selectedIndex === index}`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+                  className="mt-auto md:mt-0"
                >
-                 <p className="text-gray-500 font-bold tracking-[0.2em] text-xs md:text-sm uppercase mb-1 md:mb-2">
+                 <p className="text-gray-500 font-bold tracking-[0.2em] text-[10px] sm:text-xs md:text-sm uppercase mb-1 md:mb-2">
                    Starting At
                  </p>
-                 <p className="text-gray-900 dark:text-primary-foreground text-3xl md:text-4xl lg:text-5xl font-black font-sans">
+                 <p className="text-gray-900 dark:text-primary-foreground text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black font-sans">
                    {slide.price}
                  </p>
                </motion.div>
             </div>
 
-            {/* Right Side Vehicle Image */}
-            <div className="absolute right-0 bottom-4 md:bottom-10 z-30 w-[90%] md:w-[70%] lg:w-[60%] flex items-end justify-end pr-4 md:pr-24 pointer-events-none">
+            {/* Right/Bottom Vehicle Image */}
+            <div className="z-30 w-full md:w-1/2 flex items-center justify-center pointer-events-none mb-6 md:mb-0 mt-4 md:mt-0 px-4">
                <motion.div
                   key={`img-${selectedIndex === index}`}
-                  initial={{ opacity: 0, x: 100, y: 30 }}
-                  animate={{ opacity: 1, x: 0, y: 0 }}
+                  initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ duration: 1, type: "spring", bounce: 0.2, delay: 0.1 }}
+                  className="w-full flex justify-center"
                >
                  {/* eslint-disable-next-line @next/next/no-img-element */}
                  <img 
                    src={slide.image} 
                    alt={slide.title} 
-                   className="w-full h-auto object-contain max-h-[65vh] filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] dark:drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] pointer-events-auto"
+                   className="w-full max-w-[280px] sm:max-w-sm md:max-w-md lg:max-w-lg h-auto object-contain max-h-[40vh] md:max-h-[65vh] filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] dark:drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] pointer-events-auto"
                  />
                </motion.div>
             </div>
