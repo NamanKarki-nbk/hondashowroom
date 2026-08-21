@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Please complete OTP verification before logging in.", isVerified: false }, { status: 403 });
     }
 
-    const token = await signSessionToken({ userId: user.id, email: user.email || undefined, phone: user.phone });
+    const token = await signSessionToken({ userId: user.id, email: user.email || undefined, phone: user.phone, role: user.role });
     
     const response = NextResponse.json({ success: true, message: "Logged in successfully", userId: user.id, isVerified: user.isVerified });
     

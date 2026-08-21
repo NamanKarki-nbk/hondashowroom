@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
     await prisma.otpVerification.delete({ where: { id: latestOtp.id } });
 
     // Generate JWT and set Cookie
-    const token = await signSessionToken({ userId: user.id, email: user.email || undefined, phone: user.phone });
+    const token = await signSessionToken({ userId: user.id, email: user.email || undefined, phone: user.phone, role: user.role });
     
     const response = NextResponse.json({ success: true, user: { id: user.id, email: user.email, phone: user.phone } });
     

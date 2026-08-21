@@ -173,6 +173,18 @@ export default function Header() {
             <Link href="/warranty" onClick={() => setIsMobileMenuOpen(false)}>About Warranty</Link>
             <Link href="/about" onClick={() => setIsMobileMenuOpen(false)}>About Us</Link>
             <Link href="/owners-manual" onClick={() => setIsMobileMenuOpen(false)}>Manuals</Link>
+
+            {/* Auth and Admin Links */}
+            <div className="h-px bg-gray-200 dark:bg-gray-800 my-2" />
+            <Link href="/admin/dashboard" onClick={() => setIsMobileMenuOpen(false)} className="text-primary flex items-center gap-2">Admin Portal <ArrowRight className="w-4 h-4" /></Link>
+            {!isLoggedIn ? (
+              <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>Login</Link>
+            ) : (
+              <>
+                <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)}>My Profile</Link>
+                <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} className="text-left text-gray-500 hover:text-gray-900 dark:hover:text-white uppercase font-bold">Log Out</button>
+              </>
+            )}
             </nav>
           </div>
         </div>

@@ -68,7 +68,7 @@ export async function GET(req: NextRequest) {
     });
 
     // 4. Issue custom JWT session
-    const token = await signSessionToken({ userId: user.id, email: user.email || undefined, phone: user.phone });
+    const token = await signSessionToken({ userId: user.id, email: user.email || undefined, phone: user.phone, role: user.role });
 
     const response = NextResponse.redirect(new URL("/", req.url));
     response.cookies.set("auth_session", token, {
