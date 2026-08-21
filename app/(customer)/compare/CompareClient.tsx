@@ -38,7 +38,7 @@ function getSpecs(name: string, price: number) {
 
 export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
   // 4 slots for comparisons (store vehicle IDs or null)
-  const [slots, setSlots] = useState<(string | null)[]>([null, null, null]);
+  const [slots, setSlots] = useState<(string | null)[]>([null, null, null, null]);
   const [activeSlotIdx, setActiveSlotIdx] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isComparing, setIsComparing] = useState(false);
@@ -191,7 +191,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
               </div>
 
               {/* Selection Slots Frame */}
-              <div className="bg-white dark:bg-[#0B0B0C] border border-gray-100 dark:border-gray-800 rounded-xl shadow-sm p-5 sm:p-8 mb-10 w-full max-w-3xl mx-auto flex flex-col items-center">
+              <div className="w-full mb-10 flex flex-col items-center">
                 
                 <div className="flex flex-row items-center justify-between w-full mb-8">
                   {slots.map((slotId, idx) => {
@@ -241,8 +241,8 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                           )}
                         </div>
                         
-                        {/* VS Badge ONLY between 1st and 2nd slot */}
-                        {idx === 0 && (
+                        {/* VS Badge between slots */}
+                        {idx < slots.length - 1 && (
                            <div className="flex-shrink-0 flex items-center justify-center -mx-2 sm:-mx-6 z-10">
                               <div className="bg-black text-white text-[9px] sm:text-[11px] font-bold rounded-full w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center tracking-tighter shadow-md">
                                 vs
