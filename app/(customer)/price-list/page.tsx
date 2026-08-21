@@ -67,7 +67,7 @@ export default function PriceListPage() {
       {/* Hero Banner */}
       <div className="bg-[#111111] py-20 px-8 relative overflow-hidden">
         <div className="absolute inset-0 z-0">
-           <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover opacity-20" alt="Motorcycles" />
+           <img src="/images/price-list-bg.jpg" className="w-full h-full object-cover opacity-20" alt="Motorcycles" />
            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
         </div>
         <div className="max-w-6xl mx-auto relative z-10">

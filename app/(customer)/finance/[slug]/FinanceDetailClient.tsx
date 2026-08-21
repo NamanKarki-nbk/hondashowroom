@@ -48,7 +48,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
       <div className="relative w-full h-[60vh] min-h-[400px] bg-[#111] overflow-hidden">
         <div className="absolute inset-0">
            <img 
-             src={product.category === "SCOOTERS" ? "https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=2070" : "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=2070"} 
+             src={product.category === "SCOOTERS" ? "/images/scooter-placeholder.jpg" : "/images/bike-placeholder.jpg"} 
              className="w-full h-full object-cover opacity-60" 
              alt="Hero Background" 
            />

@@ -10,21 +10,21 @@ const TESTIMONIALS = [
     role: "Daily Commuter",
     content: "The handling in city traffic is phenomenal. The smart key features make my daily commutes so much more convenient. Absolutely love the new design!",
     rating: 5,
-    avatar: "https://i.pravatar.cc/150?u=rahul"
+    avatar: "/testimonials/rahul.jpg"
   },
   {
     name: "Priya Patel",
     role: "College Student",
     content: "It's stylish, bold, and exactly what I was looking for. The mileage is great and the under-seat storage fits my helmet perfectly.",
     rating: 5,
-    avatar: "https://i.pravatar.cc/150?u=priya"
+    avatar: "/testimonials/priya.jpg"
   },
   {
     name: "Amit Kumar",
     role: "Enthusiast",
     content: "Honda engines never disappoint. The refinement is top-notch and the suspension handles rough roads with ease. A highly recommended purchase.",
     rating: 4,
-    avatar: "https://i.pravatar.cc/150?u=amit"
+    avatar: "/testimonials/amit.jpg"
   }
 ];
 

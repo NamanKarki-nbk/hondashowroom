@@ -193,7 +193,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
             <div className="bg-white text-black px-4 py-1.5 text-xs font-extrabold rounded-sm">
               Matching models {filteredProducts.length}
             </div>
-            {isFilterExpanded ? <span className="text-3xl font-light leading-none mb-1">&minus;</span> : <span className="text-3xl font-light leading-none mb-1">+</span>}
+            <SlidersHorizontal className="w-5 h-5" />
           </div>
         </div>
 

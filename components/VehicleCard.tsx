@@ -45,7 +45,12 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
            <div className="absolute inset-0 bg-gradient-to-t from-gray-100 to-transparent opacity-50"></div>
            {imageUrl ? (
              // eslint-disable-next-line @next/next/no-img-element
-             <img src={imageUrl} alt={title} className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
+             <img 
+               src={imageUrl} 
+               alt={title} 
+               onError={(e) => { e.currentTarget.src = category.toLowerCase().includes('scooter') ? '/images/scooter-placeholder.jpg' : '/images/bike-placeholder.jpg'; }}
+               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" 
+             />
            ) : (
              <div className="w-40 h-24 bg-gray-300 rounded-xl rotate-[-10deg] shadow-lg group-hover:scale-110 transition-transform duration-500"></div>
            )}

@@ -191,79 +191,81 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
               </div>
 
               {/* Selection Slots Frame */}
-              <div className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/5 rounded-2xl p-8 mb-8 shadow-sm">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-                  {slots.map((slotId, idx) => {
-                    const vehicle = slotId ? vehicles.find(v => v.id === slotId) : null;
-                    return (
-                      <React.Fragment key={idx}>
-                        <div 
-                          onClick={() => {
-                            setActiveSlotIdx(idx);
-                            setIsModalOpen(true);
-                          }}
-                          className={`relative group flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-background/10 rounded-2xl p-6 h-64 cursor-pointer hover:border-primary dark:hover:border-primary hover:bg-background dark:hover:bg-background/5 transition-all duration-300 ${vehicle ? 'border-none bg-background dark:bg-[#1d273a]/60 shadow-inner' : ''}`}
-                        >
-                          {vehicle ? (
-                            <div className="relative w-full h-full flex flex-col justify-between items-center text-center">
-                              <button 
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleRemoveVehicle(idx);
-                                }}
-                                className="absolute -top-2 -right-2 bg-red-600 hover:bg-red-700 text-primary-foreground rounded-full p-1.5 transition-colors z-20 shadow-md"
-                              >
-                                <X className="w-4.5 h-4.5" />
-                              </button>
-                              
-                              <div className="w-full h-32 relative flex items-center justify-center p-4">
-                                <img 
-                                  src={vehicle.imageUrl || '/honda-logo.svg'} 
-                                  alt={vehicle.name} 
-                                  className="w-full h-full object-contain"
-                                />
-                              </div>
-                              <div className="mt-2">
-                                <span className="text-[10px] tracking-widest text-[#5b8cff] dark:text-[#5b8cff] uppercase font-bold block mb-1">{vehicle.brand || 'Honda'}</span>
-                                <h3 className="font-bold text-sm text-gray-900 dark:text-primary-foreground line-clamp-1">{vehicle.name}</h3>
-                                <p className="text-primary font-semibold text-xs mt-1">NPR {vehicle.price.toLocaleString('en-IN')}</p>
-                              </div>
+              <div className="border border-gray-200 dark:border-gray-800 rounded-lg bg-white dark:bg-[#0B0B0C] mb-6 flex overflow-hidden">
+                {slots.map((slotId, idx) => {
+                  const vehicle = slotId ? vehicles.find(v => v.id === slotId) : null;
+                  return (
+                    <React.Fragment key={idx}>
+                      <div className="flex-1 relative min-h-[220px] flex flex-col items-center justify-center p-6 group">
+                        {vehicle ? (
+                          <div className="relative w-full h-full flex flex-col justify-between items-center text-center">
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemoveVehicle(idx);
+                              }}
+                              className="absolute -top-4 -right-4 bg-gray-100 hover:bg-red-100 dark:bg-gray-800 text-gray-500 hover:text-red-600 rounded-full p-1 transition-colors z-20"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                            
+                            <div className="w-full h-24 relative flex items-center justify-center mb-4">
+                              <img 
+                                src={vehicle.imageUrl || '/honda-logo.svg'} 
+                                alt={vehicle.name} 
+                                className="w-full h-full object-contain"
+                              />
                             </div>
-                          ) : (
-                            <div className="flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 group-hover:text-primary">
-                              {/* Custom motorcycle line icon */}
-                              <svg className="w-14 h-14 mb-4 stroke-current opacity-60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="5" cy="18" r="3" strokeWidth="1.5" />
-                                <circle cx="19" cy="18" r="3" strokeWidth="1.5" />
-                                <path d="M19 18V13.5L16.5 9H11.5L9 13.5H5V18" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                <path d="M12 9V5H14.5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                              </svg>
-                              <span className="text-sm font-semibold flex items-center gap-1 text-gray-700 dark:text-gray-300 group-hover:text-primary">
-                                <Plus className="w-4 h-4" /> Add Bike
-                              </span>
+                            <div className="mt-auto">
+                              <h3 className="font-bold text-sm text-gray-900 dark:text-gray-100 line-clamp-1">{vehicle.name}</h3>
+                              <p className="text-gray-600 dark:text-gray-400 text-xs mt-1">₹ {vehicle.price.toLocaleString('en-IN')}</p>
                             </div>
-                          )}
-                        </div>
-                        {idx < 3 && (
-                          <div className="absolute top-1/2 left-[calc((idx+1)*25%)] -translate-x-1/2 -translate-y-1/2 hidden lg:flex bg-gray-200 dark:bg-[#0d111b] border border-gray-300 dark:border-background/5 text-gray-600 dark:text-[#5b8cff] font-bold text-xs p-1.5 rounded-full z-10 w-7 h-7 items-center justify-center shadow-sm">
-                            vs
+                          </div>
+                        ) : (
+                          <div 
+                            onClick={() => {
+                              setActiveSlotIdx(idx);
+                              setIsModalOpen(true);
+                            }}
+                            className="flex flex-col items-center justify-center cursor-pointer h-full w-full"
+                          >
+                            <svg className="w-16 h-16 mb-2 stroke-teal-500/50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <circle cx="5" cy="18" r="3" strokeWidth="1" />
+                              <circle cx="19" cy="18" r="3" strokeWidth="1" />
+                              <path d="M19 18V13.5L16.5 9H11.5L9 13.5H5V18" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M12 9V5H14.5" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <span className="text-sm font-medium flex items-center gap-1 text-[#008298] hover:text-[#006070] transition-colors">
+                              <Plus className="w-4 h-4" /> Add Bike
+                            </span>
                           </div>
                         )}
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
+                      </div>
+                      
+                      {idx < 3 && (
+                        <div className="relative">
+                          {/* Vertical Divider */}
+                          <div className="absolute top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-800 left-1/2 -translate-x-1/2"></div>
+                          {/* VS Badge */}
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0B0B0C] border border-gray-300 dark:border-gray-600 text-[#d73b30] text-[10px] font-bold p-1 rounded-full z-10 w-7 h-7 flex items-center justify-center">
+                            VS
+                          </div>
+                        </div>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
               </div>
 
               {/* Compare Trigger Button */}
-              <div className="mb-14">
+              <div className="mb-14 text-left">
                 <button
                   disabled={selectedCount < 2}
                   onClick={() => setIsComparing(true)}
-                  className={`w-64 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg ${
+                  className={`px-12 py-3 rounded-md font-semibold text-lg transition-all duration-300 ${
                     selectedCount >= 2
-                      ? 'bg-primary hover:bg-red-700 text-primary-foreground shadow-red-500/20 cursor-pointer'
-                      : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed'
+                      ? 'bg-[#d73b30] hover:bg-[#c0352b] text-white cursor-pointer'
+                      : 'bg-gray-300 dark:bg-gray-800 text-gray-500 cursor-not-allowed'
                   }`}
                 >
                   Compare
@@ -272,51 +274,68 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
 
               {/* Popular Comparisons Frame */}
               <div className="text-left">
-                <h2 className="text-2xl font-bold mb-6">Popular Comparisons</h2>
+                <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Popular Comparisons</h2>
                 
                 {/* Popular Tabs */}
-                <div className="flex border-b border-gray-200 dark:border-background/10 gap-6 mb-8 text-sm">
+                <div className="flex border-b border-gray-300 dark:border-gray-800 gap-8 mb-8 text-sm font-bold uppercase tracking-wide">
                   {(['BIKES', 'SCOOTERS'] as const).map(tab => (
                     <button
                       key={tab}
                       onClick={() => setPopularTab(tab)}
-                      className={`pb-3 font-semibold transition-all relative ${popularTab === tab ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-primary-foreground'}`}
+                      className={`pb-3 transition-all relative ${
+                        popularTab === tab 
+                          ? 'text-[#008298] dark:text-[#00a8c2]' 
+                          : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200'
+                      }`}
                     >
                       {tab}
                       {popularTab === tab && (
-                        <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary"></span>
+                        <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#008298] dark:bg-[#00a8c2] rounded-t-sm"></span>
                       )}
                     </button>
                   ))}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 scrollbar-hide">
                   {popularComparisons[popularTab].map((item, idx) => (
-                    <div key={idx} className="bg-background dark:bg-[#111] border border-gray-200 dark:border-background/5 rounded-2xl p-6 flex flex-col justify-between hover:border-gray-300 dark:hover:border-background/10 transition-colors shadow-sm">
-                      <div className="flex items-center justify-between gap-4 mb-6">
-                        {/* Vehicle 1 */}
-                        <div className="flex flex-col items-center flex-1">
-                          <img src={item.v1.imageUrl || '/honda-logo.svg'} className="h-16 object-contain mb-2" />
-                          <span className="text-[10px] text-gray-500 dark:text-gray-400 font-bold block">{item.v1.brand}</span>
-                          <h4 className="text-xs font-semibold text-center mt-1 line-clamp-1 text-gray-900 dark:text-primary-foreground">{item.v1.name}</h4>
-                          <span className="text-red-500 text-[11px] font-medium mt-1">NPR {item.v1.price.toLocaleString('en-IN')}</span>
+                    <div key={idx} className="min-w-[320px] max-w-[350px] shrink-0 snap-start bg-white dark:bg-[#0B0B0C] border border-gray-300 dark:border-gray-700 rounded-2xl flex flex-col hover:shadow-md transition-shadow">
+                      {/* Top section: Vehicles side-by-side */}
+                      <div className="flex relative p-4 pb-2">
+                        {/* Vertical Divider */}
+                        <div className="absolute top-4 bottom-4 w-px bg-gray-200 dark:bg-gray-800 left-1/2 -translate-x-1/2"></div>
+                        {/* VS Badge */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-[#0B0B0C] border border-gray-300 dark:border-gray-600 text-[#d73b30] text-[10px] font-bold p-1 rounded-full z-10 w-7 h-7 flex items-center justify-center">
+                          VS
                         </div>
-                        <span className="text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400 bg-[#e8dfd1] dark:bg-[#0d111b] w-6 h-6 rounded-full flex items-center justify-center border border-gray-200 dark:border-background/5 flex-shrink-0">vs</span>
+                        
+                        {/* Vehicle 1 */}
+                        <div className="flex-1 flex flex-col items-start pr-4">
+                          <img src={item.v1.imageUrl || '/honda-logo.svg'} className="w-full h-20 object-contain mb-3" />
+                          <span className="text-[11px] text-gray-500 dark:text-gray-400">{item.v1.brand}</span>
+                          <h4 className="text-base font-bold text-gray-900 dark:text-white line-clamp-1">{item.v1.name}</h4>
+                          <span className="text-sm font-semibold text-gray-900 dark:text-white mt-1">₹ {item.v1.price.toLocaleString('en-IN')}</span>
+                          <span className="text-xs text-gray-400">Onwards</span>
+                        </div>
+                        
                         {/* Vehicle 2 */}
-                        <div className="flex flex-col items-center flex-1">
-                          <img src={item.v2.imageUrl || '/honda-logo.svg'} className="h-16 object-contain mb-2" />
-                          <span className="text-[10px] text-gray-500 dark:text-gray-400 font-bold block">{item.v2.brand}</span>
-                          <h4 className="text-xs font-semibold text-center mt-1 line-clamp-1 text-gray-900 dark:text-primary-foreground">{item.v2.name}</h4>
-                          <span className="text-red-500 text-[11px] font-medium mt-1">NPR {item.v2.price.toLocaleString('en-IN')}</span>
+                        <div className="flex-1 flex flex-col items-start pl-4">
+                          <img src={item.v2.imageUrl || '/honda-logo.svg'} className="w-full h-20 object-contain mb-3" />
+                          <span className="text-[11px] text-gray-500 dark:text-gray-400">{item.v2.brand}</span>
+                          <h4 className="text-base font-bold text-gray-900 dark:text-white line-clamp-1">{item.v2.name}</h4>
+                          <span className="text-sm font-semibold text-gray-900 dark:text-white mt-1">₹ {item.v2.price.toLocaleString('en-IN')}</span>
+                          <span className="text-xs text-gray-400">Onwards</span>
                         </div>
                       </div>
                       
-                      <button
-                        onClick={() => startPopularCompare(item.v1.id, item.v2.id)}
-                        className="w-full py-2 bg-transparent border border-gray-200 dark:border-background/10 rounded-lg text-xs font-semibold text-gray-700 dark:text-primary-foreground hover:bg-background dark:hover:bg-background/5 transition-colors"
-                      >
-                        {item.label}
-                      </button>
+                      {/* Bottom section: Action button */}
+                      <div className="p-4 pt-2 mt-auto">
+                        <button
+                          onClick={() => startPopularCompare(item.v1.id, item.v2.id)}
+                          className="w-full py-2.5 bg-white dark:bg-[#0B0B0C] border border-[#008298] rounded-md text-sm font-semibold text-[#008298] hover:bg-teal-50 dark:hover:bg-teal-900/10 transition-colors"
+                        >
+                          {item.label}
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -532,115 +551,114 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
 
       {/* Selector Modal Overlay */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 dark:bg-black/75 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-          <div className="bg-background dark:bg-[#141b2b] border border-gray-200 dark:border-background/10 rounded-2xl w-full max-w-xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl relative">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-0 sm:p-4 backdrop-blur-sm">
+          <div className="bg-[#f0f0f0] dark:bg-[#0B0B0C] w-full max-w-xl h-full sm:h-auto sm:max-h-[85vh] sm:rounded-md overflow-hidden flex flex-col shadow-2xl relative">
             <button 
               onClick={() => {
                 setIsModalOpen(false);
                 setActiveSlotIdx(null);
                 setSearchQuery('');
               }}
-              className="absolute top-4 right-4 bg-[#e8dfd1] /5 hover:bg-gray-250 dark:hover:bg-background/10 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-primary-foreground rounded-full p-2 transition-colors z-20"
+              className="absolute top-4 right-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 text-gray-500 rounded-full p-1.5 transition-colors z-20"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Modal Header */}
-            <div className="p-6 border-b border-gray-100 dark:border-background/5">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-primary-foreground mb-4 text-left">Select Your Brand or Model</h2>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
+            <div className="p-4 pt-5 pb-0 bg-[#f0f0f0] dark:bg-[#0B0B0C]">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 text-left px-2">Select Your Brand or Model</h2>
+              <div className="relative bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md overflow-hidden flex items-center shadow-sm">
+                <Search className="absolute left-3 w-5 h-5 text-gray-400" />
                 <input 
                   type="text"
                   placeholder="Type to Select Brand or Model"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-background dark:bg-[#0d111b] border border-gray-250 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 text-xs text-gray-900 dark:text-primary-foreground placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                  className="w-full bg-transparent py-3 pl-10 pr-4 text-sm text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none"
                 />
               </div>
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 overflow-y-auto flex-1 flex flex-col gap-6 text-left">
+            <div className="overflow-y-auto flex-1 bg-white dark:bg-[#111] mt-4">
               
-              {/* Recently Visited */}
-              {searchQuery === '' && (
-                <div>
-                  <h3 className="text-[10px] tracking-wider font-extrabold uppercase text-gray-500 dark:text-gray-400 mb-3">Recently Visited</h3>
-                  <div className="flex gap-4">
+              {searchQuery !== '' ? (
+                <div className="flex flex-col">
+                  {filteredVehicles.map(v => (
                     <div 
-                      onClick={() => handleAddVehicle(vehicles[0].id)}
-                      className="bg-background dark:bg-[#1d273a]/40 border border-gray-200 dark:border-background/5 hover:border-gray-300 dark:hover:border-background/10 rounded-xl p-3 flex items-center gap-3 cursor-pointer transition-colors w-full sm:w-auto shadow-sm"
+                      key={v.id}
+                      onClick={() => handleAddVehicle(v.id)}
+                      className="p-4 border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 flex items-center justify-between cursor-pointer transition-colors"
                     >
-                      <img src={vehicles[0].imageUrl || '/honda-logo.svg'} className="h-10 w-12 object-contain" />
-                      <div>
-                        <span className="text-[9px] tracking-wide text-gray-500 dark:text-gray-400 font-semibold block">{vehicles[0].brand}</span>
-                        <span className="text-xs font-bold text-gray-900 dark:text-primary-foreground">{vehicles[0].name}</span>
+                      <div className="flex items-center gap-4">
+                        <img src={v.imageUrl || '/honda-logo.svg'} className="w-12 h-8 object-contain" />
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-900 dark:text-white">{v.name}</h4>
+                          <span className="text-[10px] uppercase text-gray-500">{v.brand}</span>
+                        </div>
                       </div>
+                      <span className="text-xs text-gray-900 dark:text-white font-medium">₹ {v.price.toLocaleString('en-IN')}</span>
                     </div>
+                  ))}
+                  {filteredVehicles.length === 0 && (
+                    <p className="text-sm text-gray-500 text-center py-8">No matching models found.</p>
+                  )}
+                </div>
+              ) : (
+                <div className="flex flex-col">
+                  {brands.map(brand => {
+                    const isExpanded = expandedBrand === brand;
+                    const brandVehicles = vehicles.filter(v => v.brand === brand);
+                    
+                    // Simple placeholder for brand logo matching image 2
+                    let brandLogo = '/honda-logo.svg';
+                    if (brand.toLowerCase() === 'yamaha') brandLogo = '/yamaha-logo.png';
+                    // Since we don't have all brand logos uploaded, we'll just use their main image if available or fallback
+
+                    return (
+                      <div key={brand} className="border-b border-gray-200 dark:border-gray-800">
+                        <button
+                          onClick={() => setExpandedBrand(isExpanded ? null : brand)}
+                          className="w-full flex items-center justify-between p-4 bg-white dark:bg-[#111] hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors text-left"
+                        >
+                          <div className="flex items-center gap-4">
+                            {/* Brand Logo Placeholder */}
+                            <div className="w-12 flex justify-center">
+                               {brand.toLowerCase() === 'honda' ? (
+                                  <img src="/honda-logo.svg" className="h-6 object-contain" alt="Honda" />
+                               ) : (
+                                  <span className="font-extrabold text-gray-800 dark:text-white text-sm">{brand}</span>
+                               )}
+                            </div>
+                            <span className="text-base text-gray-800 dark:text-white">{brand}</span>
+                          </div>
+                          {isExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+                        </button>
+                        
+                        {isExpanded && (
+                          <div className="bg-gray-50 dark:bg-[#0a0a0a] border-t border-gray-100 dark:border-gray-900">
+                            {brandVehicles.map(v => (
+                              <div
+                                key={v.id}
+                                onClick={() => handleAddVehicle(v.id)}
+                                className="py-3 px-10 border-b border-gray-100 dark:border-gray-900 last:border-0 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition-colors flex items-center justify-between"
+                              >
+                                <span className="text-sm text-gray-700 dark:text-gray-300">{v.name}</span>
+                                <span className="text-xs text-gray-900 dark:text-white font-medium">₹ {v.price.toLocaleString('en-IN')}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                  
+                  {/* OTHER BRANDS section placeholder as seen in image */}
+                  <div className="p-4 pt-6 pb-2 bg-white dark:bg-[#111]">
+                     <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">OTHER BRANDS</span>
                   </div>
                 </div>
               )}
-
-              {/* Popular Brands Accordion */}
-              <div>
-                <h3 className="text-[10px] tracking-wider font-extrabold uppercase text-gray-500 dark:text-gray-400 mb-3">Popular Brands</h3>
-                
-                {searchQuery !== '' ? (
-                  <div className="flex flex-col gap-2">
-                    {filteredVehicles.map(v => (
-                      <div 
-                        key={v.id}
-                        onClick={() => handleAddVehicle(v.id)}
-                        className="p-3 bg-background dark:bg-[#0d111b] border border-gray-200 dark:border-background/5 hover:border-primary rounded-xl flex items-center justify-between cursor-pointer transition-colors"
-                      >
-                        <div>
-                          <span className="text-[9px] uppercase tracking-wider text-gray-500 dark:text-gray-400 font-bold">{v.brand}</span>
-                          <h4 className="text-sm font-bold text-gray-900 dark:text-primary-foreground mt-0.5">{v.name}</h4>
-                        </div>
-                        <span className="text-xs text-red-500 font-semibold">NPR {v.price.toLocaleString('en-IN')}</span>
-                      </div>
-                    ))}
-                    {filteredVehicles.length === 0 && (
-                      <p className="text-xs text-gray-500 text-center py-4">No matching models found.</p>
-                    )}
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-2.5">
-                    {brands.map(brand => {
-                      const isExpanded = expandedBrand === brand;
-                      const brandVehicles = vehicles.filter(v => v.brand === brand);
-                      return (
-                        <div key={brand} className="border border-gray-200 dark:border-background/5 rounded-xl overflow-hidden shadow-sm">
-                          <button
-                            onClick={() => setExpandedBrand(isExpanded ? null : brand)}
-                            className="w-full flex items-center justify-between p-3.5 bg-background dark:bg-[#0d111b] hover:bg-[#e8dfd1] dark:hover:bg-[#1a2335]/40 transition-colors text-left"
-                          >
-                            <span className="font-bold text-sm text-gray-900 dark:text-primary-foreground">{brand}</span>
-                            {isExpanded ? <ChevronUp className="w-4 h-4 text-gray-500 dark:text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />}
-                          </button>
-                          
-                          {isExpanded && (
-                            <div className="p-3 bg-background dark:bg-[#0d111b]/80 border-t border-gray-200 dark:border-background/5 divide-y divide-gray-100 dark:divide-white/5 max-h-48 overflow-y-auto">
-                              {brandVehicles.map(v => (
-                                <div
-                                  key={v.id}
-                                  onClick={() => handleAddVehicle(v.id)}
-                                  className="py-2.5 px-1.5 hover:bg-background dark:hover:bg-background/5 rounded cursor-pointer transition-colors flex items-center justify-between"
-                                >
-                                  <span className="text-xs text-gray-800 dark:text-primary-foreground font-medium">{v.name}</span>
-                                  <span className="text-[10px] text-red-500 font-bold">NPR {v.price.toLocaleString('en-IN')}</span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
             </div>
           </div>
         </div>

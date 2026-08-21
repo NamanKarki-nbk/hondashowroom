@@ -85,9 +85,9 @@ export default function Header() {
       <div className="w-full px-4 md:px-12 lg:px-16 h-20 flex items-center justify-between gap-2 md:gap-4 min-w-0">
         <div className="flex items-center min-w-0">
            <Link href="/" className="flex items-center group">
-             {/* Mobile Logo: Cropped to show only "HONDA The Power of Dreams" */}
-             <div className="md:hidden w-36 overflow-hidden flex items-center shrink-0">
-                <img src="/honda-logo.svg" alt="Honda" className="h-6 w-auto max-w-none object-left shrink-0" />
+             {/* Mobile Logo: Scaled to fit instead of cropped */}
+             <div className="md:hidden flex items-center shrink-0">
+                <Logo className="h-4 sm:h-5 max-w-[160px] sm:max-w-[200px] object-contain shrink-0" />
              </div>
              {/* Desktop Logo */}
              <Logo className="hidden md:block h-7 lg:h-8 max-w-none group-hover:scale-105 transition-transform text-primary object-contain" />
@@ -96,7 +96,6 @@ export default function Header() {
 
         <nav className="hidden md:flex items-center gap-4 xl:gap-8 text-[13px] xl:text-sm font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide flex-1 justify-center">
           <Link href="/shop" className="hover:text-primary dark:hover:text-primary transition-colors whitespace-nowrap">Shop</Link>
-          <Link href="/compare" className="hover:text-primary dark:hover:text-primary transition-colors whitespace-nowrap">Compare</Link>
           <Link href="/finance" className="hover:text-primary dark:hover:text-primary transition-colors whitespace-nowrap">Finance</Link>
           <Link href="/accessories" className="hover:text-primary dark:hover:text-primary transition-colors whitespace-nowrap">Accessories</Link>
 
@@ -107,7 +106,6 @@ export default function Header() {
             </button>
             <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-52 bg-background dark:bg-[#1A1A1A] border border-gray-100 dark:border-background/10 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
               <div className="py-2 flex flex-col">
-                <Link href="/finance" className="px-4 py-2 hover:bg-background dark:hover:bg-[#2A2A2A] hover:text-primary dark:hover:text-primary transition-colors text-xs font-bold whitespace-nowrap">💰 EMI Calculator</Link>
                 <Link href="/fuel-calculator" className="px-4 py-2 hover:bg-background dark:hover:bg-[#2A2A2A] hover:text-primary dark:hover:text-primary transition-colors text-xs font-bold whitespace-nowrap">⛽ Fuel Calculator</Link>
                 <Link href="/compare" className="px-4 py-2 hover:bg-background dark:hover:bg-[#2A2A2A] hover:text-primary dark:hover:text-primary transition-colors text-xs font-bold whitespace-nowrap">⚖️ Compare Vehicles</Link>
               </div>

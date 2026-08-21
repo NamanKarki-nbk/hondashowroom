@@ -34,7 +34,7 @@ export default async function OwnersManualPage() {
         {/* Banner Image */}
         <div className="max-w-7xl mx-auto px-6">
           <img 
-            src="https://edge.sitecorecloud.io/hondamotorc388f-hmsi8ece-prodb777-e813/media/Project/HONDA2WI/honda2wheelersindia/new_asset_compressed/new-banner/owners-manual/Owner-manual.jpg?h=757&iar=0&w=1921" 
+            src="/images/owner-manual-bg.jpg" 
             alt="Owners Manual Banner"
             width={1921}
             height={757}

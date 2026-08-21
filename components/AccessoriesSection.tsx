@@ -10,28 +10,28 @@ const ACCESSORIES = [
     id: 1,
     name: "Premium Seat Cover",
     price: "Rs. 850",
-    image: "https://honda.com.np/wp-content/uploads/2020/09/Seat-Cover.png",
+    image: "/accessories/seat-cover.png",
     tag: "Bestseller"
   },
   {
     id: 2,
     name: "Grip Cover",
     price: "Rs. 150",
-    image: "https://honda.com.np/wp-content/uploads/2020/09/Grip-Cover.png",
+    image: "/accessories/grip-cover.png",
     tag: "Essential"
   },
   {
     id: 3,
     name: "Floor Mat",
     price: "Rs. 350",
-    image: "https://honda.com.np/wp-content/uploads/2020/09/Floor-Mat.png",
+    image: "/accessories/floor-mat.png",
     tag: "Protection"
   },
   {
     id: 4,
     name: "Body Cover",
     price: "Rs. 450",
-    image: "https://honda.com.np/wp-content/uploads/2020/09/Body-Cover.png",
+    image: "/accessories/body-cover.png",
     tag: "Weatherproof"
   }
 ];
