@@ -23,13 +23,13 @@ export default function Footer() {
           
           {/* Left Side: Branding */}
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-            <Link href="/" className="group flex items-center gap-4 mb-4">
-              <div className="bg-white/80 dark:bg-white/10 backdrop-blur-md p-3 rounded-2xl shadow-sm border border-gray-200/50 dark:border-white/10 group-hover:shadow-md transition-all">
-                <Logo className="w-8 h-8 text-primary" />
+            <Link href="/" className="group flex flex-col md:flex-row items-center gap-3 sm:gap-4 mb-4 max-w-full">
+              <div className="bg-white/80 dark:bg-white/10 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl shadow-sm border border-gray-200/50 dark:border-white/10 group-hover:shadow-md transition-all shrink-0">
+                <Logo className="h-5 sm:h-6 md:h-7 text-primary" />
               </div>
-              <div className="flex flex-col">
-                <span className="text-xl md:text-2xl font-black text-gray-900 dark:text-white tracking-tight">Society Enterprises</span>
-                <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Pvt. Ltd.</span>
+              <div className="flex flex-col items-center md:items-start min-w-0">
+                <span className="text-xl md:text-2xl font-black text-gray-900 dark:text-white tracking-tight text-center md:text-left">Society Enterprises</span>
+                <span className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest text-center md:text-left">Pvt. Ltd.</span>
               </div>
             </Link>
             <p className="text-sm font-medium text-gray-600 dark:text-gray-400 max-w-sm">
