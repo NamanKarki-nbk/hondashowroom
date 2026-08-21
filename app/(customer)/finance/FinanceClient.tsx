@@ -50,7 +50,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
       {/* Modals */}
       {selectedModel && selectedPlan && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="bg-background dark:bg-[#0B0B0C] w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl border border-gray-200 dark:border-slate-800 relative flex flex-col md:flex-row max-h-[90vh] overflow-y-auto">
+          <div className="bg-background dark:bg-[#0B0B0C] w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl border border-gray-200 dark:border-zinc-800 relative flex flex-col md:flex-row max-h-[90vh] overflow-y-auto">
             <button 
               onClick={() => setSelectedModel(null)}
               className="absolute top-4 right-4 text-gray-500 hover:text-[#B83227] z-10 bg-white/50 dark:bg-black/50 p-1 rounded-full backdrop-blur"
@@ -60,7 +60,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
               </svg>
             </button>
             
-            <div className="md:w-1/2 bg-white dark:bg-slate-900 p-8 flex flex-col justify-center items-center relative overflow-hidden">
+            <div className="md:w-1/2 bg-white dark:bg-zinc-900 p-8 flex flex-col justify-center items-center relative overflow-hidden">
                <div className="absolute top-0 right-0 w-32 h-32 bg-[#B83227]/10 rounded-full blur-3xl"></div>
                <img 
                  src={selectedModel.imageUrl || "/inventory/honda-dio-125.png"} 
@@ -117,7 +117,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
                     </div>
                  </div>
 
-                 <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-gray-200 dark:border-slate-800 text-sm">
+                 <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-gray-200 dark:border-zinc-800 text-sm">
                     <div className="flex justify-between mb-2">
                       <span className="text-gray-500">Down Payment</span>
                       <span className="font-bold text-gray-900 dark:text-white">Rs. {selectedPlan.downPayment.toLocaleString()}</span>
@@ -163,7 +163,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
           <select 
             value={category} 
             onChange={e => setCategory(e.target.value)}
-            className="w-full bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-primary-foreground px-6 py-4 rounded-2xl appearance-none outline-none font-bold shadow-sm focus:ring-2 focus:ring-[#B83227] transition-all"
+            className="w-full bg-white dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-primary-foreground px-6 py-4 rounded-2xl appearance-none outline-none font-bold shadow-sm focus:ring-2 focus:ring-[#B83227] transition-all"
           >
             <option value="All">Categories - All</option>
             <option value="MOTORCYCLE">Motorcycles</option>
@@ -176,7 +176,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
           <select 
             value={emiRange} 
             onChange={e => setEmiRange(e.target.value)}
-            className="w-full bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-primary-foreground px-6 py-4 rounded-2xl appearance-none outline-none font-bold shadow-sm focus:ring-2 focus:ring-[#B83227] transition-all"
+            className="w-full bg-white dark:bg-zinc-900 border border-gray-300 dark:border-zinc-800 text-gray-900 dark:text-primary-foreground px-6 py-4 rounded-2xl appearance-none outline-none font-bold shadow-sm focus:ring-2 focus:ring-[#B83227] transition-all"
           >
             <option value="All">EMI Range - All</option>
             <option value="< 5000">Under NPR 5,000</option>
@@ -190,7 +190,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {filteredModels.map(model => (
-            <div key={model.modelName} className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 p-8 rounded-3xl flex flex-col group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
+            <div key={model.modelName} className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-8 rounded-3xl flex flex-col group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
               <h3 className="font-black text-xl md:text-2xl font-semibold text-gray-900 dark:text-white uppercase tracking-tight mb-1">{model.modelName}</h3>
               <p className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">
                 (60% DP / 12 Months)
@@ -218,7 +218,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
                     setTenure(12);
                     setDownPaymentPct(60);
                   }}
-                  className="w-full bg-background dark:bg-slate-800 text-[#B83227] dark:text-primary-foreground group-hover:bg-[#B83227] group-hover:text-white text-sm font-bold py-3.5 rounded-xl uppercase tracking-wider transition-colors"
+                  className="w-full bg-background dark:bg-zinc-800 text-[#B83227] dark:text-primary-foreground group-hover:bg-[#B83227] group-hover:text-white text-sm font-bold py-3.5 rounded-xl uppercase tracking-wider transition-colors"
                 >
                   Explore Offer
                 </button>
