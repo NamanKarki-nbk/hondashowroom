@@ -60,11 +60,11 @@ export default function Header() {
           <div className="h-16 flex items-center justify-between px-3 sm:px-6 xl:px-8">
             {/* Logo */}
             <div className="flex items-center min-w-0 shrink">
-              <Link href="/" className="flex items-center group">
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Logo className="h-4 sm:h-5 md:h-6 lg:h-7 shrink text-primary" />
-                </motion.div>
-              </Link>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link href="/" className="flex items-center group">
+                  <Logo className="h-4 sm:h-5 md:h-6 lg:h-7 shrink text-primary pointer-events-none" />
+                </Link>
+              </motion.div>
             </div>
 
             {/* Desktop Navigation */}
@@ -125,10 +125,10 @@ export default function Header() {
               </form>
 
               {/* Auth Icon */}
-              <div className={`hidden md:block relative py-2 ${isLoggedIn ? 'group' : ''}`}>
-                <button onClick={() => router.push(isLoggedIn ? "/profile" : "/login")} className="p-2 rounded-full bg-gray-100/50 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-primary transition-colors flex items-center justify-center cursor-pointer">
+              <div className={`relative py-2 ${isLoggedIn ? 'group' : ''}`}>
+                <Link href={isLoggedIn ? "/profile" : "/login"} className="p-2 rounded-full bg-gray-100/50 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-primary transition-colors flex items-center justify-center cursor-pointer">
                    <User className="w-5 h-5 pointer-events-none" />
-                </button>
+                </Link>
                 {/* Auth Dropdown */}
                 {isLoggedIn && (
                   <div className="absolute top-[90%] right-0 pt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">

@@ -90,7 +90,7 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
   if (TABS.length === 0) return null;
 
   return (
-    <section className="py-16 md:py-24 lg:py-32 w-full bg-[#FAF6F0] dark:bg-slate-950 transition-colors duration-300">
+    <section className="py-16 md:py-24 lg:py-32 w-full bg-gray-50/50 dark:bg-slate-950 transition-colors duration-300">
       <div className="px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px] relative overflow-hidden min-h-[500px]">
         <div className="text-center mb-16 px-6">
           <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white tracking-tighter uppercase mb-10">

@@ -38,7 +38,7 @@ const ACCESSORIES = [
 
 export default function AccessoriesSection() {
   return (
-    <section className="py-24 w-full bg-[#FAF6F0] dark:bg-slate-950 transition-colors duration-300">
+    <section className="py-24 w-full bg-gray-50/50 dark:bg-slate-950 transition-colors duration-300">
       <div className="px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px]">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 xl:mb-20 gap-8">

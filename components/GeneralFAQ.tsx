@@ -31,7 +31,7 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-24 w-full bg-[#FAF6F0] dark:bg-slate-950 transition-colors duration-300">
+    <section className="py-24 w-full bg-gray-50/50 dark:bg-slate-950 transition-colors duration-300">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 w-full">
         
         {/* Header */}
