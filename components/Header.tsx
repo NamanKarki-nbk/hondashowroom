@@ -93,7 +93,7 @@ export default function Header() {
            </Link>
         </div>
 
-        <nav className="hidden lg:flex items-center gap-4 xl:gap-8 text-[13px] xl:text-sm font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide flex-1 justify-center">
+        <nav className="hidden md:flex items-center gap-4 xl:gap-8 text-[13px] xl:text-sm font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide flex-1 justify-center">
           <Link href="/shop" className="hover:text-primary dark:hover:text-primary transition-colors whitespace-nowrap">Shop</Link>
           <Link href="/compare" className="hover:text-primary dark:hover:text-primary transition-colors whitespace-nowrap">Compare</Link>
           <Link href="/finance" className="hover:text-primary dark:hover:text-primary transition-colors whitespace-nowrap">Finance</Link>
@@ -138,12 +138,12 @@ export default function Header() {
             </button>
           </form>
           <ThemeToggle />
-          <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden text-gray-800 dark:text-gray-200 p-1 flex-shrink-0 ml-2"><Menu className="w-6 h-6" /></button>
+          <button onClick={() => setIsMobileMenuOpen(true)} className="md:hidden text-gray-800 dark:text-gray-200 p-1 flex-shrink-0 ml-2"><Menu className="w-6 h-6" /></button>
         </div>
       </div>
       
       {/* Mobile Drawer */}
-      <div className={`fixed inset-0 z-[100] lg:hidden transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      <div className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
         <div className={`absolute top-0 bottom-0 left-0 w-4/5 max-w-sm bg-background dark:bg-[#111] shadow-2xl transition-transform duration-300 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} overflow-y-auto`}>
           <div className="p-6 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
