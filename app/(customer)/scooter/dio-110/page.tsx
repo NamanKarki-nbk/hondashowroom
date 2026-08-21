@@ -9,7 +9,7 @@ import DioColorSwitcher, { ColorOption } from "@/components/scooter/DioColorSwit
 import DioVariantComparison from "@/components/scooter/DioVariantComparison";
 import DioFeaturesGrid from "@/components/scooter/DioFeaturesGrid";
 import VehicleSpecs from "@/components/VehicleSpecs";
-import VehicleAccessoriesHotspots from "@/components/VehicleAccessoriesHotspots";
+import AccessoriesPage from "@/components/AccessoriesPage";
 import DioActionBanner from "@/components/scooter/DioActionBanner";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FaqSection from "@/components/FaqSection";
@@ -198,7 +198,7 @@ export default function HondaDio110Page({
         <DioFeaturesGrid features={vehicle?.specs?.features} />
 
         {/* 6. Explore Accessories */}
-        <VehicleAccessoriesHotspots 
+        <AccessoriesPage 
           vehicleImageUrl={currentColor.image} 
           hotspots={dio110Hotspots} 
         />

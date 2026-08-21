@@ -9,7 +9,7 @@ import DioColorSwitcher, { ColorOption } from "@/components/scooter/DioColorSwit
 import Dio125VariantComparison from "@/components/scooter/Dio125VariantComparison";
 import DioFeaturesGrid from "@/components/scooter/DioFeaturesGrid";
 import VehicleSpecs from "@/components/VehicleSpecs";
-import VehicleAccessoriesHotspots from "@/components/VehicleAccessoriesHotspots";
+import AccessoriesPage from "@/components/AccessoriesPage";
 import DioActionBanner from "@/components/scooter/DioActionBanner";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FaqSection from "@/components/FaqSection";
@@ -193,7 +193,7 @@ export default function HondaDio125Page({ vehicle, stdPrice, dlxPrice }: HondaDi
         <DioFeaturesGrid features={vehicle?.specs?.features} />
 
         {/* 6. Explore Accessories */}
-        <VehicleAccessoriesHotspots 
+        <AccessoriesPage 
           vehicleImageUrl={currentColor.image} 
           hotspots={dio125Hotspots} 
         />

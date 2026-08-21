@@ -16,19 +16,19 @@ export interface AccessoryHotspot {
   };
 }
 
-interface VehicleAccessoriesHotspotsProps {
+interface AccessoriesPageProps {
   vehicleImageUrl: string;
   hotspots: AccessoryHotspot[];
 }
 
-export default function VehicleAccessoriesHotspots({ vehicleImageUrl, hotspots }: VehicleAccessoriesHotspotsProps) {
+export default function AccessoriesPage({ vehicleImageUrl, hotspots }: AccessoriesPageProps) {
   const [activeHotspotId, setActiveHotspotId] = useState<string | null>(null);
 
   const activeHotspot = hotspots.find(h => h.id === activeHotspotId);
 
   return (
-    <section id="accessories" className="py-24 px-6 bg-gray-50 dark:bg-[#111112]">
-      <div className="max-w-6xl mx-auto">
+    <section id="accessories" className="min-h-screen w-full flex flex-col justify-center items-center py-24 px-6 bg-gray-50 dark:bg-[#111112]">
+      <div className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center">
         <div className="text-center mb-16">
           <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-black text-gray-900 dark:text-white mb-4">
             Explore Accessories
