@@ -47,12 +47,12 @@ export default async function LetterPrintPage({ params }: LetterPrintPageProps) 
             overflow: visible !important;
           }
           @page {
-            size: A4 ${hasLandscape ? 'landscape' : 'portrait'};
+            size: letter ${hasLandscape ? 'landscape' : 'portrait'};
             margin: 0;
           }
           ${hasLandscape ? `
           @page portrait {
-            size: A4 portrait;
+            size: letter portrait;
             margin: 0;
           }
           .page-portrait {
@@ -68,9 +68,9 @@ export default async function LetterPrintPage({ params }: LetterPrintPageProps) 
           return (
             <div 
               key={index} 
-              className={`print:shadow-none print:min-h-0 print:w-full print:m-0 print:p-0 relative ${isLandscape ? 'w-[297mm] print:break-before-page' : `w-[210mm] ${hasLandscape ? 'page-portrait' : ''}`}`}
+              className={`print:shadow-none print:min-h-0 print:w-full print:m-0 print:p-0 relative ${isLandscape ? 'w-[11in] print:break-before-page' : `w-[8.5in] ${hasLandscape ? 'page-portrait' : ''}`}`}
             >
-              <OfficialLetterpad disableTableWrapper={true} className={isLandscape ? '!min-h-[210mm] shadow-2xl print:shadow-none print:!min-h-0' : 'shadow-2xl print:shadow-none print:!min-h-0'}>
+              <OfficialLetterpad disableTableWrapper={true} className={isLandscape ? '!min-h-[8.5in] shadow-2xl print:shadow-none print:!min-h-0' : 'shadow-2xl print:shadow-none print:!min-h-0'}>
                 <table className="w-full relative z-10 border-none">
                   <thead className="table-header-group">
                     <tr>

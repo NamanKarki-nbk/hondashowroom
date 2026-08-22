@@ -8,7 +8,7 @@ interface OfficialLetterpadProps {
 
 export default function OfficialLetterpad({ children, className = "", disableTableWrapper = false }: OfficialLetterpadProps) {
   return (
-    <div className={`relative w-full min-h-[297mm] print:min-h-0 bg-white text-black print:bg-transparent ${className}`}>
+    <div className={`relative w-full min-h-[11in] print:min-h-0 bg-white text-black print:bg-transparent ${className}`}>
       
       {/* Background Watermark (Screen & Print) */}
       <div className="absolute inset-0 pointer-events-none z-0 flex justify-center items-center overflow-hidden">

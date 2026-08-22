@@ -31,7 +31,7 @@ export default function LetterPreview({ docType, recipient, metadata }: LetterPr
           <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]" />
           Live Document Preview
         </h3>
-        <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest bg-gray-100 dark:bg-slate-900 px-3 py-1.5 rounded-full shadow-inner border border-gray-200 dark:border-slate-800">Letter (210mm x 297mm)</span>
+        <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest bg-gray-100 dark:bg-slate-900 px-3 py-1.5 rounded-full shadow-inner border border-gray-200 dark:border-slate-800">Letter (8.5&quot; x 11&quot;)</span>
       </div>
       
       {/* Scrollable Letter Container */}
@@ -42,7 +42,7 @@ export default function LetterPreview({ docType, recipient, metadata }: LetterPr
             <div 
               key={index}
               className={`bg-white mx-auto shadow-2xl border border-gray-300 relative ${
-                isLandscape ? 'min-h-[210mm] w-[297mm]' : 'min-h-[297mm] max-w-[210mm] w-full'
+                isLandscape ? 'min-h-[8.5in] w-[11in]' : 'min-h-[11in] max-w-[8.5in] w-full'
               }`}
             >
               <OfficialLetterpad disableTableWrapper={true}>
