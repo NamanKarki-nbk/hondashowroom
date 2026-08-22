@@ -29,7 +29,7 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
         </div>
 
         {/* Image Container with Soft Radial Gradient */}
-        <div className="relative h-64 md:h-72 w-full flex items-center justify-center p-8 overflow-hidden bg-gradient-to-b from-gray-50/50 to-transparent dark:from-white/[0.02] dark:to-transparent">
+        <div className="relative h-48 md:h-56 w-full flex items-center justify-center p-4 overflow-hidden bg-gradient-to-b from-gray-50/50 to-transparent dark:from-white/[0.02] dark:to-transparent">
            {/* Glow Effect behind image */}
            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-primary/10 dark:bg-primary/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
            
@@ -42,7 +42,7 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
                className="w-full h-full object-contain relative z-10 group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 drop-shadow-xl" 
              />
            ) : (
-             <div className="w-40 h-24 bg-gray-200 dark:bg-gray-800 rounded-2xl rotate-[-5deg] shadow-lg group-hover:scale-110 group-hover:rotate-0 transition-all duration-500 relative z-10"></div>
+             <div className="w-full h-full max-w-[160px] max-h-[100px] bg-gray-200 dark:bg-gray-800 rounded-2xl rotate-[-5deg] shadow-lg group-hover:scale-110 group-hover:rotate-0 transition-all duration-500 relative z-10"></div>
            )}
         </div>
 
