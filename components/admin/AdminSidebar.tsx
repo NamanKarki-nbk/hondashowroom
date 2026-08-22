@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
@@ -19,6 +19,26 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState<string | null>("Front Website (CMS)");
+  const [actionStats, setActionStats] = useState({ pendingTestRides: 0, newLeads: 0 });
+
+  useEffect(() => {
+    const fetchActionStats = async () => {
+      try {
+        const res = await fetch("/api/admin/action-needed");
+        if (res.ok) {
+          const data = await res.json();
+          setActionStats({
+            pendingTestRides: data.pendingTestRides || 0,
+            newLeads: data.newLeads || 0,
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch action stats", error);
+      }
+    };
+    fetchActionStats();
+  }, [pathname]); // Refetch when navigating
+
 
   const navCategories = [
     {
@@ -199,14 +219,16 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
         </div>
 
         {/* Action Needed Widget */}
-        {!isCollapsed && (
+        {!isCollapsed && (actionStats.pendingTestRides > 0 || actionStats.newLeads > 0) && (
           <div className="px-4 py-4 shrink-0">
             <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-4">
               <div className="flex items-center gap-2 text-orange-500 mb-2">
                 <BellDot className="w-5 h-5" strokeWidth={1.5} />
                 <h4 className="font-bold text-sm">Action Needed</h4>
               </div>
-              <p className="text-xs text-gray-400 font-medium mb-3">You have 3 pending test rides and 1 new contact inquiry.</p>
+              <p className="text-xs text-gray-400 font-medium mb-3">
+                You have {actionStats.pendingTestRides} pending test {actionStats.pendingTestRides === 1 ? 'ride' : 'rides'} and {actionStats.newLeads} new contact {actionStats.newLeads === 1 ? 'inquiry' : 'inquiries'}.
+              </p>
               <Link href="/admin/crm/leads" className="text-xs font-bold text-white bg-orange-500 hover:bg-orange-600 transition-colors px-3 py-2 rounded-lg block text-center">
                 Review Leads
               </Link>

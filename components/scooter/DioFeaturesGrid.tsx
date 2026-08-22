@@ -117,7 +117,7 @@ export default function DioFeaturesGrid({ features }: { features?: FeatureCard[]
             const Icon = feat.icon || Sparkles;
             return (
               <div
-                key={feat.id}
+                key={feat.id || `feat-${index}`}
                 className="group relative bg-white dark:bg-slate-900 rounded-3xl border border-gray-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-2xl hover:border-primary/50 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
