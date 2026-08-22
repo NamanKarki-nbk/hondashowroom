@@ -14,7 +14,7 @@ const SLIDES = [
     title: "DIO 125",
     tagline: "Born to express. Built to impress.",
     price: "NPR 3,29,900",
-    image: "/inventory/honda-dio-125.png",
+    image: "/inventory/honda-dio-bs6-125.png",
     link: "/vehicles/honda-84",
     accent: "from-blue-500/20 to-cyan-500/20"
   },
@@ -24,7 +24,7 @@ const SLIDES = [
     title: "DIO BS6",
     tagline: "Keep dio'ing it",
     price: "NPR 2,84,900",
-    image: "/inventory/honda-dio-bs6.png",
+    image: "/inventory/honda-dio-bs6-110.png",
     link: "/vehicles/honda-87",
     accent: "from-red-500/20 to-orange-500/20"
   },
@@ -34,7 +34,7 @@ const SLIDES = [
     title: "HORNET 2.0",
     tagline: "Fly against the wind",
     price: "NPR 4,69,900",
-    image: "/inventory/cb-hornet-2-0.png",
+    image: "/inventory/cb-hornet-20.png",
     link: "/vehicles/honda-75",
     accent: "from-emerald-500/20 to-teal-500/20"
   }
