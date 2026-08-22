@@ -47,18 +47,16 @@ export default function LetterPreview({ docType, recipient, metadata }: LetterPr
             >
               <OfficialLetterpad disableTableWrapper={true}>
                 <table className="w-full relative z-10 border-none">
-                  {docType !== 'Quotation' && (
-                    <thead className="table-header-group">
-                      <tr>
-                        <td className="border-none">
-                          <div className="w-full flex justify-end px-[1in] pt-[0.5in] pb-0">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src="/honda-wing-logo.png" alt="Honda Logo" className="w-[1in] h-auto object-contain" />
-                          </div>
-                        </td>
-                      </tr>
-                    </thead>
-                  )}
+                  <thead className="table-header-group">
+                    <tr>
+                      <td className="border-none">
+                        <div className="w-full flex justify-end px-[1in] pt-[0.5in] pb-0">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src="/honda-wing-logo.png" alt="Honda Logo" className="w-[1in] h-auto object-contain" />
+                        </div>
+                      </td>
+                    </tr>
+                  </thead>
                   <tbody>
                     <tr>
                       <td 
@@ -67,22 +65,20 @@ export default function LetterPreview({ docType, recipient, metadata }: LetterPr
                       />
                     </tr>
                   </tbody>
-                  {docType !== 'Quotation' && (
-                    <tfoot className="table-footer-group">
-                      <tr>
-                        <td className="border-none">
-                          <div className="w-full text-center px-[1in] pb-[0.5in] pt-2 bg-white">
-                            <p className="text-[13px] font-bold text-gray-800">
-                              <span className="text-[#CC0000] font-black uppercase">SOCIETY ENTERPRISES PVT. LTD.</span>, Ganga Nagari, Damak-05, Jhapa, Nepal
-                            </p>
-                            <p className="text-[10px] font-semibold text-gray-700 mt-1">
-                              <span className="font-bold text-black">Sales Division</span> Phone No.: 9801615250, 9801615251, E-mail: societyenterprises2024@gmail.com
-                            </p>
-                          </div>
-                        </td>
-                      </tr>
-                    </tfoot>
-                  )}
+                  <tfoot className="table-footer-group">
+                    <tr>
+                      <td className="border-none">
+                        <div className="w-full text-center px-[1in] pb-[0.5in] pt-2 bg-white">
+                          <p className="text-[13px] font-bold text-gray-800">
+                            <span className="text-[#CC0000] font-black uppercase">SOCIETY ENTERPRISES PVT. LTD.</span>, Ganga Nagari, Damak-05, Jhapa, Nepal
+                          </p>
+                          <p className="text-[10px] font-semibold text-gray-700 mt-1">
+                            <span className="font-bold text-black">Sales Division</span> Phone No.: 9801615250, 9801615251, E-mail: societyenterprises2024@gmail.com
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  </tfoot>
                 </table>
               </OfficialLetterpad>
             </div>
