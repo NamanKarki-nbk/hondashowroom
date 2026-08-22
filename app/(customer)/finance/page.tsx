@@ -51,9 +51,9 @@ export default async function FinancePage() {
     } else if (nameLower.includes('sp 125')) {
       imageUrl = '/inventory/honda-sp-125-.png';
     } else if (nameLower.includes('shine 125')) {
-      imageUrl = '/inventory/honda-shine-bs6.jpg';
+      imageUrl = '/inventory/honda-shine-bs6.png';
     } else if (nameLower.includes('shine')) {
-      imageUrl = '/inventory/honda-shine-bs6.jpg';
+      imageUrl = '/inventory/honda-shine-bs6.png';
     } else if (nameLower.includes('nx 200')) {
       imageUrl = '/product-catalog/honda-nx-200.png';
     }
