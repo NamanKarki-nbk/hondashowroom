@@ -67,13 +67,39 @@ export default function HondaDio110Page({
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setIsBookingOpen(false);
-      setSubmitted(false);
-    }, 2500);
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          interestedIn: selectedVariant,
+          source: bookingType === "book" ? "Dio 110 - Booking" : "Dio 110 - Test Ride",
+          remarks: `Preferred location: ${form.preferredBranch}, City: ${form.city}`,
+        }),
+      });
+
+      if (res.ok) {
+        setSubmitted(true);
+        setTimeout(() => {
+          setIsBookingOpen(false);
+          setSubmitted(false);
+        }, 2500);
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Booking error:", error);
+      alert("Failed to submit request.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const dio110Hotspots = [
@@ -309,9 +335,11 @@ export default function HondaDio110Page({
 
                   <button
                     type="submit"
-                    className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-black py-4 rounded-xl uppercase tracking-wider text-sm shadow-lg shadow-primary/25 transition-all flex items-center justify-center gap-2 mt-2"
+                    disabled={isSubmitting}
+                    className="w-full bg-primary hover:bg-primary-hover disabled:bg-primary/50 text-primary-foreground font-black py-4 rounded-xl uppercase tracking-wider text-sm shadow-lg shadow-primary/25 transition-all flex items-center justify-center gap-2 mt-2"
                   >
-                    Confirm {bookingType === "book" ? "Booking" : "Test Ride"} <ArrowRight className="w-4 h-4" />
+                    {isSubmitting ? "Processing..." : `Confirm ${bookingType === "book" ? "Booking" : "Test Ride"}`} 
+                    {!isSubmitting && <ArrowRight className="w-4 h-4" />}
                   </button>
                 </form>
               </div>
