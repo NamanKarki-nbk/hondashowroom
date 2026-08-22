@@ -96,17 +96,17 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
           <div className="mt-6 flex gap-3">
             <button 
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onQuoteClick && onQuoteClick(); }}
-              className="group/btn flex-1 flex items-center justify-center gap-2 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-900 dark:text-white py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300"
+              className="group/btn flex-1 flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-900 dark:text-white py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300"
             >
               Get Quote
-              <ArrowRight className="w-3.5 h-3.5 opacity-50 group-hover/btn:opacity-100 group-hover/btn:translate-x-1 transition-all duration-300" />
+              <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover/btn:text-slate-900 dark:group-hover/btn:text-white group-hover/btn:translate-x-0.5 transition-all duration-300" />
             </button>
             <button 
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onBookClick && onBookClick(); }}
-              className="group/btn flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300 shadow-[0_4px_14px_0_rgba(239,68,68,0.39)] hover:shadow-[0_6px_20px_rgba(239,68,68,0.23)] hover:-translate-y-0.5"
+              className="group/btn flex-1 flex items-center justify-center gap-1.5 bg-[#cc0000] hover:bg-[#aa0000] text-white py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 shadow-[0_4px_16px_rgba(204,0,0,0.4)] hover:shadow-[0_6px_24px_rgba(204,0,0,0.5)] hover:-translate-y-0.5"
             >
               Pre-Book
-              <ArrowRight className="w-3.5 h-3.5 opacity-80 group-hover/btn:opacity-100 group-hover/btn:translate-x-1 transition-all duration-300" />
+              <ArrowRight className="w-3.5 h-3.5 text-white/80 group-hover/btn:text-white group-hover/btn:translate-x-0.5 transition-all duration-300" />
             </button>
           </div>
         </div>

@@ -4,6 +4,7 @@ import React, { useCallback, useState, useEffect, useMemo } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import VehicleCard from "./VehicleCard";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 export type Product = {
@@ -20,6 +21,8 @@ interface CategoryCarouselProps {
 }
 
 export default function CategoryCarousel({ products }: CategoryCarouselProps) {
+  const router = useRouter();
+  
   const scooterOrder = ["dio bs6 110", "dio bs6 125"];
   const motorcycleOrder = ["honda shine", "honda sp", "hornet", "nx 200"];
 
@@ -157,6 +160,8 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
                       }
                       slug={vehicle.id}
                       imageUrl={vehicle.imageUrl}
+                      onQuoteClick={() => router.push(`/book-now?model=${encodeURIComponent(vehicle.name)}`)}
+                      onBookClick={() => router.push(`/vehicles/${vehicle.id}`)}
                     />
                   </motion.div>
                 ))}
