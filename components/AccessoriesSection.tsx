@@ -51,9 +51,9 @@ export default function AccessoriesSection({ accessories = [] }: { accessories?:
     <section className="py-24 w-full bg-gray-50/50 dark:bg-slate-950 transition-colors duration-300">
       <div className="px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px]">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 xl:mb-20 gap-8">
+        <div className="flex flex-col md:flex-row md:items-end mb-16 xl:mb-20 gap-8">
           <div>
-            <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-full px-5 py-2 mb-6 text-sm font-bold tracking-widest uppercase text-primary">
+            <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-full px-5 py-2 mb-6 text-sm font-bold tracking-widest text-primary">
               <ShoppingBag className="w-4 h-4" />
               <span>Genuine Accessories</span>
             </div>
@@ -62,13 +62,6 @@ export default function AccessoriesSection({ accessories = [] }: { accessories?:
               Explore <span className="text-primary">Accessories</span>
             </h2>
           </div>
-          
-          <Link href="/accessories" className="group flex items-center gap-4 text-gray-900 dark:text-white font-bold hover:text-primary dark:hover:text-primary transition-colors text-lg uppercase tracking-wider shrink-0">
-            <span>View Catalog</span>
-            <div className="w-12 h-12 rounded-full bg-white dark:bg-white/10 shadow-sm border border-gray-200 dark:border-white/10 flex items-center justify-center group-hover:bg-primary group-hover:border-primary group-hover:text-white transition-all duration-300 group-hover:scale-110">
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-            </div>
-          </Link>
         </div>
 
         {/* 4-Column Grid */}
@@ -83,7 +76,7 @@ export default function AccessoriesSection({ accessories = [] }: { accessories?:
               className="group relative bg-white/70 dark:bg-white/5 backdrop-blur-xl rounded-[2rem] p-6 md:p-8 border border-gray-200/60 dark:border-white/10 hover:border-primary/50 dark:hover:border-primary/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(239,68,68,0.15)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.02)] transition-all duration-500 flex flex-col items-center text-center h-full hover:-translate-y-2 cursor-pointer"
             >
               {/* Badge */}
-              <div className="absolute top-6 left-6 z-10">
+              <div className="absolute top-6 left-6 md:top-8 md:left-8 z-10">
                  <span className="bg-white/90 dark:bg-black/50 backdrop-blur-md text-gray-900 dark:text-white border border-gray-100 dark:border-white/10 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm">
                    {item.tag}
                  </span>
@@ -111,13 +104,23 @@ export default function AccessoriesSection({ accessories = [] }: { accessories?:
                 <p className="text-gray-500 dark:text-gray-400 font-bold tracking-widest text-lg mb-6">{item.price}</p>
                 
                 {/* Action Button */}
-                <button className="w-full flex items-center justify-center gap-2 bg-gray-100 dark:bg-white/10 group-hover:bg-primary text-gray-900 dark:text-white group-hover:text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-widest transition-all duration-300 shadow-sm group-hover:shadow-[0_4px_14px_0_rgba(239,68,68,0.39)]">
+                <button className="w-full flex items-center justify-center gap-2 bg-gray-200 dark:bg-white/20 border border-gray-300 dark:border-gray-600 group-hover:border-transparent group-hover:bg-primary text-gray-900 dark:text-white group-hover:text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-widest transition-all duration-300 shadow-sm group-hover:shadow-[0_4px_14px_0_rgba(239,68,68,0.39)]">
                   Add to Cart
                   <ShoppingBag className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
                 </button>
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* View Catalog Button */}
+        <div className="mt-16 flex justify-center">
+          <Link href="/accessories" className="group flex items-center gap-4 text-gray-900 dark:text-white font-bold hover:text-primary dark:hover:text-primary transition-colors text-lg uppercase tracking-wider shrink-0 bg-white dark:bg-white/5 px-8 py-4 rounded-full border border-gray-200 dark:border-white/10 shadow-sm hover:shadow-md">
+            <span>View Catalog</span>
+            <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </Link>
         </div>
       </div>
     </section>

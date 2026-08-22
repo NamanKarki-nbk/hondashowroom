@@ -41,7 +41,7 @@ export default function FAQSection() {
             <span>Help Center</span>
           </div>
           
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white tracking-tighter uppercase leading-[1.1]">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white tracking-tighter leading-[1.1]">
             Frequently Asked <span className="text-primary">Questions</span>
           </h2>
         </div>
@@ -53,18 +53,18 @@ export default function FAQSection() {
             return (
               <div 
                 key={index} 
-                className={`bg-white/70 dark:bg-white/5 backdrop-blur-xl rounded-2xl overflow-hidden transition-all duration-500 border ${isOpen ? 'border-primary/50 shadow-[0_12px_30px_-10px_rgba(239,68,68,0.2)] dark:shadow-[0_12px_30px_-10px_rgba(239,68,68,0.3)]' : 'border-gray-200/60 dark:border-white/10 shadow-sm hover:border-gray-300 dark:hover:border-white/20'}`}
+                className={`bg-white/70 dark:bg-white/5 backdrop-blur-xl rounded-2xl overflow-hidden transition-all duration-500 border ${isOpen ? 'border-gray-400 dark:border-gray-500 shadow-md' : 'border-gray-200/60 dark:border-white/10 shadow-sm hover:border-gray-300 dark:hover:border-white/20'}`}
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   className="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none group"
                 >
-                  <span className={`text-lg md:text-xl font-bold pr-8 transition-colors duration-300 ${isOpen ? 'text-primary' : 'text-gray-900 dark:text-white group-hover:text-primary'}`}>
+                  <span className={`text-lg md:text-xl font-bold pr-8 transition-colors duration-300 ${isOpen ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white'}`}>
                     {faq.question}
                   </span>
                   
-                  <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${isOpen ? 'bg-primary text-white rotate-180 shadow-md shadow-red-500/30' : 'bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400 group-hover:bg-gray-200 dark:group-hover:bg-white/20'}`}>
-                    {isOpen ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                  <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${isOpen ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 rotate-180 shadow-md shadow-gray-500/20' : 'bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400 group-hover:bg-gray-200 dark:group-hover:bg-white/20'}`}>
+                    {isOpen ? <Minus className="w-5 h-5 translate-y-[1px]" /> : <Plus className="w-5 h-5 translate-y-[1px]" />}
                   </div>
                 </button>
                 
@@ -77,8 +77,8 @@ export default function FAQSection() {
                       transition={{ duration: 0.4, ease: "easeInOut" }}
                     >
                       <div className="px-6 md:px-8 pb-6 md:pb-8 text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed font-medium">
-                        <div className="pt-2 border-t border-gray-100 dark:border-white/5 mt-2">
-                          <p className="mt-4">{faq.answer}</p>
+                        <div className="pt-6 border-t border-gray-200 dark:border-white/10 mt-2">
+                          <p className="mt-2">{faq.answer}</p>
                         </div>
                       </div>
                     </motion.div>

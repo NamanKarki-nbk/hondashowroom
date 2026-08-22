@@ -113,9 +113,9 @@ export default function HeroSlider() {
                    </p>
                  </div>
                  
-                 <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-[90px] xl:text-[110px] font-black text-transparent bg-clip-text bg-gradient-to-br from-gray-900 to-gray-500 dark:from-white dark:to-gray-500 tracking-tighter uppercase leading-[0.9] mb-4 md:mb-6 font-sans py-2">
+                 <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[90px] xl:text-[110px] font-black text-transparent bg-clip-text bg-gradient-to-br from-gray-900 to-gray-500 dark:from-white dark:to-gray-500 tracking-tighter uppercase leading-[0.9] mb-4 md:mb-6 font-sans py-2">
                    {slide.title}
-                 </h2>
+                 </h1>
                  
                  <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base md:text-xl font-medium mb-8 md:mb-10 sm:max-w-none px-4 md:px-0">
                    {slide.tagline}
@@ -179,7 +179,7 @@ export default function HeroSlider() {
       </div>{/* end embla viewport */}
 
       {/* Navigation Controls Overlay */}
-      <div className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-40">
+      <div className="absolute right-16 md:right-24 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-40">
         {SLIDES.map((_, idx) => (
           <button 
             key={idx}

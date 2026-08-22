@@ -92,13 +92,13 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
   return (
     <section className="py-16 md:py-24 lg:py-32 w-full bg-gray-50/50 dark:bg-slate-950 transition-colors duration-300">
       <div className="px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px] relative overflow-hidden min-h-[500px]">
-        <div className="text-center mb-16 px-6">
+        <div className="text-left mb-16 px-6 max-w-7xl mx-auto w-full">
           <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white tracking-tighter uppercase mb-10">
             Explore Models
           </h2>
 
           {/* Premium Segmented Control Tabs */}
-          <div className="flex justify-start sm:justify-center w-full">
+          <div className="flex justify-start w-full">
             <div className="inline-flex items-center p-1.5 bg-gray-200/50 dark:bg-white/5 backdrop-blur-md rounded-2xl border border-gray-300/50 dark:border-white/10 shadow-inner max-w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {TABS.map((tab) => {
                 const isActive = activeTab === tab.id;
@@ -124,7 +124,7 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
         </div>
 
         {/* Carousel */}
-        <div className="relative">
+        <div className="relative group max-w-7xl mx-auto">
           <div className="overflow-hidden" ref={emblaRef}>
             <AnimatePresence mode="wait">
               <motion.div 
@@ -166,13 +166,13 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
 
           <button
             onClick={scrollPrev}
-            className="absolute -left-4 md:-left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-full flex items-center justify-center text-gray-800 dark:text-white shadow-xl hover:scale-110 hover:bg-white dark:hover:bg-slate-700 transition-all z-10 hidden sm:flex group"
+            className="absolute left-0 md:-left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-full flex items-center justify-center text-gray-800 dark:text-white shadow-xl hover:scale-110 hover:bg-white dark:hover:bg-slate-700 transition-all z-10 hidden sm:flex opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0"
           >
             <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
           </button>
           <button
             onClick={scrollNext}
-            className="absolute -right-4 md:-right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-full flex items-center justify-center text-gray-800 dark:text-white shadow-xl hover:scale-110 hover:bg-white dark:hover:bg-slate-700 transition-all z-10 hidden sm:flex group"
+            className="absolute right-0 md:-right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-gray-200 dark:border-white/10 rounded-full flex items-center justify-center text-gray-800 dark:text-white shadow-xl hover:scale-110 hover:bg-white dark:hover:bg-slate-700 transition-all z-10 hidden sm:flex opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0"
           >
             <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
           </button>

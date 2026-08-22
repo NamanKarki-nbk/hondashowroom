@@ -23,7 +23,7 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
         
         {/* Top Badge */}
         <div className="absolute top-5 left-5 z-10">
-          <span className="bg-white/90 dark:bg-black/50 backdrop-blur-md text-primary dark:text-primary-foreground border border-gray-100 dark:border-white/10 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm">
+          <span className="bg-white/90 dark:bg-black/50 backdrop-blur-md text-primary dark:text-primary-foreground border border-gray-100 dark:border-white/10 text-[10px] font-bold px-3 py-1.5 rounded-full tracking-widest shadow-sm">
             {category}
           </span>
         </div>
@@ -103,9 +103,10 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
             </button>
             <button 
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onBookClick && onBookClick(); }}
-              className="flex-1 bg-primary hover:bg-primary-hover text-white py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300 shadow-[0_4px_14px_0_rgba(239,68,68,0.39)] hover:shadow-[0_6px_20px_rgba(239,68,68,0.23)] hover:-translate-y-0.5"
+              className="group/btn flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300 shadow-[0_4px_14px_0_rgba(239,68,68,0.39)] hover:shadow-[0_6px_20px_rgba(239,68,68,0.23)] hover:-translate-y-0.5"
             >
               Pre-Book
+              <ArrowRight className="w-3.5 h-3.5 opacity-80 group-hover/btn:opacity-100 group-hover/btn:translate-x-1 transition-all duration-300" />
             </button>
           </div>
         </div>
