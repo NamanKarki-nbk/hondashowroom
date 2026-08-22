@@ -36,7 +36,17 @@ const ACCESSORIES = [
   }
 ];
 
-export default function AccessoriesSection() {
+export default function AccessoriesSection({ accessories = [] }: { accessories?: any[] }) {
+  const displayAccessories = accessories && accessories.length > 0 
+    ? accessories.map(a => ({
+        id: a.id,
+        name: a.name,
+        price: `Rs. ${a.price.toLocaleString('en-IN')}`,
+        image: a.imageUrl,
+        tag: a.category || "Accessory"
+      }))
+    : ACCESSORIES;
+
   return (
     <section className="py-24 w-full bg-gray-50/50 dark:bg-slate-950 transition-colors duration-300">
       <div className="px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px]">
@@ -63,7 +73,7 @@ export default function AccessoriesSection() {
 
         {/* 4-Column Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-8">
-          {ACCESSORIES.map((item, idx) => (
+          {displayAccessories.map((item, idx) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 30 }}

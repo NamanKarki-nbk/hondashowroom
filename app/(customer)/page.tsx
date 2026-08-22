@@ -4,6 +4,9 @@ import { ArrowRight, ChevronRight, Phone, Search, Menu, ChevronDown } from "luci
 import Logo from "@/components/Logo";
 import { prisma } from "@/lib/prisma";
 import ClientOnly from "@/components/ClientOnly";
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 import EmiCalculator from "@/components/EmiCalculator";
 import HeroSlider from "@/components/HeroSlider";
 import CategoryCarousel from "@/components/CategoryCarousel";
@@ -67,6 +70,11 @@ export default async function CustomerLandingPage() {
     featured: i === 0,
   }));
 
+  const homeAccessories = await prisma.accessory.findMany({
+    take: 4,
+    orderBy: { createdAt: 'desc' }
+  });
+
   return (
     <div className="min-h-screen bg-background text-gray-900 dark:text-foreground font-sans selection:bg-primary selection:text-primary-foreground overflow-x-hidden transition-colors duration-300">
       {/* 1. Immersive Hero Section */}
@@ -90,7 +98,7 @@ export default async function CustomerLandingPage() {
         {/* Accessories Section */}
         <div id="accessories">
           <ClientOnly>
-            <AccessoriesSection />
+            <AccessoriesSection accessories={homeAccessories} />
           </ClientOnly>
         </div>
       </Reveal>
