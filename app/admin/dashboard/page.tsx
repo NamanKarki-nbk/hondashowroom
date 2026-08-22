@@ -1,31 +1,95 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import { TrendingUp, Package, DollarSign, Calendar as CalendarIcon, Users, ArrowUpRight, ArrowDownRight, ChevronRight, ArrowRight } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
-const KPI_DATA = [
-  { label: "Total Revenue (MTD)", value: "Rs. 42,500,000", change: "+12.5%", trend: "up", icon: DollarSign },
-  { label: "In-Stock Units", value: "148", change: "-5", trend: "down", icon: Package },
-  { label: "Monthly Commissions", value: "Rs. 637,500", change: "+8.2%", trend: "up", icon: TrendingUp },
-  { label: "New Customers", value: "32", change: "+15%", trend: "up", icon: Users },
-];
+export default async function AdminDashboard() {
+  // 1. Get current month date range
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-const COLOR_MATRIX = [
-  { model: "CBR 250RR", red: 4, black: 2, matte: 1 },
-  { model: "Dio 125", red: 15, black: 10, matte: 8 },
-  { model: "XR 190L", red: 5, black: 3, matte: 0 },
-  { model: "CB Shine", red: 8, black: 12, matte: 5 },
-];
+  // 2. Fetch KPIs
+  const [revenueResult, commissionResult, inStockCount, newCustomersCount] = await Promise.all([
+    prisma.salesTransaction.aggregate({
+      _sum: { finalAmount: true },
+      where: { createdAt: { gte: startOfMonth } }
+    }),
+    prisma.salesTransaction.aggregate({
+      _sum: { commission: true },
+      where: { createdAt: { gte: startOfMonth } }
+    }),
+    prisma.vehicleInventory.count({
+      where: { status: 'IN_STOCK' }
+    }),
+    prisma.customer.count({
+      where: { createdAt: { gte: startOfMonth } }
+    })
+  ]);
 
-const DELIVERIES = [
-  { date: "Aug 05", customer: "Bikash Shrestha", model: "CBR 250RR", status: "Confirmed" },
-  { date: "Aug 05", customer: "Sita Sharma", model: "Dio 125", status: "Pending" },
-  { date: "Aug 06", customer: "Ramesh Gurung", model: "XR 190L", status: "Confirmed" },
-  { date: "Aug 08", customer: "Nabin Thapa", model: "CB Shine", status: "Confirmed" },
-];
+  const totalRevenue = revenueResult._sum.finalAmount || 0;
+  const totalCommission = commissionResult._sum.commission || 0;
 
-export default function AdminDashboard() {
+  // Format currency
+  const formatCurrency = (val: number) => `Rs. ${val.toLocaleString()}`;
+
+  const KPI_DATA = [
+    { label: "Total Revenue (MTD)", value: formatCurrency(totalRevenue), change: "+0%", trend: "up", icon: DollarSign },
+    { label: "In-Stock Units", value: inStockCount.toString(), change: "0", trend: "up", icon: Package },
+    { label: "Monthly Commissions", value: formatCurrency(totalCommission), change: "+0%", trend: "up", icon: TrendingUp },
+    { label: "New Customers", value: newCustomersCount.toString(), change: "+0%", trend: "up", icon: Users },
+  ];
+
+  // 3. Fetch Inventory Matrix Data
+  const inventoryGroups = await prisma.vehicleInventory.groupBy({
+    by: ['modelName', 'color'],
+    where: { status: 'IN_STOCK' },
+    _count: true,
+  });
+
+  // Transform into a matrix of modelName -> { Red, Black, Matte }
+  const matrixMap: Record<string, { red: number, black: number, matte: number }> = {};
+  inventoryGroups.forEach(group => {
+    if (!matrixMap[group.modelName]) {
+      matrixMap[group.modelName] = { red: 0, black: 0, matte: 0 };
+    }
+    const colorLower = group.color.toLowerCase();
+    if (colorLower.includes('red')) {
+      matrixMap[group.modelName].red += group._count;
+    } else if (colorLower.includes('black')) {
+      matrixMap[group.modelName].black += group._count;
+    } else if (colorLower.includes('matte') || colorLower.includes('gray') || colorLower.includes('grey') || colorLower.includes('silver')) {
+      matrixMap[group.modelName].matte += group._count;
+    }
+  });
+
+  const COLOR_MATRIX = Object.entries(matrixMap).map(([model, counts]) => ({
+    model,
+    ...counts
+  })).sort((a, b) => (b.red + b.black + b.matte) - (a.red + a.black + a.matte)).slice(0, 5); // top 5 models by stock
+
+  // 4. Fetch Recent Deliveries (Sales Transactions)
+  const recentSales = await prisma.salesTransaction.findMany({
+    take: 4,
+    orderBy: { createdAt: 'desc' },
+    include: {
+      customer: true,
+      vehicle: true
+    }
+  });
+
+  const DELIVERIES = recentSales.map(sale => {
+    const d = new Date(sale.createdAt);
+    const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
+    return {
+      date: dateStr,
+      customer: sale.customer.fullName,
+      model: sale.vehicle.modelName,
+      status: "Confirmed"
+    };
+  });
+
+  const currentMonthStr = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
   return (
     <div className="bg-transparent text-gray-900 dark:text-gray-100 p-4 md:p-8 selection:bg-primary selection:text-primary-foreground h-full transition-colors duration-300">
       <div className="max-w-[1600px] mx-auto space-y-10">
@@ -40,17 +104,19 @@ export default function AdminDashboard() {
             <div className="bg-primary/10 p-2 rounded-xl">
                <CalendarIcon className="w-5 h-5 text-primary" />
             </div>
-            <span className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest">August 2026</span>
+            <span className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest">{currentMonthStr}</span>
           </div>
         </header>
 
         {/* KPI Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {KPI_DATA.map((kpi, idx) => (
+          {KPI_DATA.map((kpi, idx) => {
+            const Icon = kpi.icon;
+            return (
             <div key={idx} className="bg-white dark:bg-slate-900/50 backdrop-blur-xl border border-gray-100 dark:border-slate-800/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.02)] rounded-3xl p-6 relative overflow-hidden group hover:border-primary/30 dark:hover:border-primary/30 hover:-translate-y-1 transition-all duration-300">
                <div className="flex justify-between items-start mb-6">
                   <div className="p-3 bg-gray-50 dark:bg-zinc-800/50 rounded-2xl text-gray-500 dark:text-gray-400 group-hover:text-primary group-hover:bg-primary/10 transition-colors shadow-sm">
-                     <kpi.icon className="w-6 h-6" />
+                     <Icon className="w-6 h-6" />
                   </div>
                   <span className={`text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 uppercase tracking-wider ${kpi.trend === 'up' ? 'text-emerald-700 bg-emerald-100 dark:text-emerald-400 dark:bg-emerald-400/10 border border-emerald-200 dark:border-emerald-400/20' : 'text-rose-700 bg-rose-100 dark:text-rose-400 dark:bg-rose-400/10 border border-rose-200 dark:border-rose-400/20'}`}>
                      {kpi.change} 
@@ -62,7 +128,8 @@ export default function AdminDashboard() {
                  <p className="text-sm text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider">{kpi.label}</p>
                </div>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -116,6 +183,11 @@ export default function AdminDashboard() {
                       </td>
                     </tr>
                   ))}
+                  {COLOR_MATRIX.length === 0 && (
+                    <tr>
+                      <td colSpan={5} className="py-8 text-center text-gray-500">No inventory data available</td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -126,11 +198,15 @@ export default function AdminDashboard() {
             <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white tracking-tight mb-8">Deliveries</h2>
             
             <div className="space-y-4 flex-1">
-               {DELIVERIES.map((delivery, idx) => (
+               {DELIVERIES.map((delivery, idx) => {
+                 const dateParts = delivery.date.split(' ');
+                 const monthStr = dateParts[0];
+                 const dayStr = dateParts[1] || '';
+                 return (
                  <div key={idx} className="flex gap-4 items-center group">
                     <div className="flex flex-col items-center justify-center bg-gray-50 dark:bg-zinc-800/50 border border-gray-200 dark:border-zinc-700/50 rounded-2xl w-16 h-16 shrink-0 group-hover:border-primary/50 group-hover:bg-red-50 dark:group-hover:bg-primary/10 transition-colors">
-                       <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{delivery.date.split(' ')[0]}</span>
-                       <span className="text-xl font-black text-gray-900 dark:text-white">{delivery.date.split(' ')[1]}</span>
+                       <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{monthStr}</span>
+                       <span className="text-xl font-black text-gray-900 dark:text-white">{dayStr}</span>
                     </div>
                     
                     <div className="flex-1">
@@ -140,7 +216,11 @@ export default function AdminDashboard() {
 
                     <div className={`w-2.5 h-2.5 rounded-full ${delivery.status === 'Confirmed' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]'}`} title={delivery.status} />
                  </div>
-               ))}
+                 );
+               })}
+               {DELIVERIES.length === 0 && (
+                 <div className="text-center text-gray-500 py-4">No recent deliveries found</div>
+               )}
             </div>
             
             <Link href="/admin/sales-calendar" className="block mt-8 pt-6 border-t border-gray-100 dark:border-slate-800">
