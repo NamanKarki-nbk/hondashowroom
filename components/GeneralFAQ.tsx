@@ -41,7 +41,7 @@ export default function FAQSection() {
             <span>Help Center</span>
           </div>
           
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white tracking-tighter leading-[1.1]">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white tracking-tighter leading-tight">
             Frequently Asked <span className="text-primary">Questions</span>
           </h2>
         </div>

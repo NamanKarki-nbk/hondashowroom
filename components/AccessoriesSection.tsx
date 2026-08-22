@@ -59,7 +59,7 @@ export default function AccessoriesSection({ accessories = [] }: { accessories?:
             </div>
             
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white tracking-tighter uppercase leading-[1.1]">
-              Explore <span className="text-primary">Accessories</span>
+              Explore <span>Accessories</span>
             </h2>
           </div>
         </div>

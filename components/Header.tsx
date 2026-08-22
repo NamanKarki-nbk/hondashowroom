@@ -9,12 +9,15 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NavLink = ({ href, children }: { href: string, children: React.ReactNode }) => {
+  const pathname = usePathname();
+  const isActive = pathname === href || (pathname?.startsWith(href + '/') ?? false);
+  
   return (
     <Link href={href} className="relative group px-1 py-2">
-      <span className="text-[13px] xl:text-sm font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide group-hover:text-primary dark:group-hover:text-primary transition-colors whitespace-nowrap">
+      <span className={`text-[13px] xl:text-sm font-bold uppercase tracking-wide transition-colors whitespace-nowrap ${isActive ? 'text-primary' : 'text-gray-800 dark:text-gray-200 group-hover:text-primary dark:group-hover:text-primary'}`}>
         {children}
       </span>
-      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-orange-500 transition-all duration-300 group-hover:w-full"></span>
+      <span className={`absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-primary to-orange-500 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
     </Link>
   );
 };

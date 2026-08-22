@@ -10,9 +10,9 @@ import { motion, AnimatePresence } from "framer-motion";
 const SLIDES = [
   {
     id: 1,
-    subtitle: "HONDA SCOOTER",
+    subtitle: "Honda scooter",
     title: "DIO 125",
-    tagline: "Born To Express. Built To Impress.",
+    tagline: "Born to express. Built to impress.",
     price: "NPR 3,29,900",
     image: "/inventory/honda-dio-125.png",
     link: "/vehicles/84",
@@ -20,9 +20,9 @@ const SLIDES = [
   },
   {
     id: 2,
-    subtitle: "HONDA SCOOTER",
+    subtitle: "Honda scooter",
     title: "DIO BS6",
-    tagline: "Keep Dio'ing It",
+    tagline: "Keep dio'ing it",
     price: "NPR 2,84,900",
     image: "/inventory/honda-dio-bs6.png",
     link: "/vehicles/87",
@@ -30,9 +30,9 @@ const SLIDES = [
   },
   {
     id: 3,
-    subtitle: "HONDA MOTORCYCLE",
+    subtitle: "Honda motorcycle",
     title: "HORNET 2.0",
-    tagline: "Fly Against The Wind",
+    tagline: "Fly against the wind",
     price: "NPR 4,69,900",
     image: "/inventory/cb-hornet-2-0.png",
     link: "/vehicles/75",
@@ -113,9 +113,9 @@ export default function HeroSlider() {
                    </p>
                  </div>
                  
-                 <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[90px] xl:text-[110px] font-black text-transparent bg-clip-text bg-gradient-to-br from-gray-900 to-gray-500 dark:from-white dark:to-gray-500 tracking-tighter uppercase leading-[0.9] mb-4 md:mb-6 font-sans py-2">
-                   {slide.title}
-                 </h1>
+                       <div role="heading" aria-level={2} className="text-4xl sm:text-5xl md:text-7xl lg:text-[90px] xl:text-[110px] font-black text-transparent bg-clip-text bg-gradient-to-br from-gray-900 to-gray-500 dark:from-white dark:to-gray-500 tracking-tighter uppercase leading-[0.9] mb-4 md:mb-6 font-sans py-2">
+                         {slide.title}
+                       </div>
                  
                  <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base md:text-xl font-medium mb-8 md:mb-10 sm:max-w-none px-4 md:px-0">
                    {slide.tagline}

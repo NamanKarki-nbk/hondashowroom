@@ -7,25 +7,11 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const ACTIONS = [
   { 
-    id: "book", 
-    label: "Book Now", 
-    href: "/book-now", 
-    icon: CalendarDays, 
-    badgeColor: "bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400" 
-  },
-  { 
     id: "finance", 
     label: "Finance", 
     href: "/finance", 
     icon: Banknote, 
     badgeColor: "bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400" 
-  },
-  { 
-    id: "test-ride", 
-    label: "Test Ride", 
-    href: "/test-ride", 
-    icon: Bike, 
-    badgeColor: "bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400" 
   },
   { 
     id: "exchange", 
@@ -45,7 +31,7 @@ const ACTIONS = [
 
 export default function FloatingActionBar() {
   const [mounted, setMounted] = useState(false);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -56,13 +42,13 @@ export default function FloatingActionBar() {
   return (
     <>
       {/* Desktop Floating Action Menu */}
-      <div className="fixed right-4 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-end gap-3 pointer-events-none">
+      <div className="fixed right-4 bottom-4 md:right-8 md:bottom-8 z-50 hidden md:flex flex-col items-end gap-3 pointer-events-none">
         <AnimatePresence>
           {open && (
             <motion.div
-              initial={{ scale: 0.9, opacity: 0, x: 20 }}
-              animate={{ scale: 1, opacity: 1, x: 0 }}
-              exit={{ scale: 0.9, opacity: 0, x: 20 }}
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
               className="flex flex-col bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 shadow-2xl rounded-2xl p-2 pointer-events-auto w-[220px]"
             >
