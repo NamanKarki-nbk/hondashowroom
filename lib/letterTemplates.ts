@@ -118,127 +118,127 @@ function generateQuotationTemplate(data: TemplateData): { subject: string, html:
   const isPower = meta.category === 'POWER_PRODUCTS';
   
   const html = `
-    <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; color: #000; font-size: 13px; line-height: 1.3;">
+    <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; color: #000; font-size: 14px; line-height: 1.5;">
       
       <!-- Ref & Date -->
-      <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-weight: bold;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold;">
         <div>Ref No. ${data.letterNo}</div>
         <div>Date : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${dateStr}</div>
       </div>
 
       <!-- To -->
-      <div style="margin-bottom: 4px;">
+      <div style="margin-bottom: 20px;">
         <strong>To,</strong><br/>
         ${data.recipient}<br/>
         ${meta.bankAddress || ''}
       </div>
 
-      <div style="margin-bottom: 4px; font-weight: bold;">
+      <div style="margin-bottom: 20px; font-weight: bold;">
         Sub: For Quotation.
       </div>
 
-      <div style="margin-bottom: 4px;">
+      <div style="margin-bottom: 20px;">
         <strong>Dear Sir/ Madam,</strong><br/>
         We are pleased to note your interest in Honda ${isPower ? 'Power Products' : 'Two Wheelers'}. We assure you of the best Japanese Technology for the smooth ride. Further to your inquiry, we hereby quote our best price of Honda ${isPower ? 'Power Product' : 'Two-Wheeler'} as per details and Technical Specifications as mentioned hereinafter.
       </div>
 
       <!-- Primary Table -->
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 4px; border: 1px solid #000;">
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #000;">
         <thead>
           <tr style="font-weight: bold; text-align: center;">
-            <td style="border: 1px solid #000; padding: 2px;">MODEL</td>
-            <td style="border: 1px solid #000; padding: 2px;">VARIENT</td>
-            <td style="border: 1px solid #000; padding: 2px;">C.C.</td>
-            <td style="border: 1px solid #000; padding: 2px;">UNIT PRICE</td>
+            <td style="border: 1px solid #000; padding: 5px;">MODEL</td>
+            <td style="border: 1px solid #000; padding: 5px;">VARIENT</td>
+            <td style="border: 1px solid #000; padding: 5px;">C.C.</td>
+            <td style="border: 1px solid #000; padding: 5px;">UNIT PRICE</td>
           </tr>
         </thead>
         <tbody>
           <tr style="text-align: center; font-weight: bold;">
-            <td style="border: 1px solid #000; padding: 2px;">${meta.vehicleModel || ''}</td>
-            <td style="border: 1px solid #000; padding: 2px;">${meta.variant || '-'}</td>
-            <td style="border: 1px solid #000; padding: 2px;">${meta.cc || '-'}</td>
-            <td style="border: 1px solid #000; padding: 2px;">Rs. ${price.toLocaleString('en-IN')}</td>
+            <td style="border: 1px solid #000; padding: 5px;">${meta.vehicleModel || ''}</td>
+            <td style="border: 1px solid #000; padding: 5px;">${meta.variant || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px;">${meta.cc || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px;">Rs. ${price.toLocaleString('en-IN')}</td>
           </tr>
         </tbody>
       </table>
 
-      <div style="font-weight: bold; margin-bottom: 8px;">
+      <div style="font-weight: bold; margin-bottom: 25px;">
         IN WORD: ${words}
       </div>
 
       <!-- Technical Specifications -->
-      <div style="font-weight: bold; margin-bottom: 2px;">Technical Specifications:</div>
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 4px; border: 1px solid #000;">
+      <div style="font-weight: bold; margin-bottom: 5px;">Technical Specifications:</div>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #000;">
         <tbody>
           <tr>
-            <td style="border: 1px solid #000; padding: 2px; font-weight: bold; width: 25%;">Displacement</td>
-            <td style="border: 1px solid #000; padding: 2px; width: 25%;">${specs.displacement || '-'}</td>
-            <td style="border: 1px solid #000; padding: 2px; font-weight: bold; width: 25%;">Fuel Type</td>
-            <td style="border: 1px solid #000; padding: 2px; width: 25%;">${specs.fuelType || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold; width: 25%;">Displacement</td>
+            <td style="border: 1px solid #000; padding: 5px; width: 25%;">${specs.displacement || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold; width: 25%;">Fuel Type</td>
+            <td style="border: 1px solid #000; padding: 5px; width: 25%;">${specs.fuelType || '-'}</td>
           </tr>
           <tr>
-            <td style="border: 1px solid #000; padding: 2px; font-weight: bold;">Engine Type</td>
-            <td style="border: 1px solid #000; padding: 2px;">${specs.engineType || '-'}</td>
-            <td style="border: 1px solid #000; padding: 2px; font-weight: bold;">Starting Method</td>
-            <td style="border: 1px solid #000; padding: 2px;">${specs.startingMethod || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Engine Type</td>
+            <td style="border: 1px solid #000; padding: 5px;">${specs.engineType || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Starting Method</td>
+            <td style="border: 1px solid #000; padding: 5px;">${specs.startingMethod || '-'}</td>
           </tr>
           <tr>
-            <td style="border: 1px solid #000; padding: 2px; font-weight: bold;">Kerb Weight</td>
-            <td style="border: 1px solid #000; padding: 2px;">${specs.kerbWeight || '-'}</td>
-            <td style="border: 1px solid #000; padding: 2px; font-weight: bold;">Fuel Tank</td>
-            <td style="border: 1px solid #000; padding: 2px;">${specs.fuelTank || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Kerb Weight</td>
+            <td style="border: 1px solid #000; padding: 5px;">${specs.kerbWeight || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Fuel Tank</td>
+            <td style="border: 1px solid #000; padding: 5px;">${specs.fuelTank || '-'}</td>
           </tr>
           <tr>
-            <td style="border: 1px solid #000; padding: 2px; font-weight: bold;">No. of Gears</td>
-            <td style="border: 1px solid #000; padding: 2px;">${specs.noOfGears || '-'}</td>
-            <td style="border: 1px solid #000; padding: 2px; font-weight: bold;">Ground Clearance</td>
-            <td style="border: 1px solid #000; padding: 2px;">${specs.groundClearance || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">No. of Gears</td>
+            <td style="border: 1px solid #000; padding: 5px;">${specs.noOfGears || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Ground Clearance</td>
+            <td style="border: 1px solid #000; padding: 5px;">${specs.groundClearance || '-'}</td>
           </tr>
         </tbody>
       </table>
 
       <!-- Colors -->
-      <div style="margin-bottom: 2px;"><strong>Available Colors:</strong></div>
-      <div style="border: 1px solid #000; padding: 2px; margin-bottom: 4px; font-weight: bold;">
+      <div style="margin-bottom: 5px;"><strong>Available Colors:</strong></div>
+      <div style="border: 1px solid #000; padding: 5px; margin-bottom: 20px; font-weight: bold;">
         ${meta.availableColors || '-'}
       </div>
 
       <!-- T&C -->
-      <div style="font-weight: bold; margin-bottom: 2px;">Term & Conditions:</div>
-      <div style="margin-bottom: 8px; font-size: 11px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">Term & Conditions:</div>
+      <div style="margin-bottom: 20px; font-size: 13px;">
         The above price in subject to change without any prior notice in case of any changes in the Honda Company Limited or their government levies or the tax and other policies in the government of Nepal. The price does not include contact tax. Honda Company Limited reserves the right to change without notice-colors, equipment, Honda Specifications and models and also to discontinue models.
       </div>
 
       <!-- Accessories and Warranty -->
-      <div style="display: flex; gap: 20px; margin-bottom: 12px;">
+      <div style="display: flex; gap: 20px; margin-bottom: 50px;">
         <div style="flex: 1;">
-          <div style="font-weight: bold; margin-bottom: 4px;">Accessories:</div>
-          <div style="border: 1px solid #000; padding: 6px; min-height: 60px;">
-            <div style="margin-bottom: 4px;">☑ Helmet: 1 Pcs. in Each Purchase</div>
-            <div style="margin-bottom: 4px;">☑ Tool Set, First Aid Kit & Spare Key.</div>
+          <div style="font-weight: bold; margin-bottom: 5px;">Accessories:</div>
+          <div style="border: 1px solid #000; padding: 10px; min-height: 80px;">
+            <div style="margin-bottom: 5px;">☑ Helmet: 1 Pcs. in Each Purchase</div>
+            <div style="margin-bottom: 5px;">☑ Tool Set, First Aid Kit & Spare Key.</div>
             <div>☑ Owner's Manual.</div>
           </div>
         </div>
         <div style="flex: 1;">
-          <div style="font-weight: bold; margin-bottom: 4px;">Service & Warranty :</div>
-          <div style="border: 1px solid #000; padding: 6px; min-height: 60px;">
-            <div style="margin-bottom: 4px;">☑ Warranty: 2 Years or 24000 Km</div>
+          <div style="font-weight: bold; margin-bottom: 5px;">Service & Warranty :</div>
+          <div style="border: 1px solid #000; padding: 10px; min-height: 80px;">
+            <div style="margin-bottom: 5px;">☑ Warranty: 2 Years or 24000 Km</div>
             <div>☑ Service: 3 Times</div>
           </div>
         </div>
       </div>
 
       <!-- Footer Signatures -->
-      <div style="display: flex; justify-content: space-between; text-align: center; font-weight: bold; margin-bottom: 4px;">
+      <div style="display: flex; justify-content: space-between; text-align: center; font-weight: bold; margin-bottom: 20px;">
         <div>
-          <div style="margin-bottom: 4px;">For,</div>
+          <div style="margin-bottom: 5px;">For,</div>
           <div>${(meta.loaneeName || '').toUpperCase()}</div>
           <div>${(meta.loaneeAddress || '').toUpperCase()}</div>
           ${meta.loaneeContact ? `<div>${meta.loaneeContact}</div>` : ''}
         </div>
         <div>
-          <div style="margin-bottom: 4px;">Thanking you,</div>
-          <br /><br />
+          <div style="margin-bottom: 5px;">Thanking you,</div>
+          <br /><br /><br />
           <div>Authorized Signatory</div>
         </div>
       </div>
