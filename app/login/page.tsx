@@ -49,7 +49,8 @@ function LoginPageContent() {
       
       if (res.ok) {
         localStorage.setItem('isLoggedIn', 'true');
-        router.push("/");
+        const redirectUrl = searchParams.get("redirect") || "/";
+        router.push(redirectUrl);
         router.refresh();
       } else if (res.status === 403) {
         router.push(`/verify-otp?identifier=${encodeURIComponent(email)}`);
@@ -101,7 +102,8 @@ function LoginPageContent() {
       if (!res.ok) throw new Error(data.error || "Invalid OTP");
       
       localStorage.setItem('isLoggedIn', 'true');
-      router.push("/");
+      const redirectUrl = searchParams.get("redirect") || "/";
+      router.push(redirectUrl);
       router.refresh();
     } catch (err: any) {
       setError(err.message);

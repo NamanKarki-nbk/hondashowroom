@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, CalendarClock, ChevronRight, X, ShieldCheck } from "lucide-react";
 import Logo from "@/components/Logo";
@@ -43,6 +44,26 @@ export default function HondaDio110Page({
     preferredBranch: "Damak, Jhapa",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    fetch("/api/profile")
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data?.user) {
+          setUser(data.user);
+          setForm(prev => ({
+            ...prev,
+            name: data.user.fullName || prev.name,
+            phone: data.user.phone || prev.phone,
+          }));
+        }
+      })
+      .catch(console.error);
+  }, []);
 
   const scrollTo = (id: string) => {
     setActiveNav(id);
@@ -54,6 +75,16 @@ export default function HondaDio110Page({
   };
 
   const handleOpenBooking = (type: "book" | "testride", variantName?: string) => {
+    if (!user) {
+      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
+      return;
+    }
+    if (!user.isVerified) {
+      alert("Please verify your contact number in your profile before proceeding.");
+      router.push("/profile");
+      return;
+    }
+    
     if (variantName) setSelectedVariant(variantName);
     setBookingType(type);
     setIsBookingOpen(true);
