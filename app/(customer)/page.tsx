@@ -10,7 +10,7 @@ import CategoryCarousel from "@/components/CategoryCarousel";
 import AccessoriesSection from "@/components/AccessoriesSection";
 import HondaBlogSection from "@/components/HondaBlogSection";
 import ServicesGrid from "@/components/ServicesGrid";
-import AboutTestimonials from "@/components/AboutTestimonials";
+
 import FAQSection from "@/components/GeneralFAQ";
 import Reveal from "@/components/Reveal"; // We will create this component
 
@@ -100,10 +100,6 @@ export default async function CustomerLandingPage() {
         <ServicesGrid />
       </Reveal>
 
-      <Reveal>
-        {/* About & Testimonials */}
-        <AboutTestimonials />
-      </Reveal>
 
       <Reveal>
         {/* FAQ Section */}
