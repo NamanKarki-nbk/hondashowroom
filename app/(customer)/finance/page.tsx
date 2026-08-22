@@ -55,7 +55,7 @@ export default async function FinancePage() {
     } else if (nameLower.includes('shine')) {
       imageUrl = '/inventory/honda-shine-bs6.png';
     } else if (nameLower.includes('nx 200')) {
-      imageUrl = '/product-catalog/honda-nx-200.png';
+      imageUrl = '/inventory/honda-nx-200.png';
     }
 
     return {
