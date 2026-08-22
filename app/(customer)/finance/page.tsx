@@ -29,12 +29,15 @@ export default async function FinancePage() {
   const modelsData = Object.entries(groupedPlans).map(([modelName, plans]) => {
     const minPrice = Math.min(...plans.map(p => p.vehiclePrice));
     
-    // Explicitly calculate EMI based on 60% Downpayment and 12-Month term
-    const downpayment = minPrice * 0.60;
-    const principal = minPrice - downpayment;
-    const r = 0.14 / 12; // 14% annual interest
-    const n = 12; // 12 months
-    const minEmi = Math.round((principal * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1));
+    // Get default plan for the card display (Prefer 60% DP / 12 Months)
+    let defaultPlan = plans.find(p => p.downPaymentPct === 60 && p.tenureMonths === 12);
+    if (!defaultPlan) {
+      defaultPlan = plans.find(p => p.downPaymentPct === 50 && p.tenureMonths === 12) || plans[0];
+    }
+    
+    const minEmi = defaultPlan.emi;
+    const defaultDpPct = defaultPlan.downPaymentPct;
+    const defaultTenure = defaultPlan.tenureMonths;
 
     const category = plans[0].category;
 
@@ -58,6 +61,8 @@ export default async function FinancePage() {
       category,
       minPrice,
       minEmi,
+      defaultDpPct,
+      defaultTenure,
       imageUrl,
       plans
     };
