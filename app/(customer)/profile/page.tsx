@@ -221,7 +221,7 @@ export default function ProfilePage() {
         if (!extractedNumber) extractedNumber = "04-02-72-01532"; // Fallback for specific user testing case
       } 
       else if (activeTab === 'LICENSE') {
-        const dlMatch = fullText.match(/D\.?\s*L\.?\s*No[\.\:]?\s*([A-Z0-9\-]+)/i);
+        const dlMatch = fullText.match(/D\.?\s*L\.?\s*No[\.\:\s]*([A-Z0-9\-]+)/i);
         if (dlMatch) extractedNumber = dlMatch[1];
         
         const nameMatch = fullText.match(/Name\s*[\:\-]?\s*([A-Za-z\s]+)/i);
