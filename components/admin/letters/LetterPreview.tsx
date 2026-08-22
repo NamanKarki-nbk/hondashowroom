@@ -60,7 +60,7 @@ export default function LetterPreview({ docType, recipient, metadata }: LetterPr
                   <tbody>
                     <tr>
                       <td 
-                        className={`px-[1in] align-top border-none prose prose-sm max-w-none text-black print:text-black ${docType !== 'Quotation' ? 'font-nepali' : ''} leading-normal text-justify ${isLandscape ? 'h-[5.5in]' : 'h-[8.0in]'}`}
+                        className={`px-[1in] align-top border-none prose prose-sm max-w-none text-black print:text-black ${docType !== 'Quotation' ? 'font-nepali' : ''} leading-normal text-justify ${isLandscape ? 'h-[5.5in]' : 'h-[7.0in]'}`}
                         dangerouslySetInnerHTML={{ __html: part }} 
                       />
                     </tr>
