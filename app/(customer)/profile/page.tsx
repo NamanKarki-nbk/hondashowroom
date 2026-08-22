@@ -75,8 +75,8 @@ export default function ProfilePage() {
         if (data.user) {
           const fetchedData = {
             fullName: data.user.fullName || "",
-            email: data.user.email?.startsWith("placeholder-") ? "" : (data.user.email || ""),
-            phone: data.user.phone?.startsWith("placeholder-") ? "" : (data.user.phone || ""),
+            email: (data.user.email?.startsWith("placeholder-") || data.user.email?.includes("google-")) ? "" : (data.user.email || ""),
+            phone: (data.user.phone?.startsWith("placeholder-") || data.user.phone?.includes("google-") || data.user.phone?.match(/[a-z]/i)) ? "" : (data.user.phone?.replace(/\D/g, "").slice(-10) || ""),
             bio: data.user.bio || "",
             address: data.user.address || "",
             avatarUrl: data.user.avatarUrl || "",
@@ -806,7 +806,7 @@ export default function ProfilePage() {
                       disabled={isScanning || !frontImage || !backImage}
                       className="w-full bg-gray-900 dark:bg-white text-white dark:text-black font-black uppercase tracking-widest py-4 px-4 rounded-none hover:bg-black hover:text-primary dark:hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center justify-center gap-3"
                     >
-                      {isScanning ? <><Loader2 className="w-5 h-5 animate-spin" /> Extracting...</> : `Scan ${activeTab.replace('_', ' ')}`}
+                      {isScanning ? <><Loader2 className="w-5 h-5 animate-spin" /> Extracting...</> : `Scan ${activeTab === 'LICENSE' ? "DRIVER'S LICENSE" : activeTab.replace('_', ' ')}`}
                     </button>
                   </div>
 

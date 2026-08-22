@@ -34,7 +34,7 @@ export default async function LettersPage() {
       </div>
 
       <div className="bg-white dark:bg-slate-950 rounded-xl border border-gray-200 dark:border-slate-800 overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto w-full">
           <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
             <thead className="bg-gray-50 dark:bg-white/5 text-gray-700 dark:text-gray-300 font-medium">
               <tr>

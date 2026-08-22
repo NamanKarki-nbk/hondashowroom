@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Filter, Upload, Plus, FileCheck, Receipt, Calendar, Tag, Info, X, Database, RefreshCw } from "lucide-react";
+import { Search, Filter, Upload, Plus, FileCheck, Receipt, Calendar, Tag, Info, X, Database, RefreshCw, MapPin, Truck } from "lucide-react";
 import Link from "next/link";
 
 type VehicleInventoryItem = {
@@ -17,6 +17,7 @@ type VehicleInventoryItem = {
   sellingPrice: number;
   status: string;
   hexCode: string;
+  branchId?: string;
 };
 
 export default function VehicleInventoryTable() {
@@ -31,10 +32,32 @@ export default function VehicleInventoryTable() {
   const [syncing, setSyncing] = useState(false);
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
 
+  const [routingVehicle, setRoutingVehicle] = useState<VehicleInventoryItem | null>(null);
+  const [branches, setBranches] = useState<any[]>([]);
+  const [selectedBranch, setSelectedBranch] = useState("");
+  const [transferNotes, setTransferNotes] = useState("");
+  const [transferring, setTransferring] = useState(false);
+
   const showNotification = (message: string, type: 'success' | 'error') => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 4000);
   };
+
+  const fetchBranches = async () => {
+    try {
+      const res = await fetch("/api/admin/cms/branches");
+      if (res.ok) {
+        const data = await res.json();
+        setBranches(data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchBranches();
+  }, []);
 
   const fetchInventory = async () => {
     setLoading(true);
@@ -132,6 +155,40 @@ export default function VehicleInventoryTable() {
     }
   };
 
+  const handleTransfer = async () => {
+    if (!routingVehicle || !selectedBranch) return;
+    setTransferring(true);
+    
+    try {
+      const res = await fetch('/api/admin/inventory/transfer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          vehicleId: routingVehicle.id,
+          targetBranchId: selectedBranch,
+          fromBranchId: routingVehicle.branchId,
+          notes: transferNotes
+        }),
+      });
+      const data = await res.json();
+      
+      if (res.ok) {
+        showNotification('Vehicle transferred successfully', 'success');
+        setRoutingVehicle(null);
+        setSelectedBranch("");
+        setTransferNotes("");
+        fetchInventory();
+      } else {
+        showNotification(data.error || 'Failed to transfer vehicle', 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      showNotification('An error occurred during transfer.', 'error');
+    } finally {
+      setTransferring(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {notification && (
@@ -186,7 +243,7 @@ export default function VehicleInventoryTable() {
 
       {/* Main Table Card */}
       <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-800 overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto w-full">
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-gray-100 dark:border-slate-800 text-[10px] font-black uppercase tracking-widest text-gray-400">
@@ -254,11 +311,19 @@ export default function VehicleInventoryTable() {
                       </span>
                     </td>
                     <td className="py-4 px-6 text-right sticky right-0 bg-white dark:bg-slate-900 border-l border-gray-100 dark:border-slate-800 z-10 transition-colors group-hover:bg-gray-50 dark:group-hover:bg-zinc-800">
-                      <Link href={`/admin/sales?vehicleId=${item.id}`}>
-                        <button className="bg-primary hover:bg-red-800 text-white px-5 py-1.5 rounded text-xs font-bold uppercase tracking-wider shadow-sm transition-colors">
-                          Sell
+                      <div className="flex justify-end gap-2">
+                        <button 
+                          onClick={() => setRoutingVehicle(item)}
+                          className="bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider shadow-sm transition-colors flex items-center gap-1"
+                        >
+                          <Truck className="w-3 h-3" /> Route
                         </button>
-                      </Link>
+                        <Link href={`/admin/sales?vehicleId=${item.id}`}>
+                          <button className="bg-primary hover:bg-red-800 text-white px-5 py-1.5 rounded text-xs font-bold uppercase tracking-wider shadow-sm transition-colors">
+                            Sell
+                          </button>
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -337,7 +402,7 @@ export default function VehicleInventoryTable() {
             
             {/* Table Area */}
             <div className="flex-1 overflow-y-auto bg-[#f8f9fa] dark:bg-slate-950 p-4 md:p-8">
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 overflow-hidden shadow-sm">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 overflow-x-auto w-full shadow-sm">
                 <table className="w-full text-left text-sm border-collapse">
                   <thead className="bg-gray-50/90 dark:bg-white/5 backdrop-blur-md sticky top-0 z-10">
                     <tr>
@@ -412,6 +477,71 @@ export default function VehicleInventoryTable() {
                   )}
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Route/Transfer Modal */}
+      {routingVehicle && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in zoom-in-95">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-slate-800 w-full max-w-md flex flex-col overflow-hidden">
+            <div className="p-6 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center">
+              <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
+                <Truck className="text-primary w-5 h-5" /> Route Vehicle
+              </h2>
+              <button onClick={() => setRoutingVehicle(null)} className="text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              <div className="bg-gray-50 dark:bg-slate-800/50 p-4 rounded-xl border border-gray-100 dark:border-slate-800">
+                <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">{routingVehicle.modelName}</p>
+                <p className="text-xs text-gray-500 font-mono tracking-wider">VIN: {routingVehicle.vin}</p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-700 dark:text-gray-400 uppercase tracking-widest mb-2">Destination Branch</label>
+                <select 
+                  value={selectedBranch}
+                  onChange={(e) => setSelectedBranch(e.target.value)}
+                  className="w-full bg-white dark:bg-black border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:border-primary outline-none dark:text-white appearance-none"
+                >
+                  <option value="">-- Select Branch --</option>
+                  {branches.filter(b => b.id !== routingVehicle.branchId).map(branch => (
+                    <option key={branch.id} value={branch.id}>{branch.name} - {branch.address}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-700 dark:text-gray-400 uppercase tracking-widest mb-2">Transfer Notes (Optional)</label>
+                <textarea 
+                  value={transferNotes}
+                  onChange={(e) => setTransferNotes(e.target.value)}
+                  rows={3}
+                  placeholder="E.g., Customer requested delivery at specific branch..."
+                  className="w-full bg-white dark:bg-black border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:border-primary outline-none dark:text-white"
+                ></textarea>
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 flex gap-3">
+              <button 
+                onClick={() => setRoutingVehicle(null)}
+                className="flex-1 py-3 rounded-xl font-bold text-gray-600 dark:text-gray-300 bg-gray-200 hover:bg-gray-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors"
+                disabled={transferring}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleTransfer}
+                disabled={transferring || !selectedBranch}
+                className="flex-1 py-3 rounded-xl font-bold text-white bg-primary hover:bg-primary-hover transition-colors shadow-lg disabled:opacity-50"
+              >
+                {transferring ? 'Routing...' : 'Confirm Transfer'}
+              </button>
             </div>
           </div>
         </div>

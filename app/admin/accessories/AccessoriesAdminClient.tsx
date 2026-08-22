@@ -137,7 +137,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
       </div>
 
       <div className="bg-white dark:bg-[#1a1a1a] shadow rounded-lg overflow-hidden border border-gray-200 dark:border-slate-800">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto w-full">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-100 dark:bg-[#2a2a2a] border-b border-gray-200 dark:border-gray-700 text-sm">

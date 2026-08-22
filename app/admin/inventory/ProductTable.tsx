@@ -106,7 +106,7 @@ export default function ProductTable() {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto w-full">
         <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
           <thead className="bg-gray-50 dark:bg-white/5 text-gray-700 dark:text-gray-300 font-medium">
             <tr>

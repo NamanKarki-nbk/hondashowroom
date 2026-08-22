@@ -36,7 +36,7 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
            {imageUrl ? (
              // eslint-disable-next-line @next/next/no-img-element
              <img 
-               src={imageUrl} 
+               src={imageUrl.replace('/product-catalog/', '/inventory/')} 
                alt={title} 
                onError={(e) => { e.currentTarget.src = category.toLowerCase().includes('scooter') ? '/images/scooter-placeholder.jpg' : '/images/bike-placeholder.jpg'; }}
                className="w-full h-full object-contain relative z-10 group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 drop-shadow-xl" 

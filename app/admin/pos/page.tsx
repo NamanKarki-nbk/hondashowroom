@@ -6,8 +6,31 @@ import { Search, UserPlus, CreditCard, FileText, CheckCircle, Calculator } from 
 export default function AdminPOS() {
   const [vinSearch, setVinSearch] = useState("");
   const [activeVehicle, setActiveVehicle] = useState<any>(null);
-  const [customer, setCustomer] = useState({ name: "", phone: "", id: "" });
+  const [customer, setCustomer] = useState({ name: "", phone: "", id: "", customerId: "" });
+  const [customerSearchQuery, setCustomerSearchQuery] = useState("");
+  const [customerSearchResults, setCustomerSearchResults] = useState<any[]>([]);
+  const [isSearchingCustomer, setIsSearchingCustomer] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("Bank Transfer");
+
+  const searchCustomers = async (query: string) => {
+    setCustomerSearchQuery(query);
+    if (query.length < 2) {
+      setCustomerSearchResults([]);
+      return;
+    }
+    setIsSearchingCustomer(true);
+    try {
+      const res = await fetch(`/api/admin/customers/search?q=${encodeURIComponent(query)}`);
+      if (res.ok) {
+        const data = await res.json();
+        setCustomerSearchResults(data.customers || []);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSearchingCustomer(false);
+    }
+  };
 
   const handleSearch = () => {
     // Mock VIN Search
@@ -69,7 +92,40 @@ export default function AdminPOS() {
               <h2 className="text-xl md:text-2xl font-semibold font-bold text-primary-foreground mb-4 flex items-center gap-2">
                 <UserPlus className="w-5 h-5 text-primary" /> Link Customer Profile
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-4 relative">
+                <div>
+                  <input 
+                    type="text" 
+                    placeholder="Search existing customer by Name, Phone, or ID..." 
+                    value={customerSearchQuery}
+                    onChange={(e) => searchCustomers(e.target.value)}
+                    className="w-full bg-black border border-slate-700 rounded-xl px-4 py-3 text-sm focus:border-primary outline-none text-white"
+                  />
+                  {customerSearchResults.length > 0 && (
+                    <div className="absolute z-10 w-full mt-2 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl max-h-60 overflow-y-auto">
+                      {customerSearchResults.map(c => (
+                        <div 
+                          key={c.id} 
+                          onClick={() => {
+                            setCustomer({
+                              name: c.fullName || "",
+                              phone: c.phone || "",
+                              id: c.citizenshipNumber || c.licenseNumber || "",
+                              customerId: c.id
+                            });
+                            setCustomerSearchQuery("");
+                            setCustomerSearchResults([]);
+                          }}
+                          className="p-3 hover:bg-slate-700 cursor-pointer border-b border-slate-700 last:border-0"
+                        >
+                          <div className="font-bold text-white">{c.fullName}</div>
+                          <div className="text-sm text-gray-400">{c.phone} {c.citizenshipNumber ? `• ID: ${c.citizenshipNumber}` : ''}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                
                 <div className="grid grid-cols-2 gap-4">
                   <input type="text" placeholder="Full Name" value={customer.name} onChange={e => setCustomer({...customer, name: e.target.value})} className="bg-black border border-slate-700 rounded-xl px-4 py-3 text-sm focus:border-primary outline-none" />
                   <input type="tel" placeholder="Phone Number" value={customer.phone} onChange={e => setCustomer({...customer, phone: e.target.value})} className="bg-black border border-slate-700 rounded-xl px-4 py-3 text-sm focus:border-primary outline-none" />

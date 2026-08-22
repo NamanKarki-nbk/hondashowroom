@@ -304,7 +304,10 @@ export default function ExchangePage() {
               </div>
 
               <div className="space-y-3">
-                <Link href="/contact" className="w-full flex items-center justify-center gap-2 bg-[#CC0000] hover:bg-primary-hover text-white font-bold py-3.5 rounded-xl uppercase tracking-wider transition-colors shadow-lg shadow-[#B83227]/20">
+                <Link 
+                  href={`/contact?interestedIn=Exchange Valuation&remarks=${encodeURIComponent(`I want to exchange my ${brand} ${model} ${variant} (${year}, ${kms.toLocaleString()} km, ${owner}).\n\nEstimated Valuation: NPR ${Math.round(valuation.min).toLocaleString()} - NPR ${Math.round(valuation.max).toLocaleString()}`)}`}
+                  className="w-full flex items-center justify-center gap-2 bg-[#CC0000] hover:bg-primary-hover text-white font-bold py-3.5 rounded-xl uppercase tracking-wider transition-colors shadow-lg shadow-[#B83227]/20"
+                >
                   <Car className="w-5 h-5" /> Sell / Exchange Your Bike
                 </Link>
                 <button className="w-full flex items-center justify-center gap-2 bg-background hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-900 dark:text-white font-bold py-3.5 rounded-xl uppercase tracking-wider transition-colors">

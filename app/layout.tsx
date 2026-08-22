@@ -8,8 +8,30 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Society Enterprises",
-  description: "Official Honda Showroom",
+  title: "Society Enterprises | Official Honda Showroom in Damak",
+  description: "Explore the latest Honda motorcycles and scooters at Society Enterprises, Damak-06, Campus Mode, Jhapa. Book test rides, get digital quotations, and exchange your old bikes.",
+  keywords: "Honda Showroom, Damak, Jhapa, Honda Motorcycles, Scooters, Test Ride, Buy Honda Bike",
+  authors: [{ name: "Society Enterprises" }],
+  openGraph: {
+    title: "Society Enterprises | Official Honda Showroom",
+    description: "Explore the latest Honda motorcycles and scooters at Society Enterprises, Damak-06, Campus Mode.",
+    url: "https://damakhonda.com.np",
+    siteName: "Society Enterprises Honda",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Society Enterprises Honda Showroom",
+      },
+    ],
+    locale: "en_NP",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  }
 };
 
 import { ThemeProvider } from "@/components/ThemeProvider";

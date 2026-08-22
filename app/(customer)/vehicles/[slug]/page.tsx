@@ -263,6 +263,7 @@ function generateMockData(vehicle: any) {
 
   return {
     ...vehicle,
+    imageUrl: vehicle.imageUrl?.replace('/product-catalog/', '/inventory/') || "/placeholder.png",
     tagline: isPower ? "Power You Can Trust" : "The Power of Dreams",
     highlights,
     features,

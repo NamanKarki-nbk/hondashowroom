@@ -1,11 +1,32 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Mail, Phone, MapPin, Send, Loader2 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
-export default function ContactPage() {
+function ContactForm() {
+  const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  
+  const [formDataState, setFormDataState] = useState({
+    name: '',
+    phone: '',
+    interestedIn: '',
+    remarks: ''
+  });
+
+  useEffect(() => {
+    const interestedInParam = searchParams.get('interestedIn');
+    const remarksParam = searchParams.get('remarks');
+    if (interestedInParam || remarksParam) {
+      setFormDataState(prev => ({
+        ...prev,
+        interestedIn: interestedInParam || prev.interestedIn,
+        remarks: remarksParam || prev.remarks
+      }));
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -107,6 +128,7 @@ export default function ContactPage() {
                 <h3 className="text-xl md:text-2xl font-semibold font-bold mb-2">Thank You!</h3>
                 <p>Your inquiry has been received. Our sales team will contact you shortly.</p>
                 <button 
+                  type="button"
                   onClick={() => setSuccess(false)}
                   className="mt-6 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
                 >
@@ -121,7 +143,9 @@ export default function ContactPage() {
                     <input 
                       type="text" 
                       name="name" 
-                      required 
+                      required
+                      value={formDataState.name}
+                      onChange={e => setFormDataState({...formDataState, name: e.target.value})}
                       className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary p-3 border"
                       placeholder="John Doe"
                     />
@@ -131,7 +155,9 @@ export default function ContactPage() {
                     <input 
                       type="tel" 
                       name="phone" 
-                      required 
+                      required
+                      value={formDataState.phone}
+                      onChange={e => setFormDataState({...formDataState, phone: e.target.value})}
                       className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary p-3 border"
                       placeholder="98XXXXXX"
                     />
@@ -141,7 +167,9 @@ export default function ContactPage() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Interested In</label>
                   <select 
-                    name="interestedIn" 
+                    name="interestedIn"
+                    value={formDataState.interestedIn}
+                    onChange={e => setFormDataState({...formDataState, interestedIn: e.target.value})}
                     className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary p-3 border bg-white"
                   >
                     <option value="">-- Select an Option --</option>
@@ -156,7 +184,9 @@ export default function ContactPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
                   <textarea 
                     name="remarks" 
-                    rows={4} 
+                    rows={6}
+                    value={formDataState.remarks}
+                    onChange={e => setFormDataState({...formDataState, remarks: e.target.value})}
                     className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary p-3 border"
                     placeholder="How can we help you?"
                   ></textarea>
@@ -176,9 +206,16 @@ export default function ContactPage() {
               </form>
             )}
           </div>
-
         </div>
       </div>
     </main>
+  );
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>}>
+      <ContactForm />
+    </Suspense>
   );
 }

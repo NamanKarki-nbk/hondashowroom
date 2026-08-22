@@ -49,39 +49,39 @@ model User {
   passwordHash String?
   role         String  @default("USER") // ADMIN, STAFF, USER
   avatarUrl    String?
-  
-  address      String?
-  gender       Gender?
-  dobAd        String?
-  dobBs        String?
 
-  isVerified   Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  address String?
+  gender  Gender?
+  dobAd   String?
+  dobBs   String?
+
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   customerProfile Customer?
 }
 
 model Staff {
-  id        String   @id @default(uuid())
-  name      String
-  accountNo String
-  panNo     String
+  id         String   @id @default(uuid())
+  name       String
+  accountNo  String
+  panNo      String
   lastSalary Float?
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Customer {
-  id           String  @id @default(uuid())
-  userId       String? @unique
-  user         User?   @relation(fields: [userId], references: [id])
+  id     String  @id @default(uuid())
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
 
-  fullName     String
-  phone        String  @unique
-  email        String?
-  address      String?
+  fullName String
+  phone    String  @unique
+  email    String?
+  address  String?
 
   // Documents (Multi-KYC)
   citizenshipVerified Boolean @default(false)
@@ -99,7 +99,7 @@ model Customer {
   nationalIdFront    String?
   nationalIdBack     String?
 
-  isVerified Boolean @default(false)
+  isVerified  Boolean @default(false)
   ocrVerified Boolean @default(false)
 
   createdAt DateTime @default(now())
@@ -110,6 +110,11 @@ model Customer {
   leads    Lead[]
   bookings ServiceBooking[]
   finances Finance[]
+
+  testRides    TestRideBooking[]
+  referralCode ReferralCode?
+  rewardPoints RewardPointLog[]
+  reminders    ServiceReminder[]
 }
 
 model OtpVerification {
@@ -126,9 +131,9 @@ model Lead {
   customer     Customer? @relation(fields: [customerId], references: [id])
   name         String
   phone        String
-  source       String    // e.g. "Website", "Walk-in"
+  source       String // e.g. "Website", "Walk-in"
   status       String    @default("NEW") // NEW, CONTACTED, CONVERTED, LOST
-  interestedIn String?   // Vehicle model
+  interestedIn String? // Vehicle model
   remarks      String?   @db.Text
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
@@ -159,11 +164,16 @@ model VehicleInventory {
 
   purchaseInvoiceId String?
   purchaseInvoice   PurchaseInvoice? @relation(fields: [purchaseInvoiceId], references: [id])
+
+  branchId  String?
+  branch    Branch?            @relation(fields: [branchId], references: [id])
+  transfers StockTransferLog[]
+  reminders ServiceReminder[]
 }
 
 model PurchaseInvoice {
-  id           String @id @default(uuid())
-  invoiceNo    String @unique
+  id           String  @id @default(uuid())
+  invoiceNo    String  @unique
   invoiceDate  String?
   totalAmount  Float
   purchaseType String
@@ -175,21 +185,21 @@ model PurchaseInvoice {
 }
 
 model Letter {
-  id          String   @id @default(cuid())
-  letterNo    String   @unique // e.g., "2082/83-00353"
-  seqNumber   Int      // Sequential counter for sorting
-  fiscalYear  String   // e.g., "2082/83"
-  docType     String   // One of the 17 categories
-  recipient   String   // Recipient organization (English input)
-  subject     String?  // Auto-translated Nepali subject
-  date        DateTime @default(now())
-  
-  // Structured Metadata for dynamic fields
-  metadata    Json?    // Stores chassisNo, engineNo, vatBillNo, claimAmount, bank details
-  nepaliBody  String   @db.Text // Generated formal Nepali letter content
+  id         String   @id @default(cuid())
+  letterNo   String   @unique // e.g., "2082/83-00353"
+  seqNumber  Int // Sequential counter for sorting
+  fiscalYear String // e.g., "2082/83"
+  docType    String // One of the 17 categories
+  recipient  String // Recipient organization (English input)
+  subject    String? // Auto-translated Nepali subject
+  date       DateTime @default(now())
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  // Structured Metadata for dynamic fields
+  metadata   Json? // Stores chassisNo, engineNo, vatBillNo, claimAmount, bank details
+  nepaliBody String @db.Text // Generated formal Nepali letter content
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([fiscalYear, seqNumber])
 }
@@ -202,7 +212,7 @@ model SalesTransaction {
   vehicle   VehicleInventory @relation(fields: [vehicleId], references: [id])
 
   customerId String
-  customer   Customer   @relation(fields: [customerId], references: [id])
+  customer   Customer @relation(fields: [customerId], references: [id])
 
   // Extended Sales Details
   saleType    String      @default("Retail") // Retail, Corporate, Dealer
@@ -265,7 +275,7 @@ model ServiceRecord {
   vehicle   VehicleInventory @relation(fields: [vehicleId], references: [id])
 
   customerId String
-  customer   Customer   @relation(fields: [customerId], references: [id])
+  customer   Customer @relation(fields: [customerId], references: [id])
 
   odometerKm    Int
   serviceType   String
@@ -280,25 +290,25 @@ model ServiceRecord {
 }
 
 model ServiceHistory {
-  id           String        @id @default(uuid())
-  recordId     String
-  record       ServiceRecord @relation(fields: [recordId], references: [id])
-  action       String
-  notes        String?       @db.Text
-  createdAt    DateTime      @default(now())
+  id        String        @id @default(uuid())
+  recordId  String
+  record    ServiceRecord @relation(fields: [recordId], references: [id])
+  action    String
+  notes     String?       @db.Text
+  createdAt DateTime      @default(now())
 }
 
 model ServiceBooking {
-  id           String   @id @default(uuid())
-  customerId   String
-  customer     Customer @relation(fields: [customerId], references: [id])
-  vehicleNo    String?
-  chassisNo    String?
-  serviceType  String
+  id            String   @id @default(uuid())
+  customerId    String
+  customer      Customer @relation(fields: [customerId], references: [id])
+  vehicleNo     String?
+  chassisNo     String?
+  serviceType   String
   preferredDate DateTime
-  status       String   @default("PENDING") // PENDING, CONFIRMED, COMPLETED
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  status        String   @default("PENDING") // PENDING, CONFIRMED, COMPLETED
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model ProductCatalog {
@@ -327,26 +337,28 @@ model SalesTarget {
 }
 
 model Vehicle {
-  id            String   @id @default(uuid())
-  modelName     String   @unique
-  cc            Int
-  price         Int
-  baseInsurance Int
-  createdAt     DateTime @default(now())
-  
-  colors        VehicleColor[]
-  finances      Finance[]
+  id                  String   @id @default(uuid())
+  modelName           String   @unique
+  cc                  Int
+  price               Int
+  thirdPartyInsurance Int      @map("baseInsurance")
+  fullInsurance       Int      @default(0)
+  category            String   @default("MOTORCYCLE") // e.g. SCOOTER, MOTORCYCLE, POWER PRODUCT
+  createdAt           DateTime @default(now())
+
+  colors   VehicleColor[]
+  finances Finance[]
 }
 
 model VehicleColor {
-  id         String   @id @default(uuid())
+  id         String  @id @default(uuid())
   vehicleId  String
-  vehicle    Vehicle  @relation(fields: [vehicleId], references: [id])
+  vehicle    Vehicle @relation(fields: [vehicleId], references: [id])
   name       String
   hexCode    String
   imageUrl   String?
   finishType String?
-  isPopular  Boolean  @default(false)
+  isPopular  Boolean @default(false)
 }
 
 model ValuationLog {
@@ -377,42 +389,42 @@ model ServiceCharge {
 }
 
 model Finance {
-  id             String   @id @default(uuid())
-  customerId     String
-  customer       Customer @relation(fields: [customerId], references: [id])
-  vehicleId      String
-  vehicle        Vehicle  @relation(fields: [vehicleId], references: [id])
-  downpayment    Float
-  tenureMonths   Int
-  loanAmount     Float
-  status         String   @default("PENDING") // PENDING, APPROVED, REJECTED
-  documents      Json?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id           String   @id @default(uuid())
+  customerId   String
+  customer     Customer @relation(fields: [customerId], references: [id])
+  vehicleId    String
+  vehicle      Vehicle  @relation(fields: [vehicleId], references: [id])
+  downpayment  Float
+  tenureMonths Int
+  loanAmount   Float
+  status       String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  documents    Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model SparePart {
-  id          String   @id @default(uuid())
-  partNumber  String   @unique
-  name        String
-  category    String
-  price       Float
-  stock       Int      @default(0)
-  imageUrl    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(uuid())
+  partNumber String   @unique
+  name       String
+  category   String
+  price      Float
+  stock      Int      @default(0)
+  imageUrl   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Delivery {
-  id          String   @id @default(uuid())
+  id           String   @id @default(uuid())
   customerName String
-  vehicleName String
-  imageUrl    String
-  testimonial String?  @db.Text
-  rating      Int?
-  deliveredAt DateTime @default(now())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  vehicleName  String
+  imageUrl     String
+  testimonial  String?  @db.Text
+  rating       Int?
+  deliveredAt  DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Outlet {
@@ -428,25 +440,25 @@ model Outlet {
 }
 
 model FinancePlan {
-  id              String   @id @default(uuid())
-  modelName       String
-  cc              Int
-  category        String
-  vehiclePrice    Float
-  tenureMonths    Int
-  downPaymentPct  Int
-  interestRate    Float
-  downPayment     Float
-  loanAmount      Float
-  emi             Float
-  totalInterest   Float
-  registration    Float
-  insurance       Float
-  insuranceTotal  Float?
-  totalCost       Float
+  id             String @id @default(uuid())
+  modelName      String
+  cc             Int
+  category       String
+  vehiclePrice   Float
+  tenureMonths   Int
+  downPaymentPct Int
+  interestRate   Float
+  downPayment    Float
+  loanAmount     Float
+  emi            Float
+  totalInterest  Float
+  registration   Float
+  insurance      Float
+  insuranceTotal Float?
+  totalCost      Float
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([modelName, tenureMonths, downPaymentPct])
 }
@@ -455,16 +467,16 @@ model Accessory {
   id            String   @id @default(uuid())
   name          String
   partNo        String   @default("N/A")
-  category      String   // e.g., "Bike Cover", "Helmet", "Leg Guard"
+  category      String // e.g., "Bike Cover", "Helmet", "Leg Guard"
   price         Float
   imageUrl      String
   stockStatus   String   @default("IN_STOCK") // "IN_STOCK", "OUT_OF_STOCK"
   description   String?
   vehicleType   String   @default("Universal") // e.g., "Scooter", "Motorcycle", "Universal"
   compatibility String[] // e.g., ["Activa 6G", "Dio 125", "CB350"]
-  
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Blog {
@@ -475,4 +487,139 @@ model Blog {
   imageUrl  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model VehiclePrice {
+  id                 String  @id @default(uuid())
+  modelName          String
+  variant            String?
+  category           String  @default("MOTORCYCLE") // SCOOTER, MOTORCYCLE, POWER_PRODUCT
+  exShowroomPriceNPR Float
+  onRoadPriceNPR     Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([modelName, variant])
+}
+
+model TestRideBooking {
+  id            String    @id @default(uuid())
+  customerId    String?
+  customer      Customer? @relation(fields: [customerId], references: [id])
+  name          String
+  phone         String
+  modelName     String
+  branchId      String
+  branch        Branch    @relation(fields: [branchId], references: [id])
+  preferredDate DateTime
+  status        String    @default("PENDING") // PENDING, CONFIRMED, COMPLETED, CANCELLED
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model HeroBanner {
+  id        String   @id @default(uuid())
+  title     String
+  subtitle  String?
+  imageUrl  String
+  linkUrl   String?
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Offer {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  imageUrl    String?
+  badgeText   String?
+  isActive    Boolean   @default(true)
+  validUntil  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Branch {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  phone     String
+  mapUrl    String?
+  latitude  Float?
+  longitude Float?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  testRides     TestRideBooking[]
+  vehicles      VehicleInventory[]
+  transfersFrom StockTransferLog[] @relation("TransferFrom")
+  transfersTo   StockTransferLog[] @relation("TransferTo")
+}
+
+model ReferralCode {
+  id         String   @id @default(uuid())
+  code       String   @unique
+  customerId String   @unique
+  customer   Customer @relation(fields: [customerId], references: [id])
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model RewardPointLog {
+  id         String   @id @default(uuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+  points     Int
+  reason     String
+  createdAt  DateTime @default(now())
+}
+
+model StockTransferLog {
+  id           String           @id @default(uuid())
+  vehicleId    String
+  vehicle      VehicleInventory @relation(fields: [vehicleId], references: [id])
+  fromBranchId String
+  fromBranch   Branch           @relation("TransferFrom", fields: [fromBranchId], references: [id])
+  toBranchId   String
+  toBranch     Branch           @relation("TransferTo", fields: [toBranchId], references: [id])
+  transferDate DateTime         @default(now())
+  status       String           @default("COMPLETED") // PENDING, IN_TRANSIT, COMPLETED
+  remarks      String?
+  createdAt    DateTime         @default(now())
+}
+
+model DigitalQuotation {
+  id              String   @id @default(uuid())
+  customerName    String
+  customerPhone   String
+  modelName       String
+  exShowroomPrice Float
+  vatAmount       Float
+  roadTax         Float
+  insuranceAmount Float
+  totalAmount     Float
+  downPayment     Float?
+  emiAmount       Float?
+  tenureMonths    Int?
+  validUntil      DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ServiceReminder {
+  id          String           @id @default(uuid())
+  vehicleId   String
+  vehicle     VehicleInventory @relation(fields: [vehicleId], references: [id])
+  customerId  String
+  customer    Customer         @relation(fields: [customerId], references: [id])
+  serviceType String // 1st Service, 2nd Service, etc.
+  dueDate     DateTime
+  status      String           @default("PENDING") // PENDING, NOTIFIED, COMPLETED
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 }

@@ -150,7 +150,7 @@ export default async function AdminDashboard() {
                </Link>
             </div>
             
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto w-full">
               <table className="w-full text-left border-collapse min-w-[500px]">
                 <thead>
                   <tr className="border-b-2 border-gray-100 dark:border-slate-800/80 text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">

@@ -42,7 +42,7 @@ export default async function AdminUsersPage() {
 
         {/* Table Container */}
         <div className="bg-white dark:bg-slate-900/80 border border-gray-200 dark:border-slate-800/80 rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.2)] backdrop-blur-xl">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto w-full">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-50/50 dark:bg-slate-900/50 border-b border-gray-200 dark:border-slate-800/80 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-slate-400">
