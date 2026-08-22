@@ -8,8 +8,10 @@ export default async function AdminDashboard() {
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
   // 2. Fetch KPIs
-  const [revenueResult, commissionResult, inStockCount, newCustomersCount] = await Promise.all([
+  const [revenueResult, commissionResult, inStockCount, totalCustomersCount, todayCustomersCount] = await Promise.all([
     prisma.salesTransaction.aggregate({
       _sum: { finalAmount: true },
       where: { createdAt: { gte: startOfMonth } }
@@ -21,8 +23,9 @@ export default async function AdminDashboard() {
     prisma.vehicleInventory.count({
       where: { status: 'IN_STOCK' }
     }),
+    prisma.customer.count(),
     prisma.customer.count({
-      where: { createdAt: { gte: startOfMonth } }
+      where: { createdAt: { gte: startOfToday } }
     })
   ]);
 
@@ -36,7 +39,7 @@ export default async function AdminDashboard() {
     { label: "Total Revenue (MTD)", value: formatCurrency(totalRevenue), change: "+0%", trend: "up", icon: DollarSign },
     { label: "In-Stock Units", value: inStockCount.toString(), change: "0", trend: "up", icon: Package },
     { label: "Monthly Commissions", value: formatCurrency(totalCommission), change: "+0%", trend: "up", icon: TrendingUp },
-    { label: "New Customers", value: newCustomersCount.toString(), change: "+0%", trend: "up", icon: Users },
+    { label: "Total Customers", value: totalCustomersCount.toString(), change: `+${todayCustomersCount} Today`, trend: todayCustomersCount > 0 ? "up" : "down", icon: Users },
   ];
 
   // 3. Fetch Inventory Matrix Data
