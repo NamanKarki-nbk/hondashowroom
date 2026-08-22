@@ -17,8 +17,8 @@ export async function GET(req: NextRequest) {
 
   const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
   const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-  const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-  const REDIRECT_URI = `${NEXT_PUBLIC_BASE_URL}/api/auth/google/callback`;
+  const origin = req.nextUrl.origin;
+  const REDIRECT_URI = `${origin}/api/auth/google/callback`;
 
   if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
     return NextResponse.redirect(new URL("/login?error=server_configuration_missing", req.url));
