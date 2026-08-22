@@ -39,8 +39,8 @@ export default function HondaDio110Page({
   const [form, setForm] = useState({
     name: "",
     phone: "",
-    city: "Kathmandu",
-    preferredBranch: "Main Showroom",
+    city: "Damak",
+    preferredBranch: "Damak, Jhapa",
   });
   const [submitted, setSubmitted] = useState(false);
 
@@ -326,10 +326,8 @@ export default function HondaDio110Page({
                       onChange={(e) => setForm({ ...form, preferredBranch: e.target.value })}
                       className="w-full bg-gray-50 dark:bg-[#1C1C20] border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-foreground focus:ring-2 focus:ring-primary outline-none"
                     >
-                      <option value="Main Showroom">Kathmandu Main Showroom (Kantipath)</option>
-                      <option value="Lalitpur Branch">Lalitpur Branch (Lagankhel)</option>
-                      <option value="Jhapa Branch">Damak, Jhapa Showroom</option>
-                      <option value="Pokhara Branch">Pokhara Showroom</option>
+                      <option value="Damak, Jhapa">Damak, Jhapa</option>
+                      <option value="Urlabari, Morang">Urlabari, Morang</option>
                     </select>
                   </div>
 
