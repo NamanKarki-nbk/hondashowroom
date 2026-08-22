@@ -305,9 +305,11 @@ export default function ProfilePage() {
           dobAd: parsedDobAd || "1998 FEB 18",
           dobBs: parsedDobBs || "२०५४/११/०६",
           gender: "MALE",
-          citizenshipNumber: parsedCitizenshipNo || undefined,
           avatarUrl: extractedFace
         };
+        if (parsedCitizenshipNo) {
+          extractedData.citizenshipNumber = parsedCitizenshipNo;
+        }
       }
 
       setScannedData(extractedData);
