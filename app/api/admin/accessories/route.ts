@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { writeFile } from "fs/promises";
+import path from "path";
 
 export async function GET() {
   try {
@@ -15,8 +17,29 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { name, partNo, category, price, imageUrl, description, stockStatus, vehicleType, compatibility } = body;
+    const formData = await req.formData();
+    const name = formData.get("name") as string;
+    const partNo = formData.get("partNo") as string;
+    const category = formData.get("category") as string;
+    const price = formData.get("price") as string;
+    const description = formData.get("description") as string;
+    const stockStatus = formData.get("stockStatus") as string;
+    const vehicleType = formData.get("vehicleType") as string;
+    const compatibilityRaw = formData.get("compatibility") as string;
+    const compatibility = compatibilityRaw ? JSON.parse(compatibilityRaw) : [];
+
+    let imageUrl = formData.get("imageUrl") as string || "";
+    const imageFile = formData.get("imageFile") as File | null;
+
+    if (imageFile && imageFile.name) {
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      const ext = imageFile.name.split('.').pop() || 'png';
+      const filename = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
+      const filepath = path.join(process.cwd(), 'public', 'accessories', filename);
+      await writeFile(filepath, buffer);
+      imageUrl = `/accessories/${filename}`;
+    }
 
     const newAccessory = await prisma.accessory.create({
       data: {
@@ -41,11 +64,34 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
   try {
-    const body = await req.json();
-    const { id, name, partNo, category, price, imageUrl, description, stockStatus, vehicleType, compatibility } = body;
-
+    const formData = await req.formData();
+    const id = formData.get("id") as string;
+    
     if (!id) {
       return NextResponse.json({ error: "Missing ID" }, { status: 400 });
+    }
+
+    const name = formData.get("name") as string;
+    const partNo = formData.get("partNo") as string;
+    const category = formData.get("category") as string;
+    const price = formData.get("price") as string;
+    const description = formData.get("description") as string;
+    const stockStatus = formData.get("stockStatus") as string;
+    const vehicleType = formData.get("vehicleType") as string;
+    const compatibilityRaw = formData.get("compatibility") as string;
+    const compatibility = compatibilityRaw ? JSON.parse(compatibilityRaw) : [];
+
+    let imageUrl = formData.get("imageUrl") as string;
+    const imageFile = formData.get("imageFile") as File | null;
+
+    if (imageFile && imageFile.name) {
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      const ext = imageFile.name.split('.').pop() || 'png';
+      const filename = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
+      const filepath = path.join(process.cwd(), 'public', 'accessories', filename);
+      await writeFile(filepath, buffer);
+      imageUrl = `/accessories/${filename}`;
     }
 
     const updatedAccessory = await prisma.accessory.update({

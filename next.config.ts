@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'www.honda.com.np',
+      },
+      {
+        protocol: 'https',
+        hostname: 'thirdwheel.com.np',
       }
     ],
   },

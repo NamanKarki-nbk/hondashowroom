@@ -27,6 +27,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
   const [currentAccessory, setCurrentAccessory] = useState<Partial<Accessory> | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [compatInput, setCompatInput] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const handleOpenModal = (accessory?: Accessory) => {
     if (accessory) {
@@ -46,6 +47,7 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
       });
       setCompatInput("");
     }
+    setImageFile(null);
     setIsModalOpen(true);
   };
 
@@ -59,20 +61,31 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
     e.preventDefault();
     if (!currentAccessory) return;
 
-    const payload = {
-      ...currentAccessory,
-      compatibility: compatInput.split(",").map(s => s.trim()).filter(s => s !== "")
-    };
-
     setIsSaving(true);
     try {
-      const method = payload.id ? "PUT" : "POST";
+      const formData = new FormData();
+      if (currentAccessory.id) formData.append("id", currentAccessory.id);
+      formData.append("name", currentAccessory.name || "");
+      formData.append("partNo", currentAccessory.partNo || "");
+      formData.append("category", currentAccessory.category || "");
+      formData.append("price", currentAccessory.price?.toString() || "0");
+      formData.append("description", currentAccessory.description || "");
+      formData.append("stockStatus", currentAccessory.stockStatus || "IN_STOCK");
+      formData.append("vehicleType", currentAccessory.vehicleType || "Universal");
+      
+      const compArr = compatInput.split(",").map(s => s.trim()).filter(s => s !== "");
+      formData.append("compatibility", JSON.stringify(compArr));
+
+      formData.append("imageUrl", currentAccessory.imageUrl || "");
+      
+      if (imageFile) {
+        formData.append("imageFile", imageFile);
+      }
+
+      const method = currentAccessory.id ? "PUT" : "POST";
       const res = await fetch("/api/admin/accessories", {
         method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       if (!res.ok) throw new Error("Failed to save accessory");
@@ -282,15 +295,24 @@ export default function AccessoriesAdminClient({ initialAccessories }: Accessori
               </div>
 
               <div>
-                <label className="block text-sm font-semibold mb-1">Image URL</label>
-                <input
-                  type="text"
-                  required
-                  value={currentAccessory.imageUrl}
-                  onChange={(e) => setCurrentAccessory({ ...currentAccessory, imageUrl: e.target.value })}
-                  className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
-                  placeholder="https://..."
-                />
+                <label className="block text-sm font-semibold mb-1">Accessory Image</label>
+                <div className="flex flex-col gap-2">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files.length > 0) {
+                        setImageFile(e.target.files[0]);
+                      }
+                    }}
+                    className="w-full bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 rounded-lg p-2.5 outline-none focus:border-primary"
+                  />
+                  {!imageFile && currentAccessory.imageUrl && (
+                    <div className="text-sm text-gray-500">
+                      Current image: <a href={currentAccessory.imageUrl} target="_blank" className="text-primary hover:underline">{currentAccessory.imageUrl}</a>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div>
