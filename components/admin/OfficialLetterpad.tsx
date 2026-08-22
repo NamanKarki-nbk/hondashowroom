@@ -35,7 +35,7 @@ export default function OfficialLetterpad({ children, className = "", disableTab
           </thead>
           <tbody>
             <tr>
-              <td className="px-[1in] align-top border-none h-[7.0in]">
+              <td className="px-[1in] align-top border-none h-[6.0in]">
                 {children}
               </td>
             </tr>
