@@ -85,6 +85,14 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
       ]
     },
     {
+      name: "Official Documents",
+      icon: FileText,
+      items: [
+        { name: "Letters & Claims", href: "/admin/letters" },
+        { name: "Generate New", href: "/admin/letters/new" },
+      ]
+    },
+    {
       name: "Settings",
       icon: Settings,
       items: [

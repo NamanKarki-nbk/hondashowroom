@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { DOC_CATEGORIES, DocCategory } from "@/lib/letterTemplates";
 import { getRecentPurchaseInvoices, getInvoicesByDateRange } from "@/app/actions/invoice";
 import { getLatestRemainingBalance } from "@/app/actions/letter";
-import { FileText, User, Hash, Calendar, Layers, Plus, Trash2, Banknote, Download, Building2, Settings, ListPlus, X } from "lucide-react";
+import { getProductCatalogs } from "@/app/actions/catalog";
+import { FileText, User, Hash, Calendar, Layers, Plus, Trash2, Banknote, Download, Building2, Settings, ListPlus, X, Box } from "lucide-react";
 import NepaliDate from 'nepali-date-converter';
 import { format as formatEnglishDate, lastDayOfMonth } from 'date-fns';
 
@@ -53,10 +54,16 @@ export default function DynamicForm({
   const [endDate, setEndDate] = useState<string>("");
   const [isAutofilling, setIsAutofilling] = useState<boolean>(false);
   const [staffList, setStaffList] = useState<any[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
 
   // Fetch recent invoices
   useEffect(() => {
     getRecentPurchaseInvoices().then(setInvoices);
+  }, []);
+
+  // Fetch products
+  useEffect(() => {
+    getProductCatalogs().then(setProducts);
   }, []);
 
   // Fetch staff list
@@ -718,6 +725,151 @@ export default function DynamicForm({
         );
       }
 
+      case 'Quotation': {
+        return (
+          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <InputField
+              label="Bank / Organization Address"
+              id="bankAddress"
+              icon={Building2}
+              placeholder="e.g. Kantipath, Kathmandu"
+              value={metadata.bankAddress || ''}
+              onChange={(val) => setMetadata({ ...metadata, bankAddress: val })}
+            />
+            
+            <div className="pt-4 border-t border-gray-100 dark:border-slate-800">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3">Loanee Details</h3>
+              <div className="space-y-4">
+                <InputField
+                  label="Loanee Name"
+                  id="loaneeName"
+                  icon={User}
+                  placeholder="e.g. Ram Bahadur"
+                  value={metadata.loaneeName || ''}
+                  onChange={(val) => setMetadata({ ...metadata, loaneeName: val })}
+                />
+                <InputField
+                  label="Loanee Address"
+                  id="loaneeAddress"
+                  placeholder="e.g. Damak-05, Jhapa"
+                  value={metadata.loaneeAddress || ''}
+                  onChange={(val) => setMetadata({ ...metadata, loaneeAddress: val })}
+                />
+                <InputField
+                  label="Loanee Contact Number"
+                  id="loaneeContact"
+                  placeholder="e.g. 9840000000"
+                  value={metadata.loaneeContact || ''}
+                  onChange={(val) => setMetadata({ ...metadata, loaneeContact: val })}
+                />
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-gray-100 dark:border-slate-800">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3">Vehicle Details</h3>
+              
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Select Product Catalog
+                </label>
+                <select
+                  className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 text-gray-900 dark:text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#CC0000]/50"
+                  value={metadata.vehicleId || ''}
+                  onChange={(e) => {
+                    const product = products.find(p => p.id === e.target.value);
+                    if (product) {
+                      const specs = product.specs || {};
+                      setMetadata({
+                        ...metadata,
+                        vehicleId: product.id,
+                        vehicleModel: product.name,
+                        category: product.category,
+                        unitPrice: product.price,
+                        cc: specs.displacement || "",
+                        specs: {
+                          displacement: specs.displacement || "",
+                          fuelType: specs.fuelType || "",
+                          engineType: specs.engineType || "",
+                          startingMethod: specs.startingMethod || "",
+                          kerbWeight: specs.kerbWeight || "",
+                          fuelTank: specs.fuelTank || "",
+                          noOfGears: specs.noOfGears || "",
+                          groundClearance: specs.groundClearance || ""
+                        },
+                        availableColors: Array.isArray(specs.colors) ? specs.colors.join(", ") : ""
+                      });
+                    }
+                  }}
+                >
+                  <option value="">-- Select Product --</option>
+                  {products.map(p => (
+                    <option key={p.id} value={p.id}>{p.name} - Rs. {p.price}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <InputField
+                  label="Vehicle Model"
+                  id="vehicleModel"
+                  placeholder="e.g. SP Shine BS6 DSS"
+                  value={metadata.vehicleModel || ''}
+                  onChange={(val) => setMetadata({ ...metadata, vehicleModel: val })}
+                />
+                <InputField
+                  label="Variant"
+                  id="variant"
+                  placeholder="e.g. BIKE"
+                  value={metadata.variant || ''}
+                  onChange={(val) => setMetadata({ ...metadata, variant: val })}
+                />
+                <InputField
+                  label="C.C."
+                  id="cc"
+                  placeholder="e.g. 125"
+                  value={metadata.cc || ''}
+                  onChange={(val) => setMetadata({ ...metadata, cc: val })}
+                />
+                <InputField
+                  label="Unit Price (Rs)"
+                  id="unitPrice"
+                  type="number"
+                  icon={Banknote}
+                  placeholder="e.g. 319900"
+                  value={metadata.unitPrice || ''}
+                  onChange={(val) => setMetadata({ ...metadata, unitPrice: val })}
+                />
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-gray-100 dark:border-slate-800">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3">Technical Specifications</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {['displacement', 'fuelType', 'engineType', 'startingMethod', 'kerbWeight', 'fuelTank', 'noOfGears', 'groundClearance'].map((specKey) => (
+                  <InputField
+                    key={specKey}
+                    label={specKey.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                    id={specKey}
+                    placeholder={`e.g. ${specKey}`}
+                    value={metadata.specs?.[specKey] || ''}
+                    onChange={(val) => setMetadata({ ...metadata, specs: { ...metadata.specs, [specKey]: val } })}
+                  />
+                ))}
+              </div>
+              <div className="mt-4">
+                <InputField
+                  label="Available Colors"
+                  id="availableColors"
+                  placeholder="e.g. Red, Black, Blue"
+                  value={metadata.availableColors || ''}
+                  onChange={(val) => setMetadata({ ...metadata, availableColors: val })}
+                />
+              </div>
+            </div>
+          </div>
+        );
+      }
+
       default:
         return null;
     }
@@ -747,7 +899,7 @@ export default function DynamicForm({
         </div>
 
         {/* Recipient */}
-        {docType !== 'Vehicle Purchase Cash Incentive Claim' && docType !== 'Free Service Coupon Claim' && docType !== 'Warranty Claim Letter' && docType !== 'Bank Salary Deposit Request' && docType !== 'Salesman Incentive Claim' && docType !== 'Transfer Claim Amount to Cash or BG Ledger' && docType !== '6 Free Service With Engine Oil Claim' && docType !== '2 Years Free Service With Engine Oil and Parts Claim' && docType !== 'Payment Request Letter for Syakar Hire Purchase' && (
+        {docType !== 'Vehicle Purchase Cash Incentive Claim' && docType !== 'Free Service Coupon Claim' && docType !== 'Warranty Claim Letter' && docType !== 'Bank Salary Deposit Request' && docType !== 'Salesman Incentive Claim' && docType !== 'Transfer Claim Amount to Cash or BG Ledger' && docType !== '6 Free Service With Engine Oil Claim' && docType !== '2 Years Free Service With Engine Oil and Parts Claim' && docType !== 'Payment Request Letter for Syakar Hire Purchase' && docType !== 'Quotation' && (
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Recipient Organization / Name
@@ -775,7 +927,7 @@ export default function DynamicForm({
       <div className="mt-8 pt-4 border-t border-gray-200 dark:border-slate-800">
         <button
           onClick={onSubmit}
-          disabled={isSubmitting || (!recipient && docType !== 'Vehicle Purchase Cash Incentive Claim' && docType !== 'Free Service Coupon Claim' && docType !== 'Warranty Claim Letter' && docType !== 'Bank Salary Deposit Request' && docType !== 'Salesman Incentive Claim' && docType !== 'Transfer Claim Amount to Cash or BG Ledger' && docType !== '6 Free Service With Engine Oil Claim' && docType !== '2 Years Free Service With Engine Oil and Parts Claim' && docType !== 'Payment Request Letter for Syakar Hire Purchase')}
+          disabled={isSubmitting || (!recipient && docType !== 'Vehicle Purchase Cash Incentive Claim' && docType !== 'Free Service Coupon Claim' && docType !== 'Warranty Claim Letter' && docType !== 'Bank Salary Deposit Request' && docType !== 'Salesman Incentive Claim' && docType !== 'Transfer Claim Amount to Cash or BG Ledger' && docType !== '6 Free Service With Engine Oil Claim' && docType !== '2 Years Free Service With Engine Oil and Parts Claim' && docType !== 'Payment Request Letter for Syakar Hire Purchase' && docType !== 'Quotation')}
           className="w-full bg-[#CC0000] hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
         >
           {isSubmitting ? (

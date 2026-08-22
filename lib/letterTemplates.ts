@@ -11,7 +11,8 @@ export type DocCategory =
   | '2 Years Free Service With Engine Oil and Parts Claim'
   | 'Payment Request Letter for Syakar Hire Purchase'
   | 'Battery Warranty Claim'
-  | 'Parts Warranty Claim';
+  | 'Parts Warranty Claim'
+  | 'Quotation';
 
 export const DOC_CATEGORIES: DocCategory[] = [
   'Vehicle Purchase Cash Incentive Claim',
@@ -22,7 +23,8 @@ export const DOC_CATEGORIES: DocCategory[] = [
   'Transfer Claim Amount to Cash or BG Ledger',
   '6 Free Service With Engine Oil Claim',
   '2 Years Free Service With Engine Oil and Parts Claim',
-  'Payment Request Letter for Syakar Hire Purchase'
+  'Payment Request Letter for Syakar Hire Purchase',
+  'Quotation'
 ];
 
 export interface LetterMetadata {
@@ -89,6 +91,174 @@ function generateFooter(docType?: string) {
   `;
 }
 
+function numberToEnglishWordsIndian(num: number): string {
+  if (num === 0) return "ZERO";
+  const a = ["", "ONE ", "TWO ", "THREE ", "FOUR ", "FIVE ", "SIX ", "SEVEN ", "EIGHT ", "NINE ", "TEN ", "ELEVEN ", "TWELVE ", "THIRTEEN ", "FOURTEEN ", "FIFTEEN ", "SIXTEEN ", "SEVENTEEN ", "EIGHTEEN ", "NINETEEN "];
+  const b = ["", "", "TWENTY ", "THIRTY ", "FORTY ", "FIFTY ", "SIXTY ", "SEVENTY ", "EIGHTY ", "NINETY "];
+
+  const n = ('000000000' + num).slice(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+  if (!n) return "";
+  let str = "";
+  str += (n[1] != "00") ? (a[Number(n[1])] || b[Number(n[1][0])] + a[Number(n[1][1])]) + "CRORE " : "";
+  str += (n[2] != "00") ? (a[Number(n[2])] || b[Number(n[2][0])] + a[Number(n[2][1])]) + "LAKH " : "";
+  str += (n[3] != "00") ? (a[Number(n[3])] || b[Number(n[3][0])] + a[Number(n[3][1])]) + "THOUSAND " : "";
+  str += (n[4] != "0") ? (a[Number(n[4])] || b[Number(n[4][0])] + a[Number(n[4][1])]) + "HUNDRED " : "";
+  str += (n[5] != "00") ? (str != "" ? "AND " : "") + (a[Number(n[5])] || b[Number(n[5][0])] + a[Number(n[5][1])]) : "";
+  return str.trim();
+}
+
+function generateQuotationTemplate(data: TemplateData): { subject: string, html: string } {
+  const meta = data.metadata || {};
+  const price = Number(meta.unitPrice || 0);
+  const words = numberToEnglishWordsIndian(price) + " RUPEES ONLY";
+  
+  const specs = meta.specs || {};
+
+  const dateStr = data.date ? new Date(data.date).toISOString().split('T')[0] : '';
+  const isPower = meta.category === 'POWER_PRODUCTS';
+  
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; color: #000; font-size: 14px; line-height: 1.5;">
+      
+      <!-- Header -->
+      <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #cc0000; padding-bottom: 10px; margin-bottom: 20px; align-items: center;">
+        <img src="/honda-logo.svg" alt="Honda" style="height: 60px;" />
+        <div style="text-align: right;">
+          <h2 style="margin: 0; font-size: 18px; color: #cc0000;">Society Enterprises Pvt. Ltd.</h2>
+          <p style="margin: 2px 0 0 0; font-size: 13px;">Damak-05, Jhapa</p>
+          <p style="margin: 2px 0 0 0; font-size: 13px;">9801615250 / 9801615251</p>
+          <p style="margin: 2px 0 0 0; font-size: 13px;">Reg No. : 619869261</p>
+        </div>
+      </div>
+
+      <!-- Ref & Date -->
+      <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold;">
+        <div>Ref No. ${data.letterNo}</div>
+        <div>Date : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${dateStr}</div>
+      </div>
+
+      <!-- To -->
+      <div style="margin-bottom: 20px;">
+        <strong>To,</strong><br/>
+        ${data.recipient}<br/>
+        ${meta.bankAddress || ''}
+      </div>
+
+      <div style="margin-bottom: 20px; font-weight: bold;">
+        Sub: For Quotation.
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <strong>Dear Sir/ Madam,</strong><br/>
+        We are pleased to note your interest in Honda ${isPower ? 'Power Products' : 'Two Wheelers'}. We assure you of the best Japanese Technology for the smooth ride. Further to your inquiry, we hereby quote our best price of Honda ${isPower ? 'Power Product' : 'Two-Wheeler'} as per details and Technical Specifications as mentioned hereinafter.
+      </div>
+
+      <!-- Primary Table -->
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #000;">
+        <thead>
+          <tr style="font-weight: bold; text-align: center;">
+            <td style="border: 1px solid #000; padding: 5px;">MODEL</td>
+            <td style="border: 1px solid #000; padding: 5px;">VARIENT</td>
+            <td style="border: 1px solid #000; padding: 5px;">C.C.</td>
+            <td style="border: 1px solid #000; padding: 5px;">UNIT PRICE</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="text-align: center; font-weight: bold;">
+            <td style="border: 1px solid #000; padding: 5px;">${meta.vehicleModel || ''}</td>
+            <td style="border: 1px solid #000; padding: 5px;">${meta.variant || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px;">${meta.cc || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px;">Rs. ${price.toLocaleString('en-IN')}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="font-weight: bold; margin-bottom: 25px;">
+        IN WORD: ${words}
+      </div>
+
+      <!-- Technical Specifications -->
+      <div style="font-weight: bold; margin-bottom: 5px;">Technical Specifications:</div>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #000;">
+        <tbody>
+          <tr>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold; width: 25%;">Displacement</td>
+            <td style="border: 1px solid #000; padding: 5px; width: 25%;">${specs.displacement || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold; width: 25%;">Fuel Type</td>
+            <td style="border: 1px solid #000; padding: 5px; width: 25%;">${specs.fuelType || '-'}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Engine Type</td>
+            <td style="border: 1px solid #000; padding: 5px;">${specs.engineType || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Starting Method</td>
+            <td style="border: 1px solid #000; padding: 5px;">${specs.startingMethod || '-'}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Kerb Weight</td>
+            <td style="border: 1px solid #000; padding: 5px;">${specs.kerbWeight || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Fuel Tank</td>
+            <td style="border: 1px solid #000; padding: 5px;">${specs.fuelTank || '-'}</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">No. of Gears</td>
+            <td style="border: 1px solid #000; padding: 5px;">${specs.noOfGears || '-'}</td>
+            <td style="border: 1px solid #000; padding: 5px; font-weight: bold;">Ground Clearance</td>
+            <td style="border: 1px solid #000; padding: 5px;">${specs.groundClearance || '-'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Colors -->
+      <div style="margin-bottom: 5px;"><strong>Available Colors:</strong></div>
+      <div style="border: 1px solid #000; padding: 5px; margin-bottom: 20px; font-weight: bold;">
+        ${meta.availableColors || '-'}
+      </div>
+
+      <!-- T&C -->
+      <div style="font-weight: bold; margin-bottom: 5px;">Term & Conditions:</div>
+      <div style="margin-bottom: 20px; font-size: 13px;">
+        The above price in subject to change without any prior notice in case of any changes in the Honda Company Limited or their government levies or the tax and other policies in the government of Nepal. The price does not include contact tax. Honda Company Limited reserves the right to change without notice-colors, equipment, Honda Specifications and models and also to discontinue models.
+      </div>
+
+      <!-- Accessories and Warranty -->
+      <div style="display: flex; gap: 20px; margin-bottom: 50px;">
+        <div style="flex: 1;">
+          <div style="font-weight: bold; margin-bottom: 5px;">Accessories:</div>
+          <div style="border: 1px solid #000; padding: 10px; min-height: 80px;">
+            <div style="margin-bottom: 5px;">☑ Helmet: 1 Pcs. in Each Purchase</div>
+            <div style="margin-bottom: 5px;">☑ Tool Set, First Aid Kit & Spare Key.</div>
+            <div>☑ Owner's Manual.</div>
+          </div>
+        </div>
+        <div style="flex: 1;">
+          <div style="font-weight: bold; margin-bottom: 5px;">Service & Warranty :</div>
+          <div style="border: 1px solid #000; padding: 10px; min-height: 80px;">
+            <div style="margin-bottom: 5px;">☑ Warranty: 2 Years or 24000 Km</div>
+            <div>☑ Service: 3 Times</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Signatures -->
+      <div style="display: flex; justify-content: space-between; text-align: center; font-weight: bold;">
+        <div>
+          <div style="margin-bottom: 5px;">For,</div>
+          <div>${(meta.loaneeName || '').toUpperCase()}</div>
+          <div>${(meta.loaneeAddress || '').toUpperCase()}</div>
+          ${meta.loaneeContact ? `<div>${meta.loaneeContact}</div>` : ''}
+        </div>
+        <div>
+          <div style="margin-bottom: 5px;">Thanking you,</div>
+          <div>SOCIETY ENTERPRISES PVT. LTD.</div>
+          <div>Damak-05, Jhapa</div>
+        </div>
+      </div>
+
+    </div>
+  `;
+  return { subject: 'For Quotation', html };
+}
+
 export function generateNepaliTemplate(docType: DocCategory, data: TemplateData): { subject: string, html: string } {
   let subject = '';
   let body = '';
@@ -98,6 +268,10 @@ export function generateNepaliTemplate(docType: DocCategory, data: TemplateData)
   const claimAmount = meta.claimAmount ? Number(meta.claimAmount) : 0;
   const nepaliAmount = claimAmount ? toNepaliNumber(claimAmount.toString()) : '०';
   const verbalAmount = claimAmount ? numberToNepaliWords(claimAmount) : 'शून्य';
+
+  if (docType === 'Quotation') {
+    return generateQuotationTemplate(data);
+  }
 
   switch (docType) {
     case 'Vehicle Purchase Cash Incentive Claim':
