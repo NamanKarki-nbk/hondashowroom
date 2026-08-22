@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { ArrowLeft, Mail, Lock, MessageCircle, ShieldCheck } from "lucide-react";
 import Logo from "@/components/Logo";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function LoginPage() {
+function LoginPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   
   // State for login methods
   const [method, setMethod] = useState<"password" | "whatsapp">("password");
@@ -24,6 +25,14 @@ export default function LoginPage() {
   // General State
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Read error from URL query params (e.g., from Google OAuth redirect)
+  useEffect(() => {
+    const urlError = searchParams.get("error");
+    if (urlError) {
+      setError(decodeURIComponent(urlError));
+    }
+  }, [searchParams]);
   
   const handlePasswordLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -257,5 +266,13 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginPageContent />
+    </Suspense>
   );
 }
