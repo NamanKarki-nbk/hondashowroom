@@ -117,6 +117,15 @@ export default function HondaDio110Page({
       });
 
       if (res.ok) {
+        // If user didn't have a full name in profile, save it to profile now
+        if (user && !user.fullName && form.name) {
+          fetch("/api/profile", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fullName: form.name })
+          }).catch(console.error);
+        }
+
         setSubmitted(true);
         setTimeout(() => {
           setIsBookingOpen(false);
