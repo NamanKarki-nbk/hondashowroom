@@ -14,15 +14,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid or expired session" }, { status: 401 });
     }
 
-    const { identifier, code } = await req.json();
+    const { identifier, code, type } = await req.json();
 
     if (!identifier || !code) {
       return NextResponse.json({ error: "Identifier and code are required" }, { status: 400 });
     }
 
+    let formattedIdentifier = identifier;
+    if (type === "whatsapp") {
+      let digits = identifier.replace(/\D/g, '');
+      if (digits.length === 10) {
+        digits = `977${digits}`;
+      }
+      formattedIdentifier = digits;
+    }
+
     // Find the latest OTP for this identifier
     const latestOtp = await prisma.otpVerification.findFirst({
-      where: { identifier },
+      where: { identifier: formattedIdentifier },
       orderBy: { createdAt: "desc" }
     });
 

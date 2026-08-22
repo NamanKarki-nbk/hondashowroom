@@ -380,7 +380,8 @@ export default function ProfilePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           identifier: pendingContactValue,
-          code: otpValue
+          code: otpValue,
+          type: otpTarget === "phone" ? "whatsapp" : "email"
         })
       });
       
