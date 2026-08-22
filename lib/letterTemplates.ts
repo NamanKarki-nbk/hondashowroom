@@ -120,17 +120,6 @@ function generateQuotationTemplate(data: TemplateData): { subject: string, html:
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; color: #000; font-size: 14px; line-height: 1.5;">
       
-      <!-- Header -->
-      <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #cc0000; padding-bottom: 10px; margin-bottom: 20px; align-items: center;">
-        <img src="/honda-logo.svg" alt="Honda" style="height: 60px;" />
-        <div style="text-align: right;">
-          <h2 style="margin: 0; font-size: 18px; color: #cc0000;">Society Enterprises Pvt. Ltd.</h2>
-          <p style="margin: 2px 0 0 0; font-size: 13px;">Damak-05, Jhapa</p>
-          <p style="margin: 2px 0 0 0; font-size: 13px;">9801615250 / 9801615251</p>
-          <p style="margin: 2px 0 0 0; font-size: 13px;">Reg No. : 619869261</p>
-        </div>
-      </div>
-
       <!-- Ref & Date -->
       <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold;">
         <div>Ref No. ${data.letterNo}</div>
@@ -240,7 +229,7 @@ function generateQuotationTemplate(data: TemplateData): { subject: string, html:
       </div>
 
       <!-- Footer Signatures -->
-      <div style="display: flex; justify-content: space-between; text-align: center; font-weight: bold;">
+      <div style="display: flex; justify-content: space-between; text-align: center; font-weight: bold; margin-bottom: 20px;">
         <div>
           <div style="margin-bottom: 5px;">For,</div>
           <div>${(meta.loaneeName || '').toUpperCase()}</div>
@@ -249,8 +238,8 @@ function generateQuotationTemplate(data: TemplateData): { subject: string, html:
         </div>
         <div>
           <div style="margin-bottom: 5px;">Thanking you,</div>
-          <div>SOCIETY ENTERPRISES PVT. LTD.</div>
-          <div>Damak-05, Jhapa</div>
+          <br /><br /><br />
+          <div>Authorized Signatory</div>
         </div>
       </div>
 
