@@ -89,7 +89,13 @@ async function main() {
         name: v.name,
         category: v.category,
         price: v.price,
-        imageUrl: "/placeholder.png",
+        imageUrl: v.name.toLowerCase().includes('dio 125') ? '/inventory/honda-dio-125.png' :
+                  v.name.toLowerCase().includes('dio') ? '/inventory/honda-dio-bs6.png' :
+                  v.name.toLowerCase().includes('sp shine') ? '/inventory/honda-sp-125-.png' :
+                  v.name.toLowerCase().includes('shine') ? '/inventory/honda-shine-bs6.png' :
+                  v.name.toLowerCase().includes('hornet') ? '/inventory/cb-hornet-2-0.png' :
+                  v.name.toLowerCase().includes('nx 200') ? '/inventory/honda-nx-200.png' :
+                  "/placeholder.png",
       }
     });
   }
