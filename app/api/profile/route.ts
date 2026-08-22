@@ -12,24 +12,21 @@ export async function GET(req: NextRequest) {
 
     const user = await prisma.user.findUnique({
       where: { id: payload.userId },
-      select: {
-        id: true,
-        fullName: true,
-        email: true,
-        phone: true,
-        avatarUrl: true,
-        address: true,
-        gender: true,
-        dobAd: true,
-        dobBs: true,
-        
-        createdAt: true
+      include: {
+        customerProfile: true
       }
     });
 
     if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-    return NextResponse.json({ user });
+    const flatUser = {
+      ...user,
+      ...(user.customerProfile || {})
+    };
+    delete (flatUser as any).passwordHash;
+    delete (flatUser as any).customerProfile;
+
+    return NextResponse.json({ user: flatUser });
   } catch (error) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
@@ -46,42 +43,76 @@ export async function PATCH(req: NextRequest) {
     const updates = await req.json();
     
     // Whitelist allowed update fields
-    const allowedUpdates = [
+    const allowedUserUpdates = [
       "fullName", "email", "phone", "avatarUrl", "address", 
-      "gender", "dobAd", "dobBs",
+      "gender", "dobAd", "dobBs"
+    ];
+
+    const allowedCustomerUpdates = [
+      "fullName", "email", "phone", "address",
       "citizenshipVerified", "citizenshipNumber", "citizenshipFront", "citizenshipBack",
       "licenseVerified", "licenseNumber", "licenseFront", "licenseBack",
       "nationalIdVerified", "nationalIdNumber", "nationalIdFront", "nationalIdBack"
     ];
-    const dataToUpdate: Record<string, any> = {};
     
-    for (const key of allowedUpdates) {
+    const userData: Record<string, any> = {};
+    const customerData: Record<string, any> = {};
+    
+    for (const key of Object.keys(updates)) {
       if (updates[key] !== undefined) {
-        dataToUpdate[key] = updates[key];
+        if (allowedUserUpdates.includes(key)) {
+          userData[key] = updates[key];
+        }
+        if (allowedCustomerUpdates.includes(key)) {
+          customerData[key] = updates[key];
+        }
       }
     }
 
-    if (Object.keys(dataToUpdate).length === 0) {
+    if (Object.keys(userData).length === 0 && Object.keys(customerData).length === 0) {
       return NextResponse.json({ error: "No valid fields provided to update" }, { status: 400 });
     }
 
-    const updatedUser = await prisma.user.update({
+    let updatedUser: any = null;
+    if (Object.keys(userData).length > 0) {
+      updatedUser = await prisma.user.update({
+        where: { id: payload.userId },
+        data: userData,
+      });
+    } else {
+      updatedUser = await prisma.user.findUnique({ where: { id: payload.userId } });
+    }
+
+    if (Object.keys(customerData).length > 0) {
+      const upsertCustomerData = {
+        ...customerData,
+        phone: customerData.phone || updatedUser.phone,
+        fullName: customerData.fullName || updatedUser.fullName || "Unknown",
+      };
+
+      await prisma.customer.upsert({
+        where: { userId: payload.userId },
+        update: customerData,
+        create: {
+          ...upsertCustomerData,
+          userId: payload.userId,
+        }
+      });
+    }
+
+    const finalUser = await prisma.user.findUnique({
       where: { id: payload.userId },
-      data: dataToUpdate,
-      select: {
-        id: true,
-        fullName: true,
-        email: true,
-        phone: true,
-        avatarUrl: true,
-        address: true,
-        gender: true,
-        dobAd: true,
-        dobBs: true,
-      }
+      include: { customerProfile: true }
     });
 
-    return NextResponse.json({ success: true, user: updatedUser });
+    const flatUser = {
+      ...finalUser,
+      ...(finalUser?.customerProfile || {})
+    };
+    delete (flatUser as any).passwordHash;
+    delete (flatUser as any).customerProfile;
+
+    return NextResponse.json({ success: true, user: flatUser });
   } catch (error) {
     console.error("Profile update error: ", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
