@@ -162,7 +162,7 @@ function generateQuotationTemplate(data: TemplateData): { subject: string, html:
         </tbody>
       </table>
 
-      <div style="font-weight: bold; margin-bottom: 25px;">
+      <div style="font-weight: bold; margin-bottom: 10px;">
         IN WORD: ${words}
       </div>
 
