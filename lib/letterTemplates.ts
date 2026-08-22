@@ -118,32 +118,36 @@ function generateQuotationTemplate(data: TemplateData): { subject: string, html:
   const isPower = meta.category === 'POWER_PRODUCTS';
   
   const html = `
-    <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; color: #000; font-size: 14px; line-height: 1.5;">
+    <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; color: #000; font-size: 14px; line-height: 1; text-align: justify; orphans: 2; widows: 2;">
       
       <!-- Ref & Date -->
-      <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold;">
+      <div style="display: flex; justify-content: space-between; font-weight: bold; margin: 0; padding: 0; page-break-inside: avoid;">
         <div>Ref No. ${data.letterNo}</div>
         <div>Date : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${dateStr}</div>
       </div>
+      <br />
 
       <!-- To -->
-      <div style="margin-bottom: 20px;">
+      <div style="margin: 0; padding: 0; page-break-inside: avoid;">
         <strong>To,</strong><br/>
         ${data.recipient}<br/>
         ${meta.bankAddress || ''}
       </div>
+      <br />
 
-      <div style="margin-bottom: 20px; font-weight: bold;">
+      <div style="font-weight: bold; margin: 0; padding: 0; page-break-inside: avoid;">
         Sub: For Quotation.
       </div>
+      <br />
 
-      <div style="margin-bottom: 20px;">
+      <div style="margin: 0; padding: 0; text-align: justify; page-break-inside: avoid;">
         <strong>Dear Sir/ Madam,</strong><br/>
         We are pleased to note your interest in Honda ${isPower ? 'Power Products' : 'Two Wheelers'}. We assure you of the best Japanese Technology for the smooth ride. Further to your inquiry, we hereby quote our best price of Honda ${isPower ? 'Power Product' : 'Two-Wheeler'} as per details and Technical Specifications as mentioned hereinafter.
       </div>
+      <br />
 
       <!-- Primary Table -->
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #000;">
+      <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin: 0; padding: 0; page-break-inside: avoid;">
         <thead>
           <tr style="font-weight: bold; text-align: center;">
             <td style="border: 1px solid #000; padding: 5px;">MODEL</td>
@@ -161,14 +165,16 @@ function generateQuotationTemplate(data: TemplateData): { subject: string, html:
           </tr>
         </tbody>
       </table>
+      <br />
 
-      <div style="font-weight: bold; margin-bottom: 10px;">
+      <div style="font-weight: bold; margin: 0; padding: 0; page-break-inside: avoid;">
         IN WORD: ${words}
       </div>
+      <br />
 
       <!-- Technical Specifications -->
-      <div style="font-weight: bold; margin-bottom: 5px;">Technical Specifications:</div>
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #000;">
+      <div style="font-weight: bold; margin: 0; padding: 0; page-break-inside: avoid;">Technical Specifications:</div>
+      <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; margin: 0; padding: 0; page-break-inside: avoid;">
         <tbody>
           <tr>
             <td style="border: 1px solid #000; padding: 5px; font-weight: bold; width: 25%;">Displacement</td>
@@ -196,48 +202,52 @@ function generateQuotationTemplate(data: TemplateData): { subject: string, html:
           </tr>
         </tbody>
       </table>
+      <br />
 
       <!-- Colors -->
-      <div style="margin-bottom: 5px;"><strong>Available Colors:</strong></div>
-      <div style="border: 1px solid #000; padding: 5px; margin-bottom: 20px; font-weight: bold;">
+      <div style="margin: 0; padding: 0; page-break-inside: avoid;"><strong>Available Colors:</strong></div>
+      <div style="border: 1px solid #000; padding: 5px; margin: 0; font-weight: bold; page-break-inside: avoid;">
         ${meta.availableColors || '-'}
       </div>
+      <br />
 
       <!-- T&C -->
-      <div style="font-weight: bold; margin-bottom: 5px;">Term & Conditions:</div>
-      <div style="margin-bottom: 20px; font-size: 13px;">
+      <div style="font-weight: bold; margin: 0; padding: 0; page-break-inside: avoid;">Term & Conditions:</div>
+      <div style="margin: 0; padding: 0; font-size: 13px; text-align: justify; page-break-inside: avoid;">
         The above price in subject to change without any prior notice in case of any changes in the Honda Company Limited or their government levies or the tax and other policies in the government of Nepal. The price does not include contact tax. Honda Company Limited reserves the right to change without notice-colors, equipment, Honda Specifications and models and also to discontinue models.
       </div>
+      <br /><br />
 
       <!-- Accessories and Warranty -->
-      <div style="display: flex; gap: 20px; margin-bottom: 50px;">
+      <div style="display: flex; gap: 20px; margin: 0; padding: 0; page-break-inside: avoid;">
         <div style="flex: 1;">
-          <div style="font-weight: bold; margin-bottom: 5px;">Accessories:</div>
-          <div style="border: 1px solid #000; padding: 10px; min-height: 80px;">
-            <div style="margin-bottom: 5px;">☑ Helmet: 1 Pcs. in Each Purchase</div>
-            <div style="margin-bottom: 5px;">☑ Tool Set, First Aid Kit & Spare Key.</div>
-            <div>☑ Owner's Manual.</div>
+          <div style="font-weight: bold; margin: 0;">Accessories:</div>
+          <div style="border: 1px solid #000; padding: 10px; min-height: 80px; margin: 0;">
+            <div style="margin: 0;">☑ Helmet: 1 Pcs. in Each Purchase</div>
+            <div style="margin: 0;">☑ Tool Set, First Aid Kit & Spare Key.</div>
+            <div style="margin: 0;">☑ Owner's Manual.</div>
           </div>
         </div>
         <div style="flex: 1;">
-          <div style="font-weight: bold; margin-bottom: 5px;">Service & Warranty :</div>
-          <div style="border: 1px solid #000; padding: 10px; min-height: 80px;">
-            <div style="margin-bottom: 5px;">☑ Warranty: 2 Years or 24000 Km</div>
-            <div>☑ Service: 3 Times</div>
+          <div style="font-weight: bold; margin: 0;">Service & Warranty :</div>
+          <div style="border: 1px solid #000; padding: 10px; min-height: 80px; margin: 0;">
+            <div style="margin: 0;">☑ Warranty: 2 Years or 24000 Km</div>
+            <div style="margin: 0;">☑ Service: 3 Times</div>
           </div>
         </div>
       </div>
+      <br /><br />
 
       <!-- Footer Signatures -->
-      <div style="display: flex; justify-content: space-between; text-align: center; font-weight: bold; margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; text-align: center; font-weight: bold; margin: 0; padding: 0; page-break-inside: avoid;">
         <div>
-          <div style="margin-bottom: 5px;">For,</div>
+          <div style="margin: 0;">For,</div>
           <div>${(meta.loaneeName || '').toUpperCase()}</div>
           <div>${(meta.loaneeAddress || '').toUpperCase()}</div>
           ${meta.loaneeContact ? `<div>${meta.loaneeContact}</div>` : ''}
         </div>
         <div>
-          <div style="margin-bottom: 5px;">Thanking you,</div>
+          <div style="margin: 0;">Thanking you,</div>
           <br /><br /><br />
           <div>Authorized Signatory</div>
         </div>
