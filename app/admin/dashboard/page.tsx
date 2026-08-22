@@ -49,26 +49,30 @@ export default async function AdminDashboard() {
     _count: true,
   });
 
-  // Transform into a matrix of modelName -> { Red, Black, Matte }
-  const matrixMap: Record<string, { red: number, black: number, matte: number }> = {};
+  // Transform into a matrix of modelName -> { [color]: count }
+  const uniqueColorsSet = new Set<string>();
+  inventoryGroups.forEach(group => {
+    uniqueColorsSet.add(group.color);
+  });
+  const uniqueColors = Array.from(uniqueColorsSet).sort();
+
+  const matrixMap: Record<string, Record<string, number>> = {};
   inventoryGroups.forEach(group => {
     if (!matrixMap[group.modelName]) {
-      matrixMap[group.modelName] = { red: 0, black: 0, matte: 0 };
+      matrixMap[group.modelName] = {};
+      uniqueColors.forEach(c => matrixMap[group.modelName][c] = 0);
     }
-    const colorLower = group.color.toLowerCase();
-    if (colorLower.includes('red')) {
-      matrixMap[group.modelName].red += group._count;
-    } else if (colorLower.includes('black')) {
-      matrixMap[group.modelName].black += group._count;
-    } else if (colorLower.includes('matte') || colorLower.includes('gray') || colorLower.includes('grey') || colorLower.includes('silver')) {
-      matrixMap[group.modelName].matte += group._count;
-    }
+    matrixMap[group.modelName][group.color] += group._count;
   });
 
-  const COLOR_MATRIX = Object.entries(matrixMap).map(([model, counts]) => ({
-    model,
-    ...counts
-  })).sort((a, b) => (b.red + b.black + b.matte) - (a.red + a.black + a.matte)).slice(0, 5); // top 5 models by stock
+  const COLOR_MATRIX = Object.entries(matrixMap).map(([model, counts]) => {
+    const total = Object.values(counts).reduce((sum, val) => sum + val, 0);
+    return {
+      model,
+      counts,
+      total
+    };
+  }).sort((a, b) => b.total - a.total).slice(0, 5); // top 5 models by stock
 
   // 4. Fetch Recent Deliveries (Sales Transactions)
   const recentSales = await prisma.salesTransaction.findMany({
@@ -147,48 +151,50 @@ export default async function AdminDashboard() {
             </div>
             
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-left border-collapse min-w-[500px]">
                 <thead>
                   <tr className="border-b-2 border-gray-100 dark:border-slate-800/80 text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">
                     <th className="pb-4 pl-4">Model</th>
-                    <th className="pb-4 text-center">
-                       <div className="flex flex-col items-center gap-2">
-                          <div className="w-4 h-4 rounded-full bg-red-600 shadow-sm border border-red-700/20"></div>
-                          <span>Red</span>
-                       </div>
-                    </th>
-                    <th className="pb-4 text-center">
-                       <div className="flex flex-col items-center gap-2">
-                          <div className="w-4 h-4 rounded-full bg-zinc-900 shadow-sm border border-zinc-700/50"></div>
-                          <span>Black</span>
-                       </div>
-                    </th>
-                    <th className="pb-4 text-center">
-                       <div className="flex flex-col items-center gap-2">
-                          <div className="w-4 h-4 rounded-full bg-zinc-500 shadow-sm border border-zinc-400/50"></div>
-                          <span>Matte</span>
-                       </div>
-                    </th>
+                    {uniqueColors.map((color, idx) => {
+                       const lowerColor = color.toLowerCase();
+                       let bgColorClass = "bg-zinc-500 border-zinc-400/50";
+                       if (lowerColor.includes('red')) bgColorClass = "bg-red-600 border-red-700/20";
+                       else if (lowerColor.includes('black')) bgColorClass = "bg-zinc-900 border-zinc-700/50";
+                       else if (lowerColor.includes('blue')) bgColorClass = "bg-blue-600 border-blue-700/20";
+                       else if (lowerColor.includes('white')) bgColorClass = "bg-gray-100 border-gray-300";
+                       else if (lowerColor.includes('grey') || lowerColor.includes('gray') || lowerColor.includes('silver')) bgColorClass = "bg-gray-400 border-gray-500/50";
+                       
+                       return (
+                        <th key={idx} className="pb-4 text-center px-2">
+                           <div className="flex flex-col items-center gap-2">
+                              <div className={`w-4 h-4 rounded-full shadow-sm border ${bgColorClass}`}></div>
+                              <span className="truncate max-w-[80px]" title={color}>{color}</span>
+                           </div>
+                        </th>
+                       );
+                    })}
                     <th className="pb-4 pr-4 text-right">Total</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 dark:divide-zinc-800/50">
                   {COLOR_MATRIX.map((row, idx) => (
                     <tr key={idx} className="hover:bg-gray-50/80 dark:hover:bg-zinc-800/30 transition-colors group">
-                      <td className="py-5 pl-4 text-gray-900 dark:text-white font-black tracking-tight">{row.model}</td>
-                      <td className="py-5 text-center font-bold text-gray-600 dark:text-gray-300">{row.red}</td>
-                      <td className="py-5 text-center font-bold text-gray-600 dark:text-gray-300">{row.black}</td>
-                      <td className="py-5 text-center font-bold text-gray-600 dark:text-gray-300">{row.matte}</td>
+                      <td className="py-5 pl-4 text-gray-900 dark:text-white font-black tracking-tight whitespace-nowrap">{row.model}</td>
+                      {uniqueColors.map((color, colorIdx) => (
+                         <td key={colorIdx} className="py-5 text-center font-bold text-gray-600 dark:text-gray-300">
+                            {row.counts[color]}
+                         </td>
+                      ))}
                       <td className="py-5 pr-4 text-right">
                          <span className="inline-flex items-center justify-center bg-gray-100 dark:bg-zinc-800 text-gray-900 dark:text-white font-black px-3 py-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">
-                            {row.red + row.black + row.matte}
+                            {row.total}
                          </span>
                       </td>
                     </tr>
                   ))}
                   {COLOR_MATRIX.length === 0 && (
                     <tr>
-                      <td colSpan={5} className="py-8 text-center text-gray-500">No inventory data available</td>
+                      <td colSpan={uniqueColors.length + 2} className="py-8 text-center text-gray-500">No inventory data available</td>
                     </tr>
                   )}
                 </tbody>
