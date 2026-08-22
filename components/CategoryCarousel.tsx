@@ -31,15 +31,13 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
 
   const scooters = products
     .filter((p) => p.category === "SCOOTERS")
-    .sort((a, b) => (a.price || 0) - (b.price || 0));
+    .sort((a, b) => getSortIndex(a.name, scooterOrder) - getSortIndex(b.name, scooterOrder));
     
   const motorcycles = products
     .filter((p) => p.category === "MOTORCYCLES")
-    .sort((a, b) => (a.price || 0) - (b.price || 0));
+    .sort((a, b) => getSortIndex(a.name, motorcycleOrder) - getSortIndex(b.name, motorcycleOrder));
     
-  const power = products
-    .filter((p) => p.category === "POWER_PRODUCTS")
-    .sort((a, b) => (a.price || 0) - (b.price || 0));
+  const power = products.filter((p) => p.category === "POWER_PRODUCTS");
 
   const TABS = useMemo(() => [
     { id: "SCOOTERS", label: "SCOOTERS", data: scooters },

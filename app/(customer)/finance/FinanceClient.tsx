@@ -190,7 +190,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {filteredModels.map(model => (
-            <div key={model.modelName} className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 p-8 rounded-3xl flex flex-col group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
+            <div key={model.modelName} className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-8 rounded-3xl flex flex-col group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
               <h3 className="font-black text-xl md:text-2xl font-semibold text-gray-900 dark:text-white uppercase tracking-tight mb-1">{model.modelName}</h3>
               <p className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">
                 ({model.defaultDpPct}% DP / {model.defaultTenure} Months)
@@ -218,7 +218,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
                     setTenure(model.defaultTenure);
                     setDownPaymentPct(model.defaultDpPct);
                   }}
-                  className="w-full bg-background dark:bg-white/10 text-[#CC0000] dark:text-white group-hover:bg-[#CC0000] group-hover:text-white text-sm font-bold py-3.5 rounded-xl uppercase tracking-wider transition-colors"
+                  className="w-full bg-background dark:bg-zinc-800 text-[#CC0000] dark:text-primary-foreground group-hover:bg-[#CC0000] group-hover:text-white text-sm font-bold py-3.5 rounded-xl uppercase tracking-wider transition-colors"
                 >
                   Explore Offer
                 </button>
