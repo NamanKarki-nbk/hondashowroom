@@ -45,11 +45,11 @@ export default async function FinancePage() {
     let imageUrl = '';
     const nameLower = modelName.toLowerCase();
     if (nameLower.includes('dio 125')) {
-      imageUrl = '/inventory/honda-dio-125.png';
+      imageUrl = '/inventory/honda-dio-bs6-125.png';
     } else if (nameLower.includes('dio')) {
-      imageUrl = '/inventory/honda-dio-bs6.png';
+      imageUrl = '/inventory/honda-dio-bs6-110.png';
     } else if (nameLower.includes('sp 125')) {
-      imageUrl = '/inventory/honda-sp-125-.png';
+      imageUrl = '/inventory/honda-sp-shine-125.png';
     } else if (nameLower.includes('shine 125')) {
       imageUrl = '/inventory/honda-shine-bs6.png';
     } else if (nameLower.includes('shine')) {
