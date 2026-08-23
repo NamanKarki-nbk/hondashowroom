@@ -55,6 +55,7 @@ export default function DynamicForm({
   const [isAutofilling, setIsAutofilling] = useState<boolean>(false);
   const [staffList, setStaffList] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
+  const [paramsProcessed, setParamsProcessed] = useState(false);
 
   // Fetch recent invoices
   useEffect(() => {
@@ -65,6 +66,54 @@ export default function DynamicForm({
   useEffect(() => {
     getProductCatalogs().then(setProducts);
   }, []);
+
+  // Process URL params on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined' && products.length > 0 && !paramsProcessed) {
+      setParamsProcessed(true);
+      const searchParams = new URLSearchParams(window.location.search);
+      const urlDocType = searchParams.get('docType');
+      
+      if (urlDocType === 'Quotation') {
+        setDocType('Quotation');
+        const loaneeName = searchParams.get('loaneeName');
+        const loaneeContact = searchParams.get('loaneeContact');
+        const vehicleModel = searchParams.get('vehicleModel');
+        
+        setMetadata(prev => {
+          const newMeta = { ...prev };
+          if (loaneeName) newMeta.loaneeName = loaneeName;
+          if (loaneeContact) newMeta.loaneeContact = loaneeContact;
+          
+          if (vehicleModel) {
+            const product = products.find(p => p.name.toLowerCase() === vehicleModel.toLowerCase());
+            if (product) {
+              const specs = product.specs || {};
+              newMeta.vehicleId = product.id;
+              newMeta.vehicleModel = product.name;
+              newMeta.category = product.category;
+              newMeta.unitPrice = product.price;
+              newMeta.cc = specs.displacement || "";
+              newMeta.specs = {
+                displacement: specs.displacement || "",
+                fuelType: specs.fuelType || "",
+                engineType: specs.engineType || "",
+                startingMethod: specs.startingMethod || "",
+                kerbWeight: specs.kerbWeight || "",
+                fuelTank: specs.fuelTank || "",
+                noOfGears: specs.noOfGears || "",
+                groundClearance: specs.groundClearance || ""
+              };
+              newMeta.availableColors = Array.isArray(specs.colors) ? specs.colors.join(", ") : "";
+            } else {
+              newMeta.vehicleModel = vehicleModel;
+            }
+          }
+          return newMeta;
+        });
+      }
+    }
+  }, [products, paramsProcessed, setDocType, setMetadata]);
 
   // Fetch staff list
   useEffect(() => {

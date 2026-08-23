@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Search, Edit, CheckCircle, Clock, XCircle, Phone, User, Info } from 'lucide-react';
+import { Search, Edit, CheckCircle, Clock, XCircle, Phone, User, Info, FileText } from 'lucide-react';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 type Lead = {
   id: string;
@@ -16,6 +17,7 @@ type Lead = {
 };
 
 export default function LeadsClient({ type }: { type?: string }) {
+  const router = useRouter();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -184,16 +186,36 @@ export default function LeadsClient({ type }: { type?: string }) {
                           </button>
                         </div>
                       ) : (
-                        <button 
-                          onClick={() => {
-                            setEditingId(lead.id);
-                            setEditStatus(lead.status);
-                            setEditRemarks(lead.remarks || '');
-                          }}
-                          className="text-primary hover:text-primary-hover p-2 transition-colors"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
+                        <div className="flex justify-end items-center gap-2">
+                          {type === 'quotation' && (
+                            <button
+                              onClick={() => {
+                                const qs = new URLSearchParams({
+                                  docType: 'Quotation',
+                                  loaneeName: lead.name,
+                                  loaneeContact: lead.phone,
+                                  vehicleModel: lead.interestedIn || ''
+                                }).toString();
+                                router.push(`/admin/letters/new?${qs}`);
+                              }}
+                              className="text-[#1A7A1A] hover:text-[#1A7A1A]/80 p-2 transition-colors flex items-center gap-1"
+                              title="Generate Quotation"
+                            >
+                              <FileText className="w-4 h-4" />
+                            </button>
+                          )}
+                          <button 
+                            onClick={() => {
+                              setEditingId(lead.id);
+                              setEditStatus(lead.status);
+                              setEditRemarks(lead.remarks || '');
+                            }}
+                            className="text-primary hover:text-primary-hover p-2 transition-colors"
+                            title="Edit Lead"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                        </div>
                       )}
                     </td>
                   </tr>
