@@ -332,6 +332,9 @@ export default function BookNowPage() {
                   {HONDA_MODELS.map((m) => (
                     <option key={m} value={m}>{m}</option>
                   ))}
+                  {form.model && !HONDA_MODELS.includes(form.model) && (
+                    <option key={form.model} value={form.model}>{form.model}</option>
+                  )}
                 </select>
               </div>
 

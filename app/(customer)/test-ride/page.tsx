@@ -253,6 +253,9 @@ export default function TestRidePage() {
                         {HONDA_MODELS.map((m) => (
                           <option key={m} value={m}>{m}</option>
                         ))}
+                        {form.bikeModel && !HONDA_MODELS.includes(form.bikeModel) && (
+                          <option key={form.bikeModel} value={form.bikeModel}>{form.bikeModel}</option>
+                        )}
                       </select>
                     </div>
                   </div>
