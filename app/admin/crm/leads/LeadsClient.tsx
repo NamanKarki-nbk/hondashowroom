@@ -15,7 +15,7 @@ type Lead = {
   createdAt: string;
 };
 
-export default function LeadsClient() {
+export default function LeadsClient({ type }: { type?: string }) {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -28,6 +28,7 @@ export default function LeadsClient() {
     try {
       const url = new URL("/api/admin/crm/leads", window.location.origin);
       if (search) url.searchParams.append("search", search);
+      if (type) url.searchParams.append("type", type);
 
       const res = await fetch(url.toString());
       if (res.ok) {

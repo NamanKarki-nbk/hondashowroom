@@ -79,6 +79,7 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
       icon: Users,
       items: [
         { name: "Leads & Follow-ups", href: "/admin/crm/leads" },
+        { name: "Quotation Requested", href: "/admin/crm/quotations" },
         { name: "KYC Directory", href: "/admin/users" },
         { name: "Service Reminders", href: "/admin/crm/service" },
         { name: "Referrals & Loyalty", href: "/admin/crm/referrals" },

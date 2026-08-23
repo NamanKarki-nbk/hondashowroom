@@ -5,18 +5,27 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get('search') || '';
+    const type = searchParams.get('type') || '';
+
+    const leadWhere: any = {
+      OR: [
+        { name: { contains: search, mode: 'insensitive' } },
+        { phone: { contains: search } },
+      ]
+    };
+
+    if (type === 'quotation') {
+      leadWhere.source = 'Quotation Requested';
+    } else if (type === 'leads') {
+      leadWhere.source = { not: 'Quotation Requested' };
+    }
 
     const rawLeads = await prisma.lead.findMany({
-      where: {
-        OR: [
-          { name: { contains: search, mode: 'insensitive' } },
-          { phone: { contains: search } },
-        ]
-      },
+      where: leadWhere,
       orderBy: { createdAt: 'desc' }
     });
 
-    const testRides = await prisma.testRideBooking.findMany({
+    const testRides = type === 'quotation' ? [] : await prisma.testRideBooking.findMany({
       where: {
         OR: [
           { name: { contains: search, mode: 'insensitive' } },

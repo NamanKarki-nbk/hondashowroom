@@ -13,7 +13,7 @@ export default function LeadsPage() {
         <p className="text-gray-500 dark:text-gray-400 mt-2 font-medium">Manage incoming leads, website inquiries, and walk-ins.</p>
       </div>
 
-      <LeadsClient />
+      <LeadsClient type="leads" />
     </div>
   );
 }
