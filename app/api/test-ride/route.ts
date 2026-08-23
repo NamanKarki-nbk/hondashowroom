@@ -13,12 +13,12 @@ export async function POST(request: Request) {
 
     const booking = await prisma.testRideBooking.create({
       data: {
-        customerName: data.customerName,
+        name: data.customerName,
         phone: data.phone,
-        bikeModel: data.bikeModel,
-        date: new Date(data.date),
-        timeSlot: data.timeSlot,
-        notes: data.notes || '',
+        modelName: data.bikeModel,
+        preferredDate: new Date(data.date),
+        timeSlot: data.timeSlot || null,
+        notes: data.notes || null,
       }
     });
 

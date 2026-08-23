@@ -98,11 +98,31 @@ export default function BookNowPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1200));
-    const ref = String(Math.floor(100000 + Math.random() * 900000));
-    setBookingRef(ref);
-    setSubmitted(true);
-    setLoading(false);
+    try {
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.fullName,
+          phone: form.phone,
+          interestedIn: form.model,
+          remarks: `Email: ${form.email} | City: ${form.city} | Payment: ${form.paymentMethod} | Date: ${form.bookingDate} | Message: ${form.message}`,
+          source: 'Website Booking',
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setBookingRef(data.lead?.id?.slice(-6)?.toUpperCase() || 'CONFIRMED');
+        setSubmitted(true);
+      } else {
+        alert('Failed to submit booking. Please try again.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const inputClass =

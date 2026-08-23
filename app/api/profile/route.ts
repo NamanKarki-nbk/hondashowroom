@@ -21,7 +21,9 @@ export async function GET(req: NextRequest) {
 
     const flatUser = {
       ...user,
-      ...(user.customerProfile || {})
+      ...(user.customerProfile || {}),
+      isVerified: user.isVerified,
+      kycVerified: user.customerProfile?.isVerified || false,
     };
     delete (flatUser as any).passwordHash;
     delete (flatUser as any).customerProfile;
@@ -107,7 +109,9 @@ export async function PATCH(req: NextRequest) {
 
     const flatUser = {
       ...finalUser,
-      ...(finalUser?.customerProfile || {})
+      ...(finalUser?.customerProfile || {}),
+      isVerified: finalUser?.isVerified || false,
+      kycVerified: finalUser?.customerProfile?.isVerified || false,
     };
     delete (flatUser as any).passwordHash;
     delete (flatUser as any).customerProfile;
