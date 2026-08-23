@@ -15,34 +15,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 
-const HONDA_MODELS = [
-  'CB Hornet 2.0',
-  'Honda NX 200',
-  'Honda Shine BS6',
-  'Honda SP 125',
-  'Honda Dio 125',
-  'Honda Dio BS6',
-  'Generator - EZ3000CX',
-  'Generator - EZ6500CXS',
-  'Generator - EU70is',
-  'Generator - EG 1000',
-  'Generator - EP 1000',
-  'Generator - EP 1800CX',
-  'Generator - EU10I',
-  'Generator - EU22i',
-  'Generator - EU30IS',
-  'Trimmer - HHH25D75UT',
-  'Lawn Mower - HRU216M3TBUH',
-  'Lawn Mower - HRU 196',
-  'Water pump - WV30D',
-  'Water pump - WB30XD',
-  'Brush Cutter - UMK 435T',
-  'Brush Cutter - UMR 435T',
-  'Tiller - FQ650',
-  'Tiller - F300',
-  'Sprayer - WJR2525T1',
-  'Sprayer - WJR4025T',
-];
+import { HONDA_MODELS } from '@/lib/vehicleModels';
 
 interface FormData {
   fullName: string;
@@ -69,6 +42,12 @@ export default function BookNowPage() {
   const [submitted, setSubmitted] = useState(false);
   const [bookingRef, setBookingRef] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Auth state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     document.title = 'Book Your Honda | Honda Showroom';
@@ -79,6 +58,35 @@ export default function BookNowPage() {
         setForm(prev => ({ ...prev, model }));
       }
     }
+
+    const fetchProfile = async () => {
+      try {
+        const res = await fetch("/api/profile");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.user) {
+            setIsLoggedIn(true);
+            setIsVerified(!!data.user.isVerified);
+            setUser(data.user);
+            
+            // Auto-fill form
+            setForm(prev => ({
+              ...prev,
+              fullName: data.user.fullName || prev.fullName,
+              email: (data.user.email?.startsWith("placeholder-") || data.user.email?.includes("google-")) ? prev.email : (data.user.email || prev.email),
+              phone: (data.user.phone?.startsWith("placeholder-") || data.user.phone?.includes("google-") || data.user.phone?.match(/[a-z]/i)) ? prev.phone : (data.user.phone?.replace(/\D/g, "").slice(-10) || prev.phone),
+              city: data.user.address || prev.city,
+            }));
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch profile", err);
+      } finally {
+        setLoadingProfile(false);
+      }
+    };
+    
+    fetchProfile();
   }, []);
 
   const handleChange = (
@@ -171,11 +179,39 @@ export default function BookNowPage() {
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              
+              {!loadingProfile && !isLoggedIn && (
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/40 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="text-sm text-blue-800 dark:text-blue-300">
+                    <strong>Have an account?</strong> Log in to auto-fill your details and track your booking.
+                  </div>
+                  <Link href={`/login?redirect=/book-now${form.model ? `?model=${encodeURIComponent(form.model)}` : ''}`} className="shrink-0 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">
+                    Log In
+                  </Link>
+                </div>
+              )}
+
+              {!loadingProfile && isLoggedIn && !isVerified && (
+                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/40 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="text-sm text-amber-800 dark:text-amber-300">
+                    <strong>Action Required:</strong> Verify your contact number in your profile to auto-fill your details.
+                  </div>
+                  <Link href="/profile" className="shrink-0 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">
+                    Verify Contact
+                  </Link>
+                </div>
+              )}
+
               {/* Full Name */}
               <div>
                 <label className={labelClass} htmlFor="fullName">
-                  <span className="flex items-center gap-1.5">
-                    <User className="w-3.5 h-3.5 text-primary" /> Full Name
+                  <span className="flex items-center justify-between w-full">
+                    <span className="flex items-center gap-1.5">
+                      <User className="w-3.5 h-3.5 text-primary" /> Full Name
+                    </span>
+                    {user?.fullName && form.fullName === user.fullName && (
+                      <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">✓ Profile</span>
+                    )}
                   </span>
                 </label>
                 <input
@@ -194,8 +230,13 @@ export default function BookNowPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className={labelClass} htmlFor="email">
-                    <span className="flex items-center gap-1.5">
-                      <Mail className="w-3.5 h-3.5 text-primary" /> Email
+                    <span className="flex items-center justify-between w-full">
+                      <span className="flex items-center gap-1.5">
+                        <Mail className="w-3.5 h-3.5 text-primary" /> Email
+                      </span>
+                      {user?.email && form.email === user.email && !user.email.startsWith("placeholder-") && (
+                        <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">✓ Profile</span>
+                      )}
                     </span>
                   </label>
                   <input
@@ -211,8 +252,13 @@ export default function BookNowPage() {
                 </div>
                 <div>
                   <label className={labelClass} htmlFor="phone">
-                    <span className="flex items-center gap-1.5">
-                      <Phone className="w-3.5 h-3.5 text-primary" /> Phone Number
+                    <span className="flex items-center justify-between w-full">
+                      <span className="flex items-center gap-1.5">
+                        <Phone className="w-3.5 h-3.5 text-primary" /> Phone Number
+                      </span>
+                      {user?.phone && form.phone && user.phone.includes(form.phone) && (
+                        <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">✓ Profile</span>
+                      )}
                     </span>
                   </label>
                   <input

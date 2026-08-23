@@ -16,7 +16,8 @@ const SLIDES = [
     price: "NPR 3,29,900",
     image: "/inventory/honda-dio-bs6-125.png",
     link: "/vehicles/honda-84",
-    accent: "from-blue-500/20 to-cyan-500/20"
+    accent: "from-blue-500/20 to-cyan-500/20",
+    modelKey: "Honda Dio 125"
   },
   {
     id: 2,
@@ -26,7 +27,8 @@ const SLIDES = [
     price: "NPR 2,84,900",
     image: "/inventory/honda-dio-bs6-110.png",
     link: "/vehicles/honda-87",
-    accent: "from-red-500/20 to-orange-500/20"
+    accent: "from-red-500/20 to-orange-500/20",
+    modelKey: "Honda Dio BS6"
   },
   {
     id: 3,
@@ -36,7 +38,8 @@ const SLIDES = [
     price: "NPR 4,69,900",
     image: "/inventory/cb-hornet-20.png",
     link: "/vehicles/honda-75",
-    accent: "from-emerald-500/20 to-teal-500/20"
+    accent: "from-emerald-500/20 to-teal-500/20",
+    modelKey: "CB Hornet 2.0"
   }
 ];
 
@@ -120,13 +123,12 @@ export default function HeroSlider() {
                  <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base md:text-xl font-medium mb-8 md:mb-10 sm:max-w-none px-4 md:px-0">
                    {slide.tagline}
                  </p>
-                 
-                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-6 md:mb-12">
-                   <Link href={`/book-now?model=${encodeURIComponent(slide.title)}`} className="relative group bg-primary text-white px-8 py-3.5 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-[0.2em] rounded-full shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] hover:bg-primary-hover transition-all duration-300 overflow-hidden">
+                                  <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-6 md:mb-12">
+                   <Link href={`/book-now?model=${encodeURIComponent(slide.modelKey)}`} className="relative group bg-primary text-white px-8 py-3.5 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-[0.2em] rounded-full shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] hover:bg-primary-hover transition-all duration-300 overflow-hidden">
                       <span className="relative z-10">Book Now</span>
                       <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
                    </Link>
-                   <Link href={`/test-ride?model=${encodeURIComponent(slide.title)}`} className="bg-transparent border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white px-8 py-3.5 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-[0.2em] rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-all duration-300 backdrop-blur-sm">
+                   <Link href={`/test-ride?model=${encodeURIComponent(slide.modelKey)}`} className="bg-transparent border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white px-8 py-3.5 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-[0.2em] rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-all duration-300 backdrop-blur-sm">
                       Test Ride
                    </Link>
                  </div>
