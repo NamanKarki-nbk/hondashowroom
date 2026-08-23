@@ -1,12 +1,23 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, Clock, Bike, User, Phone, CheckCircle, MapPin, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function TestRidePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [defaultModel, setDefaultModel] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const model = params.get('model');
+      if (model) {
+        setDefaultModel(model);
+      }
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -155,13 +166,15 @@ export default function TestRidePage() {
                     <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">Select Vehicle <span className="text-primary">*</span></label>
                     <div className="relative">
                       <Bike className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
-                      <select name="bikeModel" required className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium appearance-none">
+                      <select name="bikeModel" required defaultValue={defaultModel || ""} key={defaultModel} className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium appearance-none">
                         <option value="">-- Choose a Model --</option>
                         <option value="CB Shine SP">CB Shine SP</option>
                         <option value="CBR 250RR">CBR 250RR</option>
                         <option value="Dio DLX">Dio DLX</option>
                         <option value="Hornet 2.0">Hornet 2.0</option>
                         <option value="XBlade 160">XBlade 160</option>
+                        <option value="Dio 125">Dio 125</option>
+                        <option value="Dio 110">Dio 110</option>
                       </select>
                     </div>
                   </div>

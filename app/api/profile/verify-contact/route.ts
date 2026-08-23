@@ -49,6 +49,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid OTP code" }, { status: 401 });
     }
 
+    // Update the verification status in the database
+    await prisma.user.update({
+      where: { id: session.userId },
+      data: { isVerified: true }
+    });
+    
+    // Also update the associated customer record if it exists
+    await prisma.customer.updateMany({
+      where: { userId: session.userId },
+      data: { isVerified: true }
+    });
+
     // Delete OTP record to prevent reuse
     await prisma.otpVerification.delete({ where: { id: latestOtp.id } });
 

@@ -122,11 +122,11 @@ export default function HeroSlider() {
                  </p>
                  
                  <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-6 md:mb-12">
-                   <Link href={slide.link} className="relative group bg-primary text-white px-8 py-3.5 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-[0.2em] rounded-full shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] hover:bg-primary-hover transition-all duration-300 overflow-hidden">
+                   <Link href={`/book-now?model=${encodeURIComponent(slide.title)}`} className="relative group bg-primary text-white px-8 py-3.5 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-[0.2em] rounded-full shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] hover:bg-primary-hover transition-all duration-300 overflow-hidden">
                       <span className="relative z-10">Book Now</span>
                       <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
                    </Link>
-                   <Link href={slide.link} className="bg-transparent border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white px-8 py-3.5 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-[0.2em] rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-all duration-300 backdrop-blur-sm">
+                   <Link href={`/test-ride?model=${encodeURIComponent(slide.title)}`} className="bg-transparent border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white px-8 py-3.5 md:px-10 md:py-4 text-xs md:text-sm font-bold uppercase tracking-[0.2em] rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-all duration-300 backdrop-blur-sm">
                       Test Ride
                    </Link>
                  </div>

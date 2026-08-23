@@ -72,6 +72,13 @@ export default function BookNowPage() {
 
   useEffect(() => {
     document.title = 'Book Your Honda | Honda Showroom';
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const model = params.get('model');
+      if (model) {
+        setForm(prev => ({ ...prev, model }));
+      }
+    }
   }, []);
 
   const handleChange = (
