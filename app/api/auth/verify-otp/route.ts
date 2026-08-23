@@ -10,14 +10,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Identifier and code are required" }, { status: 400 });
     }
 
-    let formattedIdentifier = identifier;
-    if (type === "whatsapp") {
-      let digits = identifier.replace(/\D/g, '');
-      if (digits.length === 10) {
-        digits = `977${digits}`;
-      }
-      formattedIdentifier = digits;
-    }
+    const formattedIdentifier = identifier.toLowerCase();
 
     // Find the latest OTP for this identifier
     const latestOtp = await prisma.otpVerification.findFirst({

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { generateNumericOtp, hashOtp } from "@/lib/auth";
 import { sendEmailOtp } from "@/lib/mailer";
-import { sendWhatsAppMessage } from "@/lib/whatsapp";
 
 // Simple in-memory rate limiting map
 // Key: identifier, Value: Array of timestamps
@@ -12,8 +11,8 @@ export async function POST(req: NextRequest) {
   try {
     const { identifier, type } = await req.json();
 
-    if (!identifier || !type || !["email", "whatsapp"].includes(type)) {
-      return NextResponse.json({ error: "Invalid request parameters" }, { status: 400 });
+    if (!identifier || !type || type !== "email") {
+      return NextResponse.json({ error: "Invalid request parameters. Only 'email' type is supported." }, { status: 400 });
     }
 
     // Backend Admin Restriction: Prevent public admin registration
@@ -35,15 +34,8 @@ export async function POST(req: NextRequest) {
     validTimestamps.push(now);
     rateLimitMap.set(identifier, validTimestamps);
 
-    // Format identifier if it's WhatsApp (default to Nepal +977 if no country code provided)
-    let formattedIdentifier = identifier;
-    if (type === "whatsapp") {
-      let digits = identifier.replace(/\D/g, '');
-      if (digits.length === 10) {
-        digits = `977${digits}`;
-      }
-      formattedIdentifier = digits;
-    }
+    // We only support email, so no formatting needed
+    const formattedIdentifier = identifier.toLowerCase();
 
     // Generate and hash OTP
     const otp = generateNumericOtp(6);
@@ -59,19 +51,10 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Send OTP
-    if (type === "email") {
-      const success = await sendEmailOtp(formattedIdentifier, otp);
-      if (!success) {
-        return NextResponse.json({ error: "Failed to send Email OTP. Check server configuration." }, { status: 500 });
-      }
-    } else if (type === "whatsapp") {
-      try {
-        await sendWhatsAppMessage(formattedIdentifier, `*Honda Showroom Authentication*\n\nYour One-Time Password is: *${otp}*\n\nValid for 15 minutes. Do not share this code.`);
-      } catch (error: any) {
-        console.error("WhatsApp Dispatch Error:", error);
-        return NextResponse.json({ error: "WhatsApp dispatch failed: Make sure the bot is connected or try Email instead." }, { status: 500 });
-      }
+    // Send OTP via Email
+    const success = await sendEmailOtp(formattedIdentifier, otp);
+    if (!success) {
+      return NextResponse.json({ error: "Failed to send Email OTP. Check server configuration." }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, message: `OTP sent successfully via ${type}` });

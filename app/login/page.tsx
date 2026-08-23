@@ -11,14 +11,14 @@ function LoginPageContent() {
   const searchParams = useSearchParams();
   
   // State for login methods
-  const [method, setMethod] = useState<"password" | "whatsapp">("password");
+  const [method, setMethod] = useState<"password" | "emailOtp">("password");
   
   // Password Flow State
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   
-  // WhatsApp OTP Flow State
-  const [phone, setPhone] = useState("");
+  // Email OTP Flow State
+  const [otpEmail, setOtpEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   
@@ -66,7 +66,7 @@ function LoginPageContent() {
 
   const handleRequestOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phone) return;
+    if (!otpEmail) return;
     setLoading(true);
     setError("");
     
@@ -74,7 +74,7 @@ function LoginPageContent() {
       const res = await fetch("/api/auth/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "whatsapp", identifier: phone }),
+        body: JSON.stringify({ type: "email", identifier: otpEmail }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to send OTP");
@@ -96,7 +96,7 @@ function LoginPageContent() {
       const res = await fetch("/api/auth/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "whatsapp", identifier: phone, code: otp }),
+        body: JSON.stringify({ type: "email", identifier: otpEmail, code: otp }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Invalid OTP");
@@ -179,43 +179,38 @@ function LoginPageContent() {
           </form>
         )}
 
-        {method === "whatsapp" && !otpSent && (
+        {method === "emailOtp" && !otpSent && (
           <form onSubmit={handleRequestOtp} className="space-y-5">
             <div>
               <div className="flex justify-between items-center mb-2">
-                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300">WhatsApp Number</label>
+                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300">Email Address</label>
                 <button type="button" onClick={() => setMethod("password")} className="text-xs text-gray-500 hover:text-gray-800 dark:hover:text-white font-bold transition-colors">Use Password</button>
               </div>
-              <div className="flex shadow-sm rounded-xl">
-                 <div className="flex items-center justify-center bg-gray-100 dark:bg-gray-800 border border-r-0 border-gray-200 dark:border-gray-700 rounded-l-xl px-4 text-gray-700 dark:text-gray-300 font-bold shrink-0">
-                   +977
-                 </div>
-                 <div className="relative w-full">
-                   <MessageCircle className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                   <input 
-                     type="tel" 
-                     required
-                     value={phone}
-                     onChange={e => setPhone(e.target.value)}
-                     className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-r-xl py-3 pl-10 pr-4 text-gray-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-gray-400"
-                     placeholder="98XXXXXXX"
-                   />
-                 </div>
+              <div className="relative w-full">
+                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                 <input 
+                   type="email" 
+                   required
+                   value={otpEmail}
+                   onChange={e => setOtpEmail(e.target.value)}
+                   className="w-full bg-gray-50 dark:bg-black/50 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-10 pr-4 text-gray-900 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-gray-400"
+                   placeholder="name@example.com"
+                 />
                </div>
             </div>
 
-            <button disabled={loading} type="submit" className="w-full bg-[#25D366] hover:bg-[#1fad53] text-white py-3.5 rounded-xl font-bold text-base transition-all shadow-lg shadow-[#25D366]/20 mt-4 disabled:opacity-50">
-               {loading ? "Sending OTP..." : "Send OTP"}
+            <button disabled={loading} type="submit" className="w-full bg-primary hover:bg-primary-hover text-white py-3.5 rounded-xl font-bold text-base transition-all shadow-lg shadow-primary/20 mt-4 disabled:opacity-50">
+               {loading ? "Sending OTP..." : "Send Email OTP"}
             </button>
           </form>
         )}
 
-        {method === "whatsapp" && otpSent && (
+        {method === "emailOtp" && otpSent && (
           <form onSubmit={handleVerifyOtp} className="space-y-5">
             <div>
               <div className="flex justify-between items-center mb-2">
                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300">Enter OTP</label>
-                 <button type="button" onClick={() => setOtpSent(false)} className="text-xs text-primary hover:text-primary-hover font-bold transition-colors">Change Number</button>
+                 <button type="button" onClick={() => setOtpSent(false)} className="text-xs text-primary hover:text-primary-hover font-bold transition-colors">Change Email</button>
               </div>
               <div className="relative">
                  <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -231,7 +226,7 @@ function LoginPageContent() {
               </div>
             </div>
 
-            <button disabled={loading} type="submit" className="w-full bg-[#25D366] hover:bg-[#1fad53] text-white py-3.5 rounded-xl font-bold text-base transition-all shadow-lg shadow-[#25D366]/20 mt-4 disabled:opacity-50 flex items-center justify-center gap-2">
+            <button disabled={loading} type="submit" className="w-full bg-primary hover:bg-primary-hover text-white py-3.5 rounded-xl font-bold text-base transition-all shadow-lg shadow-primary/20 mt-4 disabled:opacity-50 flex items-center justify-center gap-2">
                {loading ? "Verifying..." : "Verify"} <ShieldCheck className="w-5 h-5" />
             </button>
           </form>
@@ -254,10 +249,10 @@ function LoginPageContent() {
                   Google
                </a>
                <button 
-                 onClick={() => setMethod("whatsapp")}
+                 onClick={() => setMethod("emailOtp")}
                  className="bg-gray-50 hover:bg-gray-100 dark:bg-black/40 dark:hover:bg-black/60 border border-gray-200 dark:border-gray-700 py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm font-bold text-gray-700 dark:text-gray-300"
                >
-                  <MessageCircle className="w-5 h-5 text-green-500" /> WhatsApp
+                  <Mail className="w-5 h-5 text-primary" /> Email OTP
                </button>
             </div>
           </div>
