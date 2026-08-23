@@ -107,7 +107,7 @@ export default function BookNowPage() {
           phone: form.phone,
           interestedIn: form.model,
           remarks: `Email: ${form.email} | City: ${form.city} | Payment: ${form.paymentMethod} | Date: ${form.bookingDate} | Message: ${form.message}`,
-          source: 'Website Booking',
+          source: form.model ? `${form.model} - Booking` : 'Website Booking',
         }),
       });
       if (res.ok) {

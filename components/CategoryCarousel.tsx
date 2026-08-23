@@ -163,7 +163,7 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
                       slug={vehicle.id}
                       imageUrl={vehicle.imageUrl}
                       onQuoteClick={() => setQuoteVehicle(vehicle.name)}
-                      onBookClick={() => router.push(`/vehicles/${vehicle.id}`)}
+                      onBookClick={() => router.push(`/book-now?model=${encodeURIComponent(vehicle.name)}`)}
                     />
                   </motion.div>
                 ))}
