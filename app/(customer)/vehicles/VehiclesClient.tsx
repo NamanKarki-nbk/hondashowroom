@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Search, Filter, SlidersHorizontal } from "lucide-react";
 import VehicleCard from "@/components/VehicleCard";
+import QuoteModal from "@/components/QuoteModal";
 
 export default function VehiclesClient({ products }: { products: any[] }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,7 +27,7 @@ export default function VehiclesClient({ products }: { products: any[] }) {
   return (
     <div className="min-h-screen bg-background dark:bg-slate-950 text-gray-100 pt-24 pb-20 px-6 selection:bg-primary selection:text-primary-foreground relative">
       {/* Modals */}
-      {modalType && selectedVehicle && (
+      {modalType === "book" && selectedVehicle && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-background dark:bg-slate-900 w-full max-w-md rounded-3xl p-6 shadow-2xl border border-gray-200 dark:border-slate-800 relative">
             <button 
@@ -38,7 +39,7 @@ export default function VehiclesClient({ products }: { products: any[] }) {
               </svg>
             </button>
             <h2 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight mb-1">
-              {modalType === "quote" ? "Get A Quote" : "Pre-Book"}
+              Pre-Book
             </h2>
             <p className="text-sm text-[#CC0000] font-bold mb-6">{selectedVehicle.name}</p>
             
@@ -67,6 +68,12 @@ export default function VehiclesClient({ products }: { products: any[] }) {
           </div>
         </div>
       )}
+      
+      <QuoteModal 
+        isOpen={modalType === "quote" && selectedVehicle !== null} 
+        onClose={() => { setModalType(null); setSelectedVehicle(null); }} 
+        vehicleName={selectedVehicle?.name || ""} 
+      />
 
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-6">
