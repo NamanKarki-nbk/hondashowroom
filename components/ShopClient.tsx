@@ -2,9 +2,10 @@
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import VehicleCard from "./VehicleCard";
+import QuoteModal from "./QuoteModal";
 import { Search, SlidersHorizontal, X, ArrowUpAZ, ArrowDownAZ } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export type Product = {
   id: string;
@@ -111,9 +112,11 @@ const DualRangeSlider = ({
 
 export default function ShopClient({ initialProducts }: ShopClientProps) {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [isFilterExpanded, setIsFilterExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState(searchParams?.get("search") || "");
   const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc">("default");
+  const [quoteVehicle, setQuoteVehicle] = useState<string | null>(null);
 
   // Advanced Filters State
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -312,6 +315,8 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                     }
                     slug={vehicle.id}
                     imageUrl={vehicle.imageUrl}
+                    onQuoteClick={() => setQuoteVehicle(vehicle.name)}
+                    onBookClick={() => router.push(`/book-now?model=${encodeURIComponent(vehicle.name)}`)}
                   />
                 </motion.div>
               ))}
@@ -319,6 +324,12 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
           </motion.div>
         )}
       </div>
+      
+      <QuoteModal 
+        isOpen={!!quoteVehicle} 
+        onClose={() => setQuoteVehicle(null)} 
+        vehicleName={quoteVehicle || ""} 
+      />
     </div>
   );
 }
