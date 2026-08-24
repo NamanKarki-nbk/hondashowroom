@@ -30,11 +30,11 @@ export default function Footer() {
               </div>
               <div className="flex flex-col items-center md:items-start min-w-0 ml-2">
                 <Image 
-                  src="/society-enterprises-logo.jpg" 
+                  src="/society-enterprises-logo.png" 
                   alt="Society Enterprises" 
-                  width={180} 
-                  height={60} 
-                  className="object-contain"
+                  width={64} 
+                  height={64} 
+                  className="object-contain drop-shadow-sm mix-blend-multiply dark:mix-blend-normal"
                 />
               </div>
             </Link>
