@@ -157,7 +157,7 @@ const BrochurePDF = ({ vehicle }: BrochurePDFProps) => (
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>Generated on: {new Date().toLocaleDateString()}</Text>
-        <Text style={styles.footerText}>Contact: 023-580111 | info@damakhonda.com.np</Text>
+        <Text style={styles.footerText}>Contact: 9801615250 | info@damakhonda.com.np</Text>
       </View>
     </Page>
   </Document>

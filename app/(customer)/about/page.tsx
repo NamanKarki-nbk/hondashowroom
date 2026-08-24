@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export const metadata = {
   title: 'About Us | Society Enterprises Pvt. Ltd.',
-  description: 'Authorized Dealer of Syakar Trading Company for Honda Motorcycles and Power Products in Damak, Jhapa.',
+  description: 'Authorized Dealer of Syakar Trading Company for Honda Motorcycles and Power Products in Goarkha Department Building, Ganga Nagari, Damak-05, Jhapa.',
 };
 
 export default function AboutPage() {
@@ -17,7 +17,7 @@ export default function AboutPage() {
             About <span className="text-primary">Society Enterprises</span>
           </h1>
           <p className="text-xl md:text-2xl font-semibold text-gray-600 max-w-3xl mx-auto">
-            Authorized Dealer of Syakar Trading Company for Honda Motorcycles and Power Products in Damak, Jhapa, Nepal.
+            Authorized Dealer of Syakar Trading Company for Honda Motorcycles and Power Products in Goarkha Department Building, Ganga Nagari, Damak-05, Jhapa, Nepal.
           </p>
         </div>
 

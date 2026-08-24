@@ -45,7 +45,7 @@ export default function OfficialLetterpad({ children, className = "", disableTab
               <td className="border-none">
                 <div className="w-full text-center px-[1in] pb-[0.5in] pt-2 bg-white">
                   <p className="text-[13px] font-bold text-gray-800">
-                    <span className="text-[#CC0000] font-black uppercase">SOCIETY ENTERPRISES PVT. LTD.</span>, Ganga Nagari, Damak-05, Jhapa, Nepal
+                    <span className="text-[#CC0000] font-black uppercase">SOCIETY ENTERPRISES PVT. LTD.</span>, Goarkha Department Building, Ganga Nagari, Damak-05, Jhapa, Nepal
                   </p>
                   <p className="text-xs font-semibold text-gray-700 mt-1">
                     <span className="font-bold text-black">Sales Division</span> Phone No.: 9801615250, 9801615251, E-mail: societyenterprises2024@gmail.com

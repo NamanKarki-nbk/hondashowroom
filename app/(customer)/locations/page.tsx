@@ -10,8 +10,8 @@ const LOCATIONS = [
   {
     name: "Damak Main Showroom",
     type: "Showroom & Service Center",
-    address: "Campus Mode, Damak-09, Jhapa",
-    phone: "+977-9852673890",
+    address: "Goarkha Department Building, Ganga Nagari, Damak-05, Jhapa",
+    phone: "+977-9801615250",
     email: "damakhonda@gmail.com",
     hours: "Sun - Fri: 9:00 AM - 6:00 PM",
     isMain: true,
@@ -28,8 +28,8 @@ const LOCATIONS = [
   {
     name: "Urlabari Branch",
     type: "Showroom & Service Center",
-    address: "Main Road, Urlabari, Morang",
-    phone: "+977-9800000002",
+    address: "Hotel grand Building, Urlabari",
+    phone: "+977-9801615250",
     email: "urlabari@hondadamak.com",
     hours: "Sun - Fri: 9:30 AM - 5:30 PM",
     isMain: false,

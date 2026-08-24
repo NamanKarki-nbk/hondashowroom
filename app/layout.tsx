@@ -9,12 +9,12 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Society Enterprises | Official Honda Showroom in Damak",
-  description: "Explore the latest Honda motorcycles and scooters at Society Enterprises, Damak-06, Campus Mode, Jhapa. Book test rides, get digital quotations, and exchange your old bikes.",
+  description: "Explore the latest Honda motorcycles and scooters at Society Enterprises, Goarkha Department Building, Ganga Nagari, Damak-05, Jhapa. Book test rides, get digital quotations, and exchange your old bikes.",
   keywords: "Honda Showroom, Damak, Jhapa, Honda Motorcycles, Scooters, Test Ride, Buy Honda Bike",
   authors: [{ name: "Society Enterprises" }],
   openGraph: {
     title: "Society Enterprises | Official Honda Showroom",
-    description: "Explore the latest Honda motorcycles and scooters at Society Enterprises, Damak-06, Campus Mode.",
+    description: "Explore the latest Honda motorcycles and scooters at Society Enterprises, Goarkha Department Building, Ganga Nagari, Damak-05.",
     url: "https://damakhonda.com.np",
     siteName: "Society Enterprises Honda",
     images: [

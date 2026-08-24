@@ -86,14 +86,14 @@ function ContactForm() {
                 <MapPin className="w-6 h-6 text-primary mr-4 mt-1" />
                 <div>
                   <h4 className="font-semibold text-lg text-white">Showroom Address</h4>
-                  <p className="text-gray-400">Damak-06, Campus Mode<br/>Jhapa, Koshi Province, Nepal</p>
+                  <p className="text-gray-400">Goarkha Department Building, Ganga Nagari, Damak-05<br/>Jhapa, Koshi Province, Nepal</p>
                 </div>
               </div>
               <div className="flex items-start">
                 <Phone className="w-6 h-6 text-primary mr-4 mt-1" />
                 <div>
                   <h4 className="font-semibold text-lg text-white">Phone</h4>
-                  <p className="text-gray-400">023-580111 / 9801234567</p>
+                  <p className="text-gray-400">9801615250</p>
                 </div>
               </div>
               <div className="flex items-start">

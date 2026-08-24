@@ -130,7 +130,7 @@ export default function TestRidePage() {
               <div className="space-y-6">
                 <div>
                   <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Location</div>
-                  <div className="text-lg font-bold text-gray-900">Damak-06, Campus Mode</div>
+                  <div className="text-lg font-bold text-gray-900">Goarkha Department Building, Ganga Nagari, Damak-05</div>
                   <div className="text-gray-600">Jhapa, Koshi Province, Nepal</div>
                 </div>
                 
@@ -142,7 +142,7 @@ export default function TestRidePage() {
                 
                 <div>
                   <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Contact for queries</div>
-                  <div className="text-lg font-bold text-primary">023-580111</div>
+                  <div className="text-lg font-bold text-primary">9801615250</div>
                 </div>
               </div>
             </div>

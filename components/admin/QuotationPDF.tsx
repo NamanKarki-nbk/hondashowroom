@@ -114,8 +114,8 @@ const QuotationPDF = ({ data }: QuotationPDFProps) => (
       <View style={styles.header}>
         <View>
           <Text style={styles.brandName}>HONDA SHOWROOM</Text>
-          <Text style={styles.tagline}>Damak-06, Campus Mode, Jhapa</Text>
-          <Text style={styles.tagline}>023-580111 | info@damakhonda.com.np</Text>
+          <Text style={styles.tagline}>Goarkha Department Building, Ganga Nagari, Damak-05, Jhapa</Text>
+          <Text style={styles.tagline}>9801615250 | info@damakhonda.com.np</Text>
         </View>
         <View style={{ alignItems: 'flex-end' }}>
           <Text style={styles.documentTitle}>Digital Quotation</Text>

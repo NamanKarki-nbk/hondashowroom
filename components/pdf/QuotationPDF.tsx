@@ -108,8 +108,8 @@ export const QuotationPDF: React.FC<QuotationProps> = ({
           <View style={styles.headerLeft}>
             <Text style={styles.title}>Society Enterprises Pvt. Ltd.</Text>
             <Text style={styles.subtitle}>Authorized Dealer: Syakar Trading Company</Text>
-            <Text style={{ marginTop: 2 }}>Damak, Jhapa, Nepal</Text>
-            <Text>Phone: 023-580111</Text>
+            <Text style={{ marginTop: 2 }}>Goarkha Department Building, Ganga Nagari, Damak-05</Text>
+            <Text>Phone: 9801615250</Text>
           </View>
           <View style={styles.headerRight}>
             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>QUOTATION</Text>
