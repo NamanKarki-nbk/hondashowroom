@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Phone, Headset, ShieldCheck } from "lucide-react";
 import Logo from "@/components/Logo";
+import Image from "next/image";
 
 export default function Footer() {
   const [mounted, setMounted] = useState(false);
@@ -27,9 +28,14 @@ export default function Footer() {
               <div className="bg-white/80 dark:bg-white/10 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl shadow-sm border border-gray-200/50 dark:border-white/10 group-hover:shadow-md transition-all shrink-0">
                 <Logo className="h-5 sm:h-6 md:h-7 text-primary" />
               </div>
-              <div className="flex flex-col items-center md:items-start min-w-0">
-                <span className="text-xl md:text-2xl font-black text-gray-900 dark:text-white tracking-tight text-center md:text-left">Society Enterprises</span>
-                <span className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-widest text-center md:text-left">Pvt. Ltd.</span>
+              <div className="flex flex-col items-center md:items-start min-w-0 ml-2">
+                <Image 
+                  src="/society-enterprises-logo.jpg" 
+                  alt="Society Enterprises" 
+                  width={180} 
+                  height={60} 
+                  className="object-contain"
+                />
               </div>
             </Link>
             <p className="text-sm font-medium text-gray-600 dark:text-gray-400 max-w-sm">
