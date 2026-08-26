@@ -123,11 +123,6 @@ export const competitors = [
     specifications: { "Engine": "Electric Motor", "Max Power": "4.3 kW", "Max Torque": "22 Nm", "Mileage": "123 km/charge", "Fuel Tank": "N/A (Battery)", "Kerb Weight": "119 kg", "Brakes (Front)": "Disc", "Brakes (Rear)": "Drum" }
   },
   {
-    id: "comp_honda_activa", name: "Honda Activa", brand: "Honda", category: "SCOOTERS", price: 78689, imageUrl: "",
-    description: "India's highest selling family scooter.",
-    specifications: { "Engine": "109.51 cc", "Max Power": "7.84 PS", "Max Torque": "8.90 Nm", "Mileage": "50 kmpl", "Fuel Tank": "5.3 L", "Kerb Weight": "106 kg", "Brakes (Front)": "Disc", "Brakes (Rear)": "Drum" }
-  },
-  {
     id: "comp_tvs_jupiter", name: "TVS Jupiter", brand: "TVS", category: "SCOOTERS", price: 77168, imageUrl: "",
     description: "Popular TVS scooter with excellent mileage and style.",
     specifications: { "Engine": "109.7 cc", "Max Power": "7.88 PS", "Max Torque": "8.8 Nm", "Mileage": "50 kmpl", "Fuel Tank": "6 L", "Kerb Weight": "109 kg", "Brakes (Front)": "Disc", "Brakes (Rear)": "Drum" }

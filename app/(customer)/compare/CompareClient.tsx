@@ -144,9 +144,9 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
         label: "iQube vs Rizta"
       },
       {
-        v1: vehicles.find(v => v.name.toLowerCase().includes("activa")) || vehicles[0],
+        v1: vehicles.find(v => v.name.toLowerCase().includes("dio")) || vehicles[0],
         v2: vehicles.find(v => v.name.toLowerCase().includes("jupiter")) || vehicles[1],
-        label: "Activa vs Jupiter"
+        label: "Dio vs Jupiter"
       },
       {
         v1: vehicles.find(v => v.name.toLowerCase().includes("ntorq")) || vehicles[0],
