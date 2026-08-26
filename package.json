@@ -20,6 +20,8 @@
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.7.0",
     "@types/three": "^0.185.3",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.2",
     "ai": "^7.0.66",
     "axios": "^1.19.0",
     "bcrypt": "^6.0.0",

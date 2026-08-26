@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifySessionToken } from "@/lib/session";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
 // Define exactly which paths this middleware applies to
 export const config = {
@@ -10,18 +12,64 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - api (API routes, we handle auth inside them directly)
      * 
-     * We will apply logic specifically for /admin paths inside the function.
+     * We will apply logic specifically for /admin and /api paths inside the function.
      */
-    "/((?!_next/static|_next/image|favicon.ico|api).*)",
+    "/((?!_next/static|_next/image|favicon.ico).*)",
   ],
 };
+
+// Initialize Upstash Redis and Ratelimit
+// Will only actually connect if UPSTASH_REDIS_REST_URL is set
+const redis = process.env.UPSTASH_REDIS_REST_URL 
+  ? Redis.fromEnv() 
+  : null;
+
+const ratelimit = redis 
+  ? new Ratelimit({
+      redis: redis,
+      limiter: Ratelimit.slidingWindow(100, "60 s"),
+      analytics: true,
+    }) 
+  : null;
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // We are only strictly protecting /admin routes for now
+  // 1. API Route Rate Limiting (Using Upstash Free Tier)
+  if (pathname.startsWith("/api")) {
+    if (ratelimit) {
+      const ip = request.ip ?? "127.0.0.1";
+      const { success, limit, reset, remaining } = await ratelimit.limit(`ratelimit_${ip}`);
+
+      if (!success) {
+        return new NextResponse(
+          JSON.stringify({ error: "Too Many Requests" }),
+          {
+            status: 429,
+            headers: {
+              "Content-Type": "application/json",
+              "X-RateLimit-Limit": limit.toString(),
+              "X-RateLimit-Remaining": remaining.toString(),
+              "X-RateLimit-Reset": reset.toString(),
+            },
+          }
+        );
+      }
+    }
+
+    // Add Caching Headers for Public APIs to reduce Vercel Function Executions
+    if (request.method === "GET" && pathname.startsWith("/api/public")) {
+      const response = NextResponse.next();
+      response.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=86400");
+      return response;
+    }
+    
+    // Allow API request to proceed
+    return NextResponse.next();
+  }
+
+  // 2. Admin Route Protection
   if (pathname.startsWith("/admin")) {
     const token = request.cookies.get("auth_session")?.value;
 
@@ -61,7 +109,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // If user is trying to access /login but is already authenticated
+  // 3. Login Page Redirect if Authenticated
   if (pathname === "/login") {
     const token = request.cookies.get("auth_session")?.value;
     if (token) {
@@ -77,6 +125,6 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Allow all other routes to pass through (but session is technically available)
+  // Allow all other routes to pass through
   return NextResponse.next();
 }
