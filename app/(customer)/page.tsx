@@ -16,11 +16,17 @@ import ServicesGrid from "@/components/ServicesGrid";
 
 import FAQSection from "@/components/GeneralFAQ";
 import Reveal from "@/components/Reveal"; // We will create this component
+import OfferPopupClient from "@/components/OfferPopupClient";
 
 export default async function CustomerLandingPage() {
   const heroBanners = await prisma.heroBanner.findMany({
     where: { isActive: true },
     orderBy: { order: "asc" }
+  });
+
+  const activeOffer = await prisma.offer.findFirst({
+    where: { isActive: true },
+    orderBy: { createdAt: "desc" },
   });
 
   const catalogs = await prisma.productCatalog.findMany();
@@ -143,6 +149,9 @@ export default async function CustomerLandingPage() {
         <FAQSection />
       </Reveal>
 
+      {activeOffer && (
+        <OfferPopupClient offer={activeOffer} />
+      )}
     </div>
   );
 }
