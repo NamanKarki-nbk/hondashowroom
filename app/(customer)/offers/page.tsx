@@ -54,48 +54,57 @@ export default async function OffersPage() {
             <p className="text-gray-500 mt-2">Check back later for exciting new deals!</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {offers.map((offer) => {
               return (
                 <div
                   key={offer.id}
-                  className="relative bg-background dark:bg-slate-950 rounded-2xl border border-gray-200 dark:border-background/8 overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl"
+                  className="flex flex-col bg-white dark:bg-slate-950 border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden"
                 >
-                  <div className="p-6">
-                    <div className="flex items-start justify-between gap-4 mb-4">
-                      <div className="w-12 h-12 bg-background dark:bg-slate-900 rounded-xl flex items-center justify-center flex-shrink-0 relative overflow-hidden">
-                        {offer.imageUrl ? (
-                          <Image src={offer.imageUrl} alt={offer.title} fill className="object-cover" />
-                        ) : (
-                          <Gift className="w-6 h-6 text-primary" />
-                        )}
+                  <div className="relative w-full aspect-video bg-gray-100 dark:bg-gray-800">
+                    {offer.imageUrl ? (
+                      <Image 
+                        src={offer.imageUrl} 
+                        alt={offer.title} 
+                        fill 
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover" 
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Gift className="w-12 h-12 text-gray-300" />
                       </div>
-                      {offer.badgeText && (
-                        <span className="bg-primary text-primary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wider uppercase">
-                          {offer.badgeText}
-                        </span>
-                      )}
+                    )}
+                    {offer.badgeText && (
+                      <div className="absolute top-4 left-4 bg-primary text-white text-[10px] font-bold px-3 py-1 tracking-wider uppercase shadow-md">
+                        {offer.badgeText}
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="p-6 flex flex-col flex-1">
+                    <h3 className="text-[17px] font-bold text-gray-900 dark:text-white mb-2 leading-snug">
+                      {offer.title}
+                    </h3>
+                    
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-5 font-medium flex items-center gap-1.5">
+                      {offer.createdAt 
+                        ? new Date(offer.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+                        : ''}
                     </div>
 
-                    <h3 className="text-lg font-black text-gray-900 dark:text-primary-foreground mb-1">{offer.title}</h3>
                     {offer.description && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 leading-relaxed line-clamp-2">
+                      <p className="text-[15px] text-gray-600 dark:text-gray-400 mb-6 leading-relaxed line-clamp-3">
                         {offer.description}
                       </p>
                     )}
 
-                    <div className="flex items-center justify-between pt-4 mt-auto border-t border-gray-100 dark:border-background/5">
-                      <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                        <Clock className="w-3.5 h-3.5" /> 
-                        {offer.validUntil 
-                          ? `Valid till ${new Date(offer.validUntil).toLocaleDateString()}` 
-                          : 'Ongoing Offer'}
-                      </div>
+                    <div className="mt-auto">
                       <a
                         href="#apply-form"
-                        className="text-xs font-bold text-primary hover:underline"
+                        className="text-sm font-bold text-[#1a56db] dark:text-[#3f83f8] hover:underline flex items-center gap-0.5 transition-colors"
                       >
-                        Apply Now →
+                        Read More <ChevronRight className="w-4 h-4" />
                       </a>
                     </div>
                   </div>
