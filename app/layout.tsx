@@ -8,6 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://damakhonda.com.np'),
   title: "Society Enterprises | Official Honda Showroom in Damak",
   description: "Explore the latest Honda motorcycles and scooters at Society Enterprises, Goarkha Department Building, Ganga Nagari, Damak-05, Jhapa. Book test rides, get digital quotations, and exchange your old bikes.",
   keywords: "Honda Showroom, Damak, Jhapa, Honda Motorcycles, Scooters, Test Ride, Buy Honda Bike",
