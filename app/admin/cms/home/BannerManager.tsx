@@ -197,7 +197,7 @@ export default function BannerManager() {
                     <div className="flex items-center gap-3">
                       <div className="w-24 h-12 relative bg-gray-100 dark:bg-gray-800 rounded overflow-hidden flex-shrink-0">
                         {banner.imageUrl ? (
-                          <Image src={banner.imageUrl} alt={banner.title} fill className="object-cover" />
+                          <Image src={banner.imageUrl} alt={banner.title} fill className="object-contain" />
                         ) : (
                           <ImageIcon className="w-4 h-4 text-gray-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
                         )}
