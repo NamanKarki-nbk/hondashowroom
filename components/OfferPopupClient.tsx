@@ -44,13 +44,13 @@ export default function OfferPopupClient({ offer }: { offer: Offer }) {
         
         <Link href="/offers" onClick={handleClose} className="block w-full">
           {offer.imageUrl ? (
-            <div className="relative w-full h-[85vh] max-h-[800px] bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+            <div className="relative w-full bg-transparent flex items-center justify-center">
               <Image 
                 src={offer.imageUrl} 
                 alt={offer.title} 
-                fill 
-                sizes="(max-width: 1024px) 100vw, 1024px"
-                className="object-contain" 
+                width={1200}
+                height={1200}
+                className="w-full h-auto max-h-[90vh] object-contain" 
                 priority
               />
             </div>
