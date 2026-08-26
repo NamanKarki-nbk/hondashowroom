@@ -2,31 +2,52 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { CalendarDays, Banknote, Bike, Repeat, TicketCheck, ChevronRight, X, Menu } from "lucide-react";
+import { Settings2, ArrowRightLeft, Key, Smartphone, MapPin, Calculator } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ACTIONS = [
   { 
+    id: "accessories", 
+    label: "Accessories Configurator", 
+    href: "/accessories", 
+    icon: Settings2,
+    badgeColor: "bg-blue-100 text-blue-600" 
+  },
+  { 
+    id: "compare", 
+    label: "Compare Vehicle", 
+    href: "/compare", 
+    icon: ArrowRightLeft,
+    badgeColor: "bg-indigo-100 text-indigo-600" 
+  },
+  { 
+    id: "test-drive", 
+    label: "Book a Test Drive", 
+    href: "/test-ride", 
+    icon: Key,
+    badgeColor: "bg-amber-100 text-amber-600" 
+  },
+  { 
+    id: "ebook", 
+    label: "Ebook", 
+    href: "/", 
+    icon: Smartphone,
+    badgeColor: "bg-rose-100 text-rose-600" 
+  },
+  { 
+    id: "location", 
+    label: "Location", 
+    href: "/branches", 
+    icon: MapPin,
+    badgeColor: "bg-emerald-100 text-emerald-600" 
+  },
+  { 
     id: "finance", 
-    label: "Finance", 
+    label: "EMI Calculator", 
     href: "/finance", 
-    icon: Banknote, 
-    badgeColor: "bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400" 
-  },
-  { 
-    id: "exchange", 
-    label: "Exchange", 
-    href: "/exchange", 
-    icon: Repeat, 
-    badgeColor: "bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400" 
-  },
-  { 
-    id: "offers", 
-    label: "Apply for Offer", 
-    href: "/offers", 
-    icon: TicketCheck, 
-    badgeColor: "bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400" 
-  },
+    icon: Calculator,
+    badgeColor: "bg-purple-100 text-purple-600" 
+  }
 ];
 
 export default function FloatingActionBar() {
@@ -41,22 +62,31 @@ export default function FloatingActionBar() {
 
   return (
     <>
-      {/* Desktop Floating Action Bar (Vertical Right) */}
-      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col gap-2 p-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-[-4px_0_15px_rgba(0,0,0,0.1)] border-y border-l border-gray-200/50 dark:border-white/10 rounded-l-2xl">
-        {ACTIONS.map(({ id, label, href, icon: Icon, badgeColor }) => (
-          <Link
-            key={id}
-            href={href}
-            className="group relative flex flex-col items-center justify-center p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors w-16 h-16"
-          >
-            <div className={`p-1.5 rounded-lg ${badgeColor} transition-transform duration-300 group-hover:scale-110 mb-1`}>
-              <Icon className="w-5 h-5" />
-            </div>
-            <span className="text-[10px] font-bold tracking-tight text-gray-600 dark:text-gray-300 text-center leading-tight whitespace-pre-wrap">
-              {label.replace('Apply for ', '')}
-            </span>
-          </Link>
-        ))}
+      {/* Desktop Floating Action Bar (Expandable on hover) */}
+      <div 
+        className="fixed right-0 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col bg-[#003040] shadow-2xl transition-all duration-300 ease-in-out group overflow-hidden border-y border-l border-white/10"
+        style={{ width: '56px' }}
+        onMouseEnter={(e) => e.currentTarget.style.width = '260px'}
+        onMouseLeave={(e) => e.currentTarget.style.width = '56px'}
+      >
+        <div className="flex flex-col w-[260px]">
+          {ACTIONS.map(({ id, label, href, icon: Icon }, index) => (
+            <Link
+              key={id}
+              href={href}
+              className={`flex items-center h-14 hover:bg-white/10 transition-colors ${
+                index !== ACTIONS.length - 1 ? 'border-b border-white/10' : ''
+              }`}
+            >
+              <div className="w-[56px] flex-shrink-0 flex items-center justify-center">
+                <Icon className="w-6 h-6 text-white stroke-[1.5]" />
+              </div>
+              <span className="text-white text-[15px] font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                {label}
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
 
       {/* Mobile Bottom Bar (Refined) */}
