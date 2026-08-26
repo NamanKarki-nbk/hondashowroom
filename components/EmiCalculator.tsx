@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { ArrowUpRight, Download } from "lucide-react";
 
 export default function EmiCalculator({
@@ -210,12 +211,12 @@ export default function EmiCalculator({
 
           {/* Bike image — large, bottom right */}
           {vehicleImage && (
-            <div className="absolute bottom-0 right-0 z-20 pointer-events-none w-[70%] lg:w-[62%]">
-              <img
-                src={vehicleImage}
+            <div className="absolute bottom-0 right-0 z-20 pointer-events-none w-[70%] lg:w-[62%] h-full">
+              <Image 
+                src={vehicleImage.replace('/product-catalog/', '/inventory/')} 
                 alt={vehicleName}
-                className="w-full h-auto object-contain"
-                style={{ filter: "drop-shadow(0 0 60px rgba(0,0,0,0.9))" }}
+                fill
+                className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)] group-hover:scale-105 transition-transform duration-700 ease-out" 
               />
             </div>
           )}

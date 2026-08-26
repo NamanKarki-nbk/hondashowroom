@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -41,12 +41,12 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-primary/10 dark:bg-primary/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
            
            {imageUrl ? (
-             // eslint-disable-next-line @next/next/no-img-element
-             <img 
+             <Image 
                src={imageUrl.replace('/product-catalog/', '/inventory/')} 
                alt={title} 
+               fill
+               className="object-contain relative z-10 group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 drop-shadow-xl" 
                onError={(e) => { e.currentTarget.src = category.toLowerCase().includes('scooter') ? '/images/scooter-placeholder.jpg' : '/images/bike-placeholder.jpg'; }}
-               className="w-full h-full object-contain relative z-10 group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 drop-shadow-xl" 
              />
            ) : (
              <div className="w-full h-full max-w-[160px] max-h-[100px] bg-gray-200 dark:bg-gray-800 rounded-2xl rotate-[-5deg] shadow-lg group-hover:scale-110 group-hover:rotate-0 transition-all duration-500 relative z-10"></div>
