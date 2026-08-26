@@ -18,6 +18,11 @@ import FAQSection from "@/components/GeneralFAQ";
 import Reveal from "@/components/Reveal"; // We will create this component
 
 export default async function CustomerLandingPage() {
+  const heroBanners = await prisma.heroBanner.findMany({
+    where: { isActive: true },
+    orderBy: { order: "asc" }
+  });
+
   const catalogs = await prisma.productCatalog.findMany();
   const vehicles = await prisma.vehicle.findMany({
     select: { modelName: true, price: true }
@@ -80,7 +85,7 @@ export default async function CustomerLandingPage() {
       {/* 1. Immersive Hero Section */}
       <div className="relative">
         <ClientOnly>
-          <HeroSlider />
+          <HeroSlider banners={heroBanners} />
         </ClientOnly>
       </div>
 

@@ -43,9 +43,47 @@ const SLIDES = [
   }
 ];
 
-export default function HeroSlider() {
+interface Banner {
+  id: string | number;
+  title: string;
+  subtitle?: string | null;
+  tagline?: string;
+  price?: string;
+  image?: string;
+  imageUrl?: string;
+  link?: string;
+  linkUrl?: string | null;
+  accent?: string;
+  modelKey?: string;
+}
+
+export default function HeroSlider({ banners = [] }: { banners?: any[] }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, axis: 'x' }, [Autoplay({ delay: 6000 })]);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  // Use database banners if available, otherwise fallback to static SLIDES
+  const activeSlides = banners.length > 0 
+    ? banners.map((b, i) => {
+        // We generate a fallback accent based on index
+        const accents = [
+          "from-blue-500/20 to-cyan-500/20",
+          "from-red-500/20 to-orange-500/20",
+          "from-emerald-500/20 to-teal-500/20",
+          "from-purple-500/20 to-pink-500/20"
+        ];
+        return {
+          id: b.id,
+          title: b.title,
+          subtitle: b.subtitle || "Honda Vehicle",
+          tagline: b.subtitle || "",
+          price: b.price || "",
+          image: b.imageUrl || b.image,
+          link: b.linkUrl || b.link || "#",
+          accent: accents[i % accents.length],
+          modelKey: b.title
+        };
+      })
+    : SLIDES;
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -81,7 +119,7 @@ export default function HeroSlider() {
       {/* Embla viewport — must wrap ONLY the slides flex row */}
       <div className="w-full h-full" ref={emblaRef}>
       <div className="flex h-full touch-pan-y">
-        {SLIDES.map((slide, index) => (
+        {activeSlides.map((slide, index) => (
           <div key={slide.id} className="relative flex-[0_0_100%] min-w-0 h-full p-4 sm:p-6 lg:p-16 flex flex-col-reverse md:flex-row items-center justify-center md:justify-between pt-10 md:pt-0 pb-20 md:pb-0">
             
             {/* Giant Background Watermark Image */}
@@ -182,7 +220,7 @@ export default function HeroSlider() {
 
       {/* Navigation Controls Overlay */}
       <div className="absolute right-16 md:right-24 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-40">
-        {SLIDES.map((_, idx) => (
+        {activeSlides.map((_, idx) => (
           <button 
             key={idx}
             onClick={() => emblaApi && emblaApi.scrollTo(idx)}
