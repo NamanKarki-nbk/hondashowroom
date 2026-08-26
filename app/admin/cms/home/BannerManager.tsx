@@ -22,6 +22,7 @@ export default function BannerManager() {
   
   // Form state
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingImageUrl, setEditingImageUrl] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: "",
     subtitle: "",
@@ -54,6 +55,7 @@ export default function BannerManager() {
   const handleOpenModal = (banner?: Banner) => {
     if (banner) {
       setEditingId(banner.id);
+      setEditingImageUrl(banner.imageUrl);
       setFormData({
         title: banner.title,
         subtitle: banner.subtitle || "",
@@ -63,6 +65,7 @@ export default function BannerManager() {
       });
     } else {
       setEditingId(null);
+      setEditingImageUrl(null);
       setFormData({
         title: "",
         subtitle: "",
@@ -272,16 +275,7 @@ export default function BannerManager() {
                   />
                 </div>
 
-                <div className="col-span-2">
-                  <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Link URL (Optional)</label>
-                  <input
-                    type="text"
-                    value={formData.linkUrl}
-                    onChange={e => setFormData({...formData, linkUrl: e.target.value})}
-                    placeholder="/vehicles/activa"
-                    className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
-                  />
-                </div>
+
                 
                 <div>
                   <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Display Order</label>
@@ -310,6 +304,14 @@ export default function BannerManager() {
                   <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
                     Image File {editingId && '(Leave empty to keep existing image)'}
                   </label>
+                  {editingImageUrl && (
+                    <div className="mb-3">
+                       <p className="text-xs text-gray-500 mb-2">Current Image:</p>
+                       <div className="relative w-full h-32 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                         <Image src={editingImageUrl} alt="Current banner" fill className="object-contain" />
+                       </div>
+                    </div>
+                  )}
                   <input
                     type="file"
                     accept="image/*"
