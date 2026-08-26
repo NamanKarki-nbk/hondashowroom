@@ -192,7 +192,7 @@ export default function OfferManager() {
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 relative bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden flex-shrink-0">
                         {offer.imageUrl ? (
-                          <Image src={offer.imageUrl} alt={offer.title} fill className="object-cover" />
+                          <Image src={offer.imageUrl} alt={offer.title} fill sizes="64px" className="object-cover" />
                         ) : (
                           <Tag className="w-5 h-5 text-gray-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
                         )}

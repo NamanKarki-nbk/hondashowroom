@@ -197,7 +197,7 @@ export default function BannerManager() {
                     <div className="flex items-center gap-3">
                       <div className="w-24 h-12 relative bg-gray-100 dark:bg-gray-800 rounded overflow-hidden flex-shrink-0">
                         {banner.imageUrl ? (
-                          <Image src={banner.imageUrl} alt={banner.title} fill className="object-contain" />
+                          <Image src={banner.imageUrl} alt={banner.title} fill sizes="64px" className="object-contain" />
                         ) : (
                           <ImageIcon className="w-4 h-4 text-gray-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
                         )}
@@ -308,7 +308,7 @@ export default function BannerManager() {
                     <div className="mb-3">
                        <p className="text-xs text-gray-500 mb-2">Current Image:</p>
                        <div className="relative w-full h-32 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-                         <Image src={editingImageUrl} alt="Current banner" fill className="object-contain" />
+                         <Image src={editingImageUrl} alt="Current banner" fill sizes="128px" className="object-contain" />
                        </div>
                     </div>
                   )}

@@ -169,7 +169,7 @@ export default function BlogManager() {
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-8 relative bg-gray-100 dark:bg-gray-800 rounded overflow-hidden flex-shrink-0">
                         {blog.imageUrl ? (
-                          <Image src={blog.imageUrl} alt={blog.title} fill className="object-cover" />
+                          <Image src={blog.imageUrl} alt={blog.title} fill sizes="64px" className="object-cover" />
                         ) : (
                           <FileText className="w-4 h-4 text-gray-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
                         )}

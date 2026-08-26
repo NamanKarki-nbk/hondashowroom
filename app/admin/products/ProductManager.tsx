@@ -206,7 +206,7 @@ export default function ProductManager() {
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 relative bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden flex-shrink-0">
                         {product.imageUrl ? (
-                          <Image src={product.imageUrl} alt={product.name} fill className="object-cover" />
+                          <Image src={product.imageUrl} alt={product.name} fill sizes="64px" className="object-cover" />
                         ) : (
                           <Package className="w-5 h-5 text-gray-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
                         )}
@@ -316,7 +316,7 @@ export default function ProductManager() {
                   <div className="mb-3">
                      <p className="text-xs text-gray-500 mb-2">Current Image:</p>
                      <div className="relative w-full h-32 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-                       <Image src={editingImageUrl} alt="Current product" fill className="object-contain" />
+                       <Image src={editingImageUrl} alt="Current product" fill sizes="128px" className="object-contain" />
                      </div>
                   </div>
                 )}
