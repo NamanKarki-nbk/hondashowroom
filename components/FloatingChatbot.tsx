@@ -40,17 +40,17 @@ export default function FloatingChatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="mb-4 w-[calc(100vw-2rem)] sm:w-[340px] max-h-[80vh] shadow-2xl rounded-xl overflow-hidden flex flex-col bg-[#FAF5F5]"
+            className="mb-4 w-[calc(100vw-2rem)] sm:w-[340px] max-h-[80vh] shadow-2xl rounded-xl overflow-hidden flex flex-col bg-[#FAF5F5] dark:bg-slate-900"
           >
             {/* Header */}
             <div className="px-5 py-5 pb-3">
-               <h3 className="text-[#3b4754] font-bold text-[13px] tracking-wide">Honda AI Chatbot</h3>
+               <h3 className="text-[#3b4754] dark:text-gray-100 font-bold text-[13px] tracking-wide">Honda AI Chatbot</h3>
             </div>
             
             {/* Chat Body */}
             <div className="px-5 pb-4 max-h-[350px] overflow-y-auto flex flex-col gap-3 scrollbar-hide">
               {messages.length === 0 ? (
-                <div className="bg-white rounded-[14px] p-4 text-[14px] text-[#3b4754] shadow-sm border border-gray-100/50 leading-relaxed">
+                <div className="bg-white dark:bg-slate-800 rounded-[14px] p-4 text-[14px] text-[#3b4754] dark:text-gray-100 shadow-sm border border-gray-100/50 dark:border-white/10 leading-relaxed">
                   Namaste! Ma tapaai lai motorcycle ra scooter ko tulana garna madad garna sakchu. Ke khojdai hunuhunchha?
                 </div>
               ) : (
@@ -68,7 +68,7 @@ export default function FloatingChatbot() {
                       className={`rounded-[14px] p-4 text-[14px] shadow-sm leading-relaxed max-w-[90%] ${
                         m.role === 'user' 
                           ? 'bg-primary text-white self-end' 
-                          : 'bg-white text-[#3b4754] border border-gray-100/50 self-start'
+                          : 'bg-white dark:bg-slate-800 text-[#3b4754] dark:text-gray-100 border border-gray-100/50 dark:border-white/10 self-start'
                       }`}
                     >
                       {textContent}
@@ -86,7 +86,7 @@ export default function FloatingChatbot() {
                 </div>
               )}
               {isLoading && messages.length > 0 && messages[messages.length - 1].role === 'user' && (
-                <div className="bg-white rounded-[14px] p-4 text-[14px] text-[#3b4754] shadow-sm border border-gray-100/50 self-start">
+                <div className="bg-white dark:bg-slate-800 rounded-[14px] p-4 text-[14px] text-[#3b4754] dark:text-gray-100 shadow-sm border border-gray-100/50 dark:border-white/10 self-start">
                   <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
                 </div>
               )}
@@ -101,7 +101,7 @@ export default function FloatingChatbot() {
                   placeholder="Ask me anything"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  className="w-full bg-white border border-gray-200 rounded-lg pl-4 pr-10 py-3.5 text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-300 shadow-sm"
+                  className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg pl-4 pr-10 py-3.5 text-sm text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-1 focus:ring-gray-300 shadow-sm"
                   disabled={isLoading}
                 />
                 <button 
@@ -115,7 +115,7 @@ export default function FloatingChatbot() {
             </div>
 
             {/* Footer */}
-            <div className="flex justify-center items-center pb-4 text-[11px] text-gray-800 font-medium">
+            <div className="flex justify-center items-center pb-4 text-[11px] text-gray-800 dark:text-gray-200 font-medium">
                Built on <span className="font-extrabold ml-1 tracking-tighter text-sm">honda AI</span>
             </div>
           </motion.div>

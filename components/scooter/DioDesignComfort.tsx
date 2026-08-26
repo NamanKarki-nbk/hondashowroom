@@ -22,7 +22,7 @@ const DESIGN_COMFORT_ITEMS: DesignCard[] = [
     description: "Generously sized spacious floorboard offers comfortable legroom and ample space for carrying day-to-day shopping bags and luggage.",
     icon: Layers,
     image: "/images/dio/floorboard.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "seat",
@@ -31,7 +31,7 @@ const DESIGN_COMFORT_ITEMS: DesignCard[] = [
     description: "Ergonomically sculpted split seat provides optimal lumbar support for the rider and relaxed seating posture for the pillion passenger.",
     icon: Armchair,
     image: "/images/dio/seat.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "graphics",
@@ -40,7 +40,7 @@ const DESIGN_COMFORT_ITEMS: DesignCard[] = [
     description: "Eye-catching dual-tone body graphics, sharp front apron, and bold tail light design express an athletic and youth-oriented personality.",
     icon: Sparkles,
     image: "/images/dio/graphics.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "telescopic-suspension",
@@ -49,7 +49,7 @@ const DESIGN_COMFORT_ITEMS: DesignCard[] = [
     description: "Telescopic front hydraulic fork combined with a larger 12-inch front wheel delivers supreme stability and effortless bump absorption.",
     icon: Navigation,
     image: "/images/dio/telescopic-susp.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "underseat-storage",
@@ -58,7 +58,7 @@ const DESIGN_COMFORT_ITEMS: DesignCard[] = [
     description: "Deep 18-litre underseat storage unit easily accommodates a full-size helmet, documents, and personal belongings safely.",
     icon: Package,
     image: "/images/dio/storage.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "pillion-comfort",
@@ -67,7 +67,7 @@ const DESIGN_COMFORT_ITEMS: DesignCard[] = [
     description: "Neatly integrated aluminum footpegs open smoothly when needed and fold flush into the bodywork for a clean, aerodynamic look.",
     icon: ShieldCheck,
     image: "/images/dio/footpegs.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
 ];
 

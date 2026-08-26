@@ -8,6 +8,10 @@
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-border-base: var(--border);
+  --color-muted: var(--muted);
   --font-sans: var(--font-inter);
 }
 
@@ -17,6 +21,10 @@
   --primary: #CC0000;
   --primary-hover: #A30000;
   --primary-foreground: #ffffff;
+  --surface: #ffffff;
+  --surface-hover: #f3f4f6;
+  --border: #e5e7eb;
+  --muted: #6b7280;
 }
 
 .dark {
@@ -25,6 +33,10 @@
   --primary: #CC0000;
   --primary-hover: #A30000;
   --primary-foreground: #ffffff;
+  --surface: #0f172a;
+  --surface-hover: #1e293b;
+  --border: #1e293b;
+  --muted: #94a3b8;
 }
 
 body {

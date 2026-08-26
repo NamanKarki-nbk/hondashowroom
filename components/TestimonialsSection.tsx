@@ -30,20 +30,20 @@ const TESTIMONIALS = [
 
 export default function TestimonialsSection() {
   return (
-    <section className="py-24 px-6 bg-background border-t border-gray-100 overflow-hidden">
+    <section className="py-24 px-6 bg-background border-t border-gray-100 dark:border-slate-800 overflow-hidden">
       <div className="max-w-[1600px] mx-auto w-full">
         <div className="text-center mb-16 xl:mb-24">
-          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6 text-gray-900 uppercase">
+          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6 text-gray-900 dark:text-gray-100 uppercase">
             HEAR FROM OUR <span className="text-primary">RIDERS</span>
           </h2>
-          <p className="text-lg xl:text-2xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg xl:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
             Don't just take our word for it. Discover why thousands of riders choose Honda for their daily journey.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 xl:gap-12 relative z-10">
           {/* Decorative quotes background */}
-          <div className="absolute -top-10 -left-10 text-gray-200/50 -z-10">
+          <div className="absolute -top-10 -left-10 text-gray-200/50 dark:text-slate-700/50 -z-10">
             <Quote size={200} />
           </div>
 
@@ -54,7 +54,7 @@ export default function TestimonialsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.15 }}
-              className="bg-background rounded-3xl p-8 xl:p-12 shadow-xl shadow-gray-200/50 border border-gray-100 flex flex-col h-full hover:-translate-y-2 transition-transform duration-300"
+              className="bg-background rounded-3xl p-8 xl:p-12 shadow-xl shadow-gray-200/50 dark:shadow-slate-900/50 border border-gray-100 dark:border-slate-800 flex flex-col h-full hover:-translate-y-2 transition-transform duration-300"
             >
               <div className="flex items-center space-x-1 mb-6">
                 {[...Array(5)].map((_, i) => (
@@ -69,7 +69,7 @@ export default function TestimonialsSection() {
                 "{testimonial.content}"
               </p>
               
-              <div className="flex items-center space-x-4 mt-auto pt-6 border-t border-gray-100">
+              <div className="flex items-center space-x-4 mt-auto pt-6 border-t border-gray-100 dark:border-slate-800">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src={testimonial.avatar} 
@@ -77,7 +77,7 @@ export default function TestimonialsSection() {
                   className="w-14 h-14 xl:w-16 xl:h-16 rounded-full object-cover border-2 border-background shadow-md"
                 />
                 <div>
-                  <h4 className="font-bold text-gray-900 text-lg xl:text-xl">{testimonial.name}</h4>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100 text-lg xl:text-xl">{testimonial.name}</h3>
                   <p className="text-sm xl:text-base text-gray-500">{testimonial.role}</p>
                 </div>
               </div>

@@ -63,14 +63,14 @@ export default function EmiCalculator({
               { label: "VARIANTS", opts: [vehicleName] },
               { label: "STATE", opts: ["Delhi", "Maharashtra", "Karnataka"] },
             ].map(({ label, opts }) => (
-              <div key={label} className="border-b border-gray-600 pb-1.5 relative">
-                <p className="text-gray-400 text-[9px] tracking-[0.15em] uppercase mb-0.5">{label}</p>
-                <select className="w-full bg-transparent text-primary-foreground font-semibold text-sm outline-none appearance-none cursor-pointer pr-5">
+              <div key={label} className="border-b border-gray-300 dark:border-gray-600 pb-1.5 relative">
+                <p className="text-gray-500 dark:text-gray-400 text-[10px] tracking-[0.15em] uppercase mb-1">{label}</p>
+                <select className="w-full bg-transparent font-semibold text-sm outline-none appearance-none cursor-pointer pr-5">
                   {opts.map((o) => <option key={o} className="text-black">{o}</option>)}
                 </select>
                 <div className="absolute right-0 bottom-2 pointer-events-none">
                   <svg width="9" height="5" viewBox="0 0 9 5" fill="none">
-                    <path d="M1 1L4.5 4L8 1" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                    <path d="M1 1L4.5 4L8 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                 </div>
               </div>
@@ -78,7 +78,7 @@ export default function EmiCalculator({
           </div>
 
           {/* Enquire / Brochure */}
-          <div className="flex items-center gap-5 mb-5">
+          <div className="flex items-center gap-5 mb-7">
             <button className="bg-primary hover:bg-primary-hover text-primary-foreground px-5 py-2 rounded-full font-bold text-sm transition-colors flex items-center gap-1.5">
               Enquire now <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
@@ -92,9 +92,9 @@ export default function EmiCalculator({
           <h2 className="text-lg font-bold mb-5">EMI Calculator with Model Selection</h2>
 
           {/* Down Payment */}
-          <div className="mb-5">
+          <div className="mb-7">
             <div className="flex items-center justify-between mb-2">
-              <label className="text-gray-400 text-sm">Down Payment</label>
+              <label className="text-gray-400 dark:text-gray-600 text-sm">Down Payment</label>
               <input
                 type="number"
                 value={downPayment}
@@ -108,8 +108,8 @@ export default function EmiCalculator({
           </div>
 
           {/* Interest Rate + Mo/Yr + Tenure — all one row */}
-          <div className="flex items-center gap-3 mb-2 flex-wrap">
-            <label className="text-gray-400 text-sm shrink-0">Interest Rate (%)</label>
+          <div className="flex items-center gap-3 mb-4 flex-wrap">
+            <label className="text-gray-400 dark:text-gray-600 text-sm shrink-0">Interest Rate (%)</label>
             <input
               type="number"
               value={interestRate}
@@ -118,11 +118,11 @@ export default function EmiCalculator({
             />
             <div className="flex border border-gray-600 ml-4 shrink-0">
               <button onClick={() => setTenureType("Mo")}
-                className={`px-3 py-1.5 text-xs font-bold transition-colors ${tenureType === "Mo" ? "bg-primary text-primary-foreground" : "text-gray-400 hover:text-primary-foreground"}`}>
+                className={`px-3 py-1.5 text-xs font-bold transition-colors ${tenureType === "Mo" ? "bg-primary text-primary-foreground" : "text-gray-400 dark:text-gray-600 hover:text-primary-foreground"}`}>
                 Mo
               </button>
               <button onClick={() => setTenureType("Yr")}
-                className={`px-3 py-1.5 text-xs font-bold border-l border-gray-600 transition-colors ${tenureType === "Yr" ? "bg-primary text-primary-foreground" : "text-gray-400 hover:text-primary-foreground"}`}>
+                className={`px-3 py-1.5 text-xs font-bold border-l border-gray-600 transition-colors ${tenureType === "Yr" ? "bg-primary text-primary-foreground" : "text-gray-400 dark:text-gray-600 hover:text-primary-foreground"}`}>
                 Yr
               </button>
             </div>
@@ -148,7 +148,7 @@ export default function EmiCalculator({
           </div>
 
           {/* Buttons */}
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-4 mb-8">
             <button className="bg-primary hover:bg-primary-hover text-primary-foreground px-6 py-2.5 rounded-full font-bold text-sm transition-colors">
               Calculate EMI
             </button>
@@ -158,7 +158,7 @@ export default function EmiCalculator({
           </div>
 
           {/* Disclaimer */}
-          <p className="text-[9px] text-gray-500 leading-relaxed">
+          <p className="text-[10px] text-gray-500 dark:text-gray-500 leading-relaxed">
             Disclaimer: *Interest rate/ Finance disbursal will depend on financial institution / banks
             discretion. The calculation performed by EMI Calculator is based on the information you
             entered on reducing rate of interest and is for illustrative purposes only. This calculation
@@ -183,7 +183,7 @@ export default function EmiCalculator({
           {/* Text — top left of card */}
           <div className="relative z-10 p-8 lg:p-10">
             <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold lg:text-4xl font-extrabold text-primary-foreground mb-1">{vehicleName}</h2>
-            <p className="text-gray-400 text-xs mb-7">*Ex-Showroom Delhi ₹ {initialPrice.toLocaleString("en-IN")}</p>
+            <p className="text-gray-400 dark:text-gray-600 text-xs mb-7">*Ex-Showroom Delhi ₹ {initialPrice.toLocaleString("en-IN")}</p>
 
             {/* Loan Amount & Total Interest — right aligned values */}
             <div className="space-y-2 max-w-[320px]">

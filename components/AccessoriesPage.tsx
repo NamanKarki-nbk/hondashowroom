@@ -38,7 +38,7 @@ export default function AccessoriesPage({ vehicleImageUrl, hotspots }: Accessori
           </p>
         </div>
 
-        <div className="relative w-full max-w-4xl mx-auto aspect-[4/3] md:aspect-[16/9] rounded-3xl p-4 md:p-8 flex items-center justify-center">
+        <div className="relative w-full max-w-4xl mx-auto aspect-[4/3] md:aspect-[16/9] min-h-[300px] rounded-3xl p-4 md:p-8 flex items-center justify-center">
           {/* Vehicle Image */}
           <div className="relative w-full h-full flex items-center justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}

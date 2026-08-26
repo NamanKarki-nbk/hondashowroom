@@ -23,7 +23,7 @@ interface ProductData {
   highlights: { label: string; value: string; icon: string }[];
   features: { title: string; description: string; image: string }[];
   colors: { name: string; hex: string }[];
-  specs: Record<string, { label: string; value: string }[]>;
+  specifications: Record<string, { label: string; value: string }[]>;
   variants?: { name: string; imageUrl?: string; price?: string }[];
   threeSixty?: { localPath: string; totalFrames: number } | null;
 }
@@ -194,13 +194,13 @@ export default function ProductPageClient({ vehicle }: { vehicle: ProductData })
       </section>
 
       {/* Features Section */}
-      <VehicleFeatures features={vehicle.features} />
+      <VehicleFeatures features={vehicle.features} hideImages={vehicle.category === "POWER_PRODUCT"} />
 
       {/* Colors Section */}
       <VehicleColorSelector vehicleName={vehicle.name} imageUrl={vehicle.imageUrl} colors={vehicle.colors} />
 
       {/* Technical Specs Section */}
-      <VehicleSpecs specs={vehicle.specs} vehicleSlug={vehicle.id} fallbackImageUrl={vehicle.imageUrl} threeSixty={vehicle.threeSixty} />
+      <VehicleSpecs specs={vehicle.specifications} vehicleSlug={vehicle.id} fallbackImageUrl={vehicle.imageUrl} threeSixty={vehicle.threeSixty} />
 
       {/* EMI Calculator */}
       <EmiCalculator vehicleName={vehicle.name} vehicleImage={vehicle.imageUrl} initialPrice={vehicle.price} />

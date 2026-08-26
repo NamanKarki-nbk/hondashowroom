@@ -5,6 +5,7 @@ import ProductPageClient from "./ProductPageClient";
 import BigWingProductPageClient from "./BigWingProductPageClient";
 import HondaDio110Page from "@/app/(customer)/scooter/dio-110/page";
 import HondaDio125Page from "@/app/(customer)/scooter/dio-125/page";
+// Feature and Spec JSON imports have been removed. Data is now fetched from the database.
 
 // Helper function to generate realistic mock data based on the scraped vehicle
 function generateMockData(vehicle: any) {
@@ -30,8 +31,8 @@ function generateMockData(vehicle: any) {
     { label: "Max Power", value: "6.0 kW", icon: "Zap" }
   ];
 
-  // Features
-  const features = isPower ? [] : [
+  // Features - raw from DB
+  let featuresRaw = vehicle.features || (isPower ? [] : [
     {
       title: "First in segment - Largest underseat storage",
       description: "More storage & more safety. Built to accommodate all your family's essentials and also room for two helmets.",
@@ -45,14 +46,34 @@ function generateMockData(vehicle: any) {
     {
       title: "Assist/Slipper Clutch",
       description: "Enables quick shifting and prevents rear wheel hopping.",
-      image: "/models/hero-1.png" // placeholder
+      image: "/models/hero-1.png"
     }
-  ];
+  ]);
 
-  const isDio125 = vehicle.name.toLowerCase().includes("dio 125");
+  // Determine the public image folder for this product's features
+  const nameLower = vehicle.name.toLowerCase();
+  let featureImageFolder = "";
+  if (nameLower.includes("cb shine") || nameLower.includes("shine bs6")) {
+    featureImageFolder = "cbshine125";
+  } else if (nameLower.includes("sp shine") || nameLower.includes("sp 125")) {
+    featureImageFolder = "spshinebs6";
+  } else if (nameLower.includes("dio") && nameLower.includes("110")) {
+    featureImageFolder = "dio110";
+  } else if (nameLower.includes("dio") && nameLower.includes("125")) {
+    featureImageFolder = "dio125";
+  }
+
+  // Prefix bare filenames with the correct public path
+  const features = Array.isArray(featuresRaw) ? featuresRaw.map((f: any) => ({
+    ...f,
+    image: f.image && !f.image.startsWith("/") && featureImageFolder
+      ? `/images/features/${featureImageFolder}/${f.image}`
+      : f.image || "/models/hero-1.png"
+  })) : featuresRaw;
+
 
   // Specs
-  let rawSpecs = (vehicle.specs as any)?.specifications || vehicle.specs;
+  let rawSpecs = (vehicle.specifications as any)?.specifications || vehicle.specifications;
   let normalizedSpecs: Record<string, {label: string, value: string}[]> | null = null;
   
   if (Array.isArray(rawSpecs)) {
@@ -86,52 +107,25 @@ function generateMockData(vehicle: any) {
     }
   }
 
-  let specs = normalizedSpecs && Object.keys(normalizedSpecs).length > 0 ? normalizedSpecs : null;
-  
-  if (!specs || Object.keys(specs).length === 0) {
+  let specifications = normalizedSpecs && Object.keys(normalizedSpecs).length > 0 ? normalizedSpecs : null;
+
+  if (!specifications) {
     if (isPower) {
-      specs = {};
-    } else if (isDio125) {
-      specs = {
-        Body_Dimensions: [
-          { label: "Length", value: "1830 mm" },
-          { label: "Width", value: "707 mm" },
-          { label: "Height", value: "1172 mm" },
-          { label: "Wheelbase", value: "1260 mm" },
-          { label: "Ground Clearance", value: "171 mm" },
-          { label: "Seat Length", value: "708 mm" },
-          { label: "Kerb Weight", value: "104 kg" },
-          { label: "Fuel Tank Capacity", value: "5.3 L" }
+      specifications = {
+        "Dimensions": [
+          { label: "Length", value: "500 mm" },
+          { label: "Width", value: "300 mm" }
         ],
-        Engine_Performance: [
-          { label: "Type", value: "4 Stroke, SI Engine" },
-          { label: "Displacement", value: "123.92 cc" },
-          { label: "Maximum Power", value: "6.09 kW @ 6250 rpm" },
-          { label: "Max. Torque", value: "10.4 Nm @ 5000 rpm" },
-          { label: "Starting", value: "Self/Kick Start" }
-        ],
-        Electricals: [
-          { label: "Battery", value: "12V, 5.0Ah" },
-          { label: "Headlamp", value: "LED" }
-        ],
-        Chassis_Suspension: [
-          { label: "Frame Type", value: "Under Bone" },
-          { label: "Front Suspension", value: "Telescopic" },
-          { label: "Rear Suspension", value: "3-Step Adjustable Spring Loaded Hydraulic" }
-        ],
-        Brakes_Tyres: [
-          { label: "Front Brake", value: "Disc 190mm" },
-          { label: "Rear Brake", value: "Drum 130mm" },
-          { label: "Front Tyre", value: "90/90-12 54J" },
-          { label: "Rear Tyre", value: "90/100-10 53J" }
+        "Engine": [
+          { label: "Type", value: "4-stroke" },
+          { label: "Displacement", value: "196cc" }
         ]
       };
     } else {
-      // Default to Dio 110 specs
-      specs = {
-        Body_Dimensions: [
-          { label: "Length", value: "1808 mm" },
-          { label: "Width", value: "723 mm" },
+      specifications = {
+        "Engine": [
+          { label: "Type", value: "4 Stroke, SI Engine" },
+          { label: "Displacement", value: "124.9 cc" },
           { label: "Height", value: "1150 mm" },
           { label: "Wheelbase", value: "1260 mm" },
           { label: "Ground Clearance", value: "160 mm" },
@@ -176,7 +170,7 @@ function generateMockData(vehicle: any) {
   ];
 
   let threeSixty = null;
-  const nameLower = vehicle.name.toLowerCase();
+  // nameLower already declared above for feature image folder resolution
   
   if (nameLower.includes("dio 125") || nameLower.includes("dio bs6 125")) {
     threeSixty = {
@@ -269,7 +263,7 @@ function generateMockData(vehicle: any) {
     features,
     sections,
     colors,
-    specs: vehicle.specs ? { ...specs, ...(typeof vehicle.specs === 'object' ? vehicle.specs : {}) } : specs,
+    specifications: vehicle.specifications ? { ...specifications, ...(typeof vehicle.specifications === 'object' ? vehicle.specifications : {}) } : specifications,
     variants,
     threeSixty
   };

@@ -30,7 +30,7 @@ export async function GET(req: Request) {
 export async function PATCH(req: Request) {
   try {
     const data = await req.json();
-    const { id, price, inStock, specs } = data;
+    const { id, price, inStock, specifications } = data;
 
     if (!id) {
       return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
@@ -41,19 +41,19 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
-    // Merge new specs with existing specs if specs are provided
-    let updatedSpecs = existingProduct.specs;
-    if (specs) {
+    // Merge new specifications with existing specifications if specifications are provided
+    let updatedSpecs = existingProduct.specifications;
+    if (specifications) {
       updatedSpecs = {
-        ...(typeof existingProduct.specs === 'object' ? existingProduct.specs : {}),
-        ...specs
+        ...(typeof existingProduct.specifications === 'object' ? existingProduct.specifications : {}),
+        ...specifications
       };
     }
 
     const updatedProduct = await prisma.productCatalog.update({
       where: { id },
       data: {
-        specs: updatedSpecs ? (updatedSpecs as any) : undefined,
+        specifications: updatedSpecs ? (updatedSpecs as any) : undefined,
       }
     });
 

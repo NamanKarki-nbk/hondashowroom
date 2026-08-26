@@ -58,7 +58,7 @@ export default function DioHeroSection({
           <ChevronRight className="w-3.5 h-3.5" />
           <Link href="/shop" className="hover:text-primary transition-colors uppercase">Scooters</Link>
           <ChevronRight className="w-3.5 h-3.5" />
-          <span className="text-foreground font-bold uppercase">{vehicle?.name || "Honda Dio 110 BS6"}</span>
+          <span className="text-foreground font-bold">{vehicle?.name || "Honda Dio 110 BS6"}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
@@ -129,7 +129,7 @@ export default function DioHeroSection({
                   </div>
                 </div>
               </div>
-              <span className="text-[11px] text-gray-500 block mt-1 ml-2">
+              <span className="text-xs text-gray-500 block mt-1 ml-2">
                 *Taxes & Registration extra. Flexible EMI options available. Color selected: {currentColorName}.
               </span>
             </motion.div>
@@ -199,8 +199,8 @@ export default function DioHeroSection({
               {/* Massive Unboxed Scooter PNG Image */}
               <div className="relative w-full h-[360px] sm:h-[460px] lg:h-[520px] flex items-center justify-center">
                 <ImageWithFallback
-                  src={currentColorImage || "/inventory/honda-dio-bs6.png"}
-                  fallbackSrc="/inventory/honda-dio-bs6.png"
+                  src={currentColorImage || "/inventory/honda-dio-bs6-110.png"}
+                  fallbackSrc="/inventory/honda-dio-bs6-110.png"
                   alt={vehicle?.name || `Honda Dio BS6 - ${currentColorName}`}
                   className="max-h-[440px] lg:max-h-[500px] w-auto object-contain z-10 filter drop-shadow-[0_30px_60px_rgba(0,0,0,0.35)] hover:scale-105 transition-transform duration-500"
                   priority
@@ -220,12 +220,12 @@ export default function DioHeroSection({
                     <span className="text-xs font-black uppercase text-foreground block">
                       Honda Smart Key (H-Smart)
                     </span>
-                    <span className="text-[11px] text-gray-500 block">
+                    <span className="text-xs text-gray-500 block">
                       Smart Find • Smart Unlock • Smart Start • Smart Safe
                     </span>
                   </div>
                 </div>
-                <span className="hidden sm:inline-flex px-3 py-1 rounded-lg bg-red-50 dark:bg-red-950/40 text-primary text-[11px] font-black uppercase border border-red-200 dark:border-red-900/40">
+                <span className="hidden sm:inline-flex px-3 py-1 rounded-lg bg-red-50 dark:bg-red-950/40 text-primary text-xs font-black uppercase border border-red-200 dark:border-red-900/40">
                   <Sparkles className="w-3.5 h-3.5 mr-1" /> Seg-First
                 </span>
               </div>

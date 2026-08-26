@@ -15,6 +15,8 @@ import DioActionBanner from "@/components/scooter/DioActionBanner";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FaqSection from "@/components/FaqSection";
 import EmiCalculator from "@/components/EmiCalculator";
+import { Sparkles, Zap, Fuel, Monitor, KeyRound, Navigation, Disc } from "lucide-react";
+// Features and Specs are now pulled from the DB
 
 interface HondaDio125PageProps {
   vehicle?: any;
@@ -29,7 +31,7 @@ export default function HondaDio125Page({ vehicle, stdPrice, dlxPrice }: HondaDi
   const [selectedVariant, setSelectedVariant] = useState<string>("Honda Dio 125 H-SMART");
   const [currentColor, setCurrentColor] = useState({
     name: "Sports Red",
-    image: "/inventory/honda-dio-125.png",
+    image: "/inventory/honda-dio-bs6-125.png",
   });
 
   // Form State
@@ -59,6 +61,39 @@ export default function HondaDio125Page({ vehicle, stdPrice, dlxPrice }: HondaDi
         }
       })
       .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let maxVisibleRatio = 0;
+        let mostVisibleSection = "";
+
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > maxVisibleRatio) {
+            maxVisibleRatio = entry.intersectionRatio;
+            mostVisibleSection = entry.target.id;
+          }
+        });
+
+        if (mostVisibleSection) {
+          setActiveNav(mostVisibleSection);
+        }
+      },
+      {
+        root: null,
+        rootMargin: "-20% 0px -60% 0px",
+        threshold: [0, 0.2, 0.5, 0.8, 1],
+      }
+    );
+
+    const sections = ["overview", "variants", "specs", "colors", "features", "accessories", "emi-calculator"];
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   const scrollTo = (id: string) => {
@@ -146,7 +181,7 @@ export default function HondaDio125Page({ vehicle, stdPrice, dlxPrice }: HondaDi
         name: "Mat Floor Premium",
         description: "Premium floor mat for Dio 125, designed for maximum grip and aesthetic appeal.",
         price: "NPR 950",
-        imageUrl: "/inventory/honda-dio-125.png"
+        imageUrl: "/inventory/honda-dio-bs6-125.png"
       }
     },
     {
@@ -157,7 +192,7 @@ export default function HondaDio125Page({ vehicle, stdPrice, dlxPrice }: HondaDi
         name: "Seat Cover Pro",
         description: "Ergonomically designed seat cover for the Dio 125.",
         price: "NPR 1,400",
-        imageUrl: "/inventory/honda-dio-125.png"
+        imageUrl: "/inventory/honda-dio-bs6-125.png"
       }
     }
   ];
@@ -243,20 +278,37 @@ export default function HondaDio125Page({ vehicle, stdPrice, dlxPrice }: HondaDi
         />
 
         {/* 3. Specs */}
-        {vehicle && vehicle.specs && (
-          <VehicleSpecs 
-            specs={vehicle.specs} 
-            vehicleSlug={vehicle.id} 
-            fallbackImageUrl={vehicle.imageUrl} 
-            threeSixty={vehicle.threeSixty} 
-          />
-        )}
+        <VehicleSpecs 
+          specs={vehicle?.specifications} 
+          vehicleSlug={vehicle?.id || "honda-dio-125"} 
+          fallbackImageUrl={vehicle?.imageUrl || currentColor.image} 
+          threeSixty={vehicle?.threeSixty} 
+        />
 
         {/* 4. Colour Options */}
         <DioColorSwitcher onSelectColor={handleColorChange} />
 
         {/* 5. Highlight and Feature */}
-        <DioFeaturesGrid features={vehicle?.specs?.features} />
+        <DioFeaturesGrid 
+          features={(vehicle?.features || []).map((f: any, i: number) => {
+            let Icon = Sparkles;
+            const titleLower = f.title.toLowerCase();
+            if (titleLower.includes('meter')) Icon = Monitor;
+            else if (titleLower.includes('engine') || titleLower.includes('pgm-fi') || titleLower.includes('acg')) Icon = Zap;
+            else if (titleLower.includes('fuel')) Icon = Fuel;
+            else if (titleLower.includes('stand') || titleLower.includes('key')) Icon = ShieldCheck;
+            
+            return {
+              id: (f.id || i).toString(),
+              title: f.title,
+              subtitle: "",
+              description: f.description,
+              icon: Icon,
+              image: f.image.startsWith("/") ? f.image : `/images/features/dio125/${f.image}`,
+              fallbackImage: "/inventory/honda-dio-bs6-125.png"
+            };
+          })} 
+        />
 
         {/* 6. Explore Accessories */}
         <AccessoriesPage 

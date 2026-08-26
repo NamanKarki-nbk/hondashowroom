@@ -16,13 +16,13 @@ export default async function OwnersManualPage() {
   });
 
   return (
-    <main className="min-h-screen bg-[#242938] pt-28 pb-24">
+    <main className="min-h-screen bg-background dark:bg-slate-950 pt-28 pb-24">
 
       {/* Hero Banner */}
-      <div className="bg-[#242938]">
+      <div className="bg-background dark:bg-slate-950">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 pt-6 pb-2">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-[#868ea3] mb-4">
+          <nav className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
             <Link href="/" className="hover:text-primary-foreground flex items-center gap-1 transition-colors">
               <Home className="w-3.5 h-3.5" /> Home
             </Link>

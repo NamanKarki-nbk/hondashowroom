@@ -1,22 +1,32 @@
 "use client";
 
 import * as React from "react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
+
+function ThemeSyncer() {
+  const { setTheme } = useTheme();
+
+  React.useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      if (e.key === "honda-theme") {
+        setTheme(e.newValue ?? "system");
+      }
+    };
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, [setTheme]);
+
+  return null;
+}
 
 export function ThemeProvider({
   children,
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
-  // Suppress React 19 strict warning for next-themes script tag injection
-  if (typeof window !== "undefined") {
-    const originalConsoleError = console.error;
-    console.error = (...args: any[]) => {
-      if (typeof args[0] === "string" && args[0].includes("Encountered a script tag while rendering React component")) {
-        return;
-      }
-      originalConsoleError(...args);
-    };
-  }
-
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+  return (
+    <NextThemesProvider {...props}>
+      <ThemeSyncer />
+      {children}
+    </NextThemesProvider>
+  );
 }

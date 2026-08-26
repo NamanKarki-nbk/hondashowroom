@@ -23,7 +23,7 @@ export async function POST(req: Request) {
         price: Number(body.price),
         imageUrl: body.imageUrl,
         description: body.description || null,
-        specs: body.specs || null,
+        specifications: body.specifications || null,
       }
     });
     return NextResponse.json(product);
@@ -44,7 +44,7 @@ export async function PUT(req: Request) {
         price: Number(data.price),
         imageUrl: data.imageUrl,
         description: data.description || null,
-        specs: data.specs || null,
+        specifications: data.specifications || null,
       }
     });
     return NextResponse.json(product);

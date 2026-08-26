@@ -22,8 +22,8 @@ const DIO_FEATURES: FeatureCard[] = [
     subtitle: "Enhanced Smart Power",
     description: "Honda's advanced 110cc engine optimizes fuel combustion while reducing internal friction. Equipped with Silent ACG starter for jolt-free engine starts.",
     icon: Zap,
-    image: "/images/dio/esp-engine.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    image: "/images/features/dio110/bs-vi-engine.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
     tag: "Engine Tech",
   },
   {
@@ -32,8 +32,8 @@ const DIO_FEATURES: FeatureCard[] = [
     subtitle: "Smart Find, Unlock & Start",
     description: "Revolutionary H-Smart key system provides Answer Back (blinks lights to locate vehicle), Smart Unlock, Keyless Push Start, and Anti-Theft Smart Safe.",
     icon: KeyRound,
-    image: "/images/dio/smart-key.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    image: "/images/features/dio110/acg-starter.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
     tag: "Segment First",
   },
   {
@@ -42,8 +42,8 @@ const DIO_FEATURES: FeatureCard[] = [
     subtitle: "Smart Information Console",
     description: "Intelligent digital display featuring Real-Time Mileage, Average Mileage, Distance-to-Empty (DTE), Service Due Indicator, 3-step ECO Indicator, and Clock.",
     icon: Monitor,
-    image: "/images/dio/digital-meter.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    image: "/images/features/dio110/digital-meter.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "fuel-lid",
@@ -51,8 +51,8 @@ const DIO_FEATURES: FeatureCard[] = [
     subtitle: "Convenient Refueling",
     description: "Refuel without getting off the scooter or lifting the seat. One-touch integrated switch unlocks both the underseat compartment and external fuel cap.",
     icon: Fuel,
-    image: "/images/dio/external-fuel.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    image: "/images/features/dio110/external-fuel-fill.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "suspension",
@@ -60,8 +60,8 @@ const DIO_FEATURES: FeatureCard[] = [
     subtitle: "Superior Ride Comfort",
     description: "Telescopic front suspension paired with a larger 12-inch front alloy wheel absorbs road bumps effortlessly, providing unmatched high-speed stability.",
     icon: Navigation,
-    image: "/images/dio/telescopic.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    image: "/images/features/dio110/telescopic-suspension.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "side-stand",
@@ -69,8 +69,8 @@ const DIO_FEATURES: FeatureCard[] = [
     subtitle: "Rider Safety System",
     description: "Prevents rider from starting or accelerating the scooter while the side stand is engaged, avoiding accidental tip-overs and mishaps.",
     icon: ShieldAlert,
-    image: "/images/dio/side-stand.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    image: "/images/features/dio110/side-stand-engine-cut-off.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "cbs",
@@ -78,8 +78,8 @@ const DIO_FEATURES: FeatureCard[] = [
     subtitle: "Equalizer Braking",
     description: "Honda's proprietary CBS with equalizer distributes braking force proportionally to both front and rear wheels for shorter stopping distances.",
     icon: Disc,
-    image: "/images/dio/cbs-brakes.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    image: "/images/features/dio110/pgm-fi.png", // replacing cbs-brakes with pgm-fi since cbs-brakes image doesn't exist
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "led-lamp",
@@ -87,8 +87,8 @@ const DIO_FEATURES: FeatureCard[] = [
     subtitle: "Aggressive Stance",
     description: "Striking front LED position lamp integrated into the handlebar cowl combined with dual-tone body graphics for a distinctive, edgy road presence.",
     icon: Sparkles,
-    image: "/images/dio/led-headlamp.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    image: "/images/features/dio110/led-headlamp.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
 ];
 

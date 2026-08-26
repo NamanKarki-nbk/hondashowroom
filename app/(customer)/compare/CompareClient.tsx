@@ -10,7 +10,7 @@ type Vehicle = {
   category: string;
   price: number;
   imageUrl: string;
-  specs: any;
+  specifications: Record<string, any> | null | any;
   description: string | null;
   brand?: string;
 };
@@ -163,7 +163,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
   // Build spec sheet mapping
   const getVehicleSpecsMap = (vehicle: Vehicle) => {
     const defaultSpecs = getSpecs(vehicle.name, vehicle.price);
-    return { ...defaultSpecs, ...vehicle.specs };
+    return { ...defaultSpecs, ...vehicle.specifications };
   };
 
   const specCategories = [

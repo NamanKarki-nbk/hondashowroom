@@ -8,8 +8,8 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 const imageMap: Record<string, string> = {
-  'Honda Dio BS6 110': '/inventory/honda-dio-bs6.png',
-  'Honda Dio BS6 125': '/inventory/honda-dio-125.png',
+  'Honda Dio BS6 110': '/inventory/honda-dio-bs6-110.png',
+  'Honda Dio BS6 125': '/inventory/honda-dio-bs6-125.png',
   'Honda Shine BS6': '/inventory/honda-shine-bs6.png',
   'Honda SP Shine 125': '/inventory/honda-sp-125-.png',
   'CB Hornet 2.0': '/inventory/cb-hornet-2-0.png',

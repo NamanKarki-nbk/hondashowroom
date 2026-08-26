@@ -70,7 +70,7 @@ export default function LocationsPage() {
                     <h3 className={`text-xl md:text-2xl font-semibold font-bold uppercase tracking-tight ${!loc.isMain && "text-gray-900 dark:text-white"}`}>{loc.name}</h3>
                     <p className={`text-sm font-semibold uppercase tracking-wider mt-1 ${loc.isMain ? "text-red-200" : "text-[#CC0000]"}`}>{loc.type}</p>
                   </div>
-                  {loc.isMain && <span className="bg-white text-[#CC0000] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">HQ</span>}
+                  {loc.isMain && <span className="bg-background text-primary dark:text-red-500 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">HQ</span>}
                 </div>
                 
                 <div className="space-y-4 mb-8">
@@ -94,7 +94,7 @@ export default function LocationsPage() {
 
                 <button className={`w-full py-3 rounded-xl font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors ${
                   loc.isMain 
-                    ? "bg-white text-[#CC0000] hover:bg-gray-100" 
+                    ? "bg-background text-primary dark:text-red-500 hover:bg-gray-100 dark:hover:bg-slate-800" 
                     : "bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-700"
                 }`}>
                   <Navigation className="w-4 h-4" /> Get Directions

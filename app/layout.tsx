@@ -47,8 +47,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-300 w-full overflow-x-hidden">
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
+          defaultTheme="system"
+          enableSystem={true}
+          storageKey="honda-theme"
         >
           {children}
           <Toaster richColors position="top-right" />

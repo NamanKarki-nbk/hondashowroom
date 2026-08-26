@@ -31,7 +31,7 @@ const TECH_MODULES: TechModule[] = [
       "Tumble Flow Technology: Increases combustion speed for instant throttle response.",
     ],
     image: "/images/dio/esp-engine.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "digital-console",
@@ -47,7 +47,7 @@ const TECH_MODULES: TechModule[] = [
       "Bluetooth Connectivity Ready & Service Due Reminder.",
     ],
     image: "/images/dio/digital-meter.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "cbs-braking",
@@ -63,7 +63,7 @@ const TECH_MODULES: TechModule[] = [
       "Option for 190mm Front Disc Brake for enhanced stopping power.",
     ],
     image: "/images/dio/cbs-brakes.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "hsmart-key",
@@ -79,7 +79,7 @@ const TECH_MODULES: TechModule[] = [
       "Smart Safe: Mapped ECU immobilizer prevents hotwiring and unauthorized starting.",
     ],
     image: "/images/dio/smart-key.jpg",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
 ];
 

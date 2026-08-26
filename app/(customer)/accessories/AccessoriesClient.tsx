@@ -124,7 +124,7 @@ export default function AccessoriesClient({ initialAccessories }: AccessoriesCli
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredAccessories.map((item) => (
                   <div key={item.id} className="bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 dark:border-white/10 group">
-                    <div className="relative h-48 bg-white flex items-center justify-center p-4">
+                    <div className="relative h-48 bg-white dark:bg-slate-800 flex items-center justify-center p-4">
                       <Image
                         src={item.imageUrl}
                         alt={item.name}

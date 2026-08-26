@@ -24,7 +24,7 @@ interface ProductData {
   features: { title: string; description: string; image: string }[];
   sections?: { title: string; features: { title: string; description: string; image: string }[] }[];
   colors: { name: string; hex: string }[];
-  specs: Record<string, { label: string; value: string }[]>;
+  specifications: Record<string, { label: string; value: string }[]>;
   variants: { name: string; imageUrl: string }[];
   threeSixty?: { localPath: string; totalFrames: number } | null;
 }
@@ -196,7 +196,7 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
       <VehicleColorSelector vehicleName={vehicle.name} imageUrl={vehicle.imageUrl} colors={vehicle.colors} />
 
       {/* Technical Specs Section */}
-      <BigWingVehicleSpecs specs={vehicle.specs} vehicleSlug={vehicle.id} fallbackImageUrl={vehicle.imageUrl} threeSixty={vehicle.threeSixty} />
+      <BigWingVehicleSpecs specs={vehicle.specifications} vehicleSlug={vehicle.id} fallbackImageUrl={vehicle.imageUrl} threeSixty={vehicle.threeSixty} />
 
       {/* EMI Calculator */}
       <EmiCalculator vehicleName={vehicle.name} vehicleImage={vehicle.imageUrl} initialPrice={vehicle.price} />

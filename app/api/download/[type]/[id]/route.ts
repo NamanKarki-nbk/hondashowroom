@@ -55,7 +55,7 @@ export async function GET(
   // Fetch product info
   const product = await prisma.productCatalog.findUnique({
     where: { id },
-    select: { name: true, category: true, price: true, description: true, specs: true },
+    select: { name: true, category: true, price: true, description: true, specifications: true },
   });
 
   if (!product) {
@@ -156,8 +156,8 @@ export async function GET(
     });
 
     // ── Specs table if available ──
-    if (product.specs && typeof product.specs === "object") {
-      const specs = product.specs as Record<string, unknown>;
+    if (product.specifications && typeof product.specifications === "object") {
+      const specs = product.specifications as Record<string, unknown>;
       const specEntries = Object.entries(specs).slice(0, 10);
 
       if (specEntries.length > 0) {

@@ -74,7 +74,7 @@ export default function DioVariantComparison({ stdPrice = "NPR 2,64,900", dlxPri
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 text-primary text-xs font-black tracking-widest uppercase mb-3">
             <Sparkles className="w-4 h-4" /> Compare Model Trims
           </div>
-          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold sm:text-4xl font-black text-foreground uppercase tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold sm:text-4xl font-black text-foreground tracking-tight">
             Dio 110 Model Variants: STD vs DLX
           </h2>
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-2">
@@ -113,7 +113,7 @@ export default function DioVariantComparison({ stdPrice = "NPR 2,64,900", dlxPri
                     )}
                   </div>
 
-                  <h3 className="text-2xl md:text-3xl font-semibold font-black text-foreground uppercase tracking-tight">
+                  <h3 className="text-2xl md:text-3xl font-semibold font-black text-foreground tracking-tight">
                     {variant.name}
                   </h3>
                   <div className="text-2xl md:text-3xl font-semibold font-black text-primary mt-1 mb-4">
@@ -125,7 +125,7 @@ export default function DioVariantComparison({ stdPrice = "NPR 2,64,900", dlxPri
                   <div className="relative h-48 w-full flex items-center justify-center my-4 bg-white/60 dark:bg-[#1C1C20]/60 rounded-2xl p-2 border border-gray-200/60 dark:border-slate-800/60">
                     <ImageWithFallback
                       src={variant.image}
-                      fallbackSrc="/inventory/honda-dio-bs6.png"
+                      fallbackSrc="/inventory/honda-dio-bs6-110.png"
                       alt={variant.name}
                       className="max-h-40 w-auto object-contain drop-shadow-md"
                     />

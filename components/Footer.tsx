@@ -78,7 +78,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-16 pt-8 border-t border-gray-200/80 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs font-bold text-gray-500 dark:text-gray-400 tracking-widest uppercase text-center md:text-left">
+          <p className="text-xs font-bold text-gray-500 dark:text-gray-400 tracking-widest text-center md:text-left">
             &copy; {new Date().getFullYear()} Society Enterprises Pvt. Ltd.
           </p>
           

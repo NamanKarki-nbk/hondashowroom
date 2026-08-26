@@ -78,13 +78,13 @@ export default function LeadsClient({ type }: { type?: string }) {
       case 'CONTACTED': return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400"><Clock className="w-3 h-3"/> CONTACTED</span>;
       case 'CONVERTED': return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400"><CheckCircle className="w-3 h-3"/> CONVERTED</span>;
       case 'LOST': return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400"><XCircle className="w-3 h-3"/> LOST</span>;
-      default: return <span className="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-700">{status}</span>;
+      default: return <span className="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300">{status}</span>;
     }
   };
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-slate-900 rounded-2xl p-3 flex flex-col sm:flex-row gap-3 shadow-sm border border-gray-100 dark:border-slate-800">
+      <div className="bg-background dark:bg-slate-900 rounded-2xl p-3 flex flex-col sm:flex-row gap-3 shadow-sm border border-gray-100 dark:border-slate-800">
         <div className="relative flex-1">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
@@ -92,12 +92,12 @@ export default function LeadsClient({ type }: { type?: string }) {
             placeholder="Search leads by name or phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-transparent text-gray-900 dark:text-white outline-none pl-11 pr-4 py-2 placeholder:text-gray-400 text-sm font-medium"
+            className="w-full bg-transparent text-gray-900 dark:text-gray-100 outline-none pl-11 pr-4 py-2 placeholder:text-gray-400 text-sm font-medium"
           />
         </div>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-800 overflow-hidden">
+      <div className="bg-background dark:bg-slate-900 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-800 overflow-hidden">
         <div className="overflow-x-auto w-full">
           <table className="w-full text-left">
             <thead>
@@ -106,7 +106,7 @@ export default function LeadsClient({ type }: { type?: string }) {
                 <th className="py-5 px-6 whitespace-nowrap">Source / Interest</th>
                 <th className="py-5 px-6 whitespace-nowrap">Status</th>
                 <th className="py-5 px-6 whitespace-nowrap">Remarks</th>
-                <th className="py-5 px-6 whitespace-nowrap text-right sticky right-0 bg-white dark:bg-slate-900 border-l border-gray-100 dark:border-slate-800 z-10">Actions</th>
+                <th className="py-5 px-6 whitespace-nowrap text-right sticky right-0 bg-background dark:bg-slate-900 border-l border-gray-100 dark:border-slate-800 z-10">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
@@ -131,21 +131,21 @@ export default function LeadsClient({ type }: { type?: string }) {
                           <User className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="text-sm font-black text-gray-900 dark:text-white">{lead.name}</p>
-                          <p className="text-xs font-medium text-gray-500 flex items-center gap-1 mt-0.5"><Phone className="w-3 h-3" /> {lead.phone}</p>
+                          <p className="text-sm font-black text-gray-900 dark:text-gray-100">{lead.name}</p>
+                          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1 mt-0.5"><Phone className="w-3 h-3" /> {lead.phone}</p>
                         </div>
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <p className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-wider">{lead.source}</p>
-                      <p className="text-xs font-medium text-gray-500 mt-1">{lead.interestedIn || 'N/A'}</p>
+                      <p className="text-xs font-bold text-gray-900 dark:text-gray-100 uppercase tracking-wider">{lead.source}</p>
+                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">{lead.interestedIn || 'N/A'}</p>
                     </td>
                     <td className="py-4 px-6">
                       {editingId === lead.id ? (
                         <select 
                           value={editStatus} 
                           onChange={(e) => setEditStatus(e.target.value)}
-                          className="bg-gray-50 border border-gray-200 rounded px-2 py-1 text-xs font-bold outline-none dark:bg-black dark:border-gray-700 dark:text-white"
+                          className="bg-gray-50 border border-gray-200 dark:border-slate-800 rounded px-2 py-1 text-xs font-bold outline-none dark:bg-black dark:border-gray-700 dark:text-white"
                         >
                           <option value="NEW">NEW</option>
                           <option value="CONTACTED">CONTACTED</option>
@@ -162,19 +162,19 @@ export default function LeadsClient({ type }: { type?: string }) {
                           type="text" 
                           value={editRemarks} 
                           onChange={(e) => setEditRemarks(e.target.value)}
-                          className="w-full bg-gray-50 border border-gray-200 rounded px-3 py-1.5 text-xs font-medium outline-none dark:bg-black dark:border-gray-700 dark:text-white"
+                          className="w-full bg-gray-50 border border-gray-200 dark:border-slate-800 rounded px-3 py-1.5 text-xs font-medium outline-none dark:bg-black dark:border-gray-700 dark:text-white"
                           placeholder="Add remarks..."
                         />
                       ) : (
-                        <p className="text-xs text-gray-500 line-clamp-2 max-w-xs">{lead.remarks || '-'}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 max-w-xs">{lead.remarks || '-'}</p>
                       )}
                     </td>
-                    <td className="py-4 px-6 text-right sticky right-0 bg-white dark:bg-slate-900 border-l border-gray-100 dark:border-slate-800 z-10">
+                    <td className="py-4 px-6 text-right sticky right-0 bg-background dark:bg-slate-900 border-l border-gray-100 dark:border-slate-800 z-10">
                       {editingId === lead.id ? (
                         <div className="flex justify-end gap-2">
                           <button 
                             onClick={() => setEditingId(null)}
-                            className="px-3 py-1.5 text-xs font-bold text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+                            className="px-3 py-1.5 text-xs font-bold text-gray-500 dark:text-gray-400 transition-colors"
                           >
                             Cancel
                           </button>
@@ -187,23 +187,21 @@ export default function LeadsClient({ type }: { type?: string }) {
                         </div>
                       ) : (
                         <div className="flex justify-end items-center gap-2">
-                          {type === 'quotation' && (
-                            <button
-                              onClick={() => {
-                                const qs = new URLSearchParams({
-                                  docType: 'Quotation',
-                                  loaneeName: lead.name,
-                                  loaneeContact: lead.phone,
-                                  vehicleModel: lead.interestedIn || ''
-                                }).toString();
-                                router.push(`/admin/letters/new?${qs}`);
-                              }}
-                              className="text-[#1A7A1A] hover:text-[#1A7A1A]/80 p-2 transition-colors flex items-center gap-1"
-                              title="Generate Quotation"
-                            >
-                              <FileText className="w-4 h-4" />
-                            </button>
-                          )}
+                          <button
+                            onClick={() => {
+                              const qs = new URLSearchParams({
+                                docType: 'Quotation',
+                                loaneeName: lead.name,
+                                loaneeContact: lead.phone,
+                                vehicleModel: lead.interestedIn || ''
+                              }).toString();
+                              router.push(`/admin/letters/new?${qs}`);
+                            }}
+                            className="text-[#1A7A1A] hover:text-[#1A7A1A]/80 p-2 transition-colors flex items-center gap-1"
+                            title="Generate Quotation"
+                          >
+                            <FileText className="w-4 h-4" />
+                          </button>
                           <button 
                             onClick={() => {
                               setEditingId(lead.id);

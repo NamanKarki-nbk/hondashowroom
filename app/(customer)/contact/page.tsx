@@ -62,20 +62,20 @@ function ContactForm() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 pt-28 pb-12">
+    <main className="min-h-screen bg-gray-50 dark:bg-slate-950 pt-28 pb-12">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-extrabold text-gray-900 mb-4">
+          <h1 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 mb-4">
             Get in <span className="text-primary">Touch</span>
           </h1>
-          <p className="text-xl md:text-2xl font-semibold text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl font-semibold text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Have questions about a new vehicle, finance options, or need to schedule a service? We are here to help!
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="grid md:grid-cols-2 gap-12 bg-white dark:bg-slate-900 rounded-2xl shadow-xl overflow-hidden">
           
           {/* Contact Info & Map */}
           <div className="bg-gray-900 text-white p-8 md:p-12">
@@ -121,7 +121,7 @@ function ContactForm() {
 
           {/* Form */}
           <div className="p-8 md:p-12">
-            <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-bold text-gray-900 mb-8">Send an Inquiry</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold font-bold text-gray-900 dark:text-gray-100 mb-8">Send an Inquiry</h2>
             
             {success ? (
               <div className="bg-green-50 text-green-800 border border-green-200 rounded-xl p-6 text-center">
@@ -139,38 +139,38 @@ function ContactForm() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Full Name <span className="text-primary">*</span></label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name <span className="text-primary">*</span></label>
                     <input 
                       type="text" 
                       name="name" 
                       required
                       value={formDataState.name}
                       onChange={e => setFormDataState({...formDataState, name: e.target.value})}
-                      className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary p-3 border"
+                      className="w-full border-gray-300 dark:border-slate-700 dark:bg-slate-800 dark:text-gray-100 dark:placeholder-gray-400 rounded-lg shadow-sm focus:ring-primary focus:border-primary p-3 border"
                       placeholder="John Doe"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number <span className="text-primary">*</span></label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone Number <span className="text-primary">*</span></label>
                     <input 
                       type="tel" 
                       name="phone" 
                       required
                       value={formDataState.phone}
                       onChange={e => setFormDataState({...formDataState, phone: e.target.value})}
-                      className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary p-3 border"
+                      className="w-full border-gray-300 dark:border-slate-700 dark:bg-slate-800 dark:text-gray-100 dark:placeholder-gray-400 rounded-lg shadow-sm focus:ring-primary focus:border-primary p-3 border"
                       placeholder="98XXXXXX"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Interested In</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Interested In</label>
                   <select 
                     name="interestedIn"
                     value={formDataState.interestedIn}
                     onChange={e => setFormDataState({...formDataState, interestedIn: e.target.value})}
-                    className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary p-3 border bg-white"
+                    className="w-full border-gray-300 dark:border-slate-700 dark:bg-slate-800 dark:text-gray-100 dark:placeholder-gray-400 rounded-lg shadow-sm focus:ring-primary focus:border-primary p-3 border bg-white dark:bg-slate-900"
                   >
                     <option value="">-- Select an Option --</option>
                     <option value="New Vehicle Purchase">New Vehicle Purchase</option>
@@ -181,13 +181,13 @@ function ContactForm() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Message</label>
                   <textarea 
                     name="remarks" 
                     rows={6}
                     value={formDataState.remarks}
                     onChange={e => setFormDataState({...formDataState, remarks: e.target.value})}
-                    className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary p-3 border"
+                    className="w-full border-gray-300 dark:border-slate-700 dark:bg-slate-800 dark:text-gray-100 dark:placeholder-gray-400 rounded-lg shadow-sm focus:ring-primary focus:border-primary p-3 border"
                     placeholder="How can we help you?"
                   ></textarea>
                 </div>
@@ -214,7 +214,7 @@ function ContactForm() {
 
 export default function ContactPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>}>
       <ContactForm />
     </Suspense>
   );

@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface VehicleCardProps {
   title: string;
@@ -17,8 +18,14 @@ interface VehicleCardProps {
 }
 
 export default function VehicleCard({ title, priceNpr, cc, slug, category, imageUrl, colors, onQuoteClick, onBookClick }: VehicleCardProps) {
+  const router = useRouter();
+
+  const handleCardClick = () => {
+    router.push(`/vehicles/${slug}`);
+  };
+
   return (
-    <Link href={`/vehicles/${slug}`} className="block group h-full">
+    <div onClick={handleCardClick} className="block group h-full cursor-pointer">
       <div className="flex flex-col h-full bg-white/70 dark:bg-white/5 backdrop-blur-xl border border-gray-200/60 dark:border-white/10 rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.02)] dark:hover:shadow-[0_20px_40px_rgba(255,255,255,0.05)] transition-all duration-500 relative group-hover:-translate-y-2">
         
         {/* Top Badge */}
@@ -111,6 +118,6 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }

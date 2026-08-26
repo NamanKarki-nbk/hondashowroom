@@ -11,8 +11,34 @@ interface VehicleSpecsProps {
 }
 
 export default function VehicleSpecs({ specs, vehicleSlug = "dio-125", fallbackImageUrl, threeSixty }: VehicleSpecsProps) {
-  const specKeys = Object.keys(specs);
-  const [activeSpecTab, setActiveSpecTab] = useState(specKeys[0]);
+  const HIDDEN_TABS = ["usp", "bannerImage", "galleryImages", "features", "colors", "highlights"];
+  const TAB_LABELS: Record<string, string> = {
+    usp: "Key Features",
+    bannerImage: "Banner",
+    galleryImages: "Gallery",
+    features: "Features",
+    colors: "Colors",
+    Body_Dimensions: "Body & Dimensions",
+    Engine_Performance: "Engine",
+    Electricals: "Electricals",
+    Chassis_Suspension: "Chassis & Suspension",
+    Brakes_Tyres: "Brakes & Tyres",
+  };
+
+  const formatTabLabel = (tab: string) => {
+    if (TAB_LABELS[tab]) return TAB_LABELS[tab];
+    return tab.replace(/_/g, ' ');
+  };
+
+  // Return early if specs is undefined or null
+  if (!specs || typeof specs !== 'object') return null;
+
+  // Filter out non-array properties and hidden tabs to ensure we only render valid specs
+  const specKeys = Object.keys(specs).filter(
+    (key) => !HIDDEN_TABS.includes(key) && Array.isArray((specs as any)[key])
+  );
+  
+  const [activeSpecTab, setActiveSpecTab] = useState(specKeys[0] || "");
 
   if (!specKeys.length) return null;
 
@@ -37,7 +63,7 @@ export default function VehicleSpecs({ specs, vehicleSlug = "dio-125", fallbackI
                     : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-primary-foreground hover:bg-background/50 dark:hover:bg-gray-800/50"
                 }`}
               >
-                {tab.replace(/_/g, ' ')}
+                {formatTabLabel(tab)}
               </button>
             ))}
           </div>

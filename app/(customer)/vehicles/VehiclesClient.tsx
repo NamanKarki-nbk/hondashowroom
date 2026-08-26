@@ -123,11 +123,11 @@ export default function VehiclesClient({ products }: { products: any[] }) {
               key={idx} 
               title={vehicle.name}
               priceNpr={vehicle.price}
-              cc={vehicle.specs?.cc || undefined}
+              cc={vehicle.specifications?.cc || undefined}
               slug={vehicle.id}
               category={vehicle.category}
               imageUrl={vehicle.imageUrl}
-              colors={vehicle.specs?.colors}
+              colors={vehicle.specifications?.colors}
               onQuoteClick={() => openModal("quote", vehicle)}
               onBookClick={() => openModal("book", vehicle)}
             />

@@ -7,9 +7,9 @@ const pool = new Pool({ connectionString })
 const adapter = new PrismaPg(pool)
 
 const globalForPrisma = globalThis as unknown as {
-  prisma_v5: PrismaClient | undefined
+  prisma_v6: PrismaClient | undefined
 }
 
-export const prisma = globalForPrisma.prisma_v5 ?? new PrismaClient({ adapter })
+export const prisma = globalForPrisma.prisma_v6 ?? new PrismaClient({ adapter })
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma_v5 = prisma
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma_v6 = prisma

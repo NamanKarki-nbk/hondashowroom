@@ -104,11 +104,11 @@ export default function TestRidePage() {
   const minDate = tomorrow.toISOString().split('T')[0];
 
   return (
-    <main className="min-h-screen bg-gray-50 pt-28 pb-20">
+    <main className="min-h-screen bg-gray-50 dark:bg-slate-950 pt-28 pb-20">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-12">
         
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-5xl font-black text-gray-900 uppercase tracking-tight mb-4">
+          <h1 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 uppercase tracking-tight mb-4">
             Book a <span className="text-primary">Test Ride</span>
           </h1>
           <p className="text-xl text-gray-600 font-medium max-w-2xl mx-auto">
@@ -120,23 +120,23 @@ export default function TestRidePage() {
           
           {/* Info Column */}
           <div className="lg:col-span-5 space-y-8">
-            <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 relative overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-xl border border-gray-100 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl -z-10"></div>
               
-              <h3 className="text-2xl font-black text-gray-900 uppercase mb-6 flex items-center gap-2">
+              <h3 className="text-2xl font-black text-gray-900 dark:text-gray-100 uppercase mb-6 flex items-center gap-2">
                 <MapPin className="text-primary w-6 h-6" /> Our Showroom
               </h3>
               
               <div className="space-y-6">
                 <div>
                   <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Location</div>
-                  <div className="text-lg font-bold text-gray-900">Goarkha Department Building, Ganga Nagari, Damak-05</div>
+                  <div className="text-lg font-bold text-gray-900 dark:text-gray-100">Goarkha Department Building, Ganga Nagari, Damak-05</div>
                   <div className="text-gray-600">Jhapa, Koshi Province, Nepal</div>
                 </div>
                 
                 <div>
                   <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Test Ride Hours</div>
-                  <div className="text-lg font-bold text-gray-900">10:00 AM - 5:00 PM</div>
+                  <div className="text-lg font-bold text-gray-900 dark:text-gray-100">10:00 AM - 5:00 PM</div>
                   <div className="text-gray-600">Sunday to Friday</div>
                 </div>
                 
@@ -170,14 +170,14 @@ export default function TestRidePage() {
           
           {/* Form Column */}
           <div className="lg:col-span-7">
-            <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-gray-100">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 md:p-12 shadow-xl border border-gray-100">
               
               {success ? (
                 <div className="text-center py-12">
                   <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircle className="w-10 h-10 text-green-500" />
                   </div>
-                  <h2 className="text-3xl font-black text-gray-900 uppercase mb-4">Booking Confirmed!</h2>
+                  <h2 className="text-3xl font-black text-gray-900 dark:text-gray-100 uppercase mb-4">Booking Confirmed!</h2>
                   <p className="text-lg text-gray-600 font-medium mb-8">
                     Your test ride request has been received. Our sales executive will call you shortly to confirm the appointment.
                   </p>
@@ -215,7 +215,7 @@ export default function TestRidePage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">
+                      <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-widest mb-2">
                         <span className="flex items-center justify-between w-full">
                           <span>Full Name <span className="text-primary">*</span></span>
                           {user?.fullName && form.name === user.fullName && (
@@ -225,11 +225,11 @@ export default function TestRidePage() {
                       </label>
                       <div className="relative">
                         <User className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
-                        <input type="text" name="name" required value={form.name} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium" placeholder="John Doe" />
+                        <input type="text" name="name" required value={form.name} onChange={handleChange} className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-gray-100 dark:placeholder-gray-400 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium" placeholder="John Doe" />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">
+                      <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-widest mb-2">
                         <span className="flex items-center justify-between w-full">
                           <span>Phone Number <span className="text-primary">*</span></span>
                           {user?.phone && form.phone && user.phone.includes(form.phone) && (
@@ -239,16 +239,16 @@ export default function TestRidePage() {
                       </label>
                       <div className="relative">
                         <Phone className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
-                        <input type="tel" name="phone" required value={form.phone} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium" placeholder="98XXXXXX" />
+                        <input type="tel" name="phone" required value={form.phone} onChange={handleChange} className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-gray-100 dark:placeholder-gray-400 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium" placeholder="98XXXXXX" />
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">Select Vehicle <span className="text-primary">*</span></label>
+                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-widest mb-2">Select Vehicle <span className="text-primary">*</span></label>
                     <div className="relative">
                       <Bike className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
-                      <select name="bikeModel" required value={form.bikeModel} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium appearance-none">
+                      <select name="bikeModel" required value={form.bikeModel} onChange={handleChange} className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-gray-100 dark:placeholder-gray-400 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium appearance-none">
                         <option value="">-- Choose a Model --</option>
                         {HONDA_MODELS.map((m) => (
                           <option key={m} value={m}>{m}</option>
@@ -262,17 +262,17 @@ export default function TestRidePage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">Preferred Date <span className="text-primary">*</span></label>
+                      <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-widest mb-2">Preferred Date <span className="text-primary">*</span></label>
                       <div className="relative">
                         <CalendarIcon className="absolute left-4 top-3.5 w-5 h-5 text-gray-400 pointer-events-none" />
-                        <input type="date" name="date" required min={minDate} value={form.date} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium text-gray-700" />
+                        <input type="date" name="date" required min={minDate} value={form.date} onChange={handleChange} className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-gray-100 dark:placeholder-gray-400 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium text-gray-700 dark:text-gray-300" />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">Time Slot <span className="text-primary">*</span></label>
+                      <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-widest mb-2">Time Slot <span className="text-primary">*</span></label>
                       <div className="relative">
                         <Clock className="absolute left-4 top-3.5 w-5 h-5 text-gray-400 pointer-events-none" />
-                        <select name="timeSlot" required value={form.timeSlot} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium appearance-none">
+                        <select name="timeSlot" required value={form.timeSlot} onChange={handleChange} className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-gray-100 dark:placeholder-gray-400 rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium appearance-none">
                           <option value="">-- Select Time --</option>
                           <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
                           <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
@@ -286,8 +286,8 @@ export default function TestRidePage() {
                   </div>
                   
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-widest mb-2">Additional Notes (Optional)</label>
-                    <textarea name="notes" rows={3} value={form.notes} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium" placeholder="Any specific requirements?"></textarea>
+                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-widest mb-2">Additional Notes (Optional)</label>
+                    <textarea name="notes" rows={3} value={form.notes} onChange={handleChange} className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-gray-100 dark:placeholder-gray-400 rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary focus:border-primary outline-none font-medium" placeholder="Any specific requirements?"></textarea>
                   </div>
 
                   <button 

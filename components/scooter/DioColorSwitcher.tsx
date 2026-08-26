@@ -20,7 +20,7 @@ const COLOR_OPTIONS: ColorOption[] = [
     name: "Sports Red",
     hex: "#C1291A",
     image: "/images/dio/dio-red.png",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
     badge: "Popular",
   },
   {
@@ -28,7 +28,7 @@ const COLOR_OPTIONS: ColorOption[] = [
     name: "Matte Marvel Blue",
     hex: "#2563EB",
     image: "/images/dio/dio-blue.png",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
     badge: "New",
   },
   {
@@ -36,7 +36,7 @@ const COLOR_OPTIONS: ColorOption[] = [
     name: "Dazzle Yellow",
     hex: "#EAB308",
     image: "/images/dio/dio-yellow.png",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
     badge: "Gold Edition",
   },
   {
@@ -44,14 +44,14 @@ const COLOR_OPTIONS: ColorOption[] = [
     name: "Matte Axis Grey",
     hex: "#4A4E53",
     image: "/images/dio/dio-grey.png",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
   {
     id: "silver",
     name: "Platinum Silver",
     hex: "#94A3B8",
     image: "/images/dio/dio-silver.png",
-    fallbackImage: "/inventory/honda-dio-bs6.png",
+    fallbackImage: "/inventory/honda-dio-bs6-110.png",
   },
 ];
 
@@ -272,7 +272,7 @@ export default function DioColorSwitcher({ onSelectColor }: DioColorSwitcherProp
               <div className={`absolute inset-0 flex flex-col items-center justify-center p-8 md:p-16 ${isDragging.current ? 'cursor-grabbing' : 'cursor-grab'}`}>
                 <ImageWithFallback
                   src={SPIN_FRAMES[currentFrame]}
-                  fallbackSrc="/inventory/honda-dio-bs6.png"
+                  fallbackSrc="/inventory/honda-dio-bs6-110.png"
                   alt={`Honda Dio 360 view frame ${currentFrame}`}
                   className="w-full h-full object-contain filter drop-shadow-[0_30px_30px_rgba(0,0,0,0.4)] select-none"
                 />
@@ -305,9 +305,9 @@ export default function DioColorSwitcher({ onSelectColor }: DioColorSwitcherProp
                     {selectedColor.badge}
                   </span>
                 )}
-                <h4 className="text-xl md:text-2xl font-semibold md:text-2xl font-black text-foreground leading-tight mb-1">
+                <h3 className="text-xl md:text-2xl font-semibold md:text-2xl font-black text-foreground leading-tight mb-1">
                   {selectedColor.name}
-                </h4>
+                </h3>
                 <p className="text-xs font-medium text-gray-500 uppercase tracking-widest">
                   Official Paint
                 </p>

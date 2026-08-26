@@ -19,7 +19,7 @@ export default function ImageWithFallback({
   className = "",
   width,
   height,
-  fallbackSrc = "/inventory/honda-dio-bs6.png",
+  fallbackSrc = "/inventory/honda-dio-bs6-110.png",
   priority = false,
 }: ImageWithFallbackProps) {
   const [imgSrc, setImgSrc] = useState(src);

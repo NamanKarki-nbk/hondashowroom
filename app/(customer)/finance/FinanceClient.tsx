@@ -63,7 +63,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
             <div className="md:w-1/2 bg-white dark:bg-slate-900 p-8 flex flex-col justify-center items-center relative overflow-hidden">
                <div className="absolute top-0 right-0 w-32 h-32 bg-[#CC0000]/10 rounded-full blur-3xl"></div>
                <img 
-                 src={(selectedModel.imageUrl || "/inventory/honda-dio-125.png").replace('/product-catalog/', '/inventory/')} 
+                 src={(selectedModel.imageUrl || "/inventory/honda-dio-bs6-125.png").replace('/product-catalog/', '/inventory/')} 
                  alt={selectedModel.modelName}
                  className="w-full h-auto object-contain relative z-10 drop-shadow-xl max-h-64"
                />
@@ -202,7 +202,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
               <div className="w-full h-48 flex items-center justify-center mb-8 relative p-2">
                 <div className="absolute inset-0 bg-[#CC0000]/5 rounded-full blur-2xl group-hover:bg-[#CC0000]/10 transition-colors"></div>
                 <img 
-                  src={(model.imageUrl || "/inventory/honda-dio-125.png").replace('/product-catalog/', '/inventory/')} 
+                  src={(model.imageUrl || "/inventory/honda-dio-bs6-125.png").replace('/product-catalog/', '/inventory/')} 
                   alt={model.modelName}
                   className="w-full h-full object-contain relative z-10 transform group-hover:scale-110 transition-transform duration-700 drop-shadow-xl"
                 />

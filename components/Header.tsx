@@ -111,6 +111,7 @@ export default function Header({ initialIsLoggedIn = false }: { initialIsLoggedI
                     <Link href="/amc" className="px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-primary transition-colors text-sm font-bold whitespace-nowrap">AMC Book</Link>
                     <Link href="/service-booking" className="px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-primary transition-colors text-sm font-bold whitespace-nowrap">Service Booking</Link>
                     <Link href="/know-your-vehicle" className="px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-primary transition-colors text-sm font-bold whitespace-nowrap">Know Your Vehicle</Link>
+                    <Link href="/owners-manual" className="px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-primary transition-colors text-sm font-bold whitespace-nowrap">Owner's Manual</Link>
                     <Link href="/warranty" className="px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-primary transition-colors text-sm font-bold whitespace-nowrap">About Warranty</Link>
                   </div>
                 </div>
