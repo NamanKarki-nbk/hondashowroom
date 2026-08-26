@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-
+import { createAdminNotification } from '@/lib/notifications';
 
 export async function POST(request: Request) {
   try {
@@ -20,6 +20,13 @@ export async function POST(request: Request) {
         timeSlot: data.timeSlot || null,
         notes: data.notes || null,
       }
+    });
+
+    await createAdminNotification({
+      type: 'TEST_RIDE',
+      title: 'New Test Ride Booking',
+      message: `${data.customerName} booked a test ride for ${data.bikeModel} on ${new Date(data.date).toLocaleDateString()}.`,
+      link: '/admin/crm/test-rides'
     });
 
     return NextResponse.json({ success: true, booking });

@@ -74,24 +74,55 @@ export default async function AdminDashboard() {
     };
   }).sort((a, b) => b.total - a.total).slice(0, 5); // top 5 models by stock
 
-  // 4. Fetch Recent Deliveries (Sales Transactions)
+  // 4. Fetch Upcoming/Recent Schedule (Sales, Services, Test Rides)
   const recentSales = await prisma.salesTransaction.findMany({
-    take: 4,
+    take: 2,
     orderBy: { createdAt: 'desc' },
-    include: {
-      customer: true,
-      vehicle: true
-    }
+    include: { customer: true, vehicle: true }
+  });
+  
+  const upcomingTestRides = await prisma.testRideBooking.findMany({
+    take: 2,
+    where: { preferredDate: { gte: new Date() } },
+    orderBy: { preferredDate: 'asc' }
+  });
+  
+  const upcomingServices = await prisma.serviceBooking.findMany({
+    take: 2,
+    where: { preferredDate: { gte: new Date() } },
+    orderBy: { preferredDate: 'asc' },
+    include: { customer: true }
   });
 
-  const DELIVERIES = recentSales.map(sale => {
-    const d = new Date(sale.createdAt);
-    const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
+  const SCHEDULE = [
+    ...recentSales.map(sale => ({
+      date: sale.createdAt,
+      title: sale.customer.fullName,
+      subtitle: sale.vehicle.modelName,
+      status: "Delivered",
+      type: "DELIVERY"
+    })),
+    ...upcomingTestRides.map(tr => ({
+      date: tr.preferredDate,
+      title: `Test Ride: ${tr.name}`,
+      subtitle: tr.modelName,
+      status: "Upcoming",
+      type: "TEST_RIDE"
+    })),
+    ...upcomingServices.map(srv => ({
+      date: srv.preferredDate,
+      title: `Service: ${srv.customer.fullName}`,
+      subtitle: srv.serviceType,
+      status: "Upcoming",
+      type: "SERVICE"
+    }))
+  ]
+  .sort((a, b) => b.date.getTime() - a.date.getTime())
+  .slice(0, 4)
+  .map(item => {
     return {
-      date: dateStr,
-      customer: sale.customer.fullName,
-      model: sale.vehicle.modelName,
-      status: "Confirmed"
+      ...item,
+      dateStr: item.date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' })
     };
   });
 
@@ -202,13 +233,13 @@ export default async function AdminDashboard() {
             </div>
           </div>
 
-          {/* Sales Calendar Widget */}
+          {/* Schedule Widget */}
           <div className="bg-white dark:bg-slate-900/50 backdrop-blur-xl border border-gray-100 dark:border-slate-800/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none rounded-3xl p-6 md:p-8 flex flex-col">
-            <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white tracking-tight mb-8">Deliveries</h2>
+            <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white tracking-tight mb-8">Schedule Overview</h2>
             
             <div className="space-y-4 flex-1">
-               {DELIVERIES.map((delivery, idx) => {
-                 const dateParts = delivery.date.split(' ');
+               {SCHEDULE.map((item, idx) => {
+                 const dateParts = item.dateStr.split(' ');
                  const monthStr = dateParts[0];
                  const dayStr = dateParts[1] || '';
                  return (
@@ -219,22 +250,22 @@ export default async function AdminDashboard() {
                     </div>
                     
                     <div className="flex-1">
-                       <h4 className="text-sm font-black text-gray-900 dark:text-white tracking-tight">{delivery.customer}</h4>
-                       <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mt-0.5">{delivery.model}</p>
+                       <h4 className="text-sm font-black text-gray-900 dark:text-white tracking-tight">{item.title}</h4>
+                       <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mt-0.5">{item.subtitle}</p>
                     </div>
 
-                    <div className={`w-2.5 h-2.5 rounded-full ${delivery.status === 'Confirmed' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]'}`} title={delivery.status} />
+                    <div className={`w-2.5 h-2.5 rounded-full ${item.status === 'Delivered' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]'}`} title={item.status} />
                  </div>
                  );
                })}
-               {DELIVERIES.length === 0 && (
-                 <div className="text-center text-gray-500 py-4">No recent deliveries found</div>
+               {SCHEDULE.length === 0 && (
+                 <div className="text-center text-gray-500 py-4">No recent or upcoming schedule</div>
                )}
             </div>
             
             <Link href="/admin/sales-calendar" className="block mt-8 pt-6 border-t border-gray-100 dark:border-slate-800">
               <button className="w-full flex items-center justify-center gap-2 bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 text-gray-900 dark:text-white py-3.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors group">
-                 View Schedule <ArrowRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                 View Full Calendar <ArrowRight className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
               </button>
             </Link>
           </div>

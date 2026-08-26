@@ -8,16 +8,20 @@ interface Offer {
   id: string;
   title: string;
   description: string | null;
+  offerType: string;
   imageUrl: string | null;
-  badgeText: string | null;
   isActive: boolean;
-  validUntil: string | null;
+  startDate: string | null;
+  endDate: string | null;
+  createdAt: string;
 }
 
 export default function OfferManager() {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentOfferId, setCurrentOfferId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   
   // Form state
@@ -25,9 +29,10 @@ export default function OfferManager() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    badgeText: "",
+    offerType: "Cash Discount",
     isActive: true,
-    validUntil: "",
+    startDate: "",
+    endDate: "",
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -51,24 +56,35 @@ export default function OfferManager() {
     }
   };
 
+  const openEditModal = (offer: Offer) => {
+    setIsEditing(true);
+    setCurrentOfferId(offer.id);
+    setFormData({
+      title: offer.title,
+      description: offer.description || "",
+      offerType: offer.offerType || "Cash Discount",
+      isActive: offer.isActive,
+      startDate: offer.startDate ? new Date(offer.startDate).toISOString().slice(0, 10) : "",
+      endDate: offer.endDate ? new Date(offer.endDate).toISOString().slice(0, 10) : "",
+    });
+    setSelectedFile(null);
+    setIsModalOpen(true);
+  };
+
   const handleOpenModal = (offer?: Offer) => {
     if (offer) {
-      setEditingId(offer.id);
-      setFormData({
-        title: offer.title,
-        description: offer.description || "",
-        badgeText: offer.badgeText || "",
-        isActive: offer.isActive,
-        validUntil: offer.validUntil ? new Date(offer.validUntil).toISOString().slice(0, 10) : "",
-      });
+      openEditModal(offer);
     } else {
       setEditingId(null);
+      setIsEditing(false);
+      setCurrentOfferId(null);
       setFormData({
         title: "",
         description: "",
-        badgeText: "",
+        offerType: "Cash Discount",
         isActive: true,
-        validUntil: "",
+        startDate: "",
+        endDate: "",
       });
     }
     setSelectedFile(null);
@@ -82,19 +98,26 @@ export default function OfferManager() {
     const isEditing = !!editingId;
     const url = '/api/admin/cms/offers';
     const method = isEditing ? 'PUT' : 'POST';
-
     const payload = new FormData();
-    if (editingId) payload.append('id', editingId);
-    payload.append('title', formData.title);
-    payload.append('description', formData.description);
-    payload.append('badgeText', formData.badgeText);
-    payload.append('isActive', formData.isActive.toString());
-    if (formData.validUntil) {
-      payload.append('validUntil', formData.validUntil);
+    if (isEditing && currentOfferId) {
+      payload.append('id', currentOfferId);
     }
     
     if (selectedFile) {
       payload.append('image', selectedFile);
+    }
+    payload.append('title', formData.title);
+    if (formData.description) {
+      payload.append('description', formData.description);
+    }
+    payload.append('offerType', formData.offerType);
+    payload.append('isActive', formData.isActive.toString());
+    
+    if (formData.startDate) {
+      payload.append('startDate', formData.startDate);
+    }
+    if (formData.endDate) {
+      payload.append('endDate', formData.endDate);
     }
 
     try {
@@ -179,39 +202,40 @@ export default function OfferManager() {
           <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
             {isLoading ? (
               <tr>
-                <td colSpan={4} className="text-center py-8 text-gray-500">Loading offers...</td>
+                <td colSpan={6} className="text-center py-8 text-gray-500">Loading offers...</td>
               </tr>
             ) : filteredOffers.length === 0 ? (
               <tr>
-                <td colSpan={4} className="text-center py-8 text-gray-500">No offers found.</td>
+                <td colSpan={6} className="text-center py-8 text-gray-500">No offers found.</td>
               </tr>
             ) : (
               filteredOffers.map(offer => (
                 <tr key={offer.id} className="hover:bg-gray-50 dark:hover:bg-[#141416] transition-colors">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 relative bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden flex-shrink-0">
-                        {offer.imageUrl ? (
-                          <Image src={offer.imageUrl} alt={offer.title} fill sizes="64px" className="object-cover" />
-                        ) : (
-                          <Tag className="w-5 h-5 text-gray-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-                        )}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {offer.imageUrl ? (
+                      <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800">
+                        <Image src={offer.imageUrl} alt={offer.title} fill sizes="48px" className="object-cover" />
                       </div>
-                      <div className="truncate max-w-[250px]">
-                        <div className="flex items-center gap-2">
-                          <p className="font-semibold text-gray-900 dark:text-white truncate">{offer.title}</p>
-                          {offer.badgeText && (
-                            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary uppercase">
-                              {offer.badgeText}
-                            </span>
-                          )}
-                        </div>
-                        {offer.description && <p className="text-xs text-gray-500 truncate">{offer.description}</p>}
+                    ) : (
+                      <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
+                        <Tag className="w-5 h-5 text-gray-400" />
                       </div>
+                    )}
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex flex-col">
+                      <span className="text-sm font-bold text-gray-900 dark:text-white">{offer.title}</span>
+                      {offer.description && <span className="text-xs text-gray-500 truncate max-w-[200px] mt-1">{offer.description}</span>}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
-                    {offer.validUntil ? new Date(offer.validUntil).toLocaleDateString() : 'No Expiry'}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                    {offer.offerType}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                    <div className="flex flex-col gap-1">
+                      <div><span className="text-gray-400 mr-1 text-[10px]">Start:</span> {offer.startDate ? new Date(offer.startDate).toLocaleDateString() : 'N/A'}</div>
+                      <div><span className="text-gray-400 mr-1 text-[10px]">End:</span> {offer.endDate ? new Date(offer.endDate).toLocaleDateString() : 'N/A'}</div>
+                    </div>
                   </td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -272,30 +296,46 @@ export default function OfferManager() {
                     value={formData.description}
                     onChange={e => setFormData({...formData, description: e.target.value})}
                     placeholder="Brief description of the offer"
-                    rows={2}
-                    className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none resize-none"
+                    rows={8}
+                    className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none resize-y"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Badge Text (Optional)</label>
-                  <input
-                    type="text"
-                    value={formData.badgeText}
-                    onChange={e => setFormData({...formData, badgeText: e.target.value})}
-                    placeholder="e.g. 50% OFF"
+                  <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Offer Type</label>
+                  <select
+                    value={formData.offerType}
+                    onChange={e => setFormData({...formData, offerType: e.target.value})}
                     className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
-                  />
+                  >
+                    <option value="Cash Discount">Cash Discount</option>
+                    <option value="Exchange Bonus">Exchange Bonus</option>
+                    <option value="Low Finance">Low Finance</option>
+                    <option value="Free Accessories">Free Accessories</option>
+                    <option value="Combo">Combo</option>
+                  </select>
                 </div>
                 
-                <div>
-                  <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Valid Until (Optional)</label>
-                  <input
-                    type="date"
-                    value={formData.validUntil}
-                    onChange={e => setFormData({...formData, validUntil: e.target.value})}
-                    className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
-                  />
+                <div className="grid grid-cols-2 gap-4 col-span-2">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Start Date (Optional)</label>
+                    <input
+                      type="date"
+                      value={formData.startDate}
+                      onChange={e => setFormData({...formData, startDate: e.target.value})}
+                      className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">End Date (Optional)</label>
+                    <input
+                      type="date"
+                      value={formData.endDate}
+                      onChange={e => setFormData({...formData, endDate: e.target.value})}
+                      className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
+                    />
+                  </div>
                 </div>
 
                 <div className="flex items-center pt-2 col-span-2">

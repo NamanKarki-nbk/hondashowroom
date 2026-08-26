@@ -1,71 +1,44 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Home, ChevronRight, Wrench, Settings, Users, Zap, Droplets, Truck, ShieldCheck, FileText, Banknote, Bike, CheckCircle, Shield } from "lucide-react";
+import { Home, ChevronRight, Shield } from "lucide-react";
 import { motion } from "framer-motion";
+import * as LucideIcons from "lucide-react";
 
-const AMC_PLANS = [
-  {
-    id: "1-year",
-    title: "1 Year",
-    price: "1,500",
-    savings: "2,635",
-    color: "bg-[#e8dfd1] dark:bg-slate-900 border-gray-200 dark:border-background/10",
-    headerColor: "text-gray-900 dark:text-primary-foreground",
-    popular: false,
-    features: [
-      { text: "4 Free Services", subtext: "(Value Rs. 1,600 equivalent)", icon: Wrench },
-      { text: "5% Discount", subtext: "On Spare Parts & Engine Oil", icon: Settings },
-      { text: "25% Discount", subtext: "On Labour Charges (other repairs)", icon: Users },
-      { text: "Quick Service", subtext: "Lifetime Priority", icon: Zap },
-      { text: "3 Free Washings", subtext: "Keep your vehicle shining", icon: Droplets },
-      { text: "Free Towing & On-Road Service", subtext: "(50 km round trip, above 50 km Rs. 50/km)", icon: Truck },
-    ]
-  },
-  {
-    id: "3-year",
-    title: "3 Years",
-    price: "3,000",
-    savings: "7,717",
-    color: "bg-red-50 dark:bg-red-900/10 border-primary shadow-xl shadow-red-100 dark:shadow-red-900/20",
-    headerColor: "text-primary",
-    popular: true,
-    features: [
-      { text: "12 Free Services", subtext: "(Value Rs. 4,800 equivalent)", icon: Wrench },
-      { text: "10% Discount", subtext: "On Spare Parts & Engine Oil", icon: Settings },
-      { text: "40% Discount", subtext: "On Labour Charges (other repairs)", icon: Users },
-      { text: "Quick Service", subtext: "Lifetime Priority", icon: Zap },
-      { text: "6 Free Washings", subtext: "Keep your vehicle shining", icon: Droplets },
-      { text: "6 Months Engine Warranty", subtext: "Extended peace of mind", icon: ShieldCheck },
-      { text: "Tax/Insurance Renewal Service", subtext: "Hassle-free documentation", icon: FileText },
-      { text: "Free Towing & On-Road Service", subtext: "(50 km round trip, above 50 km Rs. 50/km)", icon: Truck },
-    ]
-  },
-  {
-    id: "5-year",
-    title: "5 Years",
-    price: "5,000",
-    savings: "13,850",
-    color: "bg-[#e8dfd1] dark:bg-slate-900 border-gray-200 dark:border-background/10",
-    headerColor: "text-gray-900 dark:text-primary-foreground",
-    popular: false,
-    features: [
-      { text: "20 Free Services", subtext: "(Value Rs. 12,000 equivalent)", icon: Wrench },
-      { text: "10% Discount", subtext: "On Spare Parts & Engine Oil", icon: Settings },
-      { text: "50% Discount", subtext: "On Labour Charges (other repairs)", icon: Users },
-      { text: "Quick Service", subtext: "Lifetime Priority", icon: Zap },
-      { text: "10 Free Washings", subtext: "Keep your vehicle shining", icon: Droplets },
-      { text: "6 Months Engine Warranty", subtext: "Extended peace of mind", icon: ShieldCheck },
-      { text: "Tax/Insurance Renewal Service", subtext: "Hassle-free documentation", icon: FileText },
-      { text: "Cashback Scheme", subtext: "Rs. 5,000 cashback on upgrading to a new Honda", icon: Banknote },
-      { text: "Free Towing & On-Road Service", subtext: "(50 km round trip, above 50 km Rs. 50/km)", icon: Truck },
-      { text: "Free Driving Training", subtext: "Learn from the experts", icon: Bike },
-    ]
-  }
-];
+interface Feature {
+  text: string;
+  subtext?: string;
+}
+
+interface AmcPlan {
+  id: string;
+  title: string;
+  price: number;
+  savings: number;
+  features: Feature[];
+  isPopular: boolean;
+  isActive: boolean;
+  order: number;
+}
 
 export default function AmcPage() {
+  const [plans, setPlans] = useState<AmcPlan[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/admin/cms/amc/plans')
+      .then(res => res.json())
+      .then(data => {
+        setPlans(data.filter((p: AmcPlan) => p.isActive));
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setIsLoading(false);
+      });
+  }, []);
+
   return (
     <div className="min-h-screen bg-background dark:bg-slate-950 pt-28 pb-24">
 
@@ -111,69 +84,78 @@ export default function AmcPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          {AMC_PLANS.map((plan, idx) => (
-            <motion.div
-              key={plan.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className={`relative rounded-3xl border p-8 flex flex-col h-full transition-transform hover:-translate-y-2 ${plan.color}`}
-            >
-              {plan.popular && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg">
-                  Most Popular
-                </div>
-              )}
-              
-              <div className="text-center mb-8 border-b border-gray-200 dark:border-background/10 pb-8">
-                <h3 className={`text-2xl md:text-3xl font-semibold font-black mb-2 ${plan.headerColor}`}>
-                  Honda Service Contract ({plan.title})
-                </h3>
-                <div className="text-gray-500 text-sm mb-4">Purchase Amount</div>
-                <div className="flex items-center justify-center gap-1">
-                  <span className="text-xl md:text-2xl font-semibold font-bold text-gray-400">Rs.</span>
-                  <span className={`text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-6xl font-bold tracking-tight font-black ${plan.headerColor}`}>{plan.price}</span>
-                  <span className="text-gray-400 font-medium">/-</span>
-                </div>
-              </div>
+          {isLoading ? (
+            <div className="col-span-1 lg:col-span-3 text-center py-20 text-gray-500">
+              Loading plans...
+            </div>
+          ) : plans.map((plan, idx) => {
+            const color = plan.isPopular ? "bg-red-50 dark:bg-red-900/10 border-primary shadow-xl shadow-red-100 dark:shadow-red-900/20" : "bg-[#e8dfd1] dark:bg-slate-900 border-gray-200 dark:border-background/10";
+            const headerColor = plan.isPopular ? "text-primary" : "text-gray-900 dark:text-primary-foreground";
 
-              <div className="flex-1">
-                <ul className="space-y-6">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-4">
-                      <div className={`mt-0.5 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${plan.popular ? 'bg-red-100 dark:bg-red-900/30' : 'bg-background dark:bg-[#2A2A2A]'} shadow-sm`}>
-                        <feature.icon className={`w-4 h-4 ${plan.popular ? 'text-primary' : 'text-gray-500 dark:text-gray-400'}`} />
-                      </div>
-                      <div>
-                        <div className="font-bold text-gray-900 dark:text-primary-foreground text-sm">
-                          {feature.text}
+            return (
+              <motion.div
+                key={plan.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className={`relative rounded-3xl border p-8 flex flex-col h-full transition-transform hover:-translate-y-2 ${color}`}
+              >
+                {plan.isPopular && (
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg">
+                    Most Popular
+                  </div>
+                )}
+                
+                <div className="text-center mb-8 border-b border-gray-200 dark:border-background/10 pb-8">
+                  <h3 className={`text-2xl md:text-3xl font-semibold font-black mb-2 ${headerColor}`}>
+                    Honda Service Contract ({plan.title})
+                  </h3>
+                  <div className="text-gray-500 text-sm mb-4">Purchase Amount</div>
+                  <div className="flex items-center justify-center gap-1">
+                    <span className="text-xl md:text-2xl font-semibold font-bold text-gray-400">Rs.</span>
+                    <span className={`text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-6xl font-bold tracking-tight font-black ${headerColor}`}>{plan.price}</span>
+                    <span className="text-gray-400 font-medium">/-</span>
+                  </div>
+                </div>
+
+                <div className="flex-1">
+                  <ul className="space-y-6">
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-4">
+                        <div className={`mt-0.5 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${plan.isPopular ? 'bg-red-100 dark:bg-red-900/30' : 'bg-background dark:bg-[#2A2A2A]'} shadow-sm`}>
+                          <LucideIcons.CheckCircle className={`w-4 h-4 ${plan.isPopular ? 'text-primary' : 'text-gray-500 dark:text-gray-400'}`} />
                         </div>
-                        {feature.subtext && (
-                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                            {feature.subtext}
+                        <div>
+                          <div className="font-bold text-gray-900 dark:text-primary-foreground text-sm">
+                            {feature.text}
                           </div>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="mt-8 pt-8 border-t border-gray-200 dark:border-background/10">
-                <div className={`rounded-xl p-4 text-center ${plan.popular ? 'bg-primary text-primary-foreground' : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400'}`}>
-                  <div className="text-sm font-bold opacity-90 mb-1">Total Customer Saving</div>
-                  <div className="text-2xl md:text-3xl font-semibold font-black">Rs. {plan.savings}/-</div>
+                          {feature.subtext && (
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                              {feature.subtext}
+                            </div>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <Link href="/book-now?service=amc" className={`w-full block text-center py-4 rounded-xl font-bold transition-colors mt-4 ${
-                  plan.popular 
-                    ? 'bg-gray-900 hover:bg-black  dark:text-black dark:hover:bg-gray-200 text-primary-foreground' 
-                    : 'bg-background hover:bg-background dark:bg-[#2A2A2A] dark:hover:bg-[#333] text-gray-900 dark:text-primary-foreground border border-gray-200 dark:border-background/10'
-                }`}>
-                  Purchase Plan
-                </Link>
-              </div>
-            </motion.div>
-          ))}
+
+                <div className="mt-8 pt-8 border-t border-gray-200 dark:border-background/10">
+                  <div className={`rounded-xl p-4 text-center ${plan.isPopular ? 'bg-primary text-primary-foreground' : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400'}`}>
+                    <div className="text-sm font-bold opacity-90 mb-1">Total Customer Saving</div>
+                    <div className="text-2xl md:text-3xl font-semibold font-black">Rs. {plan.savings}/-</div>
+                  </div>
+                  <Link href={`/amc/book?plan=${encodeURIComponent(plan.title)}`} className={`w-full block text-center py-4 rounded-xl font-bold transition-colors mt-4 ${
+                    plan.isPopular 
+                      ? 'bg-gray-900 hover:bg-black  dark:text-black dark:hover:bg-gray-200 text-primary-foreground' 
+                      : 'bg-background hover:bg-background dark:bg-[#2A2A2A] dark:hover:bg-[#333] text-gray-900 dark:text-primary-foreground border border-gray-200 dark:border-background/10'
+                  }`}>
+                    Purchase Plan
+                  </Link>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
       

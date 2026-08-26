@@ -72,6 +72,7 @@ export async function GET(req: NextRequest) {
     }
 
     // 3. Upsert user in database
+    const tempPhone = `google-${Date.now()}`;
     const user = await prisma.user.upsert({
       where: { email },
       update: {
@@ -82,7 +83,14 @@ export async function GET(req: NextRequest) {
         email,
         fullName: name,
         avatarUrl: picture,
-        phone: `google-${Date.now()}`, // Temporary phone to satisfy unique constraint
+        phone: tempPhone, // Temporary phone to satisfy unique constraint
+        customerProfile: {
+          create: {
+            email,
+            fullName: name || "Unnamed User",
+            phone: tempPhone,
+          }
+        }
       },
     });
 

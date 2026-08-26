@@ -9,7 +9,9 @@ interface Offer {
   title: string;
   description: string | null;
   imageUrl: string | null;
-  badgeText: string | null;
+  offerType: string;
+  startDate: Date | string | null;
+  endDate: Date | string | null;
   createdAt: Date | string;
 }
 
@@ -32,9 +34,9 @@ export default function OfferCard({ offer }: { offer: Offer }) {
             <Gift className="w-12 h-12 text-gray-300" />
           </div>
         )}
-        {offer.badgeText && (
+        {offer.offerType && (
           <div className="absolute top-4 left-4 bg-primary text-white text-[10px] font-bold px-3 py-1 tracking-wider uppercase shadow-md">
-            {offer.badgeText}
+            {offer.offerType}
           </div>
         )}
       </div>
@@ -45,9 +47,11 @@ export default function OfferCard({ offer }: { offer: Offer }) {
         </h3>
         
         <div className="text-xs text-gray-500 dark:text-gray-400 mb-5 font-medium flex items-center gap-1.5">
-          {offer.createdAt 
-            ? new Date(offer.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-            : ''}
+          {offer.startDate && offer.endDate
+            ? `${new Date(offer.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} - ${new Date(offer.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
+            : offer.createdAt 
+              ? new Date(offer.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+              : ''}
         </div>
 
         {offer.description && (
@@ -101,9 +105,9 @@ export default function OfferCard({ offer }: { offer: Offer }) {
               </div>
               
               <div className="p-6 md:p-8">
-                {offer.badgeText && (
+                {offer.offerType && (
                   <span className="inline-block bg-primary text-white text-[10px] font-bold px-3 py-1 tracking-wider uppercase rounded-full shadow-sm mb-4">
-                    {offer.badgeText}
+                    {offer.offerType}
                   </span>
                 )}
                 <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 leading-snug">
@@ -111,9 +115,11 @@ export default function OfferCard({ offer }: { offer: Offer }) {
                 </h2>
                 
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-6 font-medium border-b border-gray-100 dark:border-slate-800 pb-4">
-                  {offer.createdAt 
-                    ? new Date(offer.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-                    : ''}
+                  {offer.startDate && offer.endDate
+                    ? `${new Date(offer.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} - ${new Date(offer.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
+                    : offer.createdAt 
+                      ? new Date(offer.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+                      : ''}
                 </div>
 
                 <div className="prose prose-sm md:prose-base dark:prose-invert text-gray-700 dark:text-gray-300 max-w-none whitespace-pre-wrap">

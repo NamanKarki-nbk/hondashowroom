@@ -24,9 +24,9 @@ export default function BlogManager() {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-    imageUrl: "",
     author: "",
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     fetchBlogs();
@@ -53,17 +53,17 @@ export default function BlogManager() {
       setFormData({
         title: blog.title,
         content: blog.content,
-        imageUrl: blog.imageUrl || "",
         author: blog.author || "",
       });
+      setImageFile(null);
     } else {
       setEditingId(null);
       setFormData({
         title: "",
         content: "",
-        imageUrl: "",
         author: "",
       });
+      setImageFile(null);
     }
     setIsModalOpen(true);
   };
@@ -74,16 +74,17 @@ export default function BlogManager() {
     const url = '/api/admin/blogs';
     const method = isEditing ? 'PUT' : 'POST';
 
-    const payload = {
-      ...formData,
-      id: editingId,
-    };
+    const submitData = new FormData();
+    submitData.append('title', formData.title);
+    submitData.append('content', formData.content);
+    if (formData.author) submitData.append('author', formData.author);
+    if (imageFile) submitData.append('image', imageFile);
+    if (isEditing && editingId) submitData.append('id', editingId);
 
     try {
       const res = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: submitData,
       });
 
       if (res.ok) {
@@ -242,14 +243,16 @@ export default function BlogManager() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Cover Image URL</label>
+                  <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Cover Image</label>
                   <input
-                    type="text"
-                    value={formData.imageUrl}
-                    onChange={e => setFormData({...formData, imageUrl: e.target.value})}
-                    placeholder="https://..."
-                    className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
+                    type="file"
+                    accept="image/*"
+                    onChange={e => e.target.files && setImageFile(e.target.files[0])}
+                    className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
                   />
+                  {editingId && (
+                    <p className="text-[10px] text-gray-400 mt-1">Leave empty to keep existing image</p>
+                  )}
                 </div>
               </div>
 

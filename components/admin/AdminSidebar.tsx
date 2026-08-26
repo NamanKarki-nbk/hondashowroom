@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { 
   LayoutDashboard, Users, Package, ShoppingCart, 
   FileText, LogOut, ChevronLeft, ChevronRight, Settings, X, 
-  DollarSign, CreditCard, Globe, ChevronDown, BellDot
+  DollarSign, CreditCard, Globe, ChevronDown, BellDot, Briefcase, Bell
 } from "lucide-react";
 import Logo from "@/components/Logo";
 
@@ -19,7 +19,7 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState<string | null>("Front Website (CMS)");
-  const [actionStats, setActionStats] = useState({ pendingTestRides: 0, newLeads: 0 });
+  const [actionStats, setActionStats] = useState({ pendingTestRides: 0, newLeads: 0, pendingQuotations: 0, pendingAmcBookings: 0, pendingServiceBookings: 0 });
 
   useEffect(() => {
     const fetchActionStats = async () => {
@@ -27,10 +27,13 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
         const res = await fetch("/api/admin/action-needed");
         if (res.ok) {
           const data = await res.json();
-          setActionStats({
-            pendingTestRides: data.pendingTestRides || 0,
-            newLeads: data.newLeads || 0,
-          });
+            setActionStats({
+              pendingTestRides: data.pendingTestRides || 0,
+              newLeads: data.newLeads || 0,
+              pendingQuotations: data.pendingQuotations || 0,
+              pendingAmcBookings: data.pendingAmcBookings || 0,
+              pendingServiceBookings: data.pendingServiceBookings || 0,
+            });
         }
       } catch (error) {
         console.error("Failed to fetch action stats", error);
@@ -48,15 +51,23 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
       items: []
     },
     {
+      name: "Notifications",
+      icon: Bell,
+      href: "/admin/notifications",
+      items: []
+    },
+    {
       name: "Front Website (CMS)",
       icon: Globe,
       items: [
         { name: "Home Page", href: "/admin/cms/home" },
         { name: "Offers & Schemes", href: "/admin/cms/offers" },
+        { name: "AMC Plans & Bookings", href: "/admin/cms/amc" },
         { name: "Branch Info", href: "/admin/cms/branches" },
         { name: "Blog Posts", href: "/admin/blogs" },
         { name: "Products Catalog", href: "/admin/products" },
         { name: "Accessories Catalog", href: "/admin/accessories" },
+        { name: "PDF Brochures", href: "/admin/inventory/brochures" },
       ]
     },
     {
@@ -65,27 +76,39 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
       items: [
         { name: "Vehicle Stock", href: "/admin/inventory" },
         { name: "Multi-Branch Transfer", href: "/admin/inventory/transfer" },
-        { name: "PDF Brochures", href: "/admin/inventory/brochures" },
       ]
     },
     {
       name: "Sales & POS",
       icon: ShoppingCart,
       items: [
+        { name: "New Sale / Invoice", href: "/admin/sales" },
         { name: "New Invoice (POS)", href: "/admin/pos" },
-        { name: "Digital Quotation", href: "/admin/finance/quotation" },
+        { name: "Digital Quotation", href: "/admin/crm/quotations" },
+        { name: "Sales Calendar", href: "/admin/sales-calendar" },
         { name: "Sales History", href: "/admin/sales-history" },
+        { name: "Sales Analysis", href: "/admin/sales-analysis" },
+        { name: "Vehicle Price List", href: "/admin/prices" },
+        { name: "Finance Plans", href: "/admin/finance" },
       ]
     },
     {
       name: "Customer Hub (CRM)",
       icon: Users,
       items: [
+        { name: "Customer Directory", href: "/admin/crm/customers" },
         { name: "Leads & Follow-ups", href: "/admin/crm/leads" },
-        { name: "Quotation Requested", href: "/admin/crm/quotations" },
+        { name: "Test Ride Bookings", href: "/admin/crm/test-rides" },
         { name: "KYC Directory", href: "/admin/users" },
-        { name: "Service Reminders", href: "/admin/crm/service" },
+        { name: "Service Bookings", href: "/admin/crm/service" },
         { name: "Referrals & Loyalty", href: "/admin/crm/referrals" },
+      ]
+    },
+    {
+      name: "Staff & HR",
+      icon: Briefcase,
+      items: [
+        { name: "Staff Directory", href: "/admin/settings/staff" },
       ]
     },
     {
@@ -161,7 +184,10 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
                 <Link
                   key={category.name}
                   href={category.href}
-                  onClick={() => setIsMobileOpen(false)}
+                  onClick={() => {
+                    setIsMobileOpen(false);
+                    setExpandedCategory(null);
+                  }}
                   className={`
                     flex items-center px-3 py-3 rounded-lg transition-colors group
                     ${isCollapsed ? 'justify-center' : 'gap-3'}
@@ -231,18 +257,22 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
         </div>
 
         {/* Action Needed Widget */}
-        {!isCollapsed && (actionStats.pendingTestRides > 0 || actionStats.newLeads > 0) && (
+        {!isCollapsed && (actionStats.pendingTestRides > 0 || actionStats.newLeads > 0 || actionStats.pendingQuotations > 0 || actionStats.pendingAmcBookings > 0 || actionStats.pendingServiceBookings > 0) && (
           <div className="px-4 py-4 shrink-0">
             <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-4">
               <div className="flex items-center gap-2 text-orange-500 mb-2">
                 <BellDot className="w-5 h-5" strokeWidth={1.5} />
                 <h4 className="font-bold text-sm">Action Needed</h4>
               </div>
-              <p className="text-xs text-gray-400 font-medium mb-3">
-                You have {actionStats.pendingTestRides} pending test {actionStats.pendingTestRides === 1 ? 'ride' : 'rides'} and {actionStats.newLeads} new contact {actionStats.newLeads === 1 ? 'inquiry' : 'inquiries'}.
-              </p>
+              <div className="text-xs text-gray-400 font-medium mb-3 space-y-1">
+                {actionStats.pendingTestRides > 0 && <p>&bull; {actionStats.pendingTestRides} pending test {actionStats.pendingTestRides === 1 ? 'ride' : 'rides'}</p>}
+                {actionStats.newLeads > 0 && <p>&bull; {actionStats.newLeads} new contact {actionStats.newLeads === 1 ? 'inquiry' : 'inquiries'}</p>}
+                {actionStats.pendingQuotations > 0 && <p>&bull; {actionStats.pendingQuotations} pending quotation {actionStats.pendingQuotations === 1 ? 'request' : 'requests'}</p>}
+                {actionStats.pendingAmcBookings > 0 && <p>&bull; {actionStats.pendingAmcBookings} pending AMC {actionStats.pendingAmcBookings === 1 ? 'booking' : 'bookings'}</p>}
+                {actionStats.pendingServiceBookings > 0 && <p>&bull; {actionStats.pendingServiceBookings} pending service {actionStats.pendingServiceBookings === 1 ? 'booking' : 'bookings'}</p>}
+              </div>
               <Link href="/admin/crm/leads" className="text-xs font-bold text-white bg-orange-500 hover:bg-orange-600 transition-colors px-3 py-2 rounded-lg block text-center">
-                Review Leads
+                Review Now
               </Link>
             </div>
           </div>

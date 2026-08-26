@@ -65,6 +65,8 @@ model User {
 model Staff {
   id         String   @id @default(uuid())
   name       String
+  phone      String?
+  role       String   @default("STAFF")
   accountNo  String
   panNo      String
   lastSalary Float?
@@ -326,10 +328,11 @@ model ProductCatalog {
 }
 
 model SalesTarget {
-  id     String @id @default(uuid())
-  year   Int
-  month  Int // 1-12
-  target Int
+  id        String   @id @default(uuid())
+  year      Int
+  month     Int      // 1-12
+  monthName String?  // e.g., "April 2026"
+  target    Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -428,17 +431,7 @@ model Delivery {
   updatedAt    DateTime @updatedAt
 }
 
-model Outlet {
-  id          String   @id @default(uuid())
-  name        String
-  address     String
-  phone       String
-  latitude    Float?
-  longitude   Float?
-  isEmergency Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
+
 
 model FinancePlan {
   id             String @id @default(uuid())
@@ -536,11 +529,12 @@ model HeroBanner {
 model Offer {
   id          String    @id @default(uuid())
   title       String
-  description String?
+  description String?   @db.Text
+  offerType   String    @default("Cash Discount")
   imageUrl    String?
-  badgeText   String?
   isActive    Boolean   @default(true)
-  validUntil  DateTime?
+  startDate   DateTime?
+  endDate     DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -553,6 +547,7 @@ model Branch {
   mapUrl    String?
   latitude  Float?
   longitude Float?
+  isEmergency Boolean @default(false)
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -596,23 +591,7 @@ model StockTransferLog {
   createdAt    DateTime         @default(now())
 }
 
-model DigitalQuotation {
-  id              String   @id @default(uuid())
-  customerName    String
-  customerPhone   String
-  modelName       String
-  exShowroomPrice Float
-  vatAmount       Float
-  roadTax         Float
-  insuranceAmount Float
-  totalAmount     Float
-  downPayment     Float?
-  emiAmount       Float?
-  tenureMonths    Int?
-  validUntil      DateTime
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-}
+
 
 model ServiceReminder {
   id          String           @id @default(uuid())
@@ -625,4 +604,49 @@ model ServiceReminder {
   status      String           @default("PENDING") // PENDING, NOTIFIED, COMPLETED
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
+}
+
+model AmcPlan {
+  id        String   @id @default(uuid())
+  title     String
+  price     Float
+  savings   Float
+  features  Json
+  isPopular Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AmcBooking {
+  id           String   @id @default(uuid())
+  fullName     String
+  phone        String
+  email        String?
+  vehicleModel String?
+  vehicleRegNo String?
+  planTitle    String
+  status       String   @default("PENDING") // PENDING, CONTACTED, CONVERTED, CANCELLED
+  remarks      String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model AdminNotification {
+  id        String   @id @default(uuid())
+  type      String   // NEW_LEAD, TEST_RIDE, AMC_BOOKING, SERVICE_BOOKING
+  title     String
+  message   String
+  link      String?  // Deep link: /admin/crm/leads etc
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model SystemSetting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String   @db.Text
+  description String?
+  updatedAt   DateTime @updatedAt
 }

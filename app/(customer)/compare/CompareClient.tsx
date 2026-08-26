@@ -16,25 +16,89 @@ type Vehicle = {
   brand?: string;
 };
 
-// Default spec generator for vehicles with missing specs
-function getSpecs(name: string, price: number) {
-  const isScooter = name.toLowerCase().includes('dio') || name.toLowerCase().includes('iqube') || name.toLowerCase().includes('rizta') || name.toLowerCase().includes('jupiter') || name.toLowerCase().includes('ntorq') || name.toLowerCase().includes('activa');
+// Helper function to normalize specifications from the DB or provide defaults
+function normalizeVehicleSpecs(vehicle: Vehicle): Record<string, Record<string, string>> {
+  const result: Record<string, Record<string, string>> = {};
   
-  return {
-    'Engine / Motor': isScooter ? '124.9 cc, Single Cylinder' : '149.5 cc, Single Cylinder',
-    'Max Power': isScooter ? '8.14 PS @ 6500 rpm' : '14 PS @ 8000 rpm',
-    'Max Torque': isScooter ? '10.9 Nm @ 5000 rpm' : '13.25 Nm @ 6000 rpm',
-    'Mileage / Range': isScooter ? '50 kmpl' : '45 kmpl',
-    'Fuel Tank / Battery': isScooter ? '5.3 L' : '12 L',
-    'Kerb Weight': isScooter ? '109 kg' : '135 kg',
-    'Fuel Type': isScooter && (name.toLowerCase().includes('iqube') || name.toLowerCase().includes('rizta')) ? 'Electric' : 'Petrol',
-    'BS Standard': 'BS6 Phase 2',
-    'Brakes (Front)': 'Disc',
-    'Brakes (Rear)': 'Drum',
-    'Tyres (Front)': '80/100-18',
-    'Tyres (Rear)': '100/90-18',
-    'Starting Price': `NPR ${price.toLocaleString('en-IN')}`,
+  const mapCategory = (rawCat: string) => {
+    let cat = rawCat.replace(/_/g, " ");
+    const mapping: Record<string, string> = {
+      "Body Dimensions": "Body Dimensions",
+      "Dimensions": "Body Dimensions",
+      "Engine Performance": "Engine",
+      "Engine": "Engine",
+      "Power & Performance": "Engine",
+      "Transmission": "Transmission",
+      "Brakes Tyres": "Tyres and Brakes",
+      "Brakes Wheels": "Tyres and Brakes",
+      "Brakes & Wheels": "Tyres and Brakes",
+      "Chassis Suspension": "Frames & Suspension",
+      "Suspensions & Chassis": "Frames & Suspension",
+      "Electricals": "Electricals",
+      "Electrical": "Electricals"
+    };
+    return mapping[cat] || cat;
   };
+  
+  let rawSpecs = (vehicle.specifications as any)?.specifications || vehicle.specifications;
+  
+  if (Array.isArray(rawSpecs)) {
+    rawSpecs.forEach((group: any) => {
+      if (group && group.category && Array.isArray(group.data)) {
+        const cat = mapCategory(group.category);
+        if (!result[cat]) result[cat] = {};
+        group.data.forEach((item: any) => {
+          if (item.label && item.value) result[cat][item.label] = String(item.value);
+        });
+      }
+    });
+  } else if (rawSpecs && typeof rawSpecs === 'object') {
+    for (const [category, dataObj] of Object.entries(rawSpecs)) {
+      const cat = mapCategory(category);
+      if (!result[cat]) result[cat] = {};
+      
+      if (dataObj && typeof dataObj === 'object' && !Array.isArray(dataObj)) {
+        for (const [key, value] of Object.entries(dataObj)) {
+          if (value && value !== "NA" && value !== "") {
+            const label = key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+            result[cat][label] = String(value);
+          }
+        }
+      } else if (Array.isArray(dataObj)) {
+        dataObj.forEach((item: any) => {
+          if (item.label && item.value) {
+            result[cat][item.label] = String(item.value);
+          }
+        });
+      }
+    }
+  }
+
+  // If no specs from DB, use default ones
+  if (Object.keys(result).length === 0) {
+    const isScooter = vehicle.name.toLowerCase().includes('dio') || vehicle.name.toLowerCase().includes('iqube') || vehicle.name.toLowerCase().includes('rizta') || vehicle.name.toLowerCase().includes('jupiter') || vehicle.name.toLowerCase().includes('ntorq') || vehicle.name.toLowerCase().includes('activa');
+    
+    result['Engine'] = {
+      'Engine / Motor': isScooter ? '124.9 cc, Single Cylinder' : '149.5 cc, Single Cylinder',
+      'Max Power': isScooter ? '8.14 PS @ 6500 rpm' : '14 PS @ 8000 rpm',
+      'Max Torque': isScooter ? '10.9 Nm @ 5000 rpm' : '13.25 Nm @ 6000 rpm',
+      'Fuel Type': isScooter && (vehicle.name.toLowerCase().includes('iqube') || vehicle.name.toLowerCase().includes('rizta')) ? 'Electric' : 'Petrol',
+      'BS Standard': 'BS6 Phase 2'
+    };
+    result['Tyres and Brakes'] = {
+      'Brakes (Front)': 'Disc',
+      'Brakes (Rear)': 'Drum',
+      'Tyres (Front)': '80/100-18',
+      'Tyres (Rear)': '100/90-18'
+    };
+    result['Body Dimensions'] = {
+      'Fuel Tank / Battery': isScooter ? '5.3 L' : '12 L',
+      'Kerb Weight': isScooter ? '109 kg' : '135 kg',
+      'Mileage / Range': isScooter ? '50 kmpl' : '45 kmpl'
+    };
+  }
+
+  return result;
 }
 
 export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
@@ -52,10 +116,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
   // Results view states
   const [hideCommon, setHideCommon] = useState(false);
   const [highlightDiff, setHighlightDiff] = useState(false);
-  const [activeTab, setActiveTab] = useState<'SPECIFICATIONS' | 'FEATURES'>('SPECIFICATIONS');
-  const [openAccordions, setOpenAccordions] = useState<string[]>([
-    'Power & Performance', 'Brakes & Wheels', 'Suspensions & Chassis', 'Dimensions', 'Warranty and Services'
-  ]);
+  const [activeTab, setActiveTab] = useState<string>('All');
   const [popularTab, setPopularTab] = useState<'BIKES' | 'SCOOTERS' | 'RECENT'>('BIKES');
   const [recentComparisons, setRecentComparisons] = useState<string[][]>([]);
 
@@ -161,27 +222,6 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
     setIsComparing(true);
   };
 
-  // Build spec sheet mapping
-  const getVehicleSpecsMap = (vehicle: Vehicle) => {
-    const defaultSpecs = getSpecs(vehicle.name, vehicle.price);
-    return { ...defaultSpecs, ...vehicle.specifications };
-  };
-
-  const specCategories = [
-    {
-      title: 'Power & Performance',
-      fields: ['Engine / Motor', 'Max Power', 'Max Torque', 'BS Standard', 'Fuel Type']
-    },
-    {
-      title: 'Brakes & Wheels',
-      fields: ['Brakes (Front)', 'Brakes (Rear)', 'Tyres (Front)', 'Tyres (Rear)']
-    },
-    {
-      title: 'Dimensions',
-      fields: ['Fuel Tank / Battery', 'Kerb Weight', 'Mileage / Range']
-    }
-  ];
-
   // Selected vehicle lists
   const activeVehicles = useMemo(() => {
     return slots.map(id => id ? vehicles.find(v => v.id === id) : null);
@@ -190,6 +230,53 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
   const activeNonNullVehicles = useMemo(() => {
     return activeVehicles.filter(Boolean) as Vehicle[];
   }, [activeVehicles]);
+
+  const specCategories = useMemo(() => {
+    const catsMap: Record<string, Set<string>> = {};
+    activeNonNullVehicles.forEach(vehicle => {
+      const specs = normalizeVehicleSpecs(vehicle);
+      for (const cat in specs) {
+        if (!catsMap[cat]) catsMap[cat] = new Set();
+        for (const field in specs[cat]) {
+          catsMap[cat].add(field);
+        }
+      }
+    });
+    const PREFERRED_ORDER = [
+      'Body Dimensions',
+      'Engine',
+      'Transmission',
+      'Tyres and Brakes',
+      'Frames & Suspension',
+      'Electricals'
+    ];
+    
+    // Ensure all preferred categories exist
+    PREFERRED_ORDER.forEach(cat => {
+      if (!catsMap[cat]) catsMap[cat] = new Set();
+    });
+    
+    return Object.keys(catsMap).map(cat => ({
+      title: cat,
+      fields: Array.from(catsMap[cat])
+    })).sort((a, b) => {
+      const indexA = PREFERRED_ORDER.indexOf(a.title);
+      const indexB = PREFERRED_ORDER.indexOf(b.title);
+      if (indexA === -1 && indexB === -1) return a.title.localeCompare(b.title);
+      if (indexA === -1) return 1;
+      if (indexB === -1) return -1;
+      return indexA - indexB;
+    });
+  }, [activeNonNullVehicles]);
+
+  // Keep All tab active by default
+  React.useEffect(() => {
+    if (specCategories.length > 0 && !activeTab) {
+      setActiveTab('All');
+    }
+  }, [specCategories, activeTab]);
+
+
 
   return (
     <div className="min-h-screen bg-background dark:bg-slate-950 text-gray-900 dark:text-primary-foreground pt-28 pb-20 font-sans transition-colors duration-300">
@@ -449,27 +536,12 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
               {/* Compare Slots Header */}
               <div className="bg-background dark:bg-[#141b2b] border border-gray-200 dark:border-background/5 rounded-2xl p-6 mb-8 shadow-sm">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-center">
-                  
-                  {/* Left Controls */}
-                  <div className="flex flex-col gap-3 justify-center">
-                    <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-primary-foreground">
-                      <input 
-                        type="checkbox" 
-                        checked={hideCommon} 
-                        onChange={() => setHideCommon(!hideCommon)} 
-                        className="rounded accent-primary bg-[#e8dfd1] dark:bg-gray-900 border-gray-300 dark:border-background/10"
-                      />
-                      Hide common features
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-primary-foreground">
-                      <input 
-                        type="checkbox" 
-                        checked={highlightDiff} 
-                        onChange={() => setHighlightDiff(!highlightDiff)}
-                        className="rounded accent-primary bg-[#e8dfd1] dark:bg-gray-900 border-gray-300 dark:border-background/10"
-                      />
-                      Highlight differences
-                    </label>
+
+                  {/* Empty cell to align with specification labels */}
+                  <div className="hidden lg:flex flex-col items-center justify-center p-4">
+                     <span className="bg-[#f8f9fa] dark:bg-slate-900 border border-gray-200 dark:border-slate-800 text-gray-500 dark:text-gray-400 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider shadow-sm">
+                       Compare Models
+                     </span>
                   </div>
 
                   {/* Active Comparison slots */}
@@ -512,17 +584,45 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                 </div>
               </div>
 
+              {/* Attribute Filters Bar */}
+              <div className="bg-[#f8f9fa] dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-t-xl p-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div className="flex items-center gap-2 text-[11px] font-extrabold text-gray-700 dark:text-gray-300 uppercase tracking-widest">
+                  <svg className="w-4 h-4 text-[#cd302b]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                  </svg>
+                  Attribute Filters
+                </div>
+                <div className="flex items-center gap-3">
+                  <button 
+                    onClick={() => setHideCommon(!hideCommon)}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[11px] font-extrabold uppercase tracking-wide transition-colors ${hideCommon ? 'bg-[#cd302b] text-white border-[#cd302b]' : 'bg-white dark:bg-slate-950 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-slate-700 hover:border-gray-300 dark:hover:border-slate-600'} border shadow-sm`}
+                  >
+                    {hideCommon ? <Check className="w-3.5 h-3.5" /> : <span className="w-3.5 h-3.5 flex items-center justify-center font-bold">✓</span>} 
+                    Hide common features
+                  </button>
+                  <button 
+                    onClick={() => setHighlightDiff(!highlightDiff)}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[11px] font-extrabold uppercase tracking-wide transition-colors ${highlightDiff ? 'bg-[#cd302b] text-white border-[#cd302b]' : 'bg-white dark:bg-slate-950 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-slate-700 hover:border-gray-300 dark:hover:border-slate-600'} border shadow-sm`}
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Highlight differences
+                  </button>
+                </div>
+              </div>
+
               {/* Result specs Tabs */}
-              <div className="flex border-b border-gray-200 dark:border-background/10 gap-6 mb-8 text-sm">
-                {(['SPECIFICATIONS', 'FEATURES'] as const).map(tab => (
+              <div className="flex bg-white dark:bg-slate-950 border-x border-b border-gray-200 dark:border-slate-800 rounded-b-xl overflow-x-auto gap-1 text-sm shadow-sm mb-8 px-4 pt-1 hide-scrollbar">
+                {(['All', ...specCategories.map(c => c.title), 'Features']).map(tab => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`pb-3 font-semibold transition-all relative ${activeTab === tab ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-primary-foreground'}`}
+                    className={`py-4 px-6 font-bold text-xs uppercase tracking-wider transition-all relative whitespace-nowrap ${activeTab === tab ? 'text-[#cd302b] dark:text-[#cc0000] bg-red-50/50 dark:bg-red-900/10' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-900'}`}
                   >
                     {tab}
                     {activeTab === tab && (
-                      <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary"></span>
+                      <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#cd302b] rounded-t-md"></span>
                     )}
                   </button>
                 ))}
@@ -540,46 +640,46 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                 />
               </div>
 
-              {/* Result spec sheets table accordions */}
-              {activeTab === 'SPECIFICATIONS' ? (
-                <div className="flex flex-col gap-4">
-                  {specCategories.map((cat) => {
+              {/* Result spec sheets table */}
+              {(activeTab === 'All' || activeTab !== 'Features') && (
+                <div className="flex flex-col gap-6">
+                  {specCategories
+                    .filter(cat => activeTab === 'All' || cat.title === activeTab)
+                    .map((cat) => {
                     const matchedFields = cat.fields.filter(field => 
                       field.toLowerCase().includes(searchFilter.toLowerCase())
                     );
-                    if (matchedFields.length === 0) return null;
+                    if (matchedFields.length === 0 && searchFilter !== '') return null;
 
-                    const isOpen = openAccordions.includes(cat.title);
                     return (
                       <div key={cat.title} className="bg-background dark:bg-[#141b2b] border border-gray-200 dark:border-background/5 rounded-2xl overflow-hidden shadow-sm">
-                        <button 
-                          onClick={() => toggleAccordion(cat.title)}
-                          className="w-full flex items-center justify-between p-5 bg-background dark:bg-[#1c2438]/50 hover:bg-[#e8dfd1] dark:hover:bg-[#1c2438] transition-colors text-left"
-                        >
-                          <span className="font-bold text-sm tracking-wide text-gray-900 dark:text-primary-foreground">{cat.title}</span>
-                          {isOpen ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
-                        </button>
-                        
-                        {isOpen && (
+                        <div className="p-4 bg-[#f8f9fa] dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800">
+                          <h3 className="font-bold text-sm tracking-wide text-gray-900 dark:text-primary-foreground uppercase">{cat.title}</h3>
+                        </div>
+                        {matchedFields.length === 0 ? (
+                          <div className="p-6 text-center text-gray-500 text-sm">
+                             No specifications available for this category.
+                          </div>
+                        ) : (
                           <div className="divide-y divide-gray-100 dark:divide-white/5">
-                            {matchedFields.map(field => {
-                              const values = activeNonNullVehicles.map(v => getVehicleSpecsMap(v)[field] || '—');
+                              {matchedFields.map(field => {
+                                const values = activeNonNullVehicles.map(v => normalizeVehicleSpecs(v)[cat.title]?.[field] || '—');
                               const isCommon = new Set(values).size === 1;
                               const isDifferent = new Set(values.filter(val => val !== '—')).size > 1;
 
                               if (hideCommon && isCommon) return null;
 
                               return (
-                                <div key={field} className="grid grid-cols-1 lg:grid-cols-5 p-4 items-center">
+                                <div key={field} className="grid grid-cols-1 lg:grid-cols-5 p-4 items-center hover:bg-gray-50 dark:hover:bg-gray-800/20 transition-colors">
                                   <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 p-2">{field}</div>
                                   {slots.map((slotId, idx) => {
                                     if (slotId) {
                                       const vehicle = vehicles.find(v => v.id === slotId)!;
-                                      const specVal = getVehicleSpecsMap(vehicle)[field] || '—';
+                                      const specVal = normalizeVehicleSpecs(vehicle)[cat.title]?.[field] || '—';
                                       return (
                                         <div 
                                           key={`${slotId}-${field}`}
-                                          className={`p-2 border-l border-gray-100 dark:border-background/5 text-center text-xs font-medium ${highlightDiff && isDifferent ? 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 font-bold' : 'text-gray-900 dark:text-primary-foreground'}`}
+                                          className={`p-2 border-l border-gray-100 dark:border-background/5 text-center text-xs font-medium ${highlightDiff && isDifferent ? 'text-[#cd302b] dark:text-[#cc0000] bg-red-50/50 dark:bg-red-950/20 font-extrabold' : 'text-gray-900 dark:text-primary-foreground'}`}
                                         >
                                           {specVal}
                                         </div>
@@ -597,24 +697,26 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                     );
                   })}
                 </div>
-              ) : (
-                // Features
-                <div className="bg-background dark:bg-[#141b2b] border border-gray-200 dark:border-background/5 rounded-2xl p-6 shadow-sm">
-                  <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4">Class Features</h3>
+              )}
+              
+              {/* Features */}
+              {(activeTab === 'All' || activeTab === 'Features') && (
+                <div className={`bg-background dark:bg-[#141b2b] border border-gray-200 dark:border-background/5 rounded-2xl overflow-hidden shadow-sm ${activeTab === 'All' ? 'mt-6' : ''}`}>
+                  <div className="p-4 bg-[#f8f9fa] dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800">
+                    <h3 className="font-bold text-sm tracking-wide text-gray-900 dark:text-primary-foreground uppercase">Features</h3>
+                  </div>
                   <div className="divide-y divide-gray-100 dark:divide-white/5">
                     <div className="grid grid-cols-1 lg:grid-cols-5 p-4 items-center">
-                      <div className="text-xs font-semibold text-gray-500 dark:text-gray-400">Digital Console</div>
-                      <div className="p-2 border-l border-gray-100 dark:border-background/5"></div>
+                      <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 p-2">Digital Console</div>
                       {slots.map((slotId, idx) => {
                         if (slotId) {
-                          return <div key={idx} className="p-2 border-l border-gray-100 dark:border-background/5 text-center text-xs text-gray-900 dark:text-primary-foreground">Yes</div>;
+                          return <div key={idx} className="p-2 border-l border-gray-100 dark:border-background/5 text-center text-xs font-medium text-gray-900 dark:text-primary-foreground">Yes</div>;
                         }
                         return <div key={idx} className="p-2 border-l border-gray-100 dark:border-background/5 text-center text-xs text-gray-400 dark:text-gray-500">—</div>;
                       })}
                     </div>
-                    <div className="grid grid-cols-1 lg:grid-cols-5 p-4 items-center">
-                      <div className="text-xs font-semibold text-gray-500 dark:text-gray-400">Bluetooth Connectivity</div>
-                      <div className="p-2 border-l border-gray-100 dark:border-background/5"></div>
+                    <div className="grid grid-cols-1 lg:grid-cols-5 p-4 items-center hover:bg-gray-50 dark:hover:bg-gray-800/20 transition-colors">
+                      <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 p-2">Bluetooth Connectivity</div>
                       {slots.map((slotId, idx) => {
                         if (slotId) {
                           const vehicle = vehicles.find(v => v.id === slotId)!;

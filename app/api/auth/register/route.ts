@@ -27,14 +27,22 @@ export async function POST(req: NextRequest) {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
+    const tempPhone = `temp-${Date.now()}`;
+    const fullName = `${firstName} ${lastName}`.trim();
+    
     const newUser = await prisma.user.create({
-      // Provide a dummy phone number since phone is marked @unique and @required in schema,
-      // but standard email registration doesn't guarantee a phone number.
       data: {
-        fullName: `${firstName} ${lastName}`.trim(),
+        fullName,
         email,
         passwordHash,
-        phone: `temp-${Date.now()}`, // Temporary unique phone if not provided
+        phone: tempPhone,
+        customerProfile: {
+          create: {
+            fullName,
+            email,
+            phone: tempPhone,
+          }
+        }
       },
     });
 

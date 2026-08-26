@@ -1,4 +1,4 @@
-import { PrismaClient } from '../app/generated/prisma/client';
+import { PrismaClient } from '../app/generated/prisma/index.js';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 
@@ -137,9 +137,9 @@ async function main() {
 
   // 4. Seed Locations
   for (const loc of locations) {
-    const existing = await prisma.outlet.findFirst({ where: { name: loc.name } });
+    const existing = await prisma.branch.findFirst({ where: { name: loc.name } });
     if (!existing) {
-      await prisma.outlet.create({
+      await prisma.branch.create({
         data: {
           name: loc.name,
           address: loc.address,

@@ -91,6 +91,7 @@ export default function OwnersManualClient({ products }: { products: Product[] }
     }
   };
 
+  return (
     <div className="w-full text-gray-900 dark:text-white font-sans mt-8 bg-white dark:bg-slate-950 rounded-3xl shadow-sm border border-gray-100 dark:border-white/5 p-6 md:p-10">
       <div className="text-center max-w-2xl mx-auto mb-10">
         <h1 className="text-3xl md:text-4xl font-black mb-3 text-gray-900 dark:text-white tracking-tight">Owner's Manual</h1>

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { createAdminNotification } from '@/lib/notifications';
 
 export async function POST(req: Request) {
   try {
@@ -33,6 +34,13 @@ export async function POST(req: Request) {
         preferredDate: new Date(preferredDate),
         status: "PENDING"
       }
+    });
+
+    await createAdminNotification({
+      type: 'SERVICE_BOOKING',
+      title: 'New Service Booking',
+      message: `${fullName} booked a ${serviceType} service for ${vehicleNo || 'their vehicle'}.`,
+      link: '/admin/crm/service'
     });
 
     return NextResponse.json({ success: true, booking }, { status: 201 });

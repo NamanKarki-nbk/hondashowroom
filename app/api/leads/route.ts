@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { createAdminNotification } from '@/lib/notifications';
 
 export async function POST(req: Request) {
   try {
@@ -19,6 +20,30 @@ export async function POST(req: Request) {
         source: source || 'Website Contact Form',
         status: 'NEW'
       }
+    });
+
+    const isQuotation = source === 'Quotation Requested';
+    const isBooking = source && source.includes('Booking');
+
+    let type = 'NEW_LEAD';
+    let title = 'New Contact Inquiry';
+    let actionText = 'submitted an inquiry about';
+
+    if (isQuotation) {
+      type = 'DIGITAL_QUOTATION';
+      title = 'New Digital Quotation Request';
+      actionText = 'requested a quotation for';
+    } else if (isBooking) {
+      type = 'VEHICLE_BOOKING';
+      title = 'New Vehicle Booking';
+      actionText = 'booked a';
+    }
+
+    await createAdminNotification({
+      type,
+      title,
+      message: `${name} ${actionText} ${interestedIn || 'Honda vehicle'}.`,
+      link: isQuotation ? '/admin/crm/quotations' : '/admin/crm/leads'
     });
 
     return NextResponse.json({ success: true, lead }, { status: 201 });

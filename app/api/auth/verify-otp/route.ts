@@ -36,13 +36,22 @@ export async function POST(req: NextRequest) {
     const isEmail = formattedIdentifier.includes("@");
     
     // Upsert User and mark as verified
+    const tempPhone = isEmail ? `placeholder-${Date.now()}` : formattedIdentifier;
     const user = await prisma.user.upsert({
       where: isEmail ? { email: formattedIdentifier } : { phone: formattedIdentifier },
       update: { isVerified: true },
       create: {
         email: isEmail ? formattedIdentifier : null,
-        phone: isEmail ? `placeholder-${Date.now()}` : formattedIdentifier,
-        isVerified: true
+        phone: tempPhone,
+        isVerified: true,
+        customerProfile: {
+          create: {
+            email: isEmail ? formattedIdentifier : null,
+            phone: tempPhone,
+            fullName: "Unnamed User",
+            isVerified: true
+          }
+        }
       }
     });
 

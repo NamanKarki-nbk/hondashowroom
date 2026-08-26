@@ -1,0 +1,161 @@
+"use client";
+
+import React, { useState, useEffect } from 'react';
+import { Gift, Search, ChevronDown, CheckCircle2, Star } from 'lucide-react';
+import { format } from 'date-fns';
+
+export default function DeliveriesClient() {
+  const [deliveries, setDeliveries] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('ALL');
+
+  useEffect(() => {
+    fetchDeliveries();
+  }, [statusFilter]);
+
+  const fetchDeliveries = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`/api/admin/crm/deliveries?status=${statusFilter}`);
+      if (res.ok) {
+        const data = await res.json();
+        setDeliveries(data);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (id: string, status: string) => {
+    try {
+      const res = await fetch('/api/admin/crm/deliveries', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status })
+      });
+      if (res.ok) {
+        fetchDeliveries();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const filteredDeliveries = deliveries.filter(d => 
+    d.customer.fullName.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    d.customer.phone.includes(searchQuery)
+  );
+
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800 p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <div>
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <Gift className="w-6 h-6 text-primary" /> Deliveries & Handover
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">Manage scheduled vehicle deliveries and customer feedback.</p>
+        </div>
+        
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
+          >
+            <option value="ALL">All Status</option>
+            <option value="SCHEDULED">Scheduled</option>
+            <option value="DELIVERED">Delivered</option>
+            <option value="RESCHEDULED">Rescheduled</option>
+          </select>
+          <div className="relative flex-1 sm:w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search by customer name or phone..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-primary outline-none"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto w-full">
+        <table className="w-full text-left text-sm whitespace-nowrap">
+          <thead className="text-gray-500 bg-gray-50 dark:bg-slate-950/50 border-y border-gray-100 dark:border-slate-800">
+            <tr>
+              <th className="px-4 py-3 font-medium">Customer</th>
+              <th className="px-4 py-3 font-medium">Vehicle</th>
+              <th className="px-4 py-3 font-medium">Invoice No</th>
+              <th className="px-4 py-3 font-medium">Delivery Date</th>
+              <th className="px-4 py-3 font-medium">Feedback</th>
+              <th className="px-4 py-3 font-medium">Status</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+            {isLoading ? (
+              <tr>
+                <td colSpan={6} className="text-center py-8 text-gray-500">Loading deliveries...</td>
+              </tr>
+            ) : filteredDeliveries.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="text-center py-8 text-gray-500">No deliveries found.</td>
+              </tr>
+            ) : (
+              filteredDeliveries.map(delivery => (
+                <tr key={delivery.id} className="hover:bg-gray-50 dark:hover:bg-[#141416] transition-colors">
+                  <td className="px-4 py-3">
+                    <p className="font-semibold text-gray-900 dark:text-white">{delivery.customer.fullName}</p>
+                    <p className="text-xs text-gray-500">{delivery.customer.phone}</p>
+                  </td>
+                  <td className="px-4 py-3">
+                    <p className="text-gray-900 dark:text-white">{delivery.vehicle.modelName}</p>
+                    <p className="text-xs text-gray-500">VIN: {delivery.vehicle.vinNumber}</p>
+                  </td>
+                  <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
+                    {delivery.sales?.invoiceNo || 'N/A'}
+                  </td>
+                  <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">
+                    {format(new Date(delivery.deliveryDate), 'MMM d, yyyy h:mm a')}
+                  </td>
+                  <td className="px-4 py-3">
+                    {delivery.feedbackScore ? (
+                      <div className="flex items-center gap-1 text-amber-500">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star key={i} className={`w-3 h-3 ${i < delivery.feedbackScore! ? 'fill-current' : 'text-gray-300 dark:text-gray-700'}`} />
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-xs text-gray-500">No feedback</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="relative group inline-block">
+                      <select
+                        value={delivery.status}
+                        onChange={(e) => handleStatusChange(delivery.id, e.target.value)}
+                        className={`appearance-none pr-8 pl-3 py-1 text-xs font-semibold rounded-full outline-none cursor-pointer border ${
+                          delivery.status === 'DELIVERED' ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800' :
+                          delivery.status === 'SCHEDULED' ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800' :
+                          'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800'
+                        }`}
+                      >
+                        <option value="SCHEDULED">SCHEDULED</option>
+                        <option value="DELIVERED">DELIVERED</option>
+                        <option value="RESCHEDULED">RESCHEDULED</option>
+                      </select>
+                      <ChevronDown className="w-3 h-3 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none opacity-50" />
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

@@ -14,6 +14,9 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
   // Selected options inside modal
   const [downPaymentPct, setDownPaymentPct] = useState(60); // percentage
   const [tenure, setTenure] = useState(12); // months
+  
+  const [isApplying, setIsApplying] = useState(false);
+  const [submitMsg, setSubmitMsg] = useState("");
 
   const filteredModels = modelsData.filter(m => {
     if (category !== "All" && m.category !== category) return false;
@@ -45,6 +48,35 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
   const availableDownPayments = selectedModel 
     ? Array.from(new Set(selectedModel.plans.filter((p: any) => p.tenureMonths === tenure).map((p: any) => p.downPaymentPct))).sort((a: any, b: any) => b - a)
     : [];
+
+  const handleApply = async () => {
+    if (!selectedPlan) return;
+    setIsApplying(true);
+    setSubmitMsg("");
+    try {
+      const res = await fetch("/api/finance-application", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          planId: selectedPlan.id,
+          loanAmount: selectedPlan.loanAmount,
+          downPayment: selectedPlan.downPayment,
+          tenureMonths: tenure,
+          monthlyEmi: selectedPlan.emi,
+        })
+      });
+      if (res.ok) {
+        setSubmitMsg("Application submitted successfully! Our team will contact you shortly.");
+      } else {
+        const data = await res.json();
+        setSubmitMsg(data.error || "Failed to submit. Please ensure you are logged in.");
+      }
+    } catch (error) {
+      setSubmitMsg("An error occurred. Please try again.");
+    } finally {
+      setIsApplying(false);
+    }
+  };
 
   return (
     <div>
@@ -152,9 +184,18 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
                     </div>
                  </div>
 
-                 <button className="w-full bg-[#CC0000] hover:bg-primary-hover text-white py-3.5 rounded-xl font-bold uppercase tracking-wider transition-colors shadow-lg shadow-[#B83227]/20">
-                   Apply for Finance
+                 <button 
+                   onClick={handleApply}
+                   disabled={isApplying}
+                   className="w-full bg-[#CC0000] hover:bg-primary-hover text-white py-3.5 rounded-xl font-bold uppercase tracking-wider transition-colors shadow-lg shadow-[#B83227]/20 disabled:opacity-50 flex justify-center items-center"
+                 >
+                   {isApplying ? "Submitting..." : "Apply for Finance"}
                  </button>
+                 {submitMsg && (
+                   <div className={`mt-2 p-3 text-sm font-semibold text-center rounded-xl ${submitMsg.includes('successfully') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                     {submitMsg}
+                   </div>
+                 )}
                </div>
             </div>
           </div>

@@ -55,3 +55,47 @@ export async function sendEmailOtp(toEmail: string, otpCode: string) {
     return false;
   }
 }
+
+export async function sendAdminAlert(subject: string, message: string, link?: string) {
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (!adminEmail || !process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+    console.warn("ADMIN_EMAIL, GMAIL_USER or GMAIL_APP_PASSWORD is not set. Simulating admin alert:");
+    console.log(`[TESTING ALERT] Subject: ${subject} | Message: ${message}`);
+    return true;
+  }
+
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+      <h2 style="color: #c1291A;">Admin Alert: ${subject}</h2>
+      <p style="font-size: 16px; color: #333;">${message}</p>
+      ${link ? `
+      <div style="margin: 30px 0;">
+        <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}${link}" style="background-color: #c1291A; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">
+          View in Dashboard
+        </a>
+      </div>
+      ` : ''}
+      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+      <p style="font-size: 12px; color: #999;">
+        This is an automated notification from your Honda Showroom CMS.
+      </p>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `"Honda Showroom Alerts" <noreply@hondashowroom.com>`,
+      to: adminEmail,
+      subject: `Admin Alert: ${subject}`,
+      html: htmlContent,
+      headers: {
+        'X-Priority': '1',
+        'X-MSMail-Priority': 'High',
+      }
+    });
+    return true;
+  } catch (error) {
+    console.error("Error sending Admin Alert: ", error);
+    return false;
+  }
+}

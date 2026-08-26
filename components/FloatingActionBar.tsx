@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Settings2, ArrowRightLeft, Key, Smartphone, MapPin, Calculator } from "lucide-react";
+import { Settings2, ArrowRightLeft, Key, Smartphone, MapPin, Calculator, Gift } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ACTIONS = [
@@ -12,6 +12,13 @@ const ACTIONS = [
     href: "/compare", 
     icon: ArrowRightLeft,
     badgeColor: "bg-indigo-100 text-indigo-600" 
+  },
+  {
+    id: "offers",
+    label: "Special Offers",
+    href: "/offers",
+    icon: Gift,
+    badgeColor: "bg-red-100 text-red-600"
   },
   { 
     id: "test-drive", 
@@ -26,13 +33,6 @@ const ACTIONS = [
     href: "/branches", 
     icon: MapPin,
     badgeColor: "bg-emerald-100 text-emerald-600" 
-  },
-  { 
-    id: "finance", 
-    label: "EMI Calculator", 
-    href: "/finance", 
-    icon: Calculator,
-    badgeColor: "bg-purple-100 text-purple-600" 
   }
 ];
 

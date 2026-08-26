@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Menu } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import NotificationBell from "@/components/admin/NotificationBell";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -34,6 +35,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
             
             <div className="flex items-center gap-4">
+              <NotificationBell />
               <ThemeToggle />
             </div>
           </header>

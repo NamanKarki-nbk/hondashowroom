@@ -6,9 +6,10 @@ import { z } from "zod";
 const offerSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional().nullable(),
-  badgeText: z.string().optional().nullable(),
+  offerType: z.string().optional().default("Cash Discount"),
   isActive: z.coerce.boolean().default(true),
-  validUntil: z.string().optional().nullable().transform(val => val ? new Date(val) : null),
+  startDate: z.string().optional().nullable().transform(val => val ? new Date(val) : null),
+  endDate: z.string().optional().nullable().transform(val => val ? new Date(val) : null),
 });
 
 export async function GET() {

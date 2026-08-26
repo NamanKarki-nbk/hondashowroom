@@ -172,7 +172,7 @@ export async function POST(req: Request) {
           description: 'Get information about store locations, addresses, and contact numbers.',
           parameters: flexSchema,
           execute: async (input: z.infer<typeof flexSchema>) => {
-            const outlets = await prisma.outlet.findMany({
+            const branches = await prisma.branch.findMany({
               select: {
                 name: true,
                 address: true,
@@ -180,9 +180,9 @@ export async function POST(req: Request) {
                 isEmergency: true,
               },
             });
-            if (outlets.length > 0) {
+            if (branches.length > 0) {
               return {
-                stores: outlets.map((o: any) => ({
+                stores: branches.map((o: any) => ({
                   name: o.name,
                   address: o.address,
                   contact: o.phone,

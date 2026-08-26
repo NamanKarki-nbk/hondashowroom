@@ -123,15 +123,13 @@ function generateMockData(vehicle: any) {
       };
     } else {
       specifications = {
-        "Engine": [
-          { label: "Type", value: "4 Stroke, SI Engine" },
-          { label: "Displacement", value: "124.9 cc" },
+        Body_Dimensions: [
           { label: "Height", value: "1150 mm" },
           { label: "Wheelbase", value: "1260 mm" },
           { label: "Ground Clearance", value: "160 mm" },
           { label: "Seat Length", value: "690 mm" },
           { label: "Kerb Weight", value: "103 kg" },
-          { label: "Fuel Tank Capacity", value: "5.3 Litres" }
+          { label: "Fuel Tank Capacity", value: "5.3 L" }
         ],
         Engine_Performance: [
           { label: "Type", value: "4 Stroke, SI Engine, PGM-FI eSP" },
