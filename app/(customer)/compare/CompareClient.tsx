@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X, Search, ChevronDown, ChevronUp, Check, Info } from 'lucide-react';
 
@@ -232,10 +233,11 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                               </button>
                               
                               <div className="w-16 h-16 sm:w-28 sm:h-28 relative flex items-center justify-center mb-2 sm:mb-4 bg-white dark:bg-slate-950 rounded-full sm:rounded-none">
-                                <img 
+                                <Image 
                                   src={vehicle.imageUrl || '/honda-logo.svg'} 
                                   alt={vehicle.name} 
-                                  className="w-full h-full object-contain p-1"
+                                  fill
+                                  className="object-contain p-1"
                                 />
                               </div>
                               <div className="mt-auto hidden sm:block">
@@ -331,7 +333,9 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                           
                           {/* Vehicle 1 */}
                           <div className="flex-1 flex flex-col items-start pr-4">
-                            <img src={v1.imageUrl || '/honda-logo.svg'} className="w-full h-20 object-contain mb-3" />
+                            <div className="relative w-full h-20 mb-3">
+                              <Image src={v1.imageUrl || '/honda-logo.svg'} alt={v1.name} fill className="object-contain" />
+                            </div>
                             <span className="text-[11px] text-gray-500 dark:text-gray-400">{v1.brand}</span>
                             <h4 className="text-base font-bold text-gray-900 dark:text-white line-clamp-1">{v1.name}</h4>
                             <span className="text-sm font-semibold text-gray-900 dark:text-white mt-1">₹ {v1.price.toLocaleString('en-IN')}</span>
@@ -340,7 +344,9 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                           
                           {/* Vehicle 2 */}
                           <div className="flex-1 flex flex-col items-start pl-4">
-                            <img src={v2.imageUrl || '/honda-logo.svg'} className="w-full h-20 object-contain mb-3" />
+                            <div className="relative w-full h-20 mb-3">
+                              <Image src={v2.imageUrl || '/honda-logo.svg'} alt={v2.name} fill className="object-contain" />
+                            </div>
                             <span className="text-[11px] text-gray-500 dark:text-gray-400">{v2.brand}</span>
                             <h4 className="text-base font-bold text-gray-900 dark:text-white line-clamp-1">{v2.name}</h4>
                             <span className="text-sm font-semibold text-gray-900 dark:text-white mt-1">₹ {v2.price.toLocaleString('en-IN')}</span>
@@ -383,7 +389,9 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                         
                         {/* Vehicle 1 */}
                         <div className="flex-1 flex flex-col items-start pr-4">
-                          <img src={item.v1.imageUrl || '/honda-logo.svg'} className="w-full h-20 object-contain mb-3" />
+                          <div className="relative w-full h-20 mb-3">
+                            <Image src={item.v1.imageUrl || '/honda-logo.svg'} alt={item.v1.name} fill className="object-contain" />
+                          </div>
                           <span className="text-[11px] text-gray-500 dark:text-gray-400">{item.v1.brand}</span>
                           <h4 className="text-base font-bold text-gray-900 dark:text-white line-clamp-1">{item.v1.name}</h4>
                           <span className="text-sm font-semibold text-gray-900 dark:text-white mt-1">₹ {item.v1.price.toLocaleString('en-IN')}</span>
@@ -392,7 +400,9 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                         
                         {/* Vehicle 2 */}
                         <div className="flex-1 flex flex-col items-start pl-4">
-                          <img src={item.v2.imageUrl || '/honda-logo.svg'} className="w-full h-20 object-contain mb-3" />
+                          <div className="relative w-full h-20 mb-3">
+                            <Image src={item.v2.imageUrl || '/honda-logo.svg'} alt={item.v2.name} fill className="object-contain" />
+                          </div>
                           <span className="text-[11px] text-gray-500 dark:text-gray-400">{item.v2.brand}</span>
                           <h4 className="text-base font-bold text-gray-900 dark:text-white line-clamp-1">{item.v2.name}</h4>
                           <span className="text-sm font-semibold text-gray-900 dark:text-white mt-1">₹ {item.v2.price.toLocaleString('en-IN')}</span>
@@ -475,8 +485,8 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                             >
                               <X className="w-3.5 h-3.5" />
                             </button>
-                            <div className="h-24 w-full flex items-center justify-center p-2">
-                              <img src={vehicle.imageUrl || '/honda-logo.svg'} className="h-full object-contain" />
+                            <div className="h-24 w-full flex items-center justify-center p-2 relative">
+                              <Image src={vehicle.imageUrl || '/honda-logo.svg'} alt={vehicle.name} fill className="object-contain p-2" />
                             </div>
                             <div className="mt-2 text-center">
                               <h3 className="font-bold text-xs line-clamp-1 text-gray-900 dark:text-primary-foreground">{vehicle.name}</h3>
@@ -664,7 +674,9 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                       className="p-4 border-b border-gray-200 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-gray-900 flex items-center justify-between cursor-pointer transition-colors"
                     >
                       <div className="flex items-center gap-4">
-                        <img src={v.imageUrl || '/honda-logo.svg'} className="w-12 h-8 object-contain" />
+                        <div className="relative w-12 h-8">
+                          <Image src={v.imageUrl || '/honda-logo.svg'} alt={v.name} fill className="object-contain" />
+                        </div>
                         <div>
                           <h4 className="text-sm font-medium text-gray-900 dark:text-white">{v.name}</h4>
                           <span className="text-[10px] uppercase text-gray-500">{v.brand}</span>
@@ -717,9 +729,14 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                               <div
                                 key={v.id}
                                 onClick={() => handleAddVehicle(v.id)}
-                                className="py-3 px-10 border-b border-gray-100 dark:border-gray-900 last:border-0 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition-colors flex items-center justify-between"
+                                className="py-3 px-6 border-b border-gray-100 dark:border-gray-900 last:border-0 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition-colors flex items-center justify-between"
                               >
-                                <span className="text-sm text-gray-700 dark:text-gray-300">{v.name}</span>
+                                <div className="flex items-center gap-4">
+                                  <div className="relative w-12 h-8">
+                                    <Image src={v.imageUrl || '/honda-logo.svg'} alt={v.name} fill className="object-contain" />
+                                  </div>
+                                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{v.name}</span>
+                                </div>
                                 <span className="text-xs text-gray-900 dark:text-white font-medium">₹ {v.price.toLocaleString('en-IN')}</span>
                               </div>
                             ))}
