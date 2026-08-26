@@ -181,14 +181,16 @@ export default function HeroSlider({ banners = [] }: { banners?: any[] }) {
                   transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                   className="mt-auto md:mt-0 flex items-baseline gap-4"
                >
-                 <div className="flex flex-col">
-                   <p className="text-gray-400 dark:text-gray-500 font-bold tracking-[0.2em] text-[10px] md:text-xs uppercase mb-1">
-                     Starting At
-                   </p>
-                   <p className="text-gray-900 dark:text-white text-2xl md:text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-black font-sans tracking-tight">
-                     {slide.price}
-                   </p>
-                 </div>
+                 {slide.price && (
+                   <div className="flex flex-col">
+                     <p className="text-gray-400 dark:text-gray-500 font-bold tracking-[0.2em] text-[10px] md:text-xs uppercase mb-1">
+                       Starting At
+                     </p>
+                     <p className="text-gray-900 dark:text-white text-2xl md:text-3xl sm:text-3xl md:text-4xl lg:text-5xl font-black font-sans tracking-tight">
+                       {slide.price}
+                     </p>
+                   </div>
+                 )}
                </motion.div>
             </div>
 

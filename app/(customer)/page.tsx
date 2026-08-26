@@ -28,6 +28,30 @@ export default async function CustomerLandingPage() {
     select: { modelName: true, price: true }
   });
 
+  // Format banners with dynamically calculated starting prices
+  const formattedBanners = heroBanners.map(banner => {
+    const bannerKeywords = banner.title.toLowerCase().replace('honda ', '').split(' ');
+    const bannerVehicles = vehicles.filter(v => {
+      const vNameLower = v.modelName.toLowerCase();
+      return bannerKeywords.every(kw => vNameLower.includes(kw));
+    });
+    
+    let startingPrice = null;
+    if (bannerVehicles.length > 0) {
+      const validPrices = bannerVehicles.map(v => v.price).filter((p): p is number => p !== null && p > 0);
+      if (validPrices.length > 0) {
+        startingPrice = Math.min(...validPrices);
+      }
+    }
+    
+    const priceString = startingPrice ? `NPR ${startingPrice.toLocaleString('en-IN')}` : "";
+    
+    return {
+      ...banner,
+      price: priceString
+    };
+  });
+
   // Map products to their STD/Starting variant price
   const products = catalogs.map((product) => {
     // Attempt to match by name (e.g. 'Honda Dio 110' matches 'Dio 110')
@@ -85,7 +109,7 @@ export default async function CustomerLandingPage() {
       {/* 1. Immersive Hero Section */}
       <div className="relative">
         <ClientOnly>
-          <HeroSlider banners={heroBanners} />
+          <HeroSlider banners={formattedBanners} />
         </ClientOnly>
       </div>
 
