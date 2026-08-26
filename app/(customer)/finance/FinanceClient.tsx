@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 
 export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
@@ -62,11 +63,14 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
             
             <div className="md:w-1/2 bg-white dark:bg-slate-900 p-8 flex flex-col justify-center items-center relative overflow-hidden">
                <div className="absolute top-0 right-0 w-32 h-32 bg-[#CC0000]/10 rounded-full blur-3xl"></div>
-               <img 
-                 src={(selectedModel.imageUrl || "/inventory/honda-dio-bs6-125.png").replace('/product-catalog/', '/inventory/')} 
-                 alt={selectedModel.modelName}
-                 className="w-full h-auto object-contain relative z-10 drop-shadow-xl max-h-64"
-               />
+               <div className="relative w-full h-48 md:h-64 mt-4">
+                 <Image 
+                   src={(selectedModel.imageUrl || "/inventory/honda-dio-bs6-125.png").replace('/product-catalog/', '/inventory/')} 
+                   alt={selectedModel.modelName}
+                   fill
+                   className="object-contain drop-shadow-xl"
+                 />
+               </div>
                <div className="mt-6 text-center relative z-10">
                  <h2 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight">{selectedModel.modelName}</h2>
                  <p className="text-[#CC0000] font-bold text-lg mt-1">Ex-showroom NPR {selectedModel.minPrice.toLocaleString()}</p>
@@ -201,10 +205,11 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
               
               <div className="w-full h-48 flex items-center justify-center mb-8 relative p-2">
                 <div className="absolute inset-0 bg-[#CC0000]/5 rounded-full blur-2xl group-hover:bg-[#CC0000]/10 transition-colors"></div>
-                <img 
+                <Image 
                   src={(model.imageUrl || "/inventory/honda-dio-bs6-125.png").replace('/product-catalog/', '/inventory/')} 
                   alt={model.modelName}
-                  className="w-full h-full object-contain relative z-10 transform group-hover:scale-110 transition-transform duration-700 drop-shadow-xl"
+                  fill
+                  className="object-contain transform group-hover:scale-110 transition-transform duration-700 drop-shadow-xl p-2"
                 />
               </div>
 

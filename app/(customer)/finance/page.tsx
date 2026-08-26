@@ -41,21 +41,32 @@ export default async function FinancePage() {
 
     const category = plans[0].category;
 
-    // find image
+    // find image dynamically from database products
     let imageUrl = '';
     const nameLower = modelName.toLowerCase();
-    if (nameLower.includes('dio 125')) {
-      imageUrl = '/inventory/honda-dio-bs6-125.png';
-    } else if (nameLower.includes('dio')) {
-      imageUrl = '/inventory/honda-dio-bs6-110.png';
-    } else if (nameLower.includes('sp 125')) {
-      imageUrl = '/inventory/honda-sp-shine-125.png';
-    } else if (nameLower.includes('shine 125')) {
-      imageUrl = '/inventory/honda-shine-bs6.png';
-    } else if (nameLower.includes('shine')) {
-      imageUrl = '/inventory/honda-shine-bs6.png';
-    } else if (nameLower.includes('nx 200')) {
-      imageUrl = '/inventory/honda-nx-200.png';
+
+    const matchedProduct = products.find(p => {
+        const productKeywords = p.name.toLowerCase().replace('honda ', '').split(' ');
+        return productKeywords.every(kw => nameLower.includes(kw));
+    });
+
+    if (matchedProduct && matchedProduct.imageUrl) {
+      imageUrl = matchedProduct.imageUrl;
+    } else {
+      // Fallback
+      if (nameLower.includes('dio 125')) {
+        imageUrl = '/inventory/honda-dio-bs6-125.png';
+      } else if (nameLower.includes('dio')) {
+        imageUrl = '/inventory/honda-dio-bs6-110.png';
+      } else if (nameLower.includes('sp 125')) {
+        imageUrl = '/inventory/honda-sp-shine-125.png';
+      } else if (nameLower.includes('shine 125')) {
+        imageUrl = '/inventory/honda-shine-bs6.png';
+      } else if (nameLower.includes('shine')) {
+        imageUrl = '/inventory/honda-shine-bs6.png';
+      } else if (nameLower.includes('nx 200')) {
+        imageUrl = '/inventory/honda-nx-200.png';
+      }
     }
 
     return {
