@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { writeFile } from "fs/promises";
-import path from "path";
+import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/upload";
 
 export async function GET() {
   try {
@@ -31,14 +30,8 @@ export async function POST(req: Request) {
     let imageUrl = formData.get("imageUrl") as string || "";
     const imageFile = formData.get("imageFile") as File | null;
 
-    if (imageFile && imageFile.name) {
-      const bytes = await imageFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const ext = imageFile.name.split('.').pop() || 'png';
-      const filename = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
-      const filepath = path.join(process.cwd(), 'public', 'accessories', filename);
-      await writeFile(filepath, buffer);
-      imageUrl = `/accessories/${filename}`;
+    if (imageFile && imageFile.size > 0) {
+      imageUrl = await uploadToCloudinary(imageFile, 'honda-showroom/accessories');
     }
 
     const newAccessory = await prisma.accessory.create({
@@ -84,14 +77,15 @@ export async function PUT(req: Request) {
     let imageUrl = formData.get("imageUrl") as string;
     const imageFile = formData.get("imageFile") as File | null;
 
-    if (imageFile && imageFile.name) {
-      const bytes = await imageFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const ext = imageFile.name.split('.').pop() || 'png';
-      const filename = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
-      const filepath = path.join(process.cwd(), 'public', 'accessories', filename);
-      await writeFile(filepath, buffer);
-      imageUrl = `/accessories/${filename}`;
+    if (imageFile && imageFile.size > 0) {
+      // Upload new image
+      imageUrl = await uploadToCloudinary(imageFile, 'honda-showroom/accessories');
+      
+      // Delete old image if it's from cloudinary
+      const existingAccessory = await prisma.accessory.findUnique({ where: { id } });
+      if (existingAccessory && existingAccessory.imageUrl && existingAccessory.imageUrl.includes('cloudinary.com')) {
+        await deleteFromCloudinary(existingAccessory.imageUrl);
+      }
     }
 
     const updatedAccessory = await prisma.accessory.update({
@@ -123,6 +117,15 @@ export async function DELETE(req: Request) {
 
     if (!id) {
       return NextResponse.json({ error: "Missing ID" }, { status: 400 });
+    }
+
+    const existingAccessory = await prisma.accessory.findUnique({ where: { id } });
+    if (!existingAccessory) {
+      return NextResponse.json({ error: "Accessory not found" }, { status: 404 });
+    }
+
+    if (existingAccessory.imageUrl && existingAccessory.imageUrl.includes('cloudinary.com')) {
+      await deleteFromCloudinary(existingAccessory.imageUrl);
     }
 
     await prisma.accessory.delete({

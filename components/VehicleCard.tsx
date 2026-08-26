@@ -45,6 +45,7 @@ export default function VehicleCard({ title, priceNpr, cc, slug, category, image
                src={imageUrl.replace('/product-catalog/', '/inventory/')} 
                alt={title} 
                fill
+               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                className="object-contain relative z-10 group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 drop-shadow-xl" 
                onError={(e) => { e.currentTarget.src = category.toLowerCase().includes('scooter') ? '/images/scooter-placeholder.jpg' : '/images/bike-placeholder.jpg'; }}
              />

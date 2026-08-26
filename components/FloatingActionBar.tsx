@@ -7,13 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const ACTIONS = [
   { 
-    id: "accessories", 
-    label: "Accessories Configurator", 
-    href: "/accessories", 
-    icon: Settings2,
-    badgeColor: "bg-blue-100 text-blue-600" 
-  },
-  { 
     id: "compare", 
     label: "Compare Vehicle", 
     href: "/compare", 
@@ -26,13 +19,6 @@ const ACTIONS = [
     href: "/test-ride", 
     icon: Key,
     badgeColor: "bg-amber-100 text-amber-600" 
-  },
-  { 
-    id: "ebook", 
-    label: "Ebook", 
-    href: "/", 
-    icon: Smartphone,
-    badgeColor: "bg-rose-100 text-rose-600" 
   },
   { 
     id: "location", 

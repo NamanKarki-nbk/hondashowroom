@@ -34,7 +34,8 @@ export default function Footer() {
                   alt="Society Enterprises" 
                   width={64} 
                   height={64} 
-                  className="w-auto h-auto object-contain drop-shadow-sm mix-blend-multiply dark:mix-blend-normal"
+                  style={{ width: "auto", height: "auto" }}
+                  className="object-contain drop-shadow-sm mix-blend-multiply dark:mix-blend-normal"
                 />
               </div>
             </Link>
