@@ -54,6 +54,8 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
         { name: "Home Page", href: "/admin/cms/home" },
         { name: "Offers & Schemes", href: "/admin/cms/offers" },
         { name: "Branch Info", href: "/admin/cms/branches" },
+        { name: "Blog Posts", href: "/admin/blogs" },
+        { name: "Products Catalog", href: "/admin/products" },
       ]
     },
     {
