@@ -5,6 +5,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
 const SLIDES = [
@@ -124,10 +125,11 @@ export default function HeroSlider({ banners = [] }: { banners?: any[] }) {
             
             {/* Giant Background Watermark Image */}
             <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.03] dark:opacity-[0.05] pointer-events-none overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                src={slide.image} 
-                alt="watermark" 
+              <Image 
+                src={slide.image || "/placeholder.png"} 
+                alt="watermark"
+                width={1200}
+                height={1200}
                 className="w-[100%] md:w-[80%] h-auto object-contain grayscale blur-[4px] transition-transform duration-[10000ms] ease-out" 
                 style={{ transform: selectedIndex === index ? "scale(1.1) rotate(2deg)" : "scale(0.95) rotate(0deg)" }} 
               />
@@ -202,10 +204,12 @@ export default function HeroSlider({ banners = [] }: { banners?: any[] }) {
                       transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
                       className="w-full flex justify-center"
                    >
-                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                     <img 
-                       src={slide.image} 
+                     <Image 
+                       src={slide.image || "/placeholder.png"} 
                        alt={slide.title} 
+                       width={1200}
+                       height={1200}
+                       priority={index === 0}
                        className="w-full max-w-[280px] sm:max-w-sm md:max-w-md lg:max-w-xl xl:max-w-2xl h-auto object-contain max-h-[45vh] md:max-h-[70vh] filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.2)] dark:drop-shadow-[0_20px_50px_rgba(0,0,0,0.6)] pointer-events-auto"
                      />
                    </motion.div>
