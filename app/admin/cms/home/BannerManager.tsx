@@ -175,8 +175,8 @@ export default function BannerManager() {
         <table className="w-full text-left text-sm whitespace-nowrap">
           <thead className="text-gray-500 bg-gray-50 dark:bg-slate-950/50 border-y border-gray-100 dark:border-slate-800">
             <tr>
+              <th className="px-4 py-3 font-medium w-20">Order</th>
               <th className="px-4 py-3 font-medium">Banner</th>
-              <th className="px-4 py-3 font-medium">Order</th>
               <th className="px-4 py-3 font-medium">Status</th>
               <th className="px-4 py-3 font-medium text-right">Actions</th>
             </tr>
@@ -193,6 +193,9 @@ export default function BannerManager() {
             ) : (
               filteredBanners.map(banner => (
                 <tr key={banner.id} className="hover:bg-gray-50 dark:hover:bg-[#141416] transition-colors">
+                  <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">
+                    {banner.order}
+                  </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       <div className="w-24 h-12 relative bg-gray-100 dark:bg-gray-800 rounded overflow-hidden flex-shrink-0">
@@ -207,9 +210,6 @@ export default function BannerManager() {
                         {banner.subtitle && <p className="text-xs text-gray-500 truncate">{banner.subtitle}</p>}
                       </div>
                     </div>
-                  </td>
-                  <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
-                    {banner.order}
                   </td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
