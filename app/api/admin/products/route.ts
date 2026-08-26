@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { uploadToCloudinary, deleteFromCloudinary } from '@/lib/upload';
+import { z } from 'zod';
 
 export async function GET() {
   try {
@@ -12,44 +14,89 @@ export async function GET() {
   }
 }
 
+
+
+const productSchema = z.object({
+  id: z.string().min(1, "ID is required"),
+  name: z.string().min(1, "Name is required"),
+  category: z.string().min(1, "Category is required"),
+  price: z.coerce.number().min(0, "Price must be positive"),
+  description: z.string().optional().nullable(),
+});
+
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const formData = await req.formData();
+    const fields = Object.fromEntries(formData.entries());
+    const parsed = productSchema.safeParse(fields);
+    
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
+    }
+
+    const file = formData.get("image") as File | null;
+    if (!file || file.size === 0) {
+      return NextResponse.json({ error: "Image is required" }, { status: 400 });
+    }
+
+    const imageUrl = await uploadToCloudinary(file, 'honda-showroom/products');
+
     const product = await prisma.productCatalog.create({
       data: {
-        id: body.id,
-        name: body.name,
-        category: body.category,
-        price: Number(body.price),
-        imageUrl: body.imageUrl,
-        description: body.description || null,
-        specifications: body.specifications || null,
+        id: parsed.data.id,
+        name: parsed.data.name,
+        category: parsed.data.category,
+        price: parsed.data.price,
+        description: parsed.data.description || null,
+        imageUrl,
       }
     });
     return NextResponse.json(product);
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
 export async function PUT(req: Request) {
   try {
-    const body = await req.json();
-    const { id, ...data } = body;
-    const product = await prisma.productCatalog.update({
-      where: { id },
-      data: {
-        name: data.name,
-        category: data.category,
-        price: Number(data.price),
-        imageUrl: data.imageUrl,
-        description: data.description || null,
-        specifications: data.specifications || null,
+    const formData = await req.formData();
+    const fields = Object.fromEntries(formData.entries());
+    const parsed = productSchema.safeParse(fields);
+    
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
+    }
+
+    const file = formData.get("image") as File | null;
+    let imageUrl: string | undefined;
+
+    if (file && file.size > 0) {
+      imageUrl = await uploadToCloudinary(file, 'honda-showroom/products');
+      
+      const existing = await prisma.productCatalog.findUnique({ where: { id: parsed.data.id } });
+      if (existing && existing.imageUrl) {
+        await deleteFromCloudinary(existing.imageUrl);
       }
+    }
+
+    const dataToUpdate: any = {
+      name: parsed.data.name,
+      category: parsed.data.category,
+      price: parsed.data.price,
+      description: parsed.data.description || null,
+    };
+    
+    if (imageUrl) {
+      dataToUpdate.imageUrl = imageUrl;
+    }
+
+    const product = await prisma.productCatalog.update({
+      where: { id: parsed.data.id },
+      data: dataToUpdate
     });
     return NextResponse.json(product);
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to update product' }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 

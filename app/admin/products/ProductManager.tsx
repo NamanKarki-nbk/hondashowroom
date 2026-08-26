@@ -22,12 +22,14 @@ export default function ProductManager() {
   
   // Form state
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingImageUrl, setEditingImageUrl] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
     id: "",
     name: "",
     category: "SCOOTERS",
     price: "",
-    imageUrl: "",
     description: "",
   });
 
@@ -53,55 +55,71 @@ export default function ProductManager() {
   const handleOpenModal = (product?: Product) => {
     if (product) {
       setEditingId(product.id);
+      setEditingImageUrl(product.imageUrl);
       setFormData({
         id: product.id,
         name: product.name,
         category: product.category,
         price: product.price.toString(),
-        imageUrl: product.imageUrl,
         description: product.description || "",
       });
     } else {
       setEditingId(null);
+      setEditingImageUrl(null);
       setFormData({
         id: "",
         name: "",
         category: "SCOOTERS",
         price: "",
-        imageUrl: "",
         description: "",
       });
     }
+    setSelectedFile(null);
     setIsModalOpen(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSaving(true);
     const isEditing = !!editingId;
     const url = '/api/admin/products';
     const method = isEditing ? 'PUT' : 'POST';
 
-    const payload = {
-      ...formData,
-      price: Number(formData.price),
-      id: isEditing ? editingId : formData.id || formData.name.toLowerCase().replace(/\\s+/g, '-'),
-    };
+    const payload = new FormData();
+    const finalId = isEditing ? editingId : formData.id || formData.name.toLowerCase().replace(/\s+/g, '-');
+    
+    payload.append('id', finalId);
+    payload.append('name', formData.name);
+    payload.append('category', formData.category);
+    payload.append('price', formData.price.toString());
+    payload.append('description', formData.description);
+    
+    if (selectedFile) {
+      payload.append('image', selectedFile);
+    } else if (!isEditing) {
+      alert("Image is required for new products.");
+      setIsSaving(false);
+      return;
+    }
 
     try {
       const res = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: payload,
       });
 
       if (res.ok) {
         setIsModalOpen(false);
         fetchProducts();
       } else {
-        alert("Operation failed");
+        const data = await res.json();
+        alert(`Operation failed: ${JSON.stringify(data.error || 'Unknown error')}`);
       }
     } catch (error) {
       console.error(error);
+      alert("Network error. See console for details.");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -117,10 +135,20 @@ export default function ProductManager() {
     }
   };
 
-  const filteredProducts = products.filter(p => 
-    p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    p.id.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const categoryOrder = ["SCOOTERS", "MOTORCYCLES", "POWER_PRODUCTS"];
+  const filteredProducts = products
+    .filter(p => 
+      p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      p.id.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      const idxA = categoryOrder.indexOf(a.category);
+      const idxB = categoryOrder.indexOf(b.category);
+      const rankA = idxA === -1 ? 999 : idxA;
+      const rankB = idxB === -1 ? 999 : idxB;
+      if (rankA !== rankB) return rankA - rankB;
+      return a.name.localeCompare(b.name);
+    });
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800 p-6">
@@ -281,14 +309,26 @@ export default function ProductManager() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Image URL</label>
+                <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                  Image File {editingId && '(Leave empty to keep existing image)'}
+                </label>
+                {editingImageUrl && (
+                  <div className="mb-3">
+                     <p className="text-xs text-gray-500 mb-2">Current Image:</p>
+                     <div className="relative w-full h-32 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                       <Image src={editingImageUrl} alt="Current product" fill className="object-contain" />
+                     </div>
+                  </div>
+                )}
                 <input
-                  type="text"
-                  required
-                  value={formData.imageUrl}
-                  onChange={e => setFormData({...formData, imageUrl: e.target.value})}
-                  placeholder="e.g. /inventory/honda-dio-110.png"
-                  className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
+                  type="file"
+                  accept="image/*"
+                  onChange={e => {
+                    if (e.target.files && e.target.files[0]) {
+                      setSelectedFile(e.target.files[0]);
+                    }
+                  }}
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
                 />
               </div>
 
@@ -313,9 +353,16 @@ export default function ProductManager() {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-semibold transition-colors flex items-center justify-center gap-2"
+                  disabled={isSaving}
+                  className="flex-1 px-4 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                 >
-                  <Check className="w-4 h-4" /> {editingId ? 'Save Changes' : 'Create Product'}
+                  {isSaving ? (
+                    <span className="animate-pulse">Saving...</span>
+                  ) : (
+                    <>
+                      <Check className="w-4 h-4" /> {editingId ? 'Save Changes' : 'Create Product'}
+                    </>
+                  )}
                 </button>
               </div>
             </form>
