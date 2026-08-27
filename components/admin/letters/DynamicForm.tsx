@@ -586,38 +586,50 @@ export default function DynamicForm({
               <InputField label="Check Number" id="checkNo" placeholder="e.g. 1041246271" icon={Hash} value={metadata['checkNo'] || ''} onChange={(val) => handleMetaChange('checkNo', val)} />
             </div>
 
-            <div className="mt-4 border border-gray-200 dark:border-slate-800 rounded-lg overflow-hidden">
+            <div className="mt-6 border border-gray-200 dark:border-slate-700/60 shadow-sm rounded-xl overflow-hidden bg-white dark:bg-slate-900">
               {staffList.length === 0 ? (
-                <div className="p-4 text-center text-sm text-gray-500">Loading staff data... If this persists, please refresh the page.</div>
+                <div className="p-8 text-center text-sm font-medium text-gray-500 flex flex-col items-center justify-center">
+                  <div className="w-8 h-8 border-4 border-gray-200 border-t-[#CC0000] rounded-full animate-spin mb-4"></div>
+                  Loading staff data... If this persists, please refresh the page.
+                </div>
               ) : (
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-gray-50 dark:bg-gray-800/50">
-                    <tr>
-                      <th className="px-3 py-2 font-semibold">Name</th>
-                      <th className="px-3 py-2 font-semibold">Salary</th>
-                      <th className="px-3 py-2 font-semibold">TDS (1%)</th>
-                      <th className="px-3 py-2 font-semibold">Net Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
-                    {salaryClaims.map((claim: any, index: number) => (
-                      <tr key={index}>
-                        <td className="px-3 py-2 font-medium whitespace-nowrap">{claim.name}</td>
-                        <td className="px-3 py-2">
-                          <input
-                            type="number"
-                            value={claim.salary}
-                            onChange={(e) => handleSalaryChange(index, e.target.value)}
-                            className="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 focus:outline-none focus:border-[#CC0000] px-1 py-1"
-                            placeholder="0"
-                          />
-                        </td>
-                        <td className="px-3 py-2 text-gray-500">{claim.tds}</td>
-                        <td className="px-3 py-2 font-semibold">{claim.netAmount}</td>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-gray-50/80 dark:bg-slate-800/80 border-b border-gray-200 dark:border-slate-700/60 backdrop-blur-sm">
+                      <tr>
+                        <th className="px-5 py-3.5 font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider text-[11px]">Name</th>
+                        <th className="px-5 py-3.5 font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider text-[11px] w-48">Salary</th>
+                        <th className="px-5 py-3.5 font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider text-[11px] w-32">TDS (1%)</th>
+                        <th className="px-5 py-3.5 font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider text-[11px] w-36">Net Amount</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 dark:divide-slate-700/40">
+                      {salaryClaims.map((claim: any, index: number) => (
+                        <tr key={index} className="hover:bg-gray-50 dark:hover:bg-slate-800/30 transition-colors group">
+                          <td className="px-5 py-3.5 font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap">{claim.name}</td>
+                          <td className="px-5 py-2.5">
+                            <div className="relative flex items-center">
+                              <span className="absolute left-3 text-gray-400 dark:text-gray-500 text-xs font-bold pointer-events-none">Rs.</span>
+                              <input
+                                type="number"
+                                value={claim.salary}
+                                onChange={(e) => handleSalaryChange(index, e.target.value)}
+                                className="w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-950 border border-gray-300 dark:border-slate-700 rounded-lg text-sm font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#CC0000]/20 focus:border-[#CC0000] transition-all shadow-sm group-hover:border-gray-400 dark:group-hover:border-slate-600"
+                                placeholder="0"
+                              />
+                            </div>
+                          </td>
+                          <td className="px-5 py-3.5 text-gray-500 dark:text-gray-400 font-medium">Rs. {claim.tds || '0'}</td>
+                          <td className="px-5 py-3.5">
+                            <span className="inline-flex items-center justify-center px-3 py-1 rounded-md bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 font-bold text-sm border border-green-200 dark:border-green-800/30">
+                              Rs. {claim.netAmount || '0'}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               )}
               {staffList.length > 0 && (
                 <div className="bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-slate-800 p-3 flex justify-end">
