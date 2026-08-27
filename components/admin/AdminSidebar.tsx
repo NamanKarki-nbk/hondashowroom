@@ -15,10 +15,109 @@ interface AdminSidebarProps {
   setIsMobileOpen: (val: boolean) => void;
 }
 
+const navCategories = [
+  {
+    name: "Dashboard",
+    icon: LayoutDashboard,
+    href: "/admin/dashboard",
+    items: []
+  },
+  {
+    name: "Notifications",
+    icon: Bell,
+    href: "/admin/notifications",
+    items: []
+  },
+  {
+    name: "Front Website (CMS)",
+    icon: Globe,
+    items: [
+      { name: "Home Page", href: "/admin/cms/home" },
+      { name: "Offers & Schemes", href: "/admin/cms/offers" },
+      { name: "AMC Plans & Bookings", href: "/admin/cms/amc" },
+      { name: "Branch Info", href: "/admin/cms/branches" },
+      { name: "Blog Posts", href: "/admin/blogs" },
+      { name: "Products Catalog", href: "/admin/products" },
+      { name: "Accessories Catalog", href: "/admin/accessories" },
+      { name: "PDF Brochures", href: "/admin/inventory/brochures" },
+    ]
+  },
+  {
+    name: "Inventory",
+    icon: Package,
+    items: [
+      { name: "Vehicle Stock", href: "/admin/inventory" },
+      { name: "Multi-Branch Transfer", href: "/admin/inventory/transfer" },
+      { name: "Purchase Invoices", href: "/admin/inventory/purchase-invoices" },
+      { name: "Spare Parts", href: "/admin/inventory/spare-parts" },
+    ]
+  },
+  {
+    name: "Sales & POS",
+    icon: ShoppingCart,
+    items: [
+      { name: "New Sale / Invoice", href: "/admin/sales" },
+      { name: "New Invoice (POS)", href: "/admin/pos" },
+      { name: "Digital Quotation", href: "/admin/crm/quotations" },
+      { name: "Sales Calendar", href: "/admin/sales-calendar" },
+      { name: "Sales History", href: "/admin/sales-history" },
+      { name: "Sales Analysis", href: "/admin/sales-analysis" },
+      { name: "Vehicle Price List", href: "/admin/prices" },
+      { name: "Finance Plans", href: "/admin/finance" },
+    ]
+  },
+  {
+    name: "Customer Hub (CRM)",
+    icon: Users,
+    items: [
+      { name: "Customer Directory", href: "/admin/crm/customers" },
+      { name: "Leads & Follow-ups", href: "/admin/crm/leads" },
+      { name: "Test Ride Bookings", href: "/admin/crm/test-rides" },
+      { name: "KYC Directory", href: "/admin/users" },
+      { name: "Service Bookings", href: "/admin/crm/service" },
+      { name: "Deliveries & Handover", href: "/admin/crm/deliveries" },
+      { name: "Vehicle Valuations", href: "/admin/crm/valuations" },
+      { name: "Referrals & Loyalty", href: "/admin/crm/referrals" },
+    ]
+  },
+  {
+    name: "Staff & HR",
+    icon: Briefcase,
+    items: [
+      { name: "Staff Directory", href: "/admin/settings/staff" },
+    ]
+  },
+  {
+    name: "Official Documents",
+    icon: FileText,
+    items: [
+      { name: "Letters & Claims", href: "/admin/letters" },
+      { name: "Generate New", href: "/admin/letters/new" },
+    ]
+  },
+  {
+    name: "Settings",
+    icon: Settings,
+    items: [
+      { name: "Roles & Permissions", href: "/admin/settings/roles" },
+      { name: "WhatsApp API Config", href: "/admin/settings/whatsapp" },
+      { name: "Branding & Invoice Setup", href: "/admin/settings/branding" },
+      { name: "Service Charges", href: "/admin/settings/service-charges" },
+    ]
+  }
+];
+
 export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSidebarProps) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [expandedCategory, setExpandedCategory] = useState<string | null>("Front Website (CMS)");
+  
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(() => {
+    const active = navCategories.find(cat => 
+      cat.items.some(item => pathname.startsWith(item.href)) || (cat.href && pathname.startsWith(cat.href))
+    );
+    return active ? active.name : null;
+  });
+
   const [actionStats, setActionStats] = useState({ pendingTestRides: 0, newLeads: 0, pendingQuotations: 0, pendingAmcBookings: 0, pendingServiceBookings: 0 });
 
   useEffect(() => {
@@ -42,98 +141,6 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
     fetchActionStats();
   }, [pathname]); // Refetch when navigating
 
-
-  const navCategories = [
-    {
-      name: "Dashboard",
-      icon: LayoutDashboard,
-      href: "/admin/dashboard",
-      items: []
-    },
-    {
-      name: "Notifications",
-      icon: Bell,
-      href: "/admin/notifications",
-      items: []
-    },
-    {
-      name: "Front Website (CMS)",
-      icon: Globe,
-      items: [
-        { name: "Home Page", href: "/admin/cms/home" },
-        { name: "Offers & Schemes", href: "/admin/cms/offers" },
-        { name: "AMC Plans & Bookings", href: "/admin/cms/amc" },
-        { name: "Branch Info", href: "/admin/cms/branches" },
-        { name: "Blog Posts", href: "/admin/blogs" },
-        { name: "Products Catalog", href: "/admin/products" },
-        { name: "Accessories Catalog", href: "/admin/accessories" },
-        { name: "PDF Brochures", href: "/admin/inventory/brochures" },
-      ]
-    },
-    {
-      name: "Inventory",
-      icon: Package,
-      items: [
-        { name: "Vehicle Stock", href: "/admin/inventory" },
-        { name: "Multi-Branch Transfer", href: "/admin/inventory/transfer" },
-        { name: "Purchase Invoices", href: "/admin/inventory/purchase-invoices" },
-        { name: "Spare Parts", href: "/admin/inventory/spare-parts" },
-      ]
-    },
-    {
-      name: "Sales & POS",
-      icon: ShoppingCart,
-      items: [
-        { name: "New Sale / Invoice", href: "/admin/sales" },
-        { name: "New Invoice (POS)", href: "/admin/pos" },
-        { name: "Digital Quotation", href: "/admin/crm/quotations" },
-        { name: "Sales Calendar", href: "/admin/sales-calendar" },
-        { name: "Sales History", href: "/admin/sales-history" },
-        { name: "Sales Analysis", href: "/admin/sales-analysis" },
-        { name: "Vehicle Price List", href: "/admin/prices" },
-        { name: "Finance Plans", href: "/admin/finance" },
-      ]
-    },
-    {
-      name: "Customer Hub (CRM)",
-      icon: Users,
-      items: [
-        { name: "Customer Directory", href: "/admin/crm/customers" },
-        { name: "Leads & Follow-ups", href: "/admin/crm/leads" },
-        { name: "Test Ride Bookings", href: "/admin/crm/test-rides" },
-        { name: "KYC Directory", href: "/admin/users" },
-        { name: "Service Bookings", href: "/admin/crm/service" },
-        { name: "Deliveries & Handover", href: "/admin/crm/deliveries" },
-        { name: "Vehicle Valuations", href: "/admin/crm/valuations" },
-        { name: "Referrals & Loyalty", href: "/admin/crm/referrals" },
-      ]
-    },
-    {
-      name: "Staff & HR",
-      icon: Briefcase,
-      items: [
-        { name: "Staff Directory", href: "/admin/settings/staff" },
-      ]
-    },
-    {
-      name: "Official Documents",
-      icon: FileText,
-      items: [
-        { name: "Letters & Claims", href: "/admin/letters" },
-        { name: "Generate New", href: "/admin/letters/new" },
-      ]
-    },
-    {
-      name: "Settings",
-      icon: Settings,
-      items: [
-        { name: "Roles & Permissions", href: "/admin/settings/roles" },
-        { name: "WhatsApp API Config", href: "/admin/settings/whatsapp" },
-        { name: "Branding & Invoice Setup", href: "/admin/settings/branding" },
-        { name: "Service Charges", href: "/admin/settings/service-charges" },
-      ]
-    }
-  ];
 
   const toggleCategory = (name: string) => {
     if (isCollapsed) setIsCollapsed(false);
