@@ -88,7 +88,15 @@ export default function DynamicForm({
           if (vehicleModel) {
             const product = products.find(p => p.name.toLowerCase() === vehicleModel.toLowerCase());
             if (product) {
-              const specs = product.specs || {};
+              const specs = product.specifications || {};
+              
+              let colors = "";
+              if (product.features && product.features.colors) {
+                colors = Array.isArray(product.features.colors) ? product.features.colors.join(", ") : product.features.colors;
+              } else if (specs.colors) {
+                colors = Array.isArray(specs.colors) ? specs.colors.join(", ") : specs.colors;
+              }
+
               newMeta.vehicleId = product.id;
               newMeta.vehicleModel = product.name;
               newMeta.category = product.category;
@@ -104,7 +112,7 @@ export default function DynamicForm({
                 noOfGears: specs.noOfGears || "",
                 groundClearance: specs.groundClearance || ""
               };
-              newMeta.availableColors = Array.isArray(specs.colors) ? specs.colors.join(", ") : "";
+              newMeta.availableColors = colors;
             } else {
               newMeta.vehicleModel = vehicleModel;
             }
@@ -849,7 +857,15 @@ export default function DynamicForm({
                   onChange={(e) => {
                     const product = products.find(p => p.id === e.target.value);
                     if (product) {
-                      const specs = product.specs || {};
+                      const specs = product.specifications || {};
+                      
+                      let colors = "";
+                      if (product.features && product.features.colors) {
+                        colors = Array.isArray(product.features.colors) ? product.features.colors.join(", ") : product.features.colors;
+                      } else if (specs.colors) {
+                        colors = Array.isArray(specs.colors) ? specs.colors.join(", ") : specs.colors;
+                      }
+
                       setMetadata({
                         ...metadata,
                         vehicleId: product.id,
@@ -867,7 +883,7 @@ export default function DynamicForm({
                           noOfGears: specs.noOfGears || "",
                           groundClearance: specs.groundClearance || ""
                         },
-                        availableColors: Array.isArray(specs.colors) ? specs.colors.join(", ") : ""
+                        availableColors: colors
                       });
                     }
                   }}
