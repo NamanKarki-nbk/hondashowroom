@@ -76,6 +76,8 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
       items: [
         { name: "Vehicle Stock", href: "/admin/inventory" },
         { name: "Multi-Branch Transfer", href: "/admin/inventory/transfer" },
+        { name: "Purchase Invoices", href: "/admin/inventory/purchase-invoices" },
+        { name: "Spare Parts", href: "/admin/inventory/spare-parts" },
       ]
     },
     {
@@ -101,6 +103,8 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
         { name: "Test Ride Bookings", href: "/admin/crm/test-rides" },
         { name: "KYC Directory", href: "/admin/users" },
         { name: "Service Bookings", href: "/admin/crm/service" },
+        { name: "Deliveries & Handover", href: "/admin/crm/deliveries" },
+        { name: "Vehicle Valuations", href: "/admin/crm/valuations" },
         { name: "Referrals & Loyalty", href: "/admin/crm/referrals" },
       ]
     },
@@ -126,6 +130,7 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
         { name: "Roles & Permissions", href: "/admin/settings/roles" },
         { name: "WhatsApp API Config", href: "/admin/settings/whatsapp" },
         { name: "Branding & Invoice Setup", href: "/admin/settings/branding" },
+        { name: "Service Charges", href: "/admin/settings/service-charges" },
       ]
     }
   ];
