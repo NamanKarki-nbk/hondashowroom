@@ -135,6 +135,14 @@ function generateQuotationTemplate(data: TemplateData): { subject: string, html:
       </div>
       <br />
 
+      <!-- For -->
+      <div style="margin: 0; padding: 0; page-break-inside: avoid;">
+        <strong>For,</strong><br/>
+        ${meta.loaneeName || '...........................................'}<br/>
+        ${meta.loaneeAddress || '...........................................'}
+      </div>
+      <br />
+
       <div style="font-weight: bold; margin: 0; padding: 0; page-break-inside: avoid;">
         Sub: For Quotation.
       </div>
