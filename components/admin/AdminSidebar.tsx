@@ -241,7 +241,16 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
                   {!isCollapsed && (
                     <div className="flex flex-col gap-1 pl-11 pr-2 py-1">
                       {category.items.map(item => {
-                        const isSubActive = pathname.startsWith(item.href);
+                        // Find the most specific (longest) matching href in this category
+                        const bestMatch = category.items.reduce((best, curr) => {
+                          if (pathname.startsWith(curr.href) && curr.href.length > (best?.href.length || 0)) {
+                            return curr;
+                          }
+                          return best;
+                        }, null as { href: string } | null);
+
+                        const isSubActive = bestMatch?.href === item.href;
+
                         return (
                           <Link
                             key={item.name}
