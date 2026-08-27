@@ -235,13 +235,16 @@ export default function RolesClient() {
                           <select 
                             value={user.role}
                             onChange={(e) => handleRoleChange(user.id, e.target.value as SystemRole)}
-                            disabled={updatingId === user.id}
+                            disabled={updatingId === user.id || user.role === "SUPERADMIN"}
                             className="bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 text-sm rounded-lg px-3 py-1.5 font-semibold focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer disabled:opacity-50"
                           >
                             <option value="USER">User (No Admin Access)</option>
                             <option value="STAFF">Staff (POS & CRM)</option>
                             <option value="MANAGER">Manager (Inventory & Admin)</option>
                             <option value="ADMIN">Admin (Full Access)</option>
+                            {user.role === "SUPERADMIN" && (
+                              <option value="SUPERADMIN">Superadmin (Supreme)</option>
+                            )}
                           </select>
                         </div>
                       </td>
