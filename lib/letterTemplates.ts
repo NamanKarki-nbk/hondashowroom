@@ -130,8 +130,8 @@ function generateQuotationTemplate(data: TemplateData): { subject: string, html:
       <!-- To -->
       <div style="margin: 0; padding: 0; page-break-inside: avoid;">
         <strong>To,</strong><br/>
-        ${data.recipient}<br/>
-        ${meta.bankAddress || ''}
+        ${meta.receiverName || data.recipient || '...........................................'}<br/>
+        ${meta.receiverAddress || '...........................................'}
       </div>
       <br />
 

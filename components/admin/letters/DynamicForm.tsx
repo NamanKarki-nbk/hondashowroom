@@ -789,14 +789,24 @@ export default function DynamicForm({
       case 'Quotation': {
         return (
           <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <InputField
-              label="Bank / Organization Address"
-              id="bankAddress"
-              icon={Building2}
-              placeholder="e.g. Kantipath, Kathmandu"
-              value={metadata.bankAddress || ''}
-              onChange={(val) => setMetadata({ ...metadata, bankAddress: val })}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <InputField
+                label="Receiver Name"
+                id="receiverName"
+                icon={User}
+                placeholder="e.g. The Branch Manager"
+                value={metadata.receiverName || ''}
+                onChange={(val) => setMetadata({ ...metadata, receiverName: val })}
+              />
+              <InputField
+                label="Receiver Address"
+                id="receiverAddress"
+                icon={Building2}
+                placeholder="e.g. NMB Bank Ltd., Damak-05"
+                value={metadata.receiverAddress || ''}
+                onChange={(val) => setMetadata({ ...metadata, receiverAddress: val })}
+              />
+            </div>
             
             <div className="pt-4 border-t border-gray-100 dark:border-slate-800">
               <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3">Loanee Details</h3>
@@ -867,64 +877,6 @@ export default function DynamicForm({
                     <option key={p.id} value={p.id}>{p.name} - Rs. {p.price}</option>
                   ))}
                 </select>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <InputField
-                  label="Vehicle Model"
-                  id="vehicleModel"
-                  placeholder="e.g. SP Shine BS6 DSS"
-                  value={metadata.vehicleModel || ''}
-                  onChange={(val) => setMetadata({ ...metadata, vehicleModel: val })}
-                />
-                <InputField
-                  label="Variant"
-                  id="variant"
-                  placeholder="e.g. BIKE"
-                  value={metadata.variant || ''}
-                  onChange={(val) => setMetadata({ ...metadata, variant: val })}
-                />
-                <InputField
-                  label="C.C."
-                  id="cc"
-                  placeholder="e.g. 125"
-                  value={metadata.cc || ''}
-                  onChange={(val) => setMetadata({ ...metadata, cc: val })}
-                />
-                <InputField
-                  label="Unit Price (Rs)"
-                  id="unitPrice"
-                  type="number"
-                  icon={Banknote}
-                  placeholder="e.g. 319900"
-                  value={metadata.unitPrice || ''}
-                  onChange={(val) => setMetadata({ ...metadata, unitPrice: val })}
-                />
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-gray-100 dark:border-slate-800">
-              <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3">Technical Specifications</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {['displacement', 'fuelType', 'engineType', 'startingMethod', 'kerbWeight', 'fuelTank', 'noOfGears', 'groundClearance'].map((specKey) => (
-                  <InputField
-                    key={specKey}
-                    label={specKey.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                    id={specKey}
-                    placeholder={`e.g. ${specKey}`}
-                    value={metadata.specs?.[specKey] || ''}
-                    onChange={(val) => setMetadata({ ...metadata, specs: { ...metadata.specs, [specKey]: val } })}
-                  />
-                ))}
-              </div>
-              <div className="mt-4">
-                <InputField
-                  label="Available Colors"
-                  id="availableColors"
-                  placeholder="e.g. Red, Black, Blue"
-                  value={metadata.availableColors || ''}
-                  onChange={(val) => setMetadata({ ...metadata, availableColors: val })}
-                />
               </div>
             </div>
           </div>
