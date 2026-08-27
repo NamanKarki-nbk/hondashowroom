@@ -39,6 +39,38 @@ const InputField = ({ label, id, placeholder, type = "text", icon: Icon, value, 
   </div>
 );
 
+const parseSpecifications = (specs: any) => {
+  const flat: Record<string, string> = {};
+  if (!specs || typeof specs !== 'object') return flat;
+  
+  // Handle categorized specs format: { "Engine": [{ name: "Displacement", value: "110cc" }] }
+  Object.values(specs).forEach((category: any) => {
+    if (Array.isArray(category)) {
+      category.forEach((item) => {
+        if (item.name && item.value) {
+          flat[item.name.toLowerCase()] = String(item.value);
+        }
+      });
+    }
+  });
+
+  // Handle flat object format fallback
+  Object.keys(specs).forEach((key) => {
+    if (typeof specs[key] === 'string' || typeof specs[key] === 'number') {
+      flat[key.toLowerCase()] = String(specs[key]);
+    }
+  });
+  
+  return flat;
+};
+
+const getSpec = (flat: Record<string, string>, keys: string[]) => {
+  for (const k of keys) {
+    if (flat[k.toLowerCase()]) return flat[k.toLowerCase()];
+  }
+  return "";
+};
+
 export default function DynamicForm({
   docType,
   recipient,
@@ -89,28 +121,31 @@ export default function DynamicForm({
             const product = products.find(p => p.name.toLowerCase() === vehicleModel.toLowerCase());
             if (product) {
               const specs = product.specifications || {};
+              const flatSpecs = parseSpecifications(specs);
               
               let colors = "";
-              if (product.features && product.features.colors) {
-                colors = Array.isArray(product.features.colors) ? product.features.colors.join(", ") : product.features.colors;
-              } else if (specs.colors) {
-                colors = Array.isArray(specs.colors) ? specs.colors.join(", ") : specs.colors;
+              if (product.features && (product.features as any).colors) {
+                const fc = (product.features as any).colors;
+                colors = Array.isArray(fc) ? fc.join(", ") : fc;
+              } else if ((specs as any).colors) {
+                const sc = (specs as any).colors;
+                colors = Array.isArray(sc) ? sc.join(", ") : sc;
               }
 
               newMeta.vehicleId = product.id;
               newMeta.vehicleModel = product.name;
               newMeta.category = product.category;
               newMeta.unitPrice = product.price;
-              newMeta.cc = specs.displacement || "";
+              newMeta.cc = getSpec(flatSpecs, ["displacement", "engine displacement", "cc"]);
               newMeta.specs = {
-                displacement: specs.displacement || "",
-                fuelType: specs.fuelType || "",
-                engineType: specs.engineType || "",
-                startingMethod: specs.startingMethod || "",
-                kerbWeight: specs.kerbWeight || "",
-                fuelTank: specs.fuelTank || "",
-                noOfGears: specs.noOfGears || "",
-                groundClearance: specs.groundClearance || ""
+                displacement: getSpec(flatSpecs, ["displacement", "engine displacement", "cc"]),
+                fuelType: getSpec(flatSpecs, ["fuel type", "fuel system", "fuel"]),
+                engineType: getSpec(flatSpecs, ["engine type", "type"]),
+                startingMethod: getSpec(flatSpecs, ["starting method", "starting system"]),
+                kerbWeight: getSpec(flatSpecs, ["kerb weight", "dry weight", "weight"]),
+                fuelTank: getSpec(flatSpecs, ["fuel tank capacity", "fuel tank", "fuel capacity"]),
+                noOfGears: getSpec(flatSpecs, ["no. of gears", "no of gears", "gearbox"]),
+                groundClearance: getSpec(flatSpecs, ["ground clearance"])
               };
               newMeta.availableColors = colors;
             } else {
@@ -858,12 +893,15 @@ export default function DynamicForm({
                     const product = products.find(p => p.id === e.target.value);
                     if (product) {
                       const specs = product.specifications || {};
+                      const flatSpecs = parseSpecifications(specs);
                       
                       let colors = "";
-                      if (product.features && product.features.colors) {
-                        colors = Array.isArray(product.features.colors) ? product.features.colors.join(", ") : product.features.colors;
-                      } else if (specs.colors) {
-                        colors = Array.isArray(specs.colors) ? specs.colors.join(", ") : specs.colors;
+                      if (product.features && (product.features as any).colors) {
+                        const fc = (product.features as any).colors;
+                        colors = Array.isArray(fc) ? fc.join(", ") : fc;
+                      } else if ((specs as any).colors) {
+                        const sc = (specs as any).colors;
+                        colors = Array.isArray(sc) ? sc.join(", ") : sc;
                       }
 
                       setMetadata({
@@ -872,16 +910,16 @@ export default function DynamicForm({
                         vehicleModel: product.name,
                         category: product.category,
                         unitPrice: product.price,
-                        cc: specs.displacement || "",
+                        cc: getSpec(flatSpecs, ["displacement", "engine displacement", "cc"]),
                         specs: {
-                          displacement: specs.displacement || "",
-                          fuelType: specs.fuelType || "",
-                          engineType: specs.engineType || "",
-                          startingMethod: specs.startingMethod || "",
-                          kerbWeight: specs.kerbWeight || "",
-                          fuelTank: specs.fuelTank || "",
-                          noOfGears: specs.noOfGears || "",
-                          groundClearance: specs.groundClearance || ""
+                          displacement: getSpec(flatSpecs, ["displacement", "engine displacement", "cc"]),
+                          fuelType: getSpec(flatSpecs, ["fuel type", "fuel system", "fuel"]),
+                          engineType: getSpec(flatSpecs, ["engine type", "type"]),
+                          startingMethod: getSpec(flatSpecs, ["starting method", "starting system"]),
+                          kerbWeight: getSpec(flatSpecs, ["kerb weight", "dry weight", "weight"]),
+                          fuelTank: getSpec(flatSpecs, ["fuel tank capacity", "fuel tank", "fuel capacity"]),
+                          noOfGears: getSpec(flatSpecs, ["no. of gears", "no of gears", "gearbox"]),
+                          groundClearance: getSpec(flatSpecs, ["ground clearance"])
                         },
                         availableColors: colors
                       });
