@@ -254,7 +254,7 @@ export default function VehicleInventoryTable() {
                 <th className="py-5 px-6 whitespace-nowrap">Days In Stock</th>
                 <th className="py-5 px-6 whitespace-nowrap">Price (Selling)</th>
                 <th className="py-5 px-6 whitespace-nowrap">Status</th>
-                <th className="py-5 px-6 whitespace-nowrap text-right sticky right-0 bg-white dark:bg-slate-900 border-l border-gray-100 dark:border-slate-800 z-10">Actions</th>
+                <th className="py-5 px-6 whitespace-nowrap text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
@@ -310,7 +310,7 @@ export default function VehicleInventoryTable() {
                         In Stock
                       </span>
                     </td>
-                    <td className="py-4 px-6 text-right sticky right-0 bg-white dark:bg-slate-900 border-l border-gray-100 dark:border-slate-800 z-10 transition-colors group-hover:bg-gray-50 dark:group-hover:bg-zinc-800">
+                    <td className="py-4 px-6 text-right">
                       <div className="flex justify-end gap-2">
                         <button 
                           onClick={() => setRoutingVehicle(item)}
