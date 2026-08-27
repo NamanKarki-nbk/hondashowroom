@@ -130,16 +130,8 @@ function generateQuotationTemplate(data: TemplateData): { subject: string, html:
       <!-- To -->
       <div style="margin: 0; padding: 0; page-break-inside: avoid;">
         <strong>To,</strong><br/>
-        ${meta.receiverName || data.recipient || '...........................................'}<br/>
+        ${meta.receiverName || '...........................................'}<br/>
         ${meta.receiverAddress || '...........................................'}
-      </div>
-      <br />
-
-      <!-- For -->
-      <div style="margin: 0; padding: 0; page-break-inside: avoid;">
-        <strong>For,</strong><br/>
-        ${meta.loaneeName || '...........................................'}<br/>
-        ${meta.loaneeAddress || '...........................................'}
       </div>
       <br />
 
