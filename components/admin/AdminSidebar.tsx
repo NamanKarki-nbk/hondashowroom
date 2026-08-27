@@ -169,8 +169,7 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
         {/* Sidebar Header */}
         <div className="h-20 flex items-center justify-between px-4 border-b border-zinc-800 shrink-0">
           <Link href="/" className={`flex items-center gap-3 overflow-hidden ${isCollapsed ? 'justify-center w-full' : ''}`}>
-            <Logo className="h-8 max-w-[120px] lg:max-w-[140px] text-primary shrink-0" />
-            {!isCollapsed && <span className="font-black text-xl md:text-2xl uppercase tracking-tight whitespace-nowrap">Admin</span>}
+            <Logo className="h-12 max-w-[160px] lg:max-w-[200px] text-primary shrink-0" />
           </Link>
           
           <button 
