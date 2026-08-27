@@ -642,9 +642,9 @@ export default function DynamicForm({
                     <thead className="bg-gray-50/80 dark:bg-slate-800/80 border-b border-gray-200 dark:border-slate-700/60 backdrop-blur-sm">
                       <tr>
                         <th className="px-5 py-3.5 font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider text-[11px]">Name</th>
-                        <th className="px-5 py-3.5 font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider text-[11px] w-48">Salary</th>
-                        <th className="px-5 py-3.5 font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider text-[11px] w-32">TDS (1%)</th>
-                        <th className="px-5 py-3.5 font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider text-[11px] w-36">Net Amount</th>
+                        <th className="px-5 py-3.5 font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider text-[11px] w-48 min-w-[150px]">Salary</th>
+                        <th className="px-5 py-3.5 font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider text-[11px] w-32 min-w-[100px]">TDS (1%)</th>
+                        <th className="px-5 py-3.5 font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider text-[11px] w-36 min-w-[120px]">Net Amount</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 dark:divide-slate-700/40">
