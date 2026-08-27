@@ -10,7 +10,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Wrap in transaction
+    // Wrap in transaction with increased timeout to prevent P2028 errors
     await prisma.$transaction(async (tx) => {
       await tx.vehicleInventory.update({
         where: { id: vehicleId },
@@ -26,6 +26,9 @@ export async function POST(request: Request) {
           remarks: notes
         }
       });
+    }, {
+      maxWait: 5000, // default is 2000
+      timeout: 15000 // default is 5000
     });
 
     return NextResponse.json({ success: true });
