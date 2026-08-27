@@ -584,59 +584,70 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                 </div>
               </div>
 
-              {/* Attribute Filters Bar */}
-              <div className="bg-[#f8f9fa] dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-t-xl p-4 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div className="flex items-center gap-2 text-[11px] font-extrabold text-gray-700 dark:text-gray-300 uppercase tracking-widest">
-                  <svg className="w-4 h-4 text-[#cd302b]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                  </svg>
-                  Attribute Filters
-                </div>
-                <div className="flex items-center gap-3">
-                  <button 
-                    onClick={() => setHideCommon(!hideCommon)}
-                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[11px] font-extrabold uppercase tracking-wide transition-colors ${hideCommon ? 'bg-[#cd302b] text-white border-[#cd302b]' : 'bg-white dark:bg-slate-950 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-slate-700 hover:border-gray-300 dark:hover:border-slate-600'} border shadow-sm`}
-                  >
-                    {hideCommon ? <Check className="w-3.5 h-3.5" /> : <span className="w-3.5 h-3.5 flex items-center justify-center font-bold">✓</span>} 
-                    Hide common features
-                  </button>
-                  <button 
-                    onClick={() => setHighlightDiff(!highlightDiff)}
-                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[11px] font-extrabold uppercase tracking-wide transition-colors ${highlightDiff ? 'bg-[#cd302b] text-white border-[#cd302b]' : 'bg-white dark:bg-slate-950 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-slate-700 hover:border-gray-300 dark:hover:border-slate-600'} border shadow-sm`}
-                  >
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              {/* Combined Attribute Filters and Tabs Container */}
+              <div className="border border-gray-200 dark:border-slate-800 rounded-xl overflow-hidden mb-8 bg-white dark:bg-slate-950 shadow-sm">
+                
+                {/* Attribute Filters Header */}
+                <div className="bg-[#f8f9fa] dark:bg-slate-900/50 p-4 flex flex-col md:flex-row justify-between items-center gap-4 border-b border-gray-200 dark:border-slate-800">
+                  <div className="flex items-center gap-2 text-[11px] font-extrabold text-gray-700 dark:text-gray-300 uppercase tracking-widest">
+                    <svg className="w-4 h-4 text-[#cd302b]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                     </svg>
-                    Highlight differences
-                  </button>
+                    Attribute Filters
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button 
+                      onClick={() => setHideCommon(!hideCommon)}
+                      className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-wide transition-colors ${hideCommon ? 'bg-[#cd302b] text-white border-[#cd302b]' : 'bg-white dark:bg-slate-950 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-slate-700 hover:border-gray-300'} border shadow-sm`}
+                    >
+                      {hideCommon ? <Check className="w-3 h-3" /> : <span className="w-3 h-3 flex items-center justify-center">✓</span>} 
+                      Hide common features
+                    </button>
+                    <button 
+                      onClick={() => setHighlightDiff(!highlightDiff)}
+                      className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-wide transition-colors ${highlightDiff ? 'bg-[#cd302b] text-white border-[#cd302b]' : 'bg-white dark:bg-slate-950 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-slate-700 hover:border-gray-300'} border shadow-sm`}
+                    >
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      Highlight differences
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              {/* Result specs Tabs */}
-              <div className="flex bg-white dark:bg-slate-950 border-x border-b border-gray-200 dark:border-slate-800 rounded-b-xl overflow-x-auto gap-1 text-sm shadow-sm mb-8 px-4 pt-1 hide-scrollbar">
-                {(['All', ...specCategories.map(c => c.title), 'Features']).map(tab => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`py-4 px-6 font-bold text-xs uppercase tracking-wider transition-all relative whitespace-nowrap ${activeTab === tab ? 'text-[#cd302b] dark:text-[#cc0000] bg-red-50/50 dark:bg-red-900/10' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-900'}`}
-                  >
-                    {tab}
-                    {activeTab === tab && (
-                      <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#cd302b] rounded-t-md"></span>
-                    )}
-                  </button>
-                ))}
+                {/* Tabs */}
+                <div className="flex overflow-x-auto text-sm hide-scrollbar">
+                  {(['All', ...specCategories.map(c => c.title), 'Features']).map(tab => {
+                    const isActive = activeTab === tab;
+                    return (
+                      <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`py-4 px-6 font-bold text-[11px] uppercase tracking-wider transition-all relative whitespace-nowrap ${
+                          isActive 
+                            ? 'text-[#cd302b] dark:text-[#cc0000] bg-[#fdfaf9] dark:bg-red-950/20' 
+                            : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
+                        }`}
+                      >
+                        {tab}
+                        {isActive && (
+                          <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#cd302b] rounded-t-sm"></span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Spec search input */}
-              <div className="relative mb-6 w-full lg:w-96">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
+              <div className="relative mb-8 w-full max-w-[320px]">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input 
                   type="text" 
                   placeholder="Type a spec or a feature e.g. Engine"
                   value={searchFilter}
                   onChange={(e) => setSearchFilter(e.target.value)}
-                  className="w-full bg-background dark:bg-[#141b2b] border border-gray-200 dark:border-background/10 rounded-xl py-3 pl-10 pr-4 text-xs text-gray-900 dark:text-primary-foreground placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors shadow-sm"
+                  className="w-full bg-white dark:bg-[#141b2b] border border-gray-200 dark:border-background/10 rounded-lg py-2.5 pl-9 pr-4 text-xs text-gray-900 dark:text-primary-foreground placeholder-gray-400 focus:outline-none focus:border-[#cd302b] focus:ring-1 focus:ring-[#cd302b]/20 transition-all shadow-sm"
                 />
               </div>
 
