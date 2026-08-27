@@ -19,9 +19,9 @@ export async function POST(request: Request) {
 
       await tx.stockTransferLog.create({
         data: {
-          vehicleId,
-          fromBranchId: fromBranchId || null,
-          toBranchId: targetBranchId,
+          vehicle: { connect: { id: vehicleId } },
+          toBranch: { connect: { id: targetBranchId } },
+          ...(fromBranchId ? { fromBranch: { connect: { id: fromBranchId } } } : {}),
           status: 'COMPLETED',
           remarks: notes
         }
