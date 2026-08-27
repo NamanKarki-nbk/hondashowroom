@@ -70,6 +70,18 @@ export async function PATCH(req: Request) {
        return new NextResponse("Cannot change your own role", { status: 400 });
     }
 
+    // Only SUPERADMIN can assign the SUPERADMIN role
+    if (newRole === "SUPERADMIN" && session.role !== "SUPERADMIN" && !isHardcodedAdmin) {
+       return new NextResponse("Only a Superadmin can assign the Superadmin role", { status: 403 });
+    }
+
+    const targetUser = await prisma.user.findUnique({ where: { id: userId } });
+    
+    // Only SUPERADMIN can demote an existing SUPERADMIN
+    if (targetUser?.role === "SUPERADMIN" && session.role !== "SUPERADMIN" && !isHardcodedAdmin) {
+       return new NextResponse("Only a Superadmin can modify another Superadmin", { status: 403 });
+    }
+
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: { role: newRole }

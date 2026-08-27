@@ -1,12 +1,19 @@
 import React from 'react';
 import RolesClient from './RolesClient';
+import { cookies } from 'next/headers';
+import { verifySessionToken } from '@/lib/session';
 
 export const metadata = {
   title: 'Roles & Permissions | Admin Dashboard',
   description: 'Manage system access roles and understand permission levels.',
 };
 
-export default function RolesPage() {
+export default async function RolesPage() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('auth_session')?.value;
+  const session = token ? await verifySessionToken(token) : null;
+  const currentUserRole = session?.role || "USER";
+
   return (
     <div className="max-w-[1600px] mx-auto h-[calc(100vh-110px)] flex flex-col px-4 sm:px-6 lg:px-8 pb-4">
       <div className="mb-6 shrink-0">
@@ -15,7 +22,7 @@ export default function RolesPage() {
       </div>
 
       <div className="flex-1 min-h-0 bg-white dark:bg-[#1a1a1a] rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden flex flex-col">
-        <RolesClient />
+        <RolesClient currentUserRole={currentUserRole} />
       </div>
     </div>
   );
