@@ -63,12 +63,6 @@ export default async function OffersPage() {
           </div>
         )}
 
-        {/* Application Form */}
-        <div id="apply-form" className="max-w-2xl mx-auto">
-          <div className="bg-background dark:bg-slate-950 rounded-3xl border border-gray-200 dark:border-background/8 p-8 shadow-xl">
-            <OfferForm />
-          </div>
-        </div>
       </div>
     </div>
   );

@@ -8,8 +8,14 @@ const MODELS = [
   "Honda Dio 125", "Honda Dio BS6", "EG 1000", "EP 1000", "EU22i", "HRU 196",
 ];
 
-export default function OfferForm() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", model: "", message: "" });
+export interface OfferFormProps {
+  initialMessage?: string;
+  onClose?: () => void;
+  isModal?: boolean;
+}
+
+export default function OfferForm({ initialMessage = "", onClose, isModal = false }: OfferFormProps = {}) {
+  const [form, setForm] = useState({ name: "", email: "", phone: "", model: "", message: initialMessage });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -52,10 +58,14 @@ export default function OfferForm() {
           Thank you! Our team will review your application and contact you within 24 hours with offer details.
         </p>
         <button
-          onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", model: "", message: "" }); }}
+          onClick={() => { 
+            setSubmitted(false); 
+            setForm({ name: "", email: "", phone: "", model: "", message: initialMessage }); 
+            if (isModal && onClose) onClose();
+          }}
           className="mt-6 px-6 py-2.5 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:bg-primary-hover transition-colors"
         >
-          Apply for Another
+          {isModal ? "Close Window" : "Apply for Another"}
         </button>
       </div>
     );

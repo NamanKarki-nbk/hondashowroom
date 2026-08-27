@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Gift, ChevronRight, ChevronUp } from "lucide-react";
+import OfferForm from "@/components/OfferForm";
 
 interface Offer {
   id: string;
@@ -17,6 +18,7 @@ interface Offer {
 
 export default function OfferCard({ offer }: { offer: Offer }) {
   const [expanded, setExpanded] = useState(false);
+  const [applyModalOpen, setApplyModalOpen] = useState(false);
 
   return (
     <div className="flex flex-col bg-white dark:bg-slate-950 border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden">
@@ -68,12 +70,12 @@ export default function OfferCard({ offer }: { offer: Offer }) {
             Read More <ChevronRight className="w-4 h-4" />
           </button>
           
-          <a
-            href="#apply-form"
+          <button
+            onClick={() => setApplyModalOpen(true)}
             className="text-[11px] font-bold bg-primary/10 text-primary hover:bg-primary hover:text-white px-3 py-1.5 rounded-full transition-colors flex items-center"
           >
             Apply Now
-          </a>
+          </button>
         </div>
       </div>
 
@@ -135,14 +137,32 @@ export default function OfferCard({ offer }: { offer: Offer }) {
               >
                 Close
               </button>
-              <a
-                href="#apply-form"
-                onClick={() => setExpanded(false)}
+              <button
+                onClick={() => { setExpanded(false); setApplyModalOpen(true); }}
                 className="px-5 py-2.5 text-sm font-semibold text-white bg-primary hover:bg-primary-hover rounded-xl shadow-sm transition-colors"
               >
                 Apply for this Offer
-              </a>
+              </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Apply Form Modal */}
+      {applyModalOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-slate-950 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl shadow-xl relative animate-in zoom-in-95 duration-200 p-8">
+            <button 
+              onClick={() => setApplyModalOpen(false)}
+              className="absolute top-6 right-6 z-10 text-gray-500 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-slate-800 rounded-full p-2 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+            <OfferForm 
+              initialMessage={`I am interested in the "${offer.title}" offer.`} 
+              isModal={true} 
+              onClose={() => setApplyModalOpen(false)} 
+            />
           </div>
         </div>
       )}
