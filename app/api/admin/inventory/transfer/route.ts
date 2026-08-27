@@ -22,9 +22,8 @@ export async function POST(request: Request) {
           vehicleId,
           fromBranchId: fromBranchId || null,
           toBranchId: targetBranchId,
-          transferredBy: 'Admin', // Would be session user ID
-          status: 'Completed',
-          notes
+          status: 'COMPLETED',
+          remarks: notes
         }
       });
     });

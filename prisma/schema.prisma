@@ -581,8 +581,8 @@ model StockTransferLog {
   id           String           @id @default(uuid())
   vehicleId    String
   vehicle      VehicleInventory @relation(fields: [vehicleId], references: [id])
-  fromBranchId String
-  fromBranch   Branch           @relation("TransferFrom", fields: [fromBranchId], references: [id])
+  fromBranchId String?
+  fromBranch   Branch?          @relation("TransferFrom", fields: [fromBranchId], references: [id])
   toBranchId   String
   toBranch     Branch           @relation("TransferTo", fields: [toBranchId], references: [id])
   transferDate DateTime         @default(now())
