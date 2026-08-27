@@ -43,12 +43,13 @@ const parseSpecifications = (specs: any) => {
   const flat: Record<string, string> = {};
   if (!specs || typeof specs !== 'object') return flat;
   
-  // Handle categorized specs format: { "Engine": [{ name: "Displacement", value: "110cc" }] }
+  // Handle categorized specs format: { "Engine": [{ label: "Displacement", value: "110cc" }] }
   Object.values(specs).forEach((category: any) => {
     if (Array.isArray(category)) {
       category.forEach((item) => {
-        if (item.name && item.value) {
-          flat[item.name.toLowerCase()] = String(item.value);
+        const keyName = item.name || item.label || item.title || item.key;
+        if (keyName && item.value) {
+          flat[keyName.toLowerCase()] = String(item.value);
         }
       });
     }
