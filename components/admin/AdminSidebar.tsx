@@ -39,7 +39,6 @@ const navCategories = [
       { name: "Blog Posts", href: "/admin/blogs" },
       { name: "Products Catalog", href: "/admin/products" },
       { name: "Accessories Catalog", href: "/admin/accessories" },
-      { name: "PDF Brochures", href: "/admin/inventory/brochures" },
     ]
   },
   {
