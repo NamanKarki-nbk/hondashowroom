@@ -50,23 +50,10 @@ export default function LetterPreview({ docType, recipient, metadata }: LetterPr
                   <thead className="table-header-group">
                     <tr>
                       <td className="border-none">
-                        {docType === 'Quotation' ? (
-                          <div className="w-full flex items-start px-[1in] pt-[0.5in] pb-4 gap-4">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src="/honda-wing-logo.png" alt="Honda Logo" className="w-[1.2in] h-auto object-contain" />
-                            <div className="flex flex-col pt-2 text-black">
-                              <h2 className="text-xl font-bold font-sans">Society Enterprises Pvt. Ltd.</h2>
-                              <p className="text-sm font-semibold font-sans mt-0.5">Damak-05, Jhapa</p>
-                              <p className="text-sm font-semibold font-sans mt-0.5">9801615250 / 9801615251</p>
-                              <p className="text-sm font-semibold font-sans mt-0.5">Reg No. : 619869261</p>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="w-full flex justify-end px-[1in] pt-[0.5in] pb-0">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src="/honda-wing-logo.png" alt="Honda Logo" className="w-[1in] h-auto object-contain" />
-                          </div>
-                        )}
+                        <div className="w-full flex justify-end px-[1in] pt-[0.5in] pb-4">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src="/honda-wing-logo.png" alt="Honda Logo" className="w-[1in] h-auto object-contain" />
+                        </div>
                       </td>
                     </tr>
                   </thead>
@@ -81,18 +68,14 @@ export default function LetterPreview({ docType, recipient, metadata }: LetterPr
                   <tfoot className="table-footer-group">
                     <tr>
                       <td className="border-none">
-                        {docType === 'Quotation' ? (
-                          <div className="w-full h-[0.5in]"></div>
-                        ) : (
-                          <div className="w-full text-center px-[1in] pb-[0.5in] pt-2 bg-white">
-                            <p className="text-[13px] font-bold text-gray-800">
-                              <span className="text-[#CC0000] font-black uppercase">SOCIETY ENTERPRISES PVT. LTD.</span>, Goarkha Department Building, Ganga Nagari, Damak-05, Jhapa, Nepal
-                            </p>
-                            <p className="text-[10px] font-semibold text-gray-700 mt-1">
-                              <span className="font-bold text-black">Sales Division</span> Phone No.: 9801615250, 9801615251, E-mail: societyenterprises2024@gmail.com
-                            </p>
-                          </div>
-                        )}
+                        <div className="w-full text-center px-[1in] pb-[0.5in] pt-2 bg-white">
+                          <p className="text-[13px] font-bold text-gray-800">
+                            <span className="text-[#CC0000] font-black uppercase">SOCIETY ENTERPRISES PVT. LTD.</span>, Goarkha Department Building, Ganga Nagari, Damak-05, Jhapa, Nepal
+                          </p>
+                          <p className="text-[10px] font-semibold text-gray-700 mt-1">
+                            <span className="font-bold text-black">Sales Division</span> Phone No.: 9801615250, 9801615251, E-mail: societyenterprises2024@gmail.com
+                          </p>
+                        </div>
                       </td>
                     </tr>
                   </tfoot>
