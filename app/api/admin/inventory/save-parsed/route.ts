@@ -50,6 +50,10 @@ export async function POST(req: Request) {
     // 3. Insert vehicles sequentially
     let insertedCount = 0;
     let currentIndex = maxIndex + 1;
+    
+    const damakBranch = await prisma.branch.findFirst({
+      where: { name: { contains: 'Damak' } }
+    });
 
     for (const vehicle of vehicles) {
       try {
@@ -67,6 +71,7 @@ export async function POST(req: Request) {
             purchaseDate: validDate,
             indexNo: `D1-P${currentIndex}`,
             purchaseInvoiceId: purchaseInvoiceId,
+            branchId: damakBranch?.id || undefined,
           }
         });
         currentIndex++;
