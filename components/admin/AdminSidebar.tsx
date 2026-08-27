@@ -118,6 +118,24 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
   });
 
   const [actionStats, setActionStats] = useState({ pendingTestRides: 0, newLeads: 0, pendingQuotations: 0, pendingAmcBookings: 0, pendingServiceBookings: 0 });
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserSession = async () => {
+      try {
+        const res = await fetch("/api/auth/me");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.authenticated && data.user) {
+            setUserRole(data.user.role);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch user session", error);
+      }
+    };
+    fetchUserSession();
+  }, []);
 
   useEffect(() => {
     const fetchActionStats = async () => {
@@ -139,6 +157,23 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
     };
     fetchActionStats();
   }, [pathname]); // Refetch when navigating
+
+  // Generate categories based on role
+  const categories = React.useMemo(() => {
+    if (userRole === "SUPERADMIN") {
+      return [
+        ...navCategories,
+        {
+          name: "Super Admin",
+          icon: Settings, // or use another icon if imported
+          items: [
+            { name: "Activity Logs", href: "/admin/activity-logs" },
+          ]
+        }
+      ];
+    }
+    return navCategories;
+  }, [userRole]);
 
 
   const toggleCategory = (name: string) => {
@@ -182,7 +217,7 @@ export default function AdminSidebar({ isMobileOpen, setIsMobileOpen }: AdminSid
 
         {/* Navigation Links */}
         <div className="flex-1 overflow-y-auto py-6 px-3 space-y-2">
-          {navCategories.map((category) => {
+          {categories.map((category) => {
             const Icon = category.icon;
             const isExpanded = expandedCategory === category.name && !isCollapsed;
             

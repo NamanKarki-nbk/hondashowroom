@@ -60,6 +60,7 @@ model User {
   updatedAt  DateTime @updatedAt
 
   customerProfile Customer?
+  activityLogs    ActivityLog[]
 }
 
 model Staff {
@@ -649,4 +650,15 @@ model SystemSetting {
   value       String   @db.Text
   description String?
   updatedAt   DateTime @updatedAt
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String   // e.g., "CREATE", "UPDATE", "DELETE", "LOGIN"
+  entity    String   // e.g., "Lead", "VehicleInventory", "SystemSetting"
+  entityId  String?
+  details   Json?
+  createdAt DateTime @default(now())
 }
