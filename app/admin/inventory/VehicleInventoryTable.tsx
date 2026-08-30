@@ -318,7 +318,7 @@ export default function VehicleInventoryTable() {
                         >
                           <Truck className="w-3 h-3" /> Route
                         </button>
-                        <Link href={`/admin/sales?vehicleId=${item.id}`}>
+                        <Link href={`/admin/pos?vin=${item.vin}`}>
                           <button className="bg-primary hover:bg-red-800 text-white px-5 py-1.5 rounded text-xs font-bold uppercase tracking-wider shadow-sm transition-colors">
                             Sell
                           </button>
