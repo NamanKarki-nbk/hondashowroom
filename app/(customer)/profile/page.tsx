@@ -416,6 +416,13 @@ export default function ProfilePage() {
     setSaving(true);
     setMessage({ type: "", text: "" });
 
+    if (formData.phone && formData.phone.length !== 10) {
+      setMessage({ type: "error", text: "Phone number must be exactly 10 digits." });
+      setSaving(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     try {
       const res = await fetch("/api/profile", {
         method: "PATCH",
