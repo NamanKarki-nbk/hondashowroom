@@ -17,10 +17,12 @@ export default function ProfilePage() {
   // Active KYC Upload States
   const [frontImage, setFrontImage] = useState<string | null>(null);
   const [backImage, setBackImage] = useState<string | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scannedData, setScannedData] = useState<any>(null);
   
   // Viewing Modal
-  const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState({ type: "", text: "" });
+  const [viewingImage, setViewingImage] = useState<{url: string, title: string} | null>(null);
+  
 
   // Form Data
   const [formData, setFormData] = useState({
