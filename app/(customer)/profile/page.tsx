@@ -17,18 +17,10 @@ export default function ProfilePage() {
   // Active KYC Upload States
   const [frontImage, setFrontImage] = useState<string | null>(null);
   const [backImage, setBackImage] = useState<string | null>(null);
-  const [isScanning, setIsScanning] = useState(false);
-  const [scannedData, setScannedData] = useState<any>(null);
   
   // Viewing Modal
-  const [viewingImage, setViewingImage] = useState<{url: string, title: string} | null>(null);
-  
-  // OTP Simulation State
-  const [showOtpModal, setShowOtpModal] = useState(false);
-  const [otpTarget, setOtpTarget] = useState<"email" | "phone" | null>(null);
-  const [otpValue, setOtpValue] = useState("");
-  const [pendingContactValue, setPendingContactValue] = useState("");
-  const [isOtpVerifying, setIsOtpVerifying] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState({ type: "", text: "" });
 
   // Form Data
   const [formData, setFormData] = useState({
@@ -417,73 +409,6 @@ export default function ProfilePage() {
     setMessage({ type: "", text: "" });
   };
 
-  const handleVerifyContact = async (target: "email" | "phone") => {
-    if (!formData[target]) return;
-    
-    // Check if WhatsApp is connected if trying to send to phone
-    setOtpTarget(target);
-    setPendingContactValue(formData[target]);
-    setOtpValue("");
-    
-    try {
-      // Show loading state by using an empty message
-      setMessage({ type: "", text: "" });
-      
-      const res = await fetch("/api/auth/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          identifier: formData[target],
-          type: target === "phone" ? "whatsapp" : "email"
-        })
-      });
-      
-      const data = await res.json();
-      if (!res.ok) {
-        setMessage({ type: "error", text: data.error || "Failed to send OTP." });
-        return;
-      }
-      
-      setShowOtpModal(true);
-      setMessage({ type: "success", text: data.message || `OTP sent to ${formData[target]}` });
-    } catch (err) {
-      console.error(err);
-      setMessage({ type: "error", text: "Failed to send OTP. Please try again." });
-    }
-  };
-
-  const handleOtpSubmit = async () => {
-    setIsOtpVerifying(true);
-    try {
-      const res = await fetch("/api/profile/verify-contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          identifier: pendingContactValue,
-          code: otpValue,
-          type: otpTarget === "phone" ? "whatsapp" : "email"
-        })
-      });
-      
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Invalid OTP.");
-        setIsOtpVerifying(false);
-        return;
-      }
-      if (otpTarget) {
-        setInitialState((prev: any) => ({ ...prev, [otpTarget]: pendingContactValue }));
-      }
-      setShowOtpModal(false);
-      setMessage({ type: "success", text: `${otpTarget === 'email' ? 'Email' : 'Phone'} verified! Please save your profile.` });
-    } catch (err) {
-      console.error(err);
-      alert("Verification failed. Please try again.");
-    } finally {
-      setIsOtpVerifying(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -684,15 +609,6 @@ export default function ProfilePage() {
                     className="flex-1 bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
                     placeholder="you@example.com" 
                   />
-                  {!lockEmail && formData.email !== initialState.email && (
-                    <button 
-                      type="button"
-                      onClick={() => handleVerifyContact('email')}
-                      className="bg-gray-900 text-white px-4 text-xs font-bold uppercase tracking-wider hover:bg-black transition-colors"
-                    >
-                      Verify
-                    </button>
-                  )}
                 </div>
               </div>
 
@@ -712,15 +628,6 @@ export default function ProfilePage() {
                     className="flex-1 bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-none px-4 py-3 text-sm focus:border-primary outline-none text-gray-900 dark:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed" 
                     placeholder="+977 98XXXXXXXX" 
                   />
-                  {!lockPhone && formData.phone !== initialState.phone && (
-                    <button 
-                      type="button"
-                      onClick={() => handleVerifyContact('phone')}
-                      className="bg-gray-900 text-white px-4 text-xs font-bold uppercase tracking-wider hover:bg-black transition-colors"
-                    >
-                      Verify
-                    </button>
-                  )}
                 </div>
               </div>
 
@@ -975,47 +882,6 @@ export default function ProfilePage() {
           </div>
         </form>
       </div>
-
-      {/* OTP Verification Modal */}
-      {showOtpModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-950 w-full max-w-md border border-gray-200 dark:border-slate-800 p-8 shadow-2xl animate-in fade-in zoom-in duration-200">
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Smartphone className="w-8 h-8 text-primary" />
-              </div>
-              <h2 className="text-xl md:text-2xl font-semibold font-bold text-gray-900 dark:text-white uppercase tracking-wider">Verify Contact</h2>
-              <p className="text-sm text-gray-500 mt-2">Enter the OTP sent to <span className="font-bold text-gray-800 dark:text-gray-300">{pendingContactValue}</span></p>
-            </div>
-            
-            <input 
-              type="text" 
-              value={otpValue}
-              onChange={(e) => setOtpValue(e.target.value)}
-              placeholder="Enter 6-digit code"
-              className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-300 dark:border-slate-700 text-center text-2xl md:text-3xl font-semibold tracking-[0.5em] font-mono py-4 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-gray-900 dark:text-white mb-6"
-            />
-
-            <div className="flex gap-4">
-              <button 
-                type="button" 
-                onClick={() => setShowOtpModal(false)}
-                className="flex-1 py-3 text-sm font-bold uppercase tracking-wider border border-gray-300 dark:border-slate-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800"
-              >
-                Cancel
-              </button>
-              <button 
-                type="button" 
-                onClick={handleOtpSubmit}
-                disabled={isOtpVerifying || otpValue.length !== 6}
-                className="flex-1 py-3 text-sm font-bold uppercase tracking-wider bg-primary hover:bg-red-700 text-white disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {isOtpVerifying ? <Loader2 className="w-4 h-4 animate-spin" /> : "Verify"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Image Viewer Modal */}
       {viewingImage && (
