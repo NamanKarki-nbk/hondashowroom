@@ -36,7 +36,7 @@ const enhanceProducts = (products: Product[]) => {
     else if (lowerName.includes("110") || lowerName.includes("aviator") || lowerName.includes("dio")) cc = 109;
     
     // For power products, set cc to 0
-    if (p.category === "POWER_PRODUCTS") cc = 0;
+    if (p.category === "POWER_PRODUCT") cc = 0;
 
     return { ...p, cc };
   });
@@ -126,9 +126,9 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
   const products = useMemo(() => enhanceProducts(initialProducts), [initialProducts]);
 
   const CATEGORY_TYPES = [
-    { id: "MOTORCYCLES", label: "Motorcycles" },
-    { id: "SCOOTERS", label: "Scooters" },
-    { id: "POWER_PRODUCTS", label: "Power Products" }
+    { id: "MOTORCYCLE", label: "Motorcycles" },
+    { id: "SCOOTER", label: "Scooters" },
+    { id: "POWER_PRODUCT", label: "Power Products" }
   ];
 
   useEffect(() => {
@@ -154,7 +154,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
     }
     
     result = result.filter(p => {
-      if (p.category === "POWER_PRODUCTS") return true;
+      if (p.category === "POWER_PRODUCT") return true;
       return (p.cc ?? 0) >= ccRange[0] && (p.cc ?? 0) <= ccRange[1];
     });
 
