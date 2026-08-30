@@ -256,9 +256,11 @@ export default function ProfilePage() {
       console.log("[OCR] Back text:", fullText);
 
       // Extract Name
-      const nameMatch = fullText.match(/(?:Full\s*Name|Name)[^\nA-Za-z]*([A-Za-z\s]+)/i);
+      const nameMatch = fullText.match(/(?:Full\s*Name|Name)[^\nA-Za-z]*([A-Za-z \t]+)/i);
       if (nameMatch) {
           let rawName = nameMatch[1].trim();
+          rawName = rawName.replace(/(Date|DOB|Birth|Sex|Gender|Year).*$/i, '').trim();
+          
           // Validation: Ensure it looks like a real name (at least 2 words, mostly alphabet)
           let words = rawName.split(/\s+/).filter(w => /^[a-zA-Z]+$/.test(w) && w.length >= 2);
           if (words.length >= 2) {
