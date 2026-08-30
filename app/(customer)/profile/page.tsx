@@ -204,6 +204,44 @@ export default function ProfilePage() {
       
       const fullText = frontText + " \n " + backText;
 
+      const sanitizeName = (rawName: string) => {
+        let words = rawName.split(/[^a-zA-Z]+/);
+        
+        // Strategy 1: Find longest ALL CAPS sequence
+        let currentSequence: string[] = [];
+        let longestSequence: string[] = [];
+        for (let word of words) {
+            if (word.length >= 2 && word === word.toUpperCase()) {
+                currentSequence.push(word);
+            } else {
+                if (currentSequence.length > longestSequence.length) longestSequence = currentSequence;
+                currentSequence = [];
+            }
+        }
+        if (currentSequence.length > longestSequence.length) longestSequence = currentSequence;
+        if (longestSequence.length >= 2) return longestSequence.join(" ");
+
+        // Strategy 2: Find longest Title Case sequence (or mixed ALL CAPS)
+        currentSequence = [];
+        let longestTitleSequence: string[] = [];
+        for (let word of words) {
+            if (word.length >= 2 && /^[A-Z][a-zA-Z]*$/.test(word)) {
+                currentSequence.push(word);
+            } else {
+                if (currentSequence.length > longestTitleSequence.length) longestTitleSequence = currentSequence;
+                currentSequence = [];
+            }
+        }
+        if (currentSequence.length > longestTitleSequence.length) longestTitleSequence = currentSequence;
+        if (longestTitleSequence.length >= 2) return longestTitleSequence.join(" ");
+
+        // Strategy 3: Fallback just return the first few valid words
+        let validWords = words.filter(w => /^[a-zA-Z]{2,}$/.test(w));
+        if (validWords.length > 0) return validWords.slice(0, 3).join(" ");
+        
+        return rawName.trim();
+      };
+
       const extractName = (text: string) => {
         let name = "";
         let nameMatch = text.match(/(?:Full\s*Name|[NM]ame(?:\s*,\s*Surname)?)[\.\:\-\s]*([^\n]+)/i);
@@ -217,7 +255,8 @@ export default function ProfilePage() {
                 }
             }
         }
-        return name.replace(/(Sex|Date|DOB|Gender).*$/i, '').trim();
+        name = name.replace(/(Sex|Date|DOB|Gender).*$/i, '').trim();
+        return name ? sanitizeName(name) : "";
       };
       
       parsedName = extractName(fullText);
@@ -245,15 +284,30 @@ export default function ProfilePage() {
         
         // Name is extracted globally above
 
-        // Match Year, Month, Day independently to avoid formatting issues
-        const yearMatch = fullText.match(/Year[\.\:\-\s]*(\d{4})/i);
-        const monthMatch = fullText.match(/Month[\.\:\-\s]*([A-Za-z]+|\d+)/i);
-        const dayMatch = fullText.match(/Day[\.\:\-\s]*(\d+)/i);
+        // Match Year, Month, Day independently and highly robustly (ignoring OCR spelling errors of the labels)
+        const dobBlockMatch = fullText.match(/(?:Date\s*of\s*Birth|DOB|Birth)[\s\S]{0,150}/i);
+        const dobBlock = dobBlockMatch ? dobBlockMatch[0] : fullText;
 
-        if (yearMatch && monthMatch && dayMatch) {
-            const year = yearMatch[1];
-            let month = monthMatch[1].toUpperCase().substring(0, 3);
-            const day = dayMatch[1].padStart(2, '0');
+        const yearM = dobBlock.match(/\b(19\d{2}|20\d{2})\b/);
+        const monthM = dobBlock.match(/\b(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)\b/i);
+        
+        let dayM = null;
+        const explicitDay = dobBlock.match(/(?:Day)[\.\:\-\s]*([0-3]?\d)\b/i);
+        if (explicitDay) {
+            dayM = explicitDay;
+        } else {
+            // Fallback: Look for numbers 1-31 that are not the year
+            const numbers = [...dobBlock.matchAll(/\b([0-3]?\d)\b/g)].map(m => m[1]);
+            const validDays = numbers.filter(n => parseInt(n) > 0 && parseInt(n) <= 31);
+            if (validDays.length > 0) {
+                dayM = [null, validDays[validDays.length - 1]]; // Usually day is at the end of the DOB line
+            }
+        }
+
+        if (yearM && monthM && dayM) {
+            const year = yearM[1];
+            let month = monthM[1].toUpperCase().substring(0, 3);
+            const day = String(dayM[1]).padStart(2, '0');
             
             const monthMap: Record<string, string> = {
                 'JAN': '01', 'FEB': '02', 'MAR': '03', 'APR': '04', 'MAY': '05', 'JUN': '06',
