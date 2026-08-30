@@ -167,15 +167,49 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
       result = [...result].sort((a, b) => b.basePrice - a.basePrice);
     } else {
       // Default sort order
-      const orderMap: Record<string, number> = {
-        "SCOOTERS": 1,
-        "MOTORCYCLES": 2,
-        "POWER_PRODUCTS": 3
+      const categoryOrder: Record<string, number> = {
+        "SCOOTER": 1,
+        "MOTORCYCLE": 2,
+        "POWER_PRODUCT": 3
       };
+      
+      const modelOrder = [
+        "honda dio bs6 110",
+        "honda dio bs6 125",
+        "honda cb shine bs6 125",
+        "honda cb shine bs6",
+        "honda sp shine bs6 125",
+        "honda sp shine bs6"
+      ];
+      
       result = [...result].sort((a, b) => {
-        const orderA = orderMap[a.category] || 99;
-        const orderB = orderMap[b.category] || 99;
-        return orderA - orderB;
+        const orderA = categoryOrder[a.category] || 99;
+        const orderB = categoryOrder[b.category] || 99;
+        
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+        
+        // Same category sorting
+        if (a.category === "POWER_PRODUCT") {
+          return a.basePrice - b.basePrice;
+        } else {
+          const nameALower = a.name.toLowerCase();
+          const nameBLower = b.name.toLowerCase();
+          
+          let indexA = modelOrder.findIndex(m => nameALower.includes(m));
+          let indexB = modelOrder.findIndex(m => nameBLower.includes(m));
+          
+          indexA = indexA === -1 ? 999 : indexA;
+          indexB = indexB === -1 ? 999 : indexB;
+          
+          if (indexA !== indexB) {
+            return indexA - indexB;
+          }
+          
+          // Fallback to alphabetical if neither is in the specific order list
+          return a.name.localeCompare(b.name);
+        }
       });
     }
 
