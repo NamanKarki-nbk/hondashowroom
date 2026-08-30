@@ -194,7 +194,6 @@ export default function ProfilePage() {
       let parsedName = "";
       let parsedDobAd = "";
       let parsedDobBs = "";
-      let parsedDobBs = "";
       let parsedCitizenshipNo = "";
       let parsedGender = "";
 
