@@ -206,23 +206,53 @@ export default function ProfilePage() {
 
       if (activeTab === 'CITIZENSHIP') {
         const numberRegex = /(?:[0-9O]{2,}\s*[\-\/]\s*[0-9O]{2,}\s*[\-\/]\s*[0-9O]{2,}\s*[\-\/]\s*[0-9O]{3,})|(?:[0-9O]{2,}\s*[/\-]\s*[0-9O]{2,}\s*[/\-]\s*[0-9O]{4,})/;
-        const explicitMatch = fullText.match(/Citizenship Certificate No[\.\:\s]*([\d\-O\s]+)/i);
+        const explicitMatch = fullText.match(/Citizenship Certificate No[\.\:\-\s]*([0-9O\-\s]+)/i);
         
         let match = fullText.match(numberRegex);
         if (explicitMatch) {
-          extractedNumber = explicitMatch[1].replace(/O/g, '0').replace(/\s+/g, '');
+          let cleanNum = explicitMatch[1].replace(/O/g, '0').replace(/[\s\-]/g, '');
+          if (cleanNum.length === 11) {
+              extractedNumber = cleanNum.replace(/(\d{2})(\d{2})(\d{2})(\d{5})/, '$1-$2-$3-$4');
+          } else {
+              extractedNumber = explicitMatch[1].replace(/O/g, '0').trim().replace(/\s/g, ''); 
+          }
         } else if (match) {
-          extractedNumber = match[0].replace(/O/g, '0').replace(/\s+/g, '');
+          let cleanNum = match[0].replace(/O/g, '0').replace(/[\s\-]/g, '');
+          if (cleanNum.length === 11) {
+              extractedNumber = cleanNum.replace(/(\d{2})(\d{2})(\d{2})(\d{5})/, '$1-$2-$3-$4');
+          } else {
+              extractedNumber = match[0].replace(/O/g, '0').replace(/\s+/g, '');
+          }
         }
         
-        const nameMatch = fullText.match(/Full\s*Name[\:\-\s]*([A-Za-z\s]+)/i);
+        // Match Full Name with optional periods/colons before the name
+        const nameMatch = fullText.match(/Full\s*Name[\.\:\-\s]*([A-Za-z\s]+?)(?=\s*Sex|\s*Date|\n[A-Z]|$)/i);
         if (nameMatch) {
-            parsedName = nameMatch[1].split('\n')[0].trim();
+            parsedName = nameMatch[1].replace(/\n/g, ' ').trim();
         }
 
-        const dobMatch = fullText.match(/Date\s*of\s*Birth[^\d]*([\d\-A-Za-z\s]+)/i);
-        if (dobMatch) {
-            parsedDobAd = dobMatch[1].split('\n')[0].trim();
+        // Match Year, Month, Day independently to avoid formatting issues
+        const yearMatch = fullText.match(/Year[\.\:\-\s]*(\d{4})/i);
+        const monthMatch = fullText.match(/Month[\.\:\-\s]*([A-Za-z]+|\d+)/i);
+        const dayMatch = fullText.match(/Day[\.\:\-\s]*(\d+)/i);
+
+        if (yearMatch && monthMatch && dayMatch) {
+            const year = yearMatch[1];
+            let month = monthMatch[1].toUpperCase().substring(0, 3);
+            const day = dayMatch[1].padStart(2, '0');
+            
+            const monthMap: Record<string, string> = {
+                'JAN': '01', 'FEB': '02', 'MAR': '03', 'APR': '04', 'MAY': '05', 'JUN': '06',
+                'JUL': '07', 'AUG': '08', 'SEP': '09', 'OCT': '10', 'NOV': '11', 'DEC': '12'
+            };
+            
+            month = monthMap[month] || month.padStart(2, '0');
+            parsedDobAd = `${year}-${month}-${day}`;
+        } else {
+            const dobMatch = fullText.match(/Date\s*of\s*Birth[^\d]*([\d\-A-Za-z\s]+)/i);
+            if (dobMatch) {
+                parsedDobAd = dobMatch[1].split('\n')[0].trim();
+            }
         }
         
         const genderMatch = fullText.match(/Sex[\:\-\s]*(Male|Female|Other)/i);
