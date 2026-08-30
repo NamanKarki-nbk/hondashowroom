@@ -343,11 +343,11 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                     title={vehicle.name}
                     priceNpr={vehicle.basePrice}
                     category={
-                      vehicle.category === "POWER_PRODUCTS" ? "Power Product" : 
-                      vehicle.category === "AUTOMOBILES" ? "Automobile" : 
-                      vehicle.category === "SCOOTERS" ? "Scooter" : "Motorcycle"
+                      vehicle.category === "POWER_PRODUCT" ? "Power Product" : 
+                      vehicle.category === "SCOOTER" ? "Scooter" : "Motorcycle"
                     }
                     slug={vehicle.id}
+                    href={`/${vehicle.category.toLowerCase().replace('_', '-')}/${vehicle.id}`}
                     imageUrl={vehicle.imageUrl}
                     onQuoteClick={() => setQuoteVehicle(vehicle.name)}
                     onBookClick={() => router.push(`/book-now?model=${encodeURIComponent(vehicle.name)}`)}

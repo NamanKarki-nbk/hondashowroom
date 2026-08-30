@@ -9,7 +9,8 @@ interface VehicleCardProps {
   title: string;
   priceNpr: number;
   cc?: string;
-  slug: string;
+  slug?: string;
+  href?: string;
   category: string;
   imageUrl?: string;
   colors?: string[];
@@ -17,11 +18,15 @@ interface VehicleCardProps {
   onBookClick?: () => void;
 }
 
-export default function VehicleCard({ title, priceNpr, cc, slug, category, imageUrl, colors, onQuoteClick, onBookClick }: VehicleCardProps) {
+export default function VehicleCard({ title, priceNpr, cc, slug, href, category, imageUrl, colors, onQuoteClick, onBookClick }: VehicleCardProps) {
   const router = useRouter();
 
   const handleCardClick = () => {
-    router.push(`/vehicles/${slug}`);
+    if (href) {
+      router.push(href);
+    } else if (slug) {
+      router.push(`/vehicles/${slug}`);
+    }
   };
 
   return (
