@@ -288,7 +288,7 @@ export default function ProfilePage() {
         const dobBlockMatch = fullText.match(/(?:Date\s*of\s*Birth|DOB|Birth)[\s\S]{0,150}/i);
         const dobBlock = dobBlockMatch ? dobBlockMatch[0] : fullText;
 
-        const yearM = dobBlock.match(/(?:19\d{2}|20\d{2})/);
+        const yearM = dobBlock.match(/(19\d{2}|20\d{2})/);
         const monthM = dobBlock.match(/(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)/i);
         
         let dayM = null;
