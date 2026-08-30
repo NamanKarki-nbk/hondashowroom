@@ -8,8 +8,23 @@ import OfferCard from "./OfferCard";
 export const revalidate = 60; // Revalidate every minute
 
 export default async function OffersPage() {
+  const now = new Date();
   const offers = await prisma.offer.findMany({
-    where: { isActive: true },
+    where: { 
+      isActive: true,
+      OR: [
+        { endDate: null },
+        { endDate: { gte: now } }
+      ],
+      AND: [
+        {
+          OR: [
+            { startDate: null },
+            { startDate: { lte: now } }
+          ]
+        }
+      ]
+    },
     orderBy: { createdAt: "desc" },
   });
 

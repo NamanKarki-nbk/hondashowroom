@@ -24,8 +24,23 @@ export default async function CustomerLandingPage() {
     orderBy: { order: "asc" }
   });
 
+  const now = new Date();
   const activeOffer = await prisma.offer.findFirst({
-    where: { isActive: true },
+    where: { 
+      isActive: true,
+      OR: [
+        { endDate: null },
+        { endDate: { gte: now } }
+      ],
+      AND: [
+        {
+          OR: [
+            { startDate: null },
+            { startDate: { lte: now } }
+          ]
+        }
+      ]
+    },
     orderBy: { createdAt: "desc" },
   });
 
