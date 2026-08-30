@@ -385,8 +385,7 @@ export default function ProfilePage() {
           fullName: parsedName || "",
           dobAd: parsedDobAd || "",
           dobBs: parsedDobBs || "",
-          gender: parsedGender || "",
-          avatarUrl: extractedFace
+          gender: parsedGender || ""
         };
         if (parsedCitizenshipNo) {
           extractedData.citizenshipNumber = parsedCitizenshipNo;
