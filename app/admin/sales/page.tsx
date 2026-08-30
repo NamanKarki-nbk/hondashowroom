@@ -34,12 +34,6 @@ export default async function SalesPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl md:text-3xl font-semibold font-bold text-gray-900 dark:text-white">New Sale / Invoice</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">
-          Create a new sales transaction. Only fully verified customers and in-stock vehicles are eligible.
-        </p>
-      </div>
 
       <div className="bg-white dark:bg-slate-950 p-6 rounded-xl border border-gray-200 dark:border-slate-800 shadow-sm">
         <React.Suspense fallback={<div className="h-40 flex items-center justify-center">Loading form...</div>}>
