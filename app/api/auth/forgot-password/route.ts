@@ -5,7 +5,7 @@ import crypto from "crypto";
 
 export async function POST(req: Request) {
   try {
-    const { email } = await req.json();
+    const { email, origin } = await req.json();
 
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
@@ -34,8 +34,8 @@ export async function POST(req: Request) {
     });
 
     // Send email
-    const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    const resetLink = `${origin}/reset-password?token=${token}`;
+    const finalOrigin = origin || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const resetLink = `${finalOrigin}/reset-password?token=${token}`;
     await sendPasswordResetEmail(email, resetLink);
 
     return NextResponse.json({ message: "If an account exists, a reset link has been sent." }, { status: 200 });
