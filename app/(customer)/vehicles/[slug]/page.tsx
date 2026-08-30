@@ -64,12 +64,21 @@ function generateMockData(vehicle: any) {
   }
 
   // Prefix bare filenames with the correct public path
-  const features = Array.isArray(featuresRaw) ? featuresRaw.map((f: any) => ({
-    ...f,
-    image: f.image && !f.image.startsWith("/") && featureImageFolder
-      ? `/images/features/${featureImageFolder}/${f.image}`
-      : f.image || "/models/hero-1.png"
-  })) : featuresRaw;
+  const features = Array.isArray(featuresRaw) ? featuresRaw.map((f: any) => {
+    if (typeof f === 'string') {
+      return {
+        title: f,
+        description: "",
+        image: "/models/hero-1.png"
+      };
+    }
+    return {
+      ...f,
+      image: f.image && !f.image.startsWith("/") && featureImageFolder
+        ? `/images/features/${featureImageFolder}/${f.image}`
+        : f.image || "/models/hero-1.png"
+    };
+  }) : featuresRaw;
 
 
   // Specs

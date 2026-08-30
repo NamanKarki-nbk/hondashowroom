@@ -295,7 +295,7 @@ export default function HondaDio110Page({
         <DioFeaturesGrid 
           features={(vehicle?.features || []).map((f: any, i: number) => {
             let Icon = Sparkles;
-            const titleLower = f.title.toLowerCase();
+            const titleLower = (f.title || '').toLowerCase();
             if (titleLower.includes('meter')) Icon = Monitor;
             else if (titleLower.includes('engine') || titleLower.includes('acg') || titleLower.includes('start')) Icon = Zap;
             else if (titleLower.includes('fuel')) Icon = Fuel;
