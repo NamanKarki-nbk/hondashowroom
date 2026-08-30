@@ -158,7 +158,7 @@ function LoginPageContent() {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <label className="block text-sm font-bold text-gray-700 dark:text-gray-300">Password</label>
-                <Link href="#" className="text-xs text-primary hover:text-primary-hover font-bold transition-colors">Forgot Password?</Link>
+                <Link href="/forgot-password" className="text-xs text-primary hover:text-primary-hover font-bold transition-colors">Forgot Password?</Link>
               </div>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />

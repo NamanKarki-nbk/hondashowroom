@@ -99,3 +99,50 @@ export async function sendAdminAlert(subject: string, message: string, link?: st
     return false;
   }
 }
+
+export async function sendPasswordResetEmail(toEmail: string, resetLink: string) {
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+    console.warn("GMAIL_USER or GMAIL_APP_PASSWORD is not set. Simulating email by logging to console:");
+    console.log(`[TESTING] Password reset link for ${toEmail} is: ${resetLink}`);
+    return true; 
+  }
+
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+      <h2 style="color: #c1291A; text-align: center;">Honda Showroom Password Reset</h2>
+      <p style="font-size: 16px; color: #333;">Hello,</p>
+      <p style="font-size: 16px; color: #333;">You requested a password reset for your Honda Showroom account. Please click the button below to set a new password:</p>
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${resetLink}" style="background-color: #c1291A; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+          Reset Password
+        </a>
+      </div>
+      <p style="font-size: 14px; color: #666; text-align: center;">
+        This link is valid for 1 hour. If you did not request a password reset, please ignore this email.
+      </p>
+      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+      <p style="font-size: 12px; color: #999; text-align: center;">
+        Honda Showroom CMS System
+      </p>
+    </div>
+  `;
+
+  try {
+    const info = await transporter.sendMail({
+      from: `"Honda Showroom Security" <noreply@hondashowroom.com>`,
+      replyTo: `"Honda Support" <support@hondashowroom.com>`,
+      to: toEmail,
+      subject: "Reset your password - Honda Showroom",
+      html: htmlContent,
+      headers: {
+        'X-Priority': '1',
+        'X-MSMail-Priority': 'High',
+      }
+    });
+    console.log("Password reset email sent: ", info.messageId);
+    return true;
+  } catch (error) {
+    console.error("Error sending Password Reset email: ", error);
+    return false;
+  }
+}
