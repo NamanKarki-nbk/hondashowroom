@@ -204,6 +204,24 @@ export default function ProfilePage() {
       
       const fullText = frontText + " \n " + backText;
 
+      const extractName = (text: string) => {
+        let name = "";
+        let nameMatch = text.match(/(?:Full\s*Name|[NM]ame(?:\s*,\s*Surname)?)[\.\:\-\s]*([^\n]+)/i);
+        if (nameMatch) {
+            name = nameMatch[1].trim();
+            if (name.length < 3 || !/[A-Za-z]/.test(name)) {
+                const remaining = text.substring((nameMatch.index || 0) + nameMatch[0].length);
+                const nextLineMatch = remaining.match(/^\s*([A-Za-z\s]+)/);
+                if (nextLineMatch) {
+                    name = nextLineMatch[1].trim();
+                }
+            }
+        }
+        return name.replace(/(Sex|Date|DOB|Gender).*$/i, '').trim();
+      };
+      
+      parsedName = extractName(fullText);
+
       if (activeTab === 'CITIZENSHIP') {
         const numberRegex = /(?:[0-9O]{2,}\s*[\-\/]\s*[0-9O]{2,}\s*[\-\/]\s*[0-9O]{2,}\s*[\-\/]\s*[0-9O]{3,})|(?:[0-9O]{2,}\s*[/\-]\s*[0-9O]{2,}\s*[/\-]\s*[0-9O]{4,})/;
         const explicitMatch = fullText.match(/Citizenship Certificate No[\.\:\-\s]*([0-9O\-\s]+)/i);
@@ -225,11 +243,7 @@ export default function ProfilePage() {
           }
         }
         
-        // Match Full Name with optional periods/colons before the name
-        const nameMatch = fullText.match(/Full\s*Name[\.\:\-\s]*([A-Za-z\s]+?)(?=\s*Sex|\s*Date|\n[A-Z]|$)/i);
-        if (nameMatch) {
-            parsedName = nameMatch[1].replace(/\n/g, ' ').trim();
-        }
+        // Name is extracted globally above
 
         // Match Year, Month, Day independently to avoid formatting issues
         const yearMatch = fullText.match(/Year[\.\:\-\s]*(\d{4})/i);
@@ -265,8 +279,7 @@ export default function ProfilePage() {
         const dlMatch = fullText.match(/[D0O]\.?\s*[LI]\.?\s*No[\.\:\s]*([A-Z0-9\-]+)/i);
         if (dlMatch) extractedNumber = dlMatch[1].replace(/O/g, '0');
         
-        const nameMatch = fullText.match(/[NM]ame\s*[\:\-]?\s*([A-Za-z\s]+)/i);
-        if (nameMatch) parsedName = nameMatch[1].trim();
+        // Name is extracted globally above
 
         const dobMatch = fullText.match(/[D0O]\.?\s*[O0]\.?\s*B\.?\s*[\:\-]?\s*([\d\-\/]+)/i);
         if (dobMatch) {
@@ -280,8 +293,7 @@ export default function ProfilePage() {
         const ninMatch = fullText.match(/N(?:ational)?\s*I(?:dentity)?\s*N(?:umber)?[\s\.\:]*([\d\-]+)/i);
         if (ninMatch) extractedNumber = ninMatch[1];
         
-        const nameMatch = fullText.match(/Name\s*[\:\-]?\s*([A-Za-z\s]+)/i);
-        if (nameMatch) parsedName = nameMatch[1].trim();
+        // Name is extracted globally above
 
         const dobAdMatch = fullText.match(/D\.?\s*O\.?\s*B\.?\s*[\:\-]?\s*([\d\-\/]+)/i);
         if (dobAdMatch) {
