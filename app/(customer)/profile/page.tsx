@@ -288,11 +288,11 @@ export default function ProfilePage() {
         const dobBlockMatch = fullText.match(/(?:Date\s*of\s*Birth|DOB|Birth)[\s\S]{0,150}/i);
         const dobBlock = dobBlockMatch ? dobBlockMatch[0] : fullText;
 
-        const yearM = dobBlock.match(/\b(19\d{2}|20\d{2})\b/);
-        const monthM = dobBlock.match(/\b(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)\b/i);
+        const yearM = dobBlock.match(/(?:19\d{2}|20\d{2})/);
+        const monthM = dobBlock.match(/(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)/i);
         
         let dayM = null;
-        const explicitDay = dobBlock.match(/(?:Day)[\.\:\-\s]*([0-3]?\d)\b/i);
+        const explicitDay = dobBlock.match(/Day[\.\:\-\s]*([0-3]?\d)/i);
         if (explicitDay) {
             dayM = explicitDay;
         } else {
@@ -317,9 +317,10 @@ export default function ProfilePage() {
             month = monthMap[month] || month.padStart(2, '0');
             parsedDobAd = `${year}-${month}-${day}`;
         } else {
-            // DEBUG: Show the raw text in the input field so we can see what Tesseract is seeing
-            let rawBlock = dobBlock.substring(0, 60).replace(/\n/g, ' | ');
-            parsedDobAd = `DEBUG: ${rawBlock}`;
+            const dobMatch = fullText.match(/Date\s*of\s*Birth[^\d]*([\d\-A-Za-z\s]+)/i);
+            if (dobMatch) {
+                parsedDobAd = dobMatch[1].split('\n')[0].trim();
+            }
         }
         
         const genderMatch = fullText.match(/Sex[\:\-\s]*(Male|Female|Other)/i);
