@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { uploadToCloudinary, deleteFromCloudinary } from '@/lib/upload';
+import { logActivity } from "@/lib/activityLogger";
+import { cookies } from "next/headers";
+import { verifySessionToken } from "@/lib/session";
 
 export async function GET() {
   try {
@@ -34,6 +37,22 @@ export async function POST(req: Request) {
         author: author || null,
       }
     });
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "CREATE",
+      entity: "Blog",
+      entityId: blog.id,
+      details: {
+        title: blog.title,
+        author: blog.author,
+      }
+    });
+
     return NextResponse.json(blog);
   } catch (error) {
     console.error(error);
@@ -75,6 +94,22 @@ export async function PUT(req: Request) {
         author: author || null,
       }
     });
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "UPDATE",
+      entity: "Blog",
+      entityId: blog.id,
+      details: {
+        title: blog.title,
+        author: blog.author,
+      }
+    });
+
     return NextResponse.json(blog);
   } catch (error) {
     console.error(error);
@@ -96,6 +131,22 @@ export async function DELETE(req: Request) {
     await prisma.blog.delete({
       where: { id }
     });
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "DELETE",
+      entity: "Blog",
+      entityId: id,
+      details: {
+        id,
+        title: blog?.title,
+      }
+    });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error(error);

@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logActivity } from '@/lib/activityLogger';
+import { verifySessionToken } from '@/lib/session';
+import { cookies } from 'next/headers';
 
 export async function POST(req: Request) {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value || cookieStore.get('session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
     const { invoice, vehicles } = await req.json();
 
     if (!vehicles || !Array.isArray(vehicles) || vehicles.length === 0) {
@@ -45,6 +52,18 @@ export async function POST(req: Request) {
         }
       });
       purchaseInvoiceId = newInvoice.id;
+
+      await logActivity({
+        userId: session?.userId || session?.id || "system",
+        action: "CREATE",
+        entity: "VehicleInventory",
+        entityId: newInvoice.id,
+        details: {
+          invoiceNo: newInvoice.invoiceNo,
+          totalAmount: newInvoice.totalAmount,
+          purchaseType: newInvoice.purchaseType,
+        }
+      });
     }
 
     // 3. Insert vehicles sequentially
@@ -65,7 +84,7 @@ export async function POST(req: Request) {
           }
         }
 
-        await prisma.vehicleInventory.create({
+        const createdVehicle = await prisma.vehicleInventory.create({
           data: {
             ...vehicle,
             purchaseDate: validDate,
@@ -74,6 +93,20 @@ export async function POST(req: Request) {
             branchId: damakBranch?.id || undefined,
           }
         });
+
+        await logActivity({
+          userId: session?.userId || session?.id || "system",
+          action: "CREATE",
+          entity: "VehicleInventory",
+          entityId: createdVehicle.id,
+          details: {
+            vin: createdVehicle.vin,
+            modelName: createdVehicle.modelName,
+            indexNo: createdVehicle.indexNo,
+            color: createdVehicle.color,
+          }
+        });
+
         currentIndex++;
         insertedCount++;
       } catch (err: any) {

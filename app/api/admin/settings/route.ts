@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/lib/activityLogger";
+import { cookies } from "next/headers";
+import { verifySessionToken } from "@/lib/session";
 
 export async function GET(req: NextRequest) {
   try {
@@ -37,13 +40,25 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
     // Upsert each key in the payload
     for (const [key, value] of Object.entries(body)) {
       if (typeof value === 'string') {
-        await prisma.systemSetting.upsert({
+        const setting = await prisma.systemSetting.upsert({
           where: { key },
           update: { value },
           create: { key, value }
+        });
+
+        await logActivity({
+          userId: session?.userId || session?.id || "system",
+          action: "UPDATE",
+          entity: "SystemSetting",
+          entityId: setting.id,
+          details: { key, value }
         });
       }
     }

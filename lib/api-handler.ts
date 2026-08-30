@@ -5,9 +5,11 @@ import { v4 as uuidv4 } from "uuid";
  * A custom business exception that will be returned to the client as a 400 Bad Request.
  */
 export class BusinessException extends Error {
-  constructor(message: string) {
+  statusCode: number;
+  constructor(message: string, statusCode: number = 400) {
     super(message);
     this.name = "BusinessException";
+    this.statusCode = statusCode;
   }
 }
 
@@ -33,7 +35,7 @@ export function withErrorHandler(handler: Function) {
       
       // 2. Handle known Business Exceptions (safe to show to the client)
       if (error instanceof BusinessException) {
-        return NextResponse.json({ error: error.message }, { status: 400 });
+        return NextResponse.json({ error: error.message }, { status: error.statusCode });
       }
 
       // 3. Sanitized Client Response (Hide internal stack traces)

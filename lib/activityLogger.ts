@@ -20,7 +20,7 @@ export async function logActivity({
         action,
         entity,
         entityId,
-        details: details || null,
+        details: details || undefined,
       },
     });
   } catch (error) {

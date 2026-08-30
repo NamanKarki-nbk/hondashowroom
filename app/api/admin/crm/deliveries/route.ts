@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/lib/activityLogger";
+import { verifySessionToken } from "@/lib/session";
+import { cookies } from "next/headers";
 
 export async function GET(req: NextRequest) {
   try {
@@ -41,6 +44,22 @@ export async function PATCH(req: NextRequest) {
     const delivery = await prisma.delivery.update({
       where: { id },
       data: updateData
+    });
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value || cookieStore.get('session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "UPDATE",
+      entity: "Lead",
+      entityId: delivery.id,
+      details: {
+        customerName: delivery.customerName,
+        vehicleName: delivery.vehicleName,
+        rating: delivery.rating ?? null,
+      }
     });
 
     return NextResponse.json(delivery);

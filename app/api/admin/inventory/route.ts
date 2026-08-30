@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logActivity } from '@/lib/activityLogger';
+import { verifySessionToken } from '@/lib/session';
+import { cookies } from 'next/headers';
 
 export async function GET(req: Request) {
   try {
@@ -54,6 +57,22 @@ export async function PATCH(req: Request) {
       where: { id },
       data: {
         specifications: updatedSpecs ? (updatedSpecs as any) : undefined,
+      }
+    });
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value || cookieStore.get('session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "UPDATE",
+      entity: "VehicleInventory",
+      entityId: updatedProduct.id,
+      details: {
+        name: updatedProduct.name,
+        category: updatedProduct.category,
+        price: updatedProduct.price,
       }
     });
 

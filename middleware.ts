@@ -92,9 +92,9 @@ export async function middleware(request: NextRequest) {
         return response;
       }
 
-      // Check if user is the hardcoded Admin or has ADMIN role
+      // Check if user is the hardcoded Admin or has ADMIN/SUPERADMIN role
       const allowedEmails = ["successbhattarai1998@gmail.com", "admin@honda.com"];
-      if (payload.role !== "ADMIN" && (!payload.email || !allowedEmails.includes(payload.email))) {
+      if (!["ADMIN", "SUPERADMIN"].includes(payload.role) && (!payload.email || !allowedEmails.includes(payload.email))) {
         // Logged in, but NOT an admin -> Redirect to Home
         return NextResponse.redirect(new URL("/", request.url));
       }

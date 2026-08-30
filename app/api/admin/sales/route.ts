@@ -1,15 +1,21 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { cookies } from 'next/headers';
+import { logActivity } from '@/lib/activityLogger';
+import { verifySessionToken } from '@/lib/session';
 
 export async function POST(req: Request) {
   try {
-    const sessionCookie = (await cookies()).get('session');
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get('session') || cookieStore.get('auth_session');
     
     // Simplistic auth check (Ideally decode JWT here)
     if (!sessionCookie) {
       return NextResponse.json({ error: 'Unauthorized. Admin access required.' }, { status: 401 });
     }
+
+    const token = cookieStore.get('auth_session')?.value || cookieStore.get('session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
 
     const body = await req.json();
     const { 
@@ -142,6 +148,19 @@ export async function POST(req: Request) {
       }
 
       return sale;
+    });
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "CREATE",
+      entity: "Sale",
+      entityId: transaction.id,
+      details: {
+        invoiceNo: transaction.invoiceNo,
+        customerId: transaction.customerId,
+        vehicleId: transaction.vehicleId,
+        finalAmount: transaction.finalAmount,
+      }
     });
 
     return NextResponse.json({ message: 'Sales transaction completed successfully.', transaction }, { status: 201 });

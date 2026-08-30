@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { generateNepaliTemplate, DocCategory } from '@/lib/letterTemplates';
 import { getNepaliFiscalYear } from '@/lib/nepaliTranslator';
+import { logActivity } from "@/lib/activityLogger";
+import { cookies } from "next/headers";
+import { verifySessionToken } from "@/lib/session";
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
@@ -68,6 +71,23 @@ export async function POST(req: Request) {
         nepaliBody: html,
         date: now
       }
+    });
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "CREATE",
+      entity: "Letter",
+      entityId: letter.id,
+      details: {
+        letterNo: letter.letterNo,
+        docType: letter.docType,
+        recipient: letter.recipient,
+        subject: letter.subject,
+      },
     });
 
     if (docType === 'Bank Salary Deposit Request' && metadata.salaryClaims) {

@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { uploadToCloudinary, deleteFromCloudinary } from '@/lib/upload';
 import { z } from 'zod';
+import { logActivity } from "@/lib/activityLogger";
+import { cookies } from "next/headers";
+import { verifySessionToken } from "@/lib/session";
 
 export async function GET() {
   try {
@@ -51,6 +54,23 @@ export async function POST(req: Request) {
         imageUrl,
       }
     });
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "CREATE",
+      entity: "Product",
+      entityId: product.id,
+      details: {
+        name: product.name,
+        category: product.category,
+        price: product.price,
+      },
+    });
+
     return NextResponse.json(product);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -94,6 +114,23 @@ export async function PUT(req: Request) {
       where: { id: parsed.data.id },
       data: dataToUpdate
     });
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "UPDATE",
+      entity: "Product",
+      entityId: product.id,
+      details: {
+        name: product.name,
+        category: product.category,
+        price: product.price,
+      },
+    });
+
     return NextResponse.json(product);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -109,6 +146,19 @@ export async function DELETE(req: Request) {
     await prisma.productCatalog.delete({
       where: { id }
     });
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "DELETE",
+      entity: "Product",
+      entityId: id,
+      details: { id },
+    });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to delete product' }, { status: 500 });

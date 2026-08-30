@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/lib/activityLogger";
+import { verifySessionToken } from "@/lib/session";
+import { cookies } from "next/headers";
 
 export async function GET(req: NextRequest) {
   try {
@@ -46,6 +49,23 @@ export async function POST(req: NextRequest) {
       }
     });
 
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value || cookieStore.get('session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "CREATE",
+      entity: "VehicleInventory",
+      entityId: part.id,
+      details: {
+        partNumber: part.partNumber,
+        name: part.name,
+        price: part.price,
+        stock: (part as any).stock ?? (part as any).stockQty,
+      }
+    });
+
     return NextResponse.json(part);
   } catch (error) {
     console.error("Failed to create spare part:", error);
@@ -66,6 +86,22 @@ export async function PATCH(req: NextRequest) {
     const part = await prisma.sparePart.update({
       where: { id },
       data: updateData
+    });
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value || cookieStore.get('session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "UPDATE",
+      entity: "VehicleInventory",
+      entityId: part.id,
+      details: {
+        partNumber: part.partNumber,
+        name: part.name,
+        price: part.price,
+      }
     });
 
     return NextResponse.json(part);

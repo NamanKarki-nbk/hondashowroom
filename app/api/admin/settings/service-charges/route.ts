@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { logActivity } from "@/lib/activityLogger";
+import { cookies } from "next/headers";
+import { verifySessionToken } from "@/lib/session";
 
 export async function GET(req: NextRequest) {
   try {
@@ -28,6 +31,22 @@ export async function POST(req: NextRequest) {
       }
     });
 
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "CREATE",
+      entity: "SystemSetting",
+      entityId: charge.id,
+      details: {
+        serviceType: (charge as any).serviceType,
+        modelName: (charge as any).modelName,
+        baseCharge: (charge as any).baseCharge,
+      }
+    });
+
     return NextResponse.json(charge);
   } catch (error) {
     console.error("Failed to create service charge:", error);
@@ -50,6 +69,23 @@ export async function PATCH(req: NextRequest) {
       data: updateData
     });
 
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "UPDATE",
+      entity: "SystemSetting",
+      entityId: charge.id,
+      details: {
+        serviceType: (charge as any).serviceType,
+        modelName: (charge as any).modelName,
+        baseCharge: (charge as any).baseCharge,
+        isActive: (charge as any).isActive,
+      }
+    });
+
     return NextResponse.json(charge);
   } catch (error) {
     console.error("Failed to update service charge:", error);
@@ -66,6 +102,18 @@ export async function DELETE(req: NextRequest) {
 
     await prisma.serviceCharge.delete({
       where: { id }
+    });
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "DELETE",
+      entity: "SystemSetting",
+      entityId: id,
+      details: { id }
     });
 
     return NextResponse.json({ success: true });

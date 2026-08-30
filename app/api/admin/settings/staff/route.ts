@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logActivity } from '@/lib/activityLogger';
+import { cookies } from 'next/headers';
+import { verifySessionToken } from '@/lib/session';
 
 export async function GET(request: Request) {
   try {
@@ -46,6 +49,23 @@ export async function POST(request: Request) {
       }
     });
 
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "CREATE",
+      entity: "SystemSetting",
+      entityId: staff.id,
+      details: {
+        name: staff.name,
+        role: staff.role,
+        phone: staff.phone,
+        accountNo: staff.accountNo,
+      }
+    });
+
     return NextResponse.json(staff, { status: 201 });
   } catch (error) {
     console.error('Create staff error:', error);
@@ -75,6 +95,22 @@ export async function PATCH(request: Request) {
       }
     });
 
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "UPDATE",
+      entity: "SystemSetting",
+      entityId: staff.id,
+      details: {
+        name: staff.name,
+        role: staff.role,
+        phone: staff.phone,
+      }
+    });
+
     return NextResponse.json(staff);
   } catch (error) {
     console.error('Update staff error:', error);
@@ -93,6 +129,18 @@ export async function DELETE(request: Request) {
 
     await prisma.staff.delete({
       where: { id }
+    });
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
+    await logActivity({
+      userId: session?.userId || session?.id || "system",
+      action: "DELETE",
+      entity: "SystemSetting",
+      entityId: id,
+      details: { id }
     });
 
     return NextResponse.json({ success: true });

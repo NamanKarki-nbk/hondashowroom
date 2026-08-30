@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifySessionToken } from '@/lib/session';
 import { cookies } from 'next/headers';
+import { logActivity } from '@/lib/activityLogger';
 
 export async function GET() {
   try {
@@ -85,6 +86,18 @@ export async function PATCH(req: Request) {
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: { role: newRole }
+    });
+
+    await logActivity({
+      userId: session.userId || session.id,
+      action: "UPDATE",
+      entity: "SystemSetting",
+      entityId: updatedUser.id,
+      details: {
+        userId: updatedUser.id,
+        email: updatedUser.email,
+        role: updatedUser.role
+      }
     });
 
     return NextResponse.json({ success: true, user: updatedUser });

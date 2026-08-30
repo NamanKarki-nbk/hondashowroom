@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logActivity } from '@/lib/activityLogger';
+import { verifySessionToken } from '@/lib/session';
+import { cookies } from 'next/headers';
 
 export async function GET() {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_session')?.value || cookieStore.get('session')?.value;
+    const session = token ? await verifySessionToken(token) : null;
+
     const staffData = [
       { name: 'Bhim Babu Bhattarai', accountNo: '0790258268500017', panNo: '302794076', order: 1 },
       { name: 'Durga Dhungel', accountNo: '0790125818100013', panNo: '617049397', order: 2 },
@@ -29,7 +36,18 @@ export async function GET() {
         where: { accountNo: staff.accountNo }
       });
       if (!existing) {
-        await prisma.staff.create({ data: staff });
+        const createdStaff = await prisma.staff.create({ data: staff });
+        await logActivity({
+          userId: session?.userId || session?.id || "system",
+          action: "CREATE",
+          entity: "Staff",
+          entityId: createdStaff.id,
+          details: {
+            name: createdStaff.name,
+            accountNo: createdStaff.accountNo,
+            panNo: createdStaff.panNo,
+          }
+        });
       }
     }
     
