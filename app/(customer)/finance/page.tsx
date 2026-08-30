@@ -18,7 +18,7 @@ export default async function FinancePage() {
 
   const financePlans = financePlansRaw.map(plan => ({
     ...plan,
-    name: plan.variant.vehicleMaster.name,
+    name: `${plan.variant.vehicleMaster.name} ${plan.variant.variantName}`,
     vehicleVariant: plan.variant.exShowroomPriceNPR,
     category: plan.variant.vehicleMaster.category
   }));
@@ -96,14 +96,14 @@ export default async function FinancePage() {
   });
 
   const financeOrder = [
-    "dio bs6 std",
-    "dio bs6 dlx",
-    "dio 125 std",
-    "dio 125 dlx smart",
-    "shine 125 drs bs6",
-    "shine 125 dss bs6",
-    "sp 125 drs bs6",
-    "sp 125 dss bs6",
+    "dio bs6 110 standard",
+    "dio bs6 110 deluxe",
+    "dio bs6 125 standard",
+    "dio bs6 125 deluxe",
+    "cb shine bs6 125 drum",
+    "cb shine bs6 125 disc",
+    "sp shine bs6 125 drum",
+    "sp shine bs6 125 disc",
     "hornet",
     "nx 200"
   ];
