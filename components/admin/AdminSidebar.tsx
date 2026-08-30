@@ -46,6 +46,7 @@ const navCategories = [
     icon: Package,
     items: [
       { name: "Vehicle Stock", href: "/admin/inventory" },
+      { name: "Branch Stock Matrix", href: "/admin/inventory/branch-stock" },
       { name: "Multi-Branch Transfer", href: "/admin/inventory/transfer" },
       { name: "Purchase Invoices", href: "/admin/inventory/purchase-invoices" },
       { name: "Spare Parts", href: "/admin/inventory/spare-parts" },
