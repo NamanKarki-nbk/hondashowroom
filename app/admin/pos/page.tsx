@@ -296,17 +296,6 @@ function POSContent() {
                 </div>
               </div>
 
-              {/* Commission (Internal Only) */}
-              <div className="mt-8 bg-emerald-50 dark:bg-emerald-500/5 border border-emerald-200 dark:border-emerald-500/20 rounded-2xl p-5 flex items-center justify-between group hover:bg-emerald-100 dark:hover:bg-emerald-500/10 transition-colors">
-                <div>
-                  <p className="text-xs text-emerald-700 dark:text-emerald-500/70 uppercase tracking-widest font-bold mb-1">Internal: Sales Commission</p>
-                  <p className="text-xl font-black text-emerald-600 dark:text-emerald-400">Rs. {commission.toLocaleString()}</p>
-                </div>
-                <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-500/10 flex items-center justify-center border border-emerald-200 dark:border-emerald-500/20 group-hover:scale-110 transition-transform">
-                  <span className="text-emerald-700 dark:text-emerald-400 font-bold text-sm">1.5%</span>
-                </div>
-              </div>
-
               <div className="mt-8 pt-8 border-t border-zinc-200 dark:border-white/10">
                 <button 
                   disabled={!activeVehicle || !customer.name}
