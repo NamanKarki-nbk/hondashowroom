@@ -175,6 +175,57 @@ export default function ProfilePage() {
     });
   };
 
+  const preprocessForOCR = (base64Image: string): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          resolve(base64Image);
+          return;
+        }
+        
+        ctx.drawImage(img, 0, 0);
+        
+        try {
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imageData.data;
+          
+          const contrast = 1.5;
+          const intercept = 128 * (1 - contrast);
+          
+          for (let i = 0; i < data.length; i += 4) {
+              let r = data[i];
+              let g = data[i+1];
+              let b = data[i+2];
+              
+              // Grayscale
+              let gray = 0.299 * r + 0.587 * g + 0.114 * b;
+              // Contrast
+              gray = gray * contrast + intercept;
+              // Binary Threshold
+              const finalValue = gray > 140 ? 255 : 0;
+              
+              data[i] = finalValue;
+              data[i+1] = finalValue;
+              data[i+2] = finalValue;
+          }
+          
+          ctx.putImageData(imageData, 0, 0);
+          resolve(canvas.toDataURL("image/jpeg", 0.9));
+        } catch (e) {
+          console.error("Canvas preprocessing error:", e);
+          resolve(base64Image);
+        }
+      };
+      img.onerror = () => resolve(base64Image);
+      img.src = base64Image;
+    });
+  };
+
   const handleScan = async () => {
     if (!frontImage || !backImage) {
       setMessage({ type: "error", text: "Please upload both Front and Back photos to scan." });
@@ -197,75 +248,30 @@ export default function ProfilePage() {
       let parsedCitizenshipNo = "";
       let parsedGender = "";
 
-      const backResult = await worker.recognize(backImage);
-      const backText = backResult.data.text;
-      const frontResult = await worker.recognize(frontImage);
-      const frontText = frontResult.data.text;
+      // Only OCR the Back Image (English Side)
+      const cleanedBack = await preprocessForOCR(backImage);
+      const backResult = await worker.recognize(cleanedBack);
+      const fullText = backResult.data.text;
       
-      const fullText = frontText + " \n " + backText;
+      console.log("[OCR] Back text:", fullText);
 
-      const sanitizeName = (rawName: string) => {
-        let words = rawName.split(/[^a-zA-Z]+/);
-        
-        // Strategy 1: Find longest ALL CAPS sequence
-        let currentSequence: string[] = [];
-        let longestSequence: string[] = [];
-        for (let word of words) {
-            if (word.length >= 2 && word === word.toUpperCase()) {
-                currentSequence.push(word);
-            } else {
-                if (currentSequence.length > longestSequence.length) longestSequence = currentSequence;
-                currentSequence = [];
-            }
-        }
-        if (currentSequence.length > longestSequence.length) longestSequence = currentSequence;
-        if (longestSequence.length >= 2) return longestSequence.join(" ");
-
-        // Strategy 2: Find longest Title Case sequence (or mixed ALL CAPS)
-        currentSequence = [];
-        let longestTitleSequence: string[] = [];
-        for (let word of words) {
-            if (word.length >= 2 && /^[A-Z][a-zA-Z]*$/.test(word)) {
-                currentSequence.push(word);
-            } else {
-                if (currentSequence.length > longestTitleSequence.length) longestTitleSequence = currentSequence;
-                currentSequence = [];
-            }
-        }
-        if (currentSequence.length > longestTitleSequence.length) longestTitleSequence = currentSequence;
-        if (longestTitleSequence.length >= 2) return longestTitleSequence.join(" ");
-
-        // Strategy 3: Fallback just return the first few valid words
-        let validWords = words.filter(w => /^[a-zA-Z]{2,}$/.test(w));
-        if (validWords.length > 0) return validWords.slice(0, 3).join(" ");
-        
-        return rawName.trim();
-      };
-
-      const extractName = (text: string) => {
-        let name = "";
-        let nameMatch = text.match(/(?:Full\s*Name|[NM]ame(?:\s*,\s*Surname)?)[\.\:\-\s]*([^\n]+)/i);
-        if (nameMatch) {
-            name = nameMatch[1].trim();
-            if (name.length < 3 || !/[A-Za-z]/.test(name)) {
-                const remaining = text.substring((nameMatch.index || 0) + nameMatch[0].length);
-                const nextLineMatch = remaining.match(/^\s*([A-Za-z\s]+)/);
-                if (nextLineMatch) {
-                    name = nextLineMatch[1].trim();
-                }
-            }
-        }
-        name = name.replace(/(Sex|Date|DOB|Gender).*$/i, '').trim();
-        return name ? sanitizeName(name) : "";
-      };
-      
-      parsedName = extractName(fullText);
+      // Extract Name
+      const nameMatch = fullText.match(/(?:Full\s*Name|Name)[^\nA-Za-z]*([A-Za-z\s]+)/i);
+      if (nameMatch) {
+          let rawName = nameMatch[1].trim();
+          // Validation: Ensure it looks like a real name (at least 2 words, mostly alphabet)
+          let words = rawName.split(/\s+/).filter(w => /^[a-zA-Z]+$/.test(w) && w.length >= 2);
+          if (words.length >= 2) {
+              parsedName = words.join(" ").toUpperCase();
+          }
+      }
 
       if (activeTab === 'CITIZENSHIP') {
-        const numberRegex = /(?:[0-9O]{2,}\s*[\-\/]\s*[0-9O]{2,}\s*[\-\/]\s*[0-9O]{2,}\s*[\-\/]\s*[0-9O]{3,})|(?:[0-9O]{2,}\s*[/\-]\s*[0-9O]{2,}\s*[/\-]\s*[0-9O]{4,})/;
+        // Document Number
         const explicitMatch = fullText.match(/Citizenship Certificate No[\.\:\-\s]*([0-9O\-\s]+)/i);
-        
+        const numberRegex = /(?:[0-9O]{2,}\s*[\-\/]\s*[0-9O]{2,}\s*[\-\/]\s*[0-9O]{2,}\s*[\-\/]\s*[0-9O]{3,})|(?:[0-9O]{2,}\s*[/\-]\s*[0-9O]{2,}\s*[/\-]\s*[0-9O]{4,})/;
         let match = fullText.match(numberRegex);
+        
         if (explicitMatch) {
           let cleanNum = explicitMatch[1].replace(/O/g, '0').replace(/[\s\-]/g, '');
           if (cleanNum.length === 11) {
@@ -282,32 +288,19 @@ export default function ProfilePage() {
           }
         }
         
-        // Name is extracted globally above
-
-        // Match Year, Month, Day independently and highly robustly (ignoring OCR spelling errors of the labels)
+        // DOB (AD)
         const dobBlockMatch = fullText.match(/(?:Date\s*of\s*Birth|DOB|Birth)[\s\S]{0,150}/i);
         const dobBlock = dobBlockMatch ? dobBlockMatch[0] : fullText;
 
         const yearM = dobBlock.match(/(19\d{2}|20\d{2})/);
         const monthM = dobBlock.match(/(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)/i);
+        const numbers = [...dobBlock.matchAll(/\b([0-3]?\d)\b/g)].map(m => m[1]);
+        const validDays = numbers.filter(n => parseInt(n) > 0 && parseInt(n) <= 31);
         
-        let dayM = null;
-        const explicitDay = dobBlock.match(/Day[\.\:\-\s]*([0-3]?\d)/i);
-        if (explicitDay) {
-            dayM = explicitDay;
-        } else {
-            // Fallback: Look for numbers 1-31 that are not the year
-            const numbers = [...dobBlock.matchAll(/\b([0-3]?\d)\b/g)].map(m => m[1]);
-            const validDays = numbers.filter(n => parseInt(n) > 0 && parseInt(n) <= 31);
-            if (validDays.length > 0) {
-                dayM = [null, validDays[validDays.length - 1]]; // Usually day is at the end of the DOB line
-            }
-        }
-
-        if (yearM && monthM && dayM) {
+        if (yearM && monthM && validDays.length > 0) {
             const year = yearM[1];
             let month = monthM[1].toUpperCase().substring(0, 3);
-            const day = String(dayM[1]).padStart(2, '0');
+            const day = String(validDays[validDays.length - 1]).padStart(2, '0');
             
             const monthMap: Record<string, string> = {
                 'JAN': '01', 'FEB': '02', 'MAR': '03', 'APR': '04', 'MAY': '05', 'JUN': '06',
@@ -316,13 +309,9 @@ export default function ProfilePage() {
             
             month = monthMap[month] || month.padStart(2, '0');
             parsedDobAd = `${year}-${month}-${day}`;
-        } else {
-            const dobMatch = fullText.match(/Date\s*of\s*Birth[^\d]*([\d\-A-Za-z\s]+)/i);
-            if (dobMatch) {
-                parsedDobAd = dobMatch[1].split('\n')[0].trim();
-            }
         }
         
+        // Gender
         const genderMatch = fullText.match(/Sex[\:\-\s]*(Male|Female|Other)/i);
         if (genderMatch) {
             parsedGender = genderMatch[1].toUpperCase();
@@ -333,8 +322,6 @@ export default function ProfilePage() {
         const dlMatch = fullText.match(/[D0O]\.?\s*[LI]\.?\s*No[\.\:\s]*([A-Z0-9\-]+)/i);
         if (dlMatch) extractedNumber = dlMatch[1].replace(/O/g, '0');
         
-        // Name is extracted globally above
-
         const dobMatch = fullText.match(/[D0O]\.?\s*[O0]\.?\s*B\.?\s*[\:\-]?\s*([\d\-\/]+)/i);
         if (dobMatch) {
           parsedDobAd = dobMatch[1].trim();
@@ -347,8 +334,6 @@ export default function ProfilePage() {
         const ninMatch = fullText.match(/N(?:ational)?\s*I(?:dentity)?\s*N(?:umber)?[\s\.\:]*([\d\-]+)/i);
         if (ninMatch) extractedNumber = ninMatch[1];
         
-        // Name is extracted globally above
-
         const dobAdMatch = fullText.match(/D\.?\s*O\.?\s*B\.?\s*[\:\-]?\s*([\d\-\/]+)/i);
         if (dobAdMatch) {
           parsedDobAd = dobAdMatch[1].trim();
