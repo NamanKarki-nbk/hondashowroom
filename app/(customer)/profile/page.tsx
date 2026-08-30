@@ -194,7 +194,9 @@ export default function ProfilePage() {
       let parsedName = "";
       let parsedDobAd = "";
       let parsedDobBs = "";
+      let parsedDobBs = "";
       let parsedCitizenshipNo = "";
+      let parsedGender = "";
 
       const backResult = await worker.recognize(backImage);
       const backText = backResult.data.text;
@@ -214,9 +216,20 @@ export default function ProfilePage() {
           extractedNumber = match[0].replace(/O/g, '0').replace(/\s+/g, '');
         }
         
-        parsedName = "SUCCESS BHATTARAI";
-        parsedDobAd = "1998 FEB 18";
-        parsedDobBs = "२०५४/११/०६";
+        const nameMatch = fullText.match(/Full\s*Name[\:\-\s]*([A-Za-z\s]+)/i);
+        if (nameMatch) {
+            parsedName = nameMatch[1].split('\n')[0].trim();
+        }
+
+        const dobMatch = fullText.match(/Date\s*of\s*Birth[^\d]*([\d\-A-Za-z\s]+)/i);
+        if (dobMatch) {
+            parsedDobAd = dobMatch[1].split('\n')[0].trim();
+        }
+        
+        const genderMatch = fullText.match(/Sex[\:\-\s]*(Male|Female|Other)/i);
+        if (genderMatch) {
+            parsedGender = genderMatch[1].toUpperCase();
+        }
 
         if (!extractedNumber) extractedNumber = "04-02-72-01532"; // Fallback for specific user testing case
       } 
@@ -304,7 +317,7 @@ export default function ProfilePage() {
           fullName: parsedName || "SUCCESS BHATTARAI",
           dobAd: parsedDobAd || "1998 FEB 18",
           dobBs: parsedDobBs || "२०५४/११/०६",
-          gender: "MALE",
+          gender: parsedGender || "MALE",
           avatarUrl: extractedFace
         };
         if (parsedCitizenshipNo) {
