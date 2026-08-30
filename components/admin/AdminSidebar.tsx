@@ -56,7 +56,6 @@ const navCategories = [
     name: "Sales & POS",
     icon: ShoppingCart,
     items: [
-      { name: "New Sale / Invoice", href: "/admin/sales" },
       { name: "New Invoice (POS)", href: "/admin/pos" },
       { name: "Digital Quotation", href: "/admin/crm/quotations" },
       { name: "Sales Calendar", href: "/admin/sales-calendar" },
