@@ -260,7 +260,6 @@ export default function ProfilePage() {
             parsedGender = genderMatch[1].toUpperCase();
         }
 
-        if (!extractedNumber) extractedNumber = "04-02-72-01532"; // Fallback for specific user testing case
       } 
       else if (activeTab === 'LICENSE') {
         const dlMatch = fullText.match(/[D0O]\.?\s*[LI]\.?\s*No[\.\:\s]*([A-Z0-9\-]+)/i);
@@ -272,17 +271,11 @@ export default function ProfilePage() {
         const dobMatch = fullText.match(/[D0O]\.?\s*[O0]\.?\s*B\.?\s*[\:\-]?\s*([\d\-\/]+)/i);
         if (dobMatch) {
           parsedDobAd = dobMatch[1].trim();
-          if (parsedDobAd === "02-19-199") parsedDobAd = "1998-02-18";
         }
 
         const citzMatch = fullText.match(/Citizenship\s*No[\.\:\s]*([A-Z\d\-]+)/i);
         if (citzMatch) parsedCitizenshipNo = citzMatch[1].trim().replace(/O/g, '0');
-        
-        // Exact fallback for specific user testing case
-        if (!parsedName) parsedName = "Success Bhattarai";
-        if (!parsedDobAd) parsedDobAd = "1998-02-18";
-        if (!parsedCitizenshipNo) parsedCitizenshipNo = "04-02-72-01532";
-      } 
+      }
       else if (activeTab === 'NATIONAL_ID') {
         const ninMatch = fullText.match(/N(?:ational)?\s*I(?:dentity)?\s*N(?:umber)?[\s\.\:]*([\d\-]+)/i);
         if (ninMatch) extractedNumber = ninMatch[1];
@@ -293,9 +286,8 @@ export default function ProfilePage() {
         const dobAdMatch = fullText.match(/D\.?\s*O\.?\s*B\.?\s*[\:\-]?\s*([\d\-\/]+)/i);
         if (dobAdMatch) {
           parsedDobAd = dobAdMatch[1].trim();
-          if (parsedDobAd === "02-19-1998") parsedDobAd = "1998-02-18";
         }
-        
+
         const dobBsMatch = fullText.match(/(?:20\d\d[-/]\d\d[-/]\d\d)/);
         if (dobBsMatch) {
           parsedDobBs = dobBsMatch[0];
@@ -303,12 +295,6 @@ export default function ProfilePage() {
 
         const citzMatch = fullText.match(/Citizenship\s*No[\.\:\s]*([\d\-]+)/i);
         if (citzMatch) parsedCitizenshipNo = citzMatch[1].trim();
-        
-        // Exact fallback for specific user testing case
-        if (!parsedName) parsedName = "Success Bhattarai";
-        if (!parsedDobAd) parsedDobAd = "1998-02-18";
-        if (!parsedDobBs) parsedDobBs = "2054-11-06";
-        if (!parsedCitizenshipNo) parsedCitizenshipNo = "04-02-72-01532";
       }
       
       await worker.terminate();
@@ -318,8 +304,8 @@ export default function ProfilePage() {
       
       if (hasCoreIdentity && (activeTab === 'LICENSE' || activeTab === 'NATIONAL_ID')) {
         // Cross-validation
-        const nameMatches = formData.fullName.toLowerCase() === parsedName.toLowerCase() || formData.fullName.toLowerCase() === "success bhattarai";
-        const dobMatches = formData.dobAd === parsedDobAd || formData.dobAd === "1998 FEB 18" || formData.dobAd === "1998-02-18";
+        const nameMatches = !parsedName || formData.fullName.toLowerCase() === parsedName.toLowerCase();
+        const dobMatches = !parsedDobAd || formData.dobAd === parsedDobAd;
         const citzMatches = !formData.citizenshipVerified || (formData.citizenshipNumber === parsedCitizenshipNo);
 
         if (!nameMatches || !dobMatches || !citzMatches) {
@@ -332,7 +318,7 @@ export default function ProfilePage() {
       // Prepare Scanned Data
       const newStatus: any = {
         [`${activeTab.toLowerCase().replace('_', '')}Verified`]: true,
-        [`${activeTab.toLowerCase().replace('_', '')}Number`]: extractedNumber || `99-88-77-${Math.floor(Math.random()*1000)}`,
+        [`${activeTab.toLowerCase().replace('_', '')}Number`]: extractedNumber || "",
         [`${activeTab.toLowerCase().replace('_', '')}Front`]: frontImage,
         [`${activeTab.toLowerCase().replace('_', '')}Back`]: backImage,
       };
@@ -343,10 +329,10 @@ export default function ProfilePage() {
         // First scan, populate core identity
         extractedData = {
           ...extractedData,
-          fullName: parsedName || "SUCCESS BHATTARAI",
-          dobAd: parsedDobAd || "1998 FEB 18",
-          dobBs: parsedDobBs || "२०५४/११/०६",
-          gender: parsedGender || "MALE",
+          fullName: parsedName || "",
+          dobAd: parsedDobAd || "",
+          dobBs: parsedDobBs || "",
+          gender: parsedGender || "",
           avatarUrl: extractedFace
         };
         if (parsedCitizenshipNo) {
