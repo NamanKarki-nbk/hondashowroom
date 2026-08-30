@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { Plus, Edit2, Trash2, X, Search } from "lucide-react";
-import type { Vehicle, ProductCatalog } from "@prisma/client";
+import { Vehicle, ProductCatalog } from "@/app/generated/prisma";
 
 interface PricesManagerProps {
   initialPrices: Vehicle[];

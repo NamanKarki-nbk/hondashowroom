@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { Plus, Search, Edit2, Trash2, X } from "lucide-react";
-import { VehiclePrice } from "@prisma/client";
+import { VehiclePrice } from "@/app/generated/prisma";
 
 interface PricesAdminClientProps {
   initialPrices: VehiclePrice[];
+  costPrices: Record<string, number>;
 }
 
-export default function PricesAdminClient({ initialPrices }: PricesAdminClientProps) {
+export default function PricesAdminClient({ initialPrices, costPrices }: PricesAdminClientProps) {
   const [prices, setPrices] = useState<VehiclePrice[]>(initialPrices);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -137,6 +138,7 @@ export default function PricesAdminClient({ initialPrices }: PricesAdminClientPr
               <th className="px-4 py-4 text-sm font-semibold text-slate-500 dark:text-slate-400">Model Name</th>
               <th className="px-4 py-4 text-sm font-semibold text-slate-500 dark:text-slate-400">Variant</th>
               <th className="px-4 py-4 text-sm font-semibold text-slate-500 dark:text-slate-400">Category</th>
+              <th className="px-4 py-4 text-sm font-semibold text-slate-500 dark:text-slate-400">Avg. Cost (NPR)</th>
               <th className="px-4 py-4 text-sm font-semibold text-slate-500 dark:text-slate-400">Ex-Showroom (NPR)</th>
               <th className="px-4 py-4 text-sm font-semibold text-slate-500 dark:text-slate-400">On-Road (NPR)</th>
               <th className="px-4 py-4 text-sm font-semibold text-slate-500 dark:text-slate-400 text-right">Actions</th>
@@ -152,6 +154,9 @@ export default function PricesAdminClient({ initialPrices }: PricesAdminClientPr
                     <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                       {price.category}
                     </span>
+                  </td>
+                  <td className="px-4 py-4 text-sm text-slate-900 dark:text-white font-medium">
+                    {costPrices[price.modelName] ? `Rs. ${Math.round(costPrices[price.modelName]).toLocaleString('en-IN')}` : <span className="text-slate-400 italic">No Stock</span>}
                   </td>
                   <td className="px-4 py-4 text-sm text-slate-900 dark:text-white font-medium">
                     Rs. {price.exShowroomPriceNPR.toLocaleString('en-IN')}
@@ -181,7 +186,7 @@ export default function PricesAdminClient({ initialPrices }: PricesAdminClientPr
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-slate-500 dark:text-slate-400">
+                <td colSpan={7} className="px-4 py-8 text-center text-slate-500 dark:text-slate-400">
                   No pricing data found. Add some to get started.
                 </td>
               </tr>

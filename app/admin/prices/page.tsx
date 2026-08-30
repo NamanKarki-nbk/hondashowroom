@@ -8,6 +8,21 @@ export default async function AdminPricesPage() {
     orderBy: { createdAt: "desc" },
   });
 
+  // Calculate average cost price per model from inventory
+  const inventoryAggregation = await prisma.vehicleInventory.groupBy({
+    by: ['modelName'],
+    _avg: {
+      purchasePrice: true,
+    },
+  });
+
+  const costPrices: Record<string, number> = {};
+  inventoryAggregation.forEach((agg) => {
+    if (agg._avg.purchasePrice) {
+      costPrices[agg.modelName] = agg._avg.purchasePrice;
+    }
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
@@ -19,7 +34,7 @@ export default async function AdminPricesPage() {
         </p>
       </div>
 
-      <PricesAdminClient initialPrices={prices} />
+      <PricesAdminClient initialPrices={prices} costPrices={costPrices} />
     </div>
   );
 }
