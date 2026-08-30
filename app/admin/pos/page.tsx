@@ -20,13 +20,8 @@ function POSContent() {
   useEffect(() => {
     if (vinParam) {
       setVinSearch(vinParam);
-      // Automatically trigger mock search if vin is provided
-      setActiveVehicle({
-        vin: vinParam.toUpperCase(),
-        model: "CBR 250RR (Grand Prix Red)",
-        price: 1350000,
-        status: "In Stock - Damak Warehouse"
-      });
+      // We don't auto-search here anymore to avoid race conditions with state.
+      // The user can just click Lookup.
     }
   }, [vinParam]);
 
@@ -50,15 +45,32 @@ function POSContent() {
     }
   };
 
-  const handleSearch = () => {
-    // Mock VIN Search
-    if (vinSearch.length > 5) {
-      setActiveVehicle({
-        vin: vinSearch.toUpperCase(),
-        model: "CBR 250RR (Grand Prix Red)",
-        price: 1350000,
-        status: "In Stock - Damak Warehouse"
-      });
+  const [isSearchingVin, setIsSearchingVin] = useState(false);
+  const [vinError, setVinError] = useState("");
+
+  const handleSearch = async () => {
+    if (vinSearch.length < 5) {
+      setVinError("Please enter at least 5 characters of the VIN");
+      return;
+    }
+    
+    setIsSearchingVin(true);
+    setVinError("");
+    setActiveVehicle(null);
+    
+    try {
+      const res = await fetch(`/api/admin/inventory/search-vin?vin=${encodeURIComponent(vinSearch)}`);
+      if (res.ok) {
+        const data = await res.json();
+        setActiveVehicle(data.vehicle);
+      } else {
+        const data = await res.json();
+        setVinError(data.error || "Vehicle not found");
+      }
+    } catch (error) {
+      setVinError("Failed to search vehicle");
+    } finally {
+      setIsSearchingVin(false);
     }
   };
 
@@ -115,10 +127,12 @@ function POSContent() {
                   />
                   <div className="absolute inset-0 border border-primary rounded-2xl opacity-0 group-focus-within/input:opacity-100 group-focus-within/input:scale-105 transition-all duration-300 pointer-events-none"></div>
                 </div>
-                <button onClick={handleSearch} className="bg-primary hover:bg-red-700 text-white px-8 py-4 rounded-2xl font-bold uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(220,38,38,0.2)] dark:shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_25px_rgba(220,38,38,0.4)] dark:hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] active:scale-95 flex items-center justify-center gap-2">
-                  Lookup <ArrowRight className="w-5 h-5" />
+                <button disabled={isSearchingVin} onClick={handleSearch} className="bg-primary hover:bg-red-700 text-white px-8 py-4 rounded-2xl font-bold uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(220,38,38,0.2)] dark:shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_25px_rgba(220,38,38,0.4)] dark:hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50">
+                  {isSearchingVin ? "Searching..." : <>Lookup <ArrowRight className="w-5 h-5" /></>}
                 </button>
               </div>
+              
+              {vinError && <p className="text-red-500 font-semibold mt-3 text-sm">{vinError}</p>}
 
               {activeVehicle && (
                 <div className="mt-8 p-6 bg-gradient-to-br from-green-100 dark:from-green-500/10 to-transparent border border-green-200 dark:border-green-500/20 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 animate-in slide-in-from-bottom-4 duration-500">
