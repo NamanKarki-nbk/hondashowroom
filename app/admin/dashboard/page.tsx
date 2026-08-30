@@ -42,37 +42,48 @@ export default async function AdminDashboard() {
     { label: "Total Customers", value: totalCustomersCount.toString(), change: `+${todayCustomersCount} Today`, trend: todayCustomersCount > 0 ? "up" : "down", icon: Users },
   ];
 
-  // 3. Fetch Inventory Matrix Data
-  const inventoryGroups = await prisma.vehicleInventory.groupBy({
-    by: ['modelName', 'color'],
+  // 3. Fetch Inventory Matrix Data grouped by Branch, Model, Color
+  const rawInventory = await prisma.vehicleInventory.findMany({
     where: { status: 'IN_STOCK' },
-    _count: true,
+    select: { modelName: true, color: true, branch: { select: { name: true } } }
   });
 
-  // Transform into a matrix of modelName -> { [color]: count }
-  const uniqueColorsSet = new Set<string>();
-  inventoryGroups.forEach(group => {
-    uniqueColorsSet.add(group.color);
+  const branchesSet = new Set<string>();
+  rawInventory.forEach(item => {
+     if (item.branch?.name) branchesSet.add(item.branch.name);
   });
-  const uniqueColors = Array.from(uniqueColorsSet).sort();
+  const branches = Array.from(branchesSet).sort();
 
-  const matrixMap: Record<string, Record<string, number>> = {};
-  inventoryGroups.forEach(group => {
-    if (!matrixMap[group.modelName]) {
-      matrixMap[group.modelName] = {};
-      uniqueColors.forEach(c => matrixMap[group.modelName][c] = 0);
-    }
-    matrixMap[group.modelName][group.color] += group._count;
+  // Create matrix: [modelName][color][branchName] = count
+  const matrixMap: Record<string, Record<string, Record<string, number>>> = {};
+  rawInventory.forEach(item => {
+     const branchName = item.branch?.name || "Unassigned";
+     if (!matrixMap[item.modelName]) matrixMap[item.modelName] = {};
+     if (!matrixMap[item.modelName][item.color]) {
+         matrixMap[item.modelName][item.color] = {};
+         branches.forEach(b => matrixMap[item.modelName][item.color][b] = 0);
+         matrixMap[item.modelName][item.color]["Unassigned"] = 0;
+     }
+     matrixMap[item.modelName][item.color][branchName]++;
   });
 
-  const COLOR_MATRIX = Object.entries(matrixMap).map(([model, counts]) => {
-    const total = Object.values(counts).reduce((sum, val) => sum + val, 0);
-    return {
-      model,
-      counts,
-      total
-    };
-  }).sort((a, b) => b.total - a.total).slice(0, 5); // top 5 models by stock
+  const COLOR_MATRIX: any[] = [];
+  Object.entries(matrixMap).forEach(([model, colors]) => {
+     Object.entries(colors).forEach(([color, branchCounts]) => {
+         const total = Object.values(branchCounts).reduce((sum, val) => sum + val, 0);
+         COLOR_MATRIX.push({
+             model,
+             color,
+             counts: branchCounts,
+             total
+         });
+     });
+  });
+
+  COLOR_MATRIX.sort((a, b) => {
+     if (a.model !== b.model) return a.model.localeCompare(b.model);
+     return b.total - a.total;
+  });
 
   // 4. Fetch Upcoming/Recent Schedule (Sales, Services, Test Rides)
   const recentSales = await prisma.salesTransaction.findMany({
@@ -181,42 +192,34 @@ export default async function AdminDashboard() {
                </Link>
             </div>
             
-            <div className="overflow-x-auto w-full">
-              <table className="w-full text-left border-collapse min-w-[500px]">
-                <thead>
+            <div className="overflow-x-auto w-full max-h-[400px] overflow-y-auto custom-scrollbar">
+              <table className="w-full text-left border-collapse min-w-[600px]">
+                <thead className="sticky top-0 bg-white dark:bg-slate-900 z-10">
                   <tr className="border-b-2 border-gray-100 dark:border-slate-800/80 text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">
-                    <th className="pb-4 pl-4">Model</th>
-                    {uniqueColors.map((color, idx) => {
-                       const lowerColor = color.toLowerCase();
-                       let bgColorClass = "bg-zinc-500 border-zinc-400/50";
-                       if (lowerColor.includes('red')) bgColorClass = "bg-red-600 border-red-700/20";
-                       else if (lowerColor.includes('black')) bgColorClass = "bg-zinc-900 border-zinc-700/50";
-                       else if (lowerColor.includes('blue')) bgColorClass = "bg-blue-600 border-blue-700/20";
-                       else if (lowerColor.includes('white')) bgColorClass = "bg-gray-100 border-gray-300";
-                       else if (lowerColor.includes('grey') || lowerColor.includes('gray') || lowerColor.includes('silver')) bgColorClass = "bg-gray-400 border-gray-500/50";
-                       
-                       return (
-                        <th key={idx} className="pb-4 text-center px-2">
-                           <div className="flex flex-col items-center gap-2">
-                              <div className={`w-4 h-4 rounded-full shadow-sm border ${bgColorClass}`}></div>
-                              <span className="truncate max-w-[80px]" title={color}>{color}</span>
-                           </div>
-                        </th>
-                       );
-                    })}
-                    <th className="pb-4 pr-4 text-right">Total</th>
+                    <th className="py-4 pl-4">Model</th>
+                    <th className="py-4">Color</th>
+                    {branches.map((branch, idx) => (
+                       <th key={idx} className="py-4 text-center px-2">{branch}</th>
+                    ))}
+                    <th className="py-4 pr-4 text-right">Total</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 dark:divide-zinc-800/50">
                   {COLOR_MATRIX.map((row, idx) => (
                     <tr key={idx} className="hover:bg-gray-50/80 dark:hover:bg-zinc-800/30 transition-colors group">
-                      <td className="py-5 pl-4 text-gray-900 dark:text-white font-black tracking-tight whitespace-nowrap">{row.model}</td>
-                      {uniqueColors.map((color, colorIdx) => (
-                         <td key={colorIdx} className="py-5 text-center font-bold text-gray-600 dark:text-gray-300">
-                            {row.counts[color]}
+                      <td className="py-4 pl-4 text-gray-900 dark:text-white font-black tracking-tight whitespace-nowrap">{row.model}</td>
+                      <td className="py-4">
+                         <div className="flex items-center gap-2">
+                           <div className="w-3 h-3 rounded-full shadow-sm border border-gray-200 dark:border-gray-700" style={{ backgroundColor: row.color.toLowerCase() }}></div>
+                           <span className="text-gray-900 dark:text-gray-200 font-bold tracking-tight whitespace-nowrap">{row.color}</span>
+                         </div>
+                      </td>
+                      {branches.map((branch, branchIdx) => (
+                         <td key={branchIdx} className="py-4 text-center font-bold text-gray-600 dark:text-gray-300">
+                            {row.counts[branch] > 0 ? row.counts[branch] : '-'}
                          </td>
                       ))}
-                      <td className="py-5 pr-4 text-right">
+                      <td className="py-4 pr-4 text-right">
                          <span className="inline-flex items-center justify-center bg-gray-100 dark:bg-zinc-800 text-gray-900 dark:text-white font-black px-3 py-1.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-colors">
                             {row.total}
                          </span>
@@ -225,7 +228,7 @@ export default async function AdminDashboard() {
                   ))}
                   {COLOR_MATRIX.length === 0 && (
                     <tr>
-                      <td colSpan={uniqueColors.length + 2} className="py-8 text-center text-gray-500">No inventory data available</td>
+                      <td colSpan={branches.length + 3} className="py-8 text-center text-gray-500">No inventory data available</td>
                     </tr>
                   )}
                 </tbody>
