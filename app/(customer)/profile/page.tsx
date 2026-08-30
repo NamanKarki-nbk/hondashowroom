@@ -317,10 +317,9 @@ export default function ProfilePage() {
             month = monthMap[month] || month.padStart(2, '0');
             parsedDobAd = `${year}-${month}-${day}`;
         } else {
-            const dobMatch = fullText.match(/Date\s*of\s*Birth[^\d]*([\d\-A-Za-z\s]+)/i);
-            if (dobMatch) {
-                parsedDobAd = dobMatch[1].split('\n')[0].trim();
-            }
+            // DEBUG: Show the raw text in the input field so we can see what Tesseract is seeing
+            let rawBlock = dobBlock.substring(0, 60).replace(/\n/g, ' | ');
+            parsedDobAd = `DEBUG: ${rawBlock}`;
         }
         
         const genderMatch = fullText.match(/Sex[\:\-\s]*(Male|Female|Other)/i);
