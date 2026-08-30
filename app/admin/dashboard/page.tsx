@@ -45,7 +45,7 @@ export default async function AdminDashboard() {
   // 3. Fetch Inventory Matrix Data grouped by Branch, Model, Color
   const rawInventory = await prisma.vehicleInventory.findMany({
     where: { status: 'IN_STOCK' },
-    select: { modelName: true, color: true, branch: { select: { name: true } } }
+    select: { variant: { select: { vehicleMaster: { select: { name: true } } } }, color: true, branch: { select: { name: true } } }
   });
 
   const branchesSet = new Set<string>();
@@ -58,13 +58,15 @@ export default async function AdminDashboard() {
   const matrixMap: Record<string, Record<string, Record<string, number>>> = {};
   rawInventory.forEach(item => {
      const branchName = item.branch?.name || "Unassigned";
-     if (!matrixMap[item.modelName]) matrixMap[item.modelName] = {};
-     if (!matrixMap[item.modelName][item.color]) {
-         matrixMap[item.modelName][item.color] = {};
-         branches.forEach(b => matrixMap[item.modelName][item.color][b] = 0);
-         matrixMap[item.modelName][item.color]["Unassigned"] = 0;
+     const itemName = item.variant?.vehicleMaster?.name || "Unknown Model";
+     
+     if (!matrixMap[itemName]) matrixMap[itemName] = {};
+     if (!matrixMap[itemName][item.color]) {
+         matrixMap[itemName][item.color] = {};
+         branches.forEach(b => matrixMap[itemName][item.color][b] = 0);
+         matrixMap[itemName][item.color]["Unassigned"] = 0;
      }
-     matrixMap[item.modelName][item.color][branchName]++;
+     matrixMap[itemName][item.color][branchName]++;
   });
 
   const COLOR_MATRIX: any[] = [];
@@ -89,7 +91,16 @@ export default async function AdminDashboard() {
   const recentSales = await prisma.salesTransaction.findMany({
     take: 2,
     orderBy: { createdAt: 'desc' },
-    include: { customer: true, vehicle: true }
+    include: { 
+      customer: true, 
+      vehicle: {
+        include: {
+          variant: {
+            include: { vehicleMaster: true }
+          }
+        }
+      } 
+    }
   });
   
   const upcomingTestRides = await prisma.testRideBooking.findMany({
@@ -109,14 +120,14 @@ export default async function AdminDashboard() {
     ...recentSales.map(sale => ({
       date: sale.createdAt,
       title: sale.customer.fullName,
-      subtitle: sale.vehicle.modelName,
+      subtitle: sale.vehicle?.variant?.vehicleMaster?.name || "Unknown Vehicle",
       status: "Delivered",
       type: "DELIVERY"
     })),
     ...upcomingTestRides.map(tr => ({
       date: tr.preferredDate,
       title: `Test Ride: ${tr.name}`,
-      subtitle: tr.modelName,
+      subtitle: tr.name,
       status: "Upcoming",
       type: "TEST_RIDE"
     })),

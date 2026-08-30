@@ -9,14 +9,14 @@ export async function GET(request: Request) {
     const downPayment = searchParams.get('downPayment');
 
     const whereClause: any = {};
-    if (model) whereClause.modelName = model;
+    if (model) whereClause.variant = { vehicleMaster: { name: model } };
     if (tenure) whereClause.tenureMonths = parseInt(tenure, 10);
     if (downPayment) whereClause.downPaymentPct = parseInt(downPayment, 10);
 
     const plans = await prisma.financePlan.findMany({
       where: whereClause,
       orderBy: [
-        { modelName: 'asc' },
+        { variant: { vehicleMaster: { name: 'asc' } } },
         { tenureMonths: 'asc' },
         { downPaymentPct: 'desc' }
       ]

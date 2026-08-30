@@ -79,7 +79,7 @@ export async function PATCH(req: Request) {
     const targetUser = await prisma.user.findUnique({ where: { id: userId } });
     
     // Only SUPERADMIN can demote an existing SUPERADMIN
-    if (targetUser?.role === "SUPERADMIN" && session.role !== "SUPERADMIN" && !isHardcodedAdmin) {
+    if (targetUser?.role === ("SUPERADMIN" as any) && session.role !== "SUPERADMIN" && !isHardcodedAdmin) {
        return new NextResponse("Only a Superadmin can modify another Superadmin", { status: 403 });
     }
 

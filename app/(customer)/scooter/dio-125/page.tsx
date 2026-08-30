@@ -20,11 +20,11 @@ import { Sparkles, Zap, Fuel, Monitor, KeyRound, Navigation, Disc } from "lucide
 
 interface HondaDio125PageProps {
   vehicle?: any;
-  stdPrice?: string;
-  dlxPrice?: string;
 }
 
-export default function HondaDio125Page({ vehicle, stdPrice, dlxPrice }: HondaDio125PageProps = {}) {
+export default function HondaDio125Page({ vehicle }: HondaDio125PageProps = {}) {
+  const stdPrice = vehicle?.variants?.find((v: any) => v.name.includes('STD'))?.price || "NPR 3,11,900";
+  const dlxPrice = vehicle?.variants?.find((v: any) => v.name.includes('DLX'))?.price || "NPR 3,31,900";
   const [activeNav, setActiveNav] = useState("overview");
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [bookingType, setBookingType] = useState<"book" | "testride">("book");

@@ -11,7 +11,9 @@ export const metadata = {
 export default async function InventoryTransferPage() {
   const transfers = await prisma.stockTransferLog.findMany({
     include: {
-      vehicle: true,
+      vehicle: {
+        include: { variant: { include: { vehicleMaster: true } } }
+      },
       fromBranch: true,
       toBranch: true,
     },
@@ -63,7 +65,7 @@ export default async function InventoryTransferPage() {
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-sm font-bold text-gray-900 dark:text-white">{transfer.vehicle?.modelName || 'Unknown Vehicle'}</p>
+                      <p className="text-sm font-bold text-gray-900 dark:text-white">{transfer.vehicle?.variant?.variantName || transfer.vehicle?.variant?.vehicleMaster?.name || 'Unknown Vehicle'}</p>
                       <p className="text-xs text-gray-500 font-mono mt-0.5">{transfer.vehicle?.vin || 'No VIN'}</p>
                     </td>
                     <td className="px-6 py-4">

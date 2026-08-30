@@ -101,7 +101,6 @@ export async function POST(req: Request) {
           entityId: createdVehicle.id,
           details: {
             vin: createdVehicle.vin,
-            modelName: createdVehicle.modelName,
             indexNo: createdVehicle.indexNo,
             color: createdVehicle.color,
           }

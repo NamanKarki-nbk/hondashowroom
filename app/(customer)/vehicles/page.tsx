@@ -5,7 +5,7 @@ import VehiclesClient from "./VehiclesClient";
 export const dynamic = "force-dynamic";
 
 export default async function CatalogPage() {
-  const products = await prisma.productCatalog.findMany({
+  const products = await prisma.vehicleMaster.findMany({
     orderBy: { category: 'asc' }
   });
 

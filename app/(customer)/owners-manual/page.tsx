@@ -10,7 +10,7 @@ export const metadata = {
 };
 
 export default async function OwnersManualPage() {
-  const products = await prisma.productCatalog.findMany({
+  const products = await prisma.vehicleMaster.findMany({
     select: { id: true, name: true, category: true, imageUrl: true },
     orderBy: [{ category: "asc" }, { name: "asc" }],
   });

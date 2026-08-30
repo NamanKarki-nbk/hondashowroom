@@ -10,7 +10,7 @@ interface ColorData {
 }
 
 interface ModelData {
-  modelName: string;
+  name: string;
   colors: ColorData[];
   totals: Record<string, number>;
 }
@@ -49,7 +49,7 @@ export default function BranchStockPage() {
   };
 
   const filteredModels = data?.models.filter(m => 
-    m.modelName.toLowerCase().includes(search.toLowerCase())
+    m.name.toLowerCase().includes(search.toLowerCase())
   ) || [];
 
   return (
@@ -104,13 +104,13 @@ export default function BranchStockPage() {
       ) : (
         <div className="space-y-8">
           {filteredModels.map((model) => (
-            <div key={model.modelName} className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-800 overflow-hidden shadow-sm print:break-inside-avoid print:shadow-none print:border-gray-300">
+            <div key={model.name} className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-800 overflow-hidden shadow-sm print:break-inside-avoid print:shadow-none print:border-gray-300">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">
                   <thead className="bg-[#2a303c] text-white">
                     <tr>
                       <th className="px-6 py-3 font-semibold border-r border-white/10 w-[40%]">
-                        {model.modelName}
+                        {model.name}
                       </th>
                       {data.branches.map(branch => (
                         <th key={branch} className="px-6 py-3 font-semibold border-r border-white/10 text-center uppercase tracking-wider">

@@ -155,7 +155,7 @@ export default function SparePartsClient() {
                             isLowStock ? 'bg-red-50 border-red-200 text-red-700 font-bold' : 'bg-white border-gray-200 text-gray-900'
                           }`}
                         />
-                        {isLowStock && <AlertTriangle className="w-4 h-4 text-red-500" title="Low Stock!" />}
+                        {isLowStock && <AlertTriangle className="w-4 h-4 text-red-500" />}
                       </div>
                     </td>
                     <td className="px-4 py-3 text-gray-700 dark:text-gray-300">

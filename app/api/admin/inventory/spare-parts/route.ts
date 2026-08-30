@@ -34,18 +34,15 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { partNumber, name, description, price, stockQty, minStock, location } = body;
+    const { partNumber, name, price, stockQty, category } = body;
 
     const part = await prisma.sparePart.create({
       data: {
         partNumber,
         name,
-        description,
         price: parseFloat(price),
-        stockQty: parseInt(stockQty),
-        minStock: parseInt(minStock),
-        location,
-        isActive: true
+        stock: parseInt(stockQty),
+        category: category || "General",
       }
     });
 
@@ -76,12 +73,11 @@ export async function POST(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
-    const { id, stockQty, price, isActive } = body;
+    const { id, stockQty, price } = body;
     
     const updateData: any = {};
-    if (stockQty !== undefined) updateData.stockQty = parseInt(stockQty);
+    if (stockQty !== undefined) updateData.stock = parseInt(stockQty);
     if (price !== undefined) updateData.price = parseFloat(price);
-    if (isActive !== undefined) updateData.isActive = isActive;
 
     const part = await prisma.sparePart.update({
       where: { id },

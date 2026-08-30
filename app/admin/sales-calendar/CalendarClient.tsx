@@ -145,7 +145,7 @@ export default function CalendarClient() {
                 return (
                   <div 
                     key={day.toString()}
-                    onClick={() => setCurrentDate(day) || setSelectedDate(day)}
+                    onClick={() => { setCurrentDate(day); setSelectedDate(day); }}
                     className={`
                       min-h-[120px] p-3 rounded-2xl border transition-all cursor-pointer flex flex-col gap-2
                       ${!isCurrentMonth ? 'opacity-40 bg-gray-50/50 dark:bg-slate-800/30 border-transparent' : 'bg-white dark:bg-slate-800/50 border-gray-100 dark:border-slate-700'}

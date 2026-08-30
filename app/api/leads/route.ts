@@ -18,7 +18,7 @@ export async function POST(req: Request) {
         interestedIn,
         remarks,
         source: source || 'Website Contact Form',
-        status: 'NEW'
+        status: 'NEW' as any
       }
     });
 
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     }
 
     await createAdminNotification({
-      type,
+      type: type as any,
       title,
       message: `${name} ${actionText} ${interestedIn || 'Honda vehicle'}.`,
       link: isQuotation ? '/admin/crm/quotations' : '/admin/crm/leads'

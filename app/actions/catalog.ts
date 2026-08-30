@@ -2,9 +2,9 @@
 
 import { prisma } from "@/lib/prisma";
 
-export async function getProductCatalogs() {
+export async function getVehicleMasters() {
   try {
-    const catalogs = await prisma.productCatalog.findMany({
+    const catalogs = await prisma.vehicleMaster.findMany({
       orderBy: { name: 'asc' }
     });
     return catalogs;

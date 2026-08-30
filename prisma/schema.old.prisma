@@ -1,0 +1,674 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum DocumentType {
+  CITIZENSHIP
+  LICENSE
+  NATIONAL_ID
+}
+
+enum VehicleStatus {
+  IN_STOCK
+  SOLD
+}
+
+enum PaymentType {
+  CASH
+  FINANCE
+  EXCHANGE
+  CREDIT
+}
+
+enum ServiceStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model User {
+  id           String  @id @default(uuid())
+  fullName     String?
+  phone        String  @unique
+  email        String? @unique
+  passwordHash String?
+  role         String  @default("USER") // ADMIN, STAFF, USER
+  avatarUrl    String?
+
+  address String?
+  gender  Gender?
+  dobAd   String?
+  dobBs   String?
+
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  customerProfile Customer?
+  activityLogs    ActivityLog[]
+}
+
+model Staff {
+  id         String   @id @default(uuid())
+  name       String
+  phone      String?
+  role       String   @default("STAFF")
+  accountNo  String
+  panNo      String
+  lastSalary Float?
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Customer {
+  id     String  @id @default(uuid())
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
+
+  fullName String
+  phone    String  @unique
+  email    String?
+  address  String?
+
+  // Documents (Multi-KYC)
+  citizenshipVerified Boolean @default(false)
+  citizenshipNumber   String?
+  citizenshipFront    String?
+  citizenshipBack     String?
+
+  licenseVerified Boolean @default(false)
+  licenseNumber   String?
+  licenseFront    String?
+  licenseBack     String?
+
+  nationalIdVerified Boolean @default(false)
+  nationalIdNumber   String?
+  nationalIdFront    String?
+  nationalIdBack     String?
+
+  isVerified  Boolean @default(false)
+  ocrVerified Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sales    SalesTransaction[]
+  services ServiceRecord[]
+  leads    Lead[]
+  bookings ServiceBooking[]
+  finances Finance[]
+
+  testRides    TestRideBooking[]
+  referralCode ReferralCode?
+  rewardPoints RewardPointLog[]
+  reminders    ServiceReminder[]
+}
+
+model OtpVerification {
+  id         String   @id @default(uuid())
+  identifier String // email or phone
+  hashedOtp  String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+}
+
+model Lead {
+  id           String    @id @default(uuid())
+  customerId   String?
+  customer     Customer? @relation(fields: [customerId], references: [id])
+  name         String
+  phone        String
+  source       String // e.g. "Website", "Walk-in"
+  status       String    @default("NEW") // NEW, CONTACTED, CONVERTED, LOST
+  interestedIn String? // Vehicle model
+  remarks      String?   @db.Text
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model VehicleInventory {
+  id        String  @id @default(uuid())
+  indexNo   String? @unique // Custom sequential index (e.g. D1-P1)
+  vin       String  @unique // Chassis No
+  engineNo  String  @unique
+  category  String // e.g., Motorcycle, Scooter, Power Product
+  modelName String
+  cc        Int
+  color     String
+
+  purchasePrice  Float
+  purchaseDate   DateTime
+  purchaseMethod String
+  rtoStatus      String?
+
+  status VehicleStatus @default(IN_STOCK)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  saleTransaction SalesTransaction?
+  services        ServiceRecord[]
+
+  purchaseInvoiceId String?
+  purchaseInvoice   PurchaseInvoice? @relation(fields: [purchaseInvoiceId], references: [id])
+
+  branchId  String?
+  branch    Branch?            @relation(fields: [branchId], references: [id])
+  transfers StockTransferLog[]
+  reminders ServiceReminder[]
+}
+
+model PurchaseInvoice {
+  id           String  @id @default(uuid())
+  invoiceNo    String  @unique
+  invoiceDate  String?
+  totalAmount  Float
+  purchaseType String
+
+  vehicles VehicleInventory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Letter {
+  id         String   @id @default(cuid())
+  letterNo   String   @unique // e.g., "2082/83-00353"
+  seqNumber  Int // Sequential counter for sorting
+  fiscalYear String // e.g., "2082/83"
+  docType    String // One of the 17 categories
+  recipient  String // Recipient organization (English input)
+  subject    String? // Auto-translated Nepali subject
+  date       DateTime @default(now())
+
+  // Structured Metadata for dynamic fields
+  metadata   Json? // Stores chassisNo, engineNo, vatBillNo, claimAmount, bank details
+  nepaliBody String @db.Text // Generated formal Nepali letter content
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([fiscalYear, seqNumber])
+}
+
+model SalesTransaction {
+  id        String @id @default(uuid())
+  invoiceNo String @unique
+
+  vehicleId String           @unique
+  vehicle   VehicleInventory @relation(fields: [vehicleId], references: [id])
+
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  // Extended Sales Details
+  saleType    String      @default("Retail") // Retail, Corporate, Dealer
+  paymentType PaymentType // Cash, Finance, Exchange
+
+  showroomPrice      Float @default(0)
+  discount           Float @default(0)
+  insurance          Float @default(0)
+  registrationCharge Float @default(0)
+  serviceCharge      Float @default(0)
+  accessoriesCharge  Float @default(0)
+  advancePaid        Float @default(0)
+  finalAmount        Float // Auto-calculated final price
+  commission         Float // Auto-calculate 1.5% of finalAmount
+  totalAmountPaid    Float @default(0)
+  dueAmount          Float @default(0)
+
+  receipts PaymentReceipt[]
+
+  // Finance specific
+  financerName       String?
+  downpayment        Float?
+  financeAmount      Float?
+  monthlyInstallment Float?
+  installments       Int?
+  interestRate       Float?
+
+  // Exchange specific
+  exchangeModel  String?
+  exchangeNumber String?
+  exchangeValue  Float?
+
+  // Extra
+  accessories Json? // Array of included accessories like ["Helmet", "Leg Guard"]
+  remarks     String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PaymentReceipt {
+  id        String @id @default(uuid())
+  receiptNo String @unique
+
+  transactionId String
+  transaction   SalesTransaction @relation(fields: [transactionId], references: [id])
+
+  amount        Float
+  paymentMethod String
+  remarks       String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ServiceRecord {
+  id String @id @default(uuid())
+
+  vehicleId String
+  vehicle   VehicleInventory @relation(fields: [vehicleId], references: [id])
+
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  odometerKm    Int
+  serviceType   String
+  status        ServiceStatus @default(PENDING)
+  mechanicNotes String?       @db.Text
+  totalBill     Float
+
+  history ServiceHistory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ServiceHistory {
+  id        String        @id @default(uuid())
+  recordId  String
+  record    ServiceRecord @relation(fields: [recordId], references: [id])
+  action    String
+  notes     String?       @db.Text
+  createdAt DateTime      @default(now())
+}
+
+model ServiceBooking {
+  id            String   @id @default(uuid())
+  customerId    String
+  customer      Customer @relation(fields: [customerId], references: [id])
+  vehicleNo     String?
+  chassisNo     String?
+  serviceType   String
+  preferredDate DateTime
+  status        String   @default("PENDING") // PENDING, CONFIRMED, COMPLETED
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ProductCatalog {
+  id             String  @id
+  name           String
+  category       String // MOTORCYCLES, AUTOMOBILES, POWER_PRODUCTS
+  price          Float
+  imageUrl       String
+  description    String?
+  specifications Json?
+  features       Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SalesTarget {
+  id        String   @id @default(uuid())
+  year      Int
+  month     Int      // 1-12
+  monthName String?  // e.g., "April 2026"
+  target    Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([year, month])
+}
+
+model Vehicle {
+  id                  String   @id @default(uuid())
+  modelName           String   @unique
+  cc                  Int
+  price               Int
+  thirdPartyInsurance Int      @map("baseInsurance")
+  fullInsurance       Int      @default(0)
+  category            String   @default("MOTORCYCLE") // e.g. SCOOTER, MOTORCYCLE, POWER PRODUCT
+  createdAt           DateTime @default(now())
+
+  colors   VehicleColor[]
+  finances Finance[]
+}
+
+model VehicleColor {
+  id         String  @id @default(uuid())
+  vehicleId  String
+  vehicle    Vehicle @relation(fields: [vehicleId], references: [id])
+  name       String
+  hexCode    String
+  imageUrl   String?
+  finishType String?
+  isPopular  Boolean @default(false)
+}
+
+model ValuationLog {
+  id            String   @id @default(uuid())
+  brand         String
+  model         String
+  year          Int
+  kmDriven      Int
+  condition     String
+  valuationMin  Int
+  valuationMax  Int
+  customerName  String?
+  customerPhone String?
+  location      String?
+  createdAt     DateTime @default(now())
+}
+
+model ServiceCharge {
+  id             String   @id @default(uuid())
+  modelPattern   String // e.g., "CRF 300", "CB 350", "XR", "NX 200", "DIO 125 SMART", "DEFAULT"
+  downpaymentPct Int // 60, 50, 40
+  tenureMonths   Int // 12 or 24
+  amount         Int // the service charge amount in NPR
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([modelPattern, downpaymentPct, tenureMonths])
+}
+
+model Finance {
+  id           String   @id @default(uuid())
+  customerId   String
+  customer     Customer @relation(fields: [customerId], references: [id])
+  vehicleId    String
+  vehicle      Vehicle  @relation(fields: [vehicleId], references: [id])
+  downpayment  Float
+  tenureMonths Int
+  loanAmount   Float
+  status       String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  documents    Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SparePart {
+  id         String   @id @default(uuid())
+  partNumber String   @unique
+  name       String
+  category   String
+  price      Float
+  stock      Int      @default(0)
+  imageUrl   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Delivery {
+  id           String   @id @default(uuid())
+  customerName String
+  vehicleName  String
+  imageUrl     String
+  testimonial  String?  @db.Text
+  rating       Int?
+  deliveredAt  DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+
+
+model FinancePlan {
+  id             String @id @default(uuid())
+  modelName      String
+  cc             Int
+  category       String
+  vehiclePrice   Float
+  tenureMonths   Int
+  downPaymentPct Int
+  interestRate   Float
+  downPayment    Float
+  loanAmount     Float
+  emi            Float
+  totalInterest  Float
+  registration   Float
+  insurance      Float
+  insuranceTotal Float?
+  totalCost      Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([modelName, tenureMonths, downPaymentPct])
+}
+
+model Accessory {
+  id            String   @id @default(uuid())
+  name          String
+  partNo        String   @default("N/A")
+  category      String // e.g., "Bike Cover", "Helmet", "Leg Guard"
+  price         Float
+  imageUrl      String
+  stockStatus   String   @default("IN_STOCK") // "IN_STOCK", "OUT_OF_STOCK"
+  description   String?
+  vehicleType   String   @default("Universal") // e.g., "Scooter", "Motorcycle", "Universal"
+  compatibility String[] // e.g., ["Activa 6G", "Dio 125", "CB350"]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Blog {
+  id        String   @id @default(uuid())
+  title     String
+  content   String   @db.Text
+  author    String
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VehiclePrice {
+  id                 String  @id @default(uuid())
+  modelName          String
+  variant            String?
+  category           String  @default("MOTORCYCLE") // SCOOTER, MOTORCYCLE, POWER_PRODUCT
+  exShowroomPriceNPR Float
+  onRoadPriceNPR     Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([modelName, variant])
+}
+
+model TestRideBooking {
+  id            String    @id @default(uuid())
+  customerId    String?
+  customer      Customer? @relation(fields: [customerId], references: [id])
+  name          String
+  phone         String
+  modelName     String
+  branchId      String?
+  branch        Branch?   @relation(fields: [branchId], references: [id])
+  preferredDate DateTime
+  timeSlot      String?
+  notes         String?   @db.Text
+  status        String    @default("PENDING") // PENDING, CONFIRMED, COMPLETED, CANCELLED
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model HeroBanner {
+  id        String   @id @default(uuid())
+  title     String
+  subtitle  String?
+  imageUrl  String
+  linkUrl   String?
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Offer {
+  id          String    @id @default(uuid())
+  title       String
+  description String?   @db.Text
+  offerType   String    @default("Cash Discount")
+  imageUrl    String?
+  isActive    Boolean   @default(true)
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Branch {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  phone     String
+  mapUrl    String?
+  latitude  Float?
+  longitude Float?
+  isEmergency Boolean @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  testRides     TestRideBooking[]
+  vehicles      VehicleInventory[]
+  transfersFrom StockTransferLog[] @relation("TransferFrom")
+  transfersTo   StockTransferLog[] @relation("TransferTo")
+}
+
+model ReferralCode {
+  id         String   @id @default(uuid())
+  code       String   @unique
+  customerId String   @unique
+  customer   Customer @relation(fields: [customerId], references: [id])
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model RewardPointLog {
+  id         String   @id @default(uuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+  points     Int
+  reason     String
+  createdAt  DateTime @default(now())
+}
+
+model StockTransferLog {
+  id           String           @id @default(uuid())
+  vehicleId    String
+  vehicle      VehicleInventory @relation(fields: [vehicleId], references: [id])
+  fromBranchId String?
+  fromBranch   Branch?          @relation("TransferFrom", fields: [fromBranchId], references: [id])
+  toBranchId   String
+  toBranch     Branch           @relation("TransferTo", fields: [toBranchId], references: [id])
+  transferDate DateTime         @default(now())
+  status       String           @default("COMPLETED") // PENDING, IN_TRANSIT, COMPLETED
+  remarks      String?
+  createdAt    DateTime         @default(now())
+}
+
+
+
+model ServiceReminder {
+  id          String           @id @default(uuid())
+  vehicleId   String
+  vehicle     VehicleInventory @relation(fields: [vehicleId], references: [id])
+  customerId  String
+  customer    Customer         @relation(fields: [customerId], references: [id])
+  serviceType String // 1st Service, 2nd Service, etc.
+  dueDate     DateTime
+  status      String           @default("PENDING") // PENDING, NOTIFIED, COMPLETED
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model AmcPlan {
+  id        String   @id @default(uuid())
+  title     String
+  price     Float
+  savings   Float
+  features  Json
+  isPopular Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AmcBooking {
+  id           String   @id @default(uuid())
+  fullName     String
+  phone        String
+  email        String?
+  vehicleModel String?
+  vehicleRegNo String?
+  planTitle    String
+  status       String   @default("PENDING") // PENDING, CONTACTED, CONVERTED, CANCELLED
+  remarks      String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model AdminNotification {
+  id        String   @id @default(uuid())
+  type      String   // NEW_LEAD, TEST_RIDE, AMC_BOOKING, SERVICE_BOOKING
+  title     String
+  message   String
+  link      String?  // Deep link: /admin/crm/leads etc
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model SystemSetting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String   @db.Text
+  description String?
+  updatedAt   DateTime @updatedAt
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String   // e.g., "CREATE", "UPDATE", "DELETE", "LOGIN"
+  entity    String   // e.g., "Lead", "VehicleInventory", "SystemSetting"
+  entityId  String?
+  details   Json?
+  createdAt DateTime @default(now())
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([email, token])
+}

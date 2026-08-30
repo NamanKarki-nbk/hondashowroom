@@ -12,9 +12,9 @@ export default function DioActionBanner({ onBookNow, onTestRide }: DioActionBann
   const [tenure, setTenure] = useState<number>(36);
   const [downPaymentPct, setDownPaymentPct] = useState<number>(30);
 
-  const vehiclePrice = 235900;
-  const downPaymentAmount = Math.round(vehiclePrice * (downPaymentPct / 100));
-  const loanAmount = vehiclePrice - downPaymentAmount;
+  const vehicleVariant = 235900;
+  const downPaymentAmount = Math.round(vehicleVariant * (downPaymentPct / 100));
+  const loanAmount = vehicleVariant - downPaymentAmount;
   const interestRate = 0.114; // 11.4% per annum
   const estimatedMonthlyEmi = Math.round((loanAmount * (1 + interestRate * (tenure / 12))) / tenure);
 

@@ -18,7 +18,7 @@ export async function GET(req: Request) {
       where.name = { contains: search, mode: 'insensitive' };
     }
 
-    const products = await prisma.productCatalog.findMany({
+    const products = await prisma.vehicleMaster.findMany({
       where,
       orderBy: { createdAt: 'desc' }
     });
@@ -39,7 +39,7 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
     }
 
-    const existingProduct = await prisma.productCatalog.findUnique({ where: { id } });
+    const existingProduct = await prisma.vehicleMaster.findUnique({ where: { id } });
     if (!existingProduct) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
@@ -53,7 +53,7 @@ export async function PATCH(req: Request) {
       };
     }
 
-    const updatedProduct = await prisma.productCatalog.update({
+    const updatedProduct = await prisma.vehicleMaster.update({
       where: { id },
       data: {
         specifications: updatedSpecs ? (updatedSpecs as any) : undefined,
@@ -72,7 +72,7 @@ export async function PATCH(req: Request) {
       details: {
         name: updatedProduct.name,
         category: updatedProduct.category,
-        price: updatedProduct.price,
+        price: updatedProduct.basePrice,
       }
     });
 

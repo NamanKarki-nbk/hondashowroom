@@ -10,7 +10,7 @@ export default function ServiceChargesClient() {
   
   const [formData, setFormData] = useState({
     serviceType: '',
-    modelName: '',
+    name: '',
     baseCharge: '',
     taxPercent: '13'
   });
@@ -76,7 +76,7 @@ export default function ServiceChargesClient() {
       
       if (res.ok) {
         setIsModalOpen(false);
-        setFormData({ serviceType: '', modelName: '', baseCharge: '', taxPercent: '13' });
+        setFormData({ serviceType: '', name: '', baseCharge: '', taxPercent: '13' });
         fetchCharges();
       } else {
         alert("Failed to add charge rule.");
@@ -134,7 +134,7 @@ export default function ServiceChargesClient() {
                     {charge.serviceType}
                   </td>
                   <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
-                    {charge.modelName || 'Any / Default'}
+                    {charge.name || 'Any / Default'}
                   </td>
                   <td className="px-4 py-3 text-gray-900 dark:text-white">
                     {charge.baseCharge.toLocaleString()}
@@ -185,7 +185,7 @@ export default function ServiceChargesClient() {
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Applicable Model (Optional)</label>
-                <input type="text" value={formData.modelName} onChange={e => setFormData({...formData, modelName: e.target.value})} className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none" placeholder="Leave blank for all models" />
+                <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none" placeholder="Leave blank for all models" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>

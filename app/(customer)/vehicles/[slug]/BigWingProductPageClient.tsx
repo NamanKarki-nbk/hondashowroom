@@ -18,6 +18,7 @@ interface ProductData {
   name: string;
   category: string;
   price: number;
+  basePrice: number;
   imageUrl: string;
   tagline: string;
   highlights: { label: string; value: string; icon: string }[];
@@ -150,7 +151,7 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
                   "{vehicle.tagline}"
                 </p>
                 <div className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold xl:text-6xl font-black text-primary-foreground mb-10 xl:mb-16 font-sans">
-                   Starting At Rs. {vehicle.price.toLocaleString('en-IN')}
+                   Starting At Rs. {vehicle.basePrice.toLocaleString('en-IN')}
                 </div>
                 
                 <div className="flex gap-4">
@@ -199,7 +200,7 @@ export default function BigWingProductPageClient({ vehicle }: { vehicle: Product
       <BigWingVehicleSpecs specs={vehicle.specifications} vehicleSlug={vehicle.id} fallbackImageUrl={vehicle.imageUrl} threeSixty={vehicle.threeSixty} />
 
       {/* EMI Calculator */}
-      <EmiCalculator vehicleName={vehicle.name} vehicleImage={vehicle.imageUrl} initialPrice={vehicle.price} />
+      <EmiCalculator vehicleName={vehicle.name} vehicleImage={vehicle.imageUrl} initialPrice={vehicle.basePrice} />
 
       {/* Testimonials Section */}
       <TestimonialsSection />

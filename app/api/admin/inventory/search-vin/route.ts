@@ -27,6 +27,13 @@ export async function GET(req: Request) {
           mode: 'insensitive'
         },
         status: 'IN_STOCK'
+      },
+      include: {
+        variant: {
+          include: {
+            vehicleMaster: true
+          }
+        }
       }
     });
 
@@ -34,26 +41,16 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: 'Vehicle not found or not in stock' }, { status: 404 });
     }
 
-    // Try to find the selling price
-    const vehiclePrice = await prisma.vehiclePrice.findFirst({
-      where: {
-        modelName: {
-          equals: vehicle.modelName,
-          mode: 'insensitive'
-        }
-      }
-    });
-
-    const sellingPrice = vehiclePrice ? vehiclePrice.exShowroomPriceNPR : (vehicle.purchasePrice * 1.15); // Fallback to 15% margin if price not set
+    const sellingPrice = vehicle.variant.exShowroomPriceNPR || (vehicle.purchasePrice * 1.15); // Fallback to 15% margin if price not set
 
     return NextResponse.json({ 
       vehicle: {
         id: vehicle.id,
         vin: vehicle.vin,
         engineNo: vehicle.engineNo,
-        model: vehicle.modelName,
+        model: vehicle.variant?.vehicleMaster?.name || 'Unknown',
         color: vehicle.color,
-        category: vehicle.category,
+        category: vehicle.variant?.vehicleMaster?.category || 'MOTORCYCLE',
         price: sellingPrice,
         status: 'IN_STOCK'
       } 

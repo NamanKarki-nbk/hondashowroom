@@ -4,13 +4,12 @@ import { prisma } from "@/lib/prisma";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { modelName, variant, category, exShowroomPriceNPR, onRoadPriceNPR } = body;
+    const { vehicleMasterId, variantName, exShowroomPriceNPR, onRoadPriceNPR } = body;
 
-    const newPrice = await prisma.vehiclePrice.create({
+    const newPrice = await prisma.vehicleVariant.create({
       data: {
-        modelName,
-        variant,
-        category,
+        vehicleMasterId,
+        variantName,
         exShowroomPriceNPR,
         onRoadPriceNPR,
       },
@@ -26,18 +25,17 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const { id, modelName, variant, category, exShowroomPriceNPR, onRoadPriceNPR } = body;
+    const { id, vehicleMasterId, variantName, exShowroomPriceNPR, onRoadPriceNPR } = body;
 
     if (!id) {
       return NextResponse.json({ error: "Price ID is required" }, { status: 400 });
     }
 
-    const updatedPrice = await prisma.vehiclePrice.update({
+    const updatedPrice = await prisma.vehicleVariant.update({
       where: { id },
       data: {
-        modelName,
-        variant,
-        category,
+        vehicleMasterId,
+        variantName,
         exShowroomPriceNPR,
         onRoadPriceNPR,
       },
@@ -59,7 +57,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: "Price ID is required" }, { status: 400 });
     }
 
-    await prisma.vehiclePrice.delete({
+    await prisma.vehicleVariant.delete({
       where: { id },
     });
 

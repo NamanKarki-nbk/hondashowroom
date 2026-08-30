@@ -51,7 +51,7 @@ async function main() {
           vin: `MOCKVIN${uniqueId}`,
           engineNo: `MOCKENG${uniqueId}`,
           category: "MOTORCYCLE",
-          modelName: "Mock Model",
+          name: "Mock Model",
           cc: 125,
           color: "Mock Color",
           purchasePrice: 100000,

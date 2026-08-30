@@ -9,7 +9,18 @@ export async function GET(req: NextRequest) {
     const charges = await prisma.serviceCharge.findMany({
       orderBy: { createdAt: 'desc' }
     });
-    return NextResponse.json(charges);
+    
+    // Map to what the UI expects (ServiceChargesClient)
+    const mapped = charges.map(c => ({
+      id: c.id,
+      serviceType: "PAID", // Default since it's not stored
+      name: c.modelPattern === "DEFAULT" ? "" : c.modelPattern,
+      baseCharge: c.amount,
+      taxPercent: 13, // Default
+      isActive: true // Default
+    }));
+    
+    return NextResponse.json(mapped);
   } catch (error) {
     console.error("Failed to fetch service charges:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -23,11 +34,10 @@ export async function POST(req: NextRequest) {
 
     const charge = await prisma.serviceCharge.create({
       data: {
-        serviceType,
-        modelName: modelName || null,
-        baseCharge: parseFloat(baseCharge),
-        taxPercent: parseFloat(taxPercent) || 0,
-        isActive: true
+        modelPattern: modelName || "DEFAULT",
+        downpaymentPct: 0,
+        tenureMonths: 0,
+        amount: parseFloat(baseCharge) || 0,
       }
     });
 
@@ -41,9 +51,8 @@ export async function POST(req: NextRequest) {
       entity: "SystemSetting",
       entityId: charge.id,
       details: {
-        serviceType: (charge as any).serviceType,
-        modelName: (charge as any).modelName,
-        baseCharge: (charge as any).baseCharge,
+        modelPattern: (charge as any).modelPattern,
+        amount: (charge as any).amount,
       }
     });
 
@@ -60,9 +69,7 @@ export async function PATCH(req: NextRequest) {
     const { id, baseCharge, taxPercent, isActive } = body;
     
     const updateData: any = {};
-    if (baseCharge !== undefined) updateData.baseCharge = parseFloat(baseCharge);
-    if (taxPercent !== undefined) updateData.taxPercent = parseFloat(taxPercent);
-    if (isActive !== undefined) updateData.isActive = isActive;
+    if (baseCharge !== undefined) updateData.amount = parseFloat(baseCharge);
 
     const charge = await prisma.serviceCharge.update({
       where: { id },
@@ -79,10 +86,8 @@ export async function PATCH(req: NextRequest) {
       entity: "SystemSetting",
       entityId: charge.id,
       details: {
-        serviceType: (charge as any).serviceType,
-        modelName: (charge as any).modelName,
-        baseCharge: (charge as any).baseCharge,
-        isActive: (charge as any).isActive,
+        modelPattern: (charge as any).modelPattern,
+        amount: (charge as any).amount,
       }
     });
 

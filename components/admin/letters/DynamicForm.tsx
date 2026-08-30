@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { DOC_CATEGORIES, DocCategory } from "@/lib/letterTemplates";
 import { getRecentPurchaseInvoices, getInvoicesByDateRange } from "@/app/actions/invoice";
 import { getLatestRemainingBalance } from "@/app/actions/letter";
-import { getProductCatalogs } from "@/app/actions/catalog";
+import { getVehicleMasters } from "@/app/actions/catalog";
 import { FileText, User, Hash, Calendar, Layers, Plus, Trash2, Banknote, Download, Building2, Settings, ListPlus, X, Box } from "lucide-react";
 import NepaliDate from 'nepali-date-converter';
 import { format as formatEnglishDate, lastDayOfMonth } from 'date-fns';
@@ -97,7 +97,7 @@ export default function DynamicForm({
 
   // Fetch products
   useEffect(() => {
-    getProductCatalogs().then(setProducts);
+    getVehicleMasters().then(setProducts);
   }, []);
 
   // Process URL params on mount
@@ -113,7 +113,7 @@ export default function DynamicForm({
         const loaneeContact = searchParams.get('loaneeContact');
         const vehicleModel = searchParams.get('vehicleModel');
         
-        setMetadata(prev => {
+        setMetadata((prev: any) => {
           const newMeta = { ...prev };
           if (loaneeName) newMeta.loaneeName = loaneeName;
           if (loaneeContact) newMeta.loaneeContact = loaneeContact;
@@ -136,7 +136,7 @@ export default function DynamicForm({
               newMeta.vehicleId = product.id;
               newMeta.vehicleModel = product.name;
               newMeta.category = product.category;
-              newMeta.unitPrice = product.price;
+              newMeta.unitPrice = product.basePrice;
               newMeta.cc = getSpec(flatSpecs, ["displacement", "engine displacement", "cc"]);
               newMeta.specs = {
                 displacement: getSpec(flatSpecs, ["displacement", "engine displacement", "cc"]),
@@ -910,7 +910,7 @@ export default function DynamicForm({
                         vehicleId: product.id,
                         vehicleModel: product.name,
                         category: product.category,
-                        unitPrice: product.price,
+                        unitPrice: product.basePrice,
                         cc: getSpec(flatSpecs, ["displacement", "engine displacement", "cc"]),
                         specs: {
                           displacement: getSpec(flatSpecs, ["displacement", "engine displacement", "cc"]),
@@ -929,7 +929,7 @@ export default function DynamicForm({
                 >
                   <option value="">-- Select Product --</option>
                   {products.map(p => (
-                    <option key={p.id} value={p.id}>{p.name} - Rs. {p.price}</option>
+                    <option key={p.id} value={p.id}>{p.name} - Rs. {p.basePrice}</option>
                   ))}
                 </select>
               </div>

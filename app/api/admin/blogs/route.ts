@@ -34,7 +34,7 @@ export async function POST(req: Request) {
         title,
         content,
         imageUrl,
-        author: author || null,
+        author: author || "Admin",
       }
     });
 
@@ -91,7 +91,7 @@ export async function PUT(req: Request) {
         title,
         content,
         imageUrl,
-        author: author || null,
+        author: author || "Admin",
       }
     });
 

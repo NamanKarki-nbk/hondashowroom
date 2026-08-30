@@ -44,22 +44,22 @@ export default async function CustomerLandingPage() {
     orderBy: { createdAt: "desc" },
   });
 
-  const catalogs = await prisma.productCatalog.findMany();
-  const vehicles = await prisma.vehicle.findMany({
-    select: { modelName: true, price: true }
+  const catalogs = await prisma.vehicleMaster.findMany();
+  const vehicles = await prisma.vehicleMaster.findMany({
+    select: { name: true, basePrice: true }
   });
 
   // Format banners with dynamically calculated starting prices
   const formattedBanners = heroBanners.map(banner => {
     const bannerKeywords = banner.title.toLowerCase().replace('honda ', '').split(' ');
     const bannerVehicles = vehicles.filter(v => {
-      const vNameLower = v.modelName.toLowerCase();
+      const vNameLower = v.name.toLowerCase();
       return bannerKeywords.every(kw => vNameLower.includes(kw));
     });
     
     let startingPrice = null;
     if (bannerVehicles.length > 0) {
-      const validPrices = bannerVehicles.map(v => v.price).filter((p): p is number => p !== null && p > 0);
+      const validPrices = bannerVehicles.map(v => v.basePrice).filter((p): p is number => p !== null && p > 0);
       if (validPrices.length > 0) {
         startingPrice = Math.min(...validPrices);
       }
@@ -79,16 +79,16 @@ export default async function CustomerLandingPage() {
     const catalogKeywords = product.name.toLowerCase().replace('honda ', '').split(' ');
     
     const productVehicles = vehicles.filter(v => {
-      const vNameLower = v.modelName.toLowerCase();
+      const vNameLower = v.name.toLowerCase();
       // Basic heuristic: must contain all words from the catalog product (excluding "honda")
       return catalogKeywords.every(kw => vNameLower.includes(kw));
     });
-    let startingPrice = product.price;
+    let startingPrice = product.basePrice;
 
     if (productVehicles.length > 0) {
       // Find the minimum price among all matching variants to use as 'Starting at'
       const validPrices = productVehicles
-        .map(v => v.price)
+        .map(v => v.basePrice)
         .filter((p): p is number => p !== null && p > 0);
         
       if (validPrices.length > 0) {

@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma';
 
 export interface FinanceCalculationResult {
   vehicleModel: string;
-  vehiclePrice: number;
+  vehicleVariant: number;
   downpaymentAmount: number;
   loanAmount: number;
   insuranceAmount: number;
@@ -23,9 +23,9 @@ export async function calculateHondaFinance(
 
   // 1. Fetch Vehicle Price & Insurance
   // Find a vehicle that matches the pattern closely
-  const vehicle = await prisma.vehicle.findFirst({
+  const vehicle = await prisma.vehicleMaster.findFirst({
     where: {
-      modelName: {
+      name: {
         contains: modelPattern,
         mode: 'insensitive'
       }
@@ -52,7 +52,7 @@ export async function calculateHondaFinance(
   if (!serviceChargeRecord) {
      serviceChargeRecord = await prisma.serviceCharge.findFirst({
       where: {
-        modelPattern: vehicle.modelName,
+        modelPattern: vehicle.name,
         downpaymentPct: downpaymentPercent,
         tenureMonths: tenureMonths
       }
@@ -63,11 +63,11 @@ export async function calculateHondaFinance(
 
   // Calculate Insurance
   const insuranceMultiplier = tenureMonths === 12 ? 1 : 2;
-  const insuranceAmount = vehicle.baseInsurance * insuranceMultiplier;
+  const insuranceAmount = 7000 * insuranceMultiplier;
 
   // Calculate Downpayment & Loan Amount
-  const downpaymentAmount = Math.round((vehicle.price * downpaymentPercent) / 100);
-  const loanAmount = vehicle.price - downpaymentAmount;
+  const downpaymentAmount = Math.round((vehicle.basePrice * downpaymentPercent) / 100);
+  const loanAmount = vehicle.basePrice - downpaymentAmount;
 
   // Calculate EMI (0% Interest, just divide loan by tenure)
   const emi = Math.ceil(loanAmount / tenureMonths);
@@ -76,8 +76,8 @@ export async function calculateHondaFinance(
   const totalInitialPayment = downpaymentAmount + insuranceAmount + REGISTRATION_CHARGE + serviceChargeAmount;
 
   return {
-    vehicleModel: vehicle.modelName,
-    vehiclePrice: vehicle.price,
+    vehicleModel: vehicle.name,
+    vehicleVariant: vehicle.basePrice,
     downpaymentAmount,
     loanAmount,
     insuranceAmount,

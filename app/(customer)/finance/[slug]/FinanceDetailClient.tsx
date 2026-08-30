@@ -6,14 +6,14 @@ import { ChevronDown, ArrowRight } from "lucide-react";
 export default function FinanceDetailClient({ product, specs }: { product: any, specs: any }) {
   const [plan, setPlan] = useState<"Bullet" | "Balloon" | "Standard">("Standard");
   
-  const [downPayment, setDownPayment] = useState(product.price * 0.2); // 20% default
+  const [downPayment, setDownPayment] = useState(product.basePrice * 0.2); // 20% default
   const [tenure, setTenure] = useState(36); // months
   const [bulletPct, setBulletPct] = useState(30);
   
   const [emi, setEmi] = useState(0);
 
   useEffect(() => {
-    const p = Math.max(0, product.price - downPayment);
+    const p = Math.max(0, product.basePrice - downPayment);
     if (p <= 0) { setEmi(0); return; }
     
     // Very basic mockup calculations for the plans
@@ -31,9 +31,9 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
     }
     
     setEmi(Math.round(calcEmi));
-  }, [downPayment, tenure, bulletPct, plan, product.price]);
+  }, [downPayment, tenure, bulletPct, plan, product.basePrice]);
 
-  const dpPct = Math.min(100, Math.max(0, (downPayment / product.price) * 100));
+  const dpPct = Math.min(100, Math.max(0, (downPayment / product.basePrice) * 100));
   const tenurePct = ((tenure - 12) / 48) * 100;
   const bulletSliderPct = ((bulletPct - 5) / 25) * 100;
 
@@ -59,7 +59,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
               THE {product.name.toUpperCase()}.
             </h1>
             <p className="text-white text-lg font-bold">
-              EX-SHOWROOM PRICE STARTS AT ₹{(product.price/100000).toFixed(2)} LAKHS*.
+              EX-SHOWROOM PRICE STARTS AT ₹{(product.basePrice/100000).toFixed(2)} LAKHS*.
             </p>
           </div>
         </div>
@@ -114,7 +114,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
                </div>
              </div>
 
-             <p className="font-bold text-foreground mb-4">Ex-showroom price starts at ₹ {product.price.toLocaleString("en-IN")}/-</p>
+             <p className="font-bold text-foreground mb-4">Ex-showroom price starts at ₹ {product.basePrice.toLocaleString("en-IN")}/-</p>
              
              <div className="bg-black text-white inline-block px-4 py-3">
                <span className="text-sm">EMI starting at </span>
@@ -177,7 +177,7 @@ export default function FinanceDetailClient({ product, specs }: { product: any, 
                      ₹ {downPayment.toLocaleString("en-IN")}/-
                    </div>
                    <input 
-                     type="range" min={0} max={product.price} step={5000}
+                     type="range" min={0} max={product.basePrice} step={5000}
                      value={downPayment} onChange={e => setDownPayment(Number(e.target.value))}
                      className="blue-slider mb-2" style={getSliderStyle(dpPct)}
                    />

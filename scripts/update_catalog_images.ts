@@ -17,11 +17,11 @@ const imageMap: Record<string, string> = {
 };
 
 async function main() {
-  const catalogs = await prisma.productCatalog.findMany();
+  const catalogs = await prisma.vehicleMaster.findMany();
   for (const c of catalogs) {
     if (imageMap[c.name]) {
       console.log(`Updating ${c.name} -> ${imageMap[c.name]}`);
-      await prisma.productCatalog.update({
+      await prisma.vehicleMaster.update({
         where: { id: c.id },
         data: { imageUrl: imageMap[c.name] },
       });

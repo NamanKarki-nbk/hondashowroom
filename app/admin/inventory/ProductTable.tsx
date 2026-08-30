@@ -7,7 +7,7 @@ type Product = {
   id: string;
   name: string;
   category: string;
-  price: number;
+  basePrice: number;
   inStock: boolean;
   specs: any;
   colors: any[];
@@ -51,7 +51,7 @@ export default function ProductTable() {
 
   const handleEditClick = (p: Product) => {
     setEditingId(p.id);
-    setEditForm({ price: p.price, inStock: p.inStock });
+    setEditForm({ price: p.basePrice, inStock: p.inStock });
   };
 
   const handleSave = async (id: string) => {
@@ -153,7 +153,7 @@ export default function ProductTable() {
                         className="w-24 bg-white dark:bg-black border border-gray-300 dark:border-white/20 rounded px-2 py-1 outline-none text-gray-900 dark:text-white"
                       />
                     ) : (
-                      `Rs. ${p.price.toLocaleString("en-IN")}`
+                      `Rs. ${p.basePrice.toLocaleString("en-IN")}`
                     )}
                   </td>
                   <td className="px-4 py-3">

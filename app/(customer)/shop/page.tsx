@@ -3,7 +3,7 @@ import ShopClient from "@/components/ShopClient";
 import { Suspense } from "react";
 
 export default async function ShopPage() {
-  const products = await prisma.productCatalog.findMany();
+  const products = await prisma.vehicleMaster.findMany();
 
   return (
     <main className="min-h-screen bg-background dark:bg-slate-950 pt-28 pb-20">

@@ -1,7 +1,7 @@
 import { prisma } from '../lib/prisma';
 
 async function main() {
-  const products = await prisma.productCatalog.findMany();
+  const products = await prisma.vehicleMaster.findMany();
   console.log('Products:', products);
 }
 

@@ -53,9 +53,9 @@ export async function GET(
   const docType = type as DocType;
 
   // Fetch product info
-  const product = await prisma.productCatalog.findUnique({
+  const product = await prisma.vehicleMaster.findUnique({
     where: { id },
-    select: { name: true, category: true, price: true, description: true, specifications: true },
+    select: { name: true, category: true, basePrice: true, description: true, specifications: true },
   });
 
   if (!product) {
@@ -64,9 +64,9 @@ export async function GET(
 
   const config = typeConfig[docType];
   const categoryLabel =
-    product.category === "SCOOTERS"
+    product.category === ("SCOOTER" as any)
       ? "Scooter"
-      : product.category === "MOTORCYCLES"
+      : product.category === ("MOTORCYCLE" as any)
       ? "Motorcycle"
       : "Power Product";
 
@@ -141,7 +141,7 @@ export async function GET(
     const details: [string, string][] = [
       ["Model Name", `Honda ${product.name}`],
       ["Category", categoryLabel],
-      ["Starting Price", `NPR ${product.price.toLocaleString("en-IN")}`],
+      ["Starting Price", `NPR ${product.basePrice.toLocaleString("en-IN")}`],
     ];
 
     if (product.description) {

@@ -76,7 +76,7 @@ async function main() {
 
   for (const accessory of accessoriesData) {
     await prisma.accessory.create({
-      data: accessory,
+      data: accessory as any,
     });
     console.log(`Created accessory: ${accessory.name}`);
   }

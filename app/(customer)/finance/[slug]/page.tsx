@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 export default async function FinanceDetailPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
-  const product = await prisma.productCatalog.findUnique({
+  const product = await prisma.vehicleMaster.findUnique({
     where: { id: params.slug }
   });
 

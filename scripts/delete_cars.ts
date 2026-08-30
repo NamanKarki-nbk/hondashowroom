@@ -8,7 +8,7 @@ const adapter = new PrismaPg(pool)
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
-  const result = await prisma.productCatalog.deleteMany({
+  const result = await prisma.vehicleMaster.deleteMany({
     where: { category: 'AUTOMOBILES' }
   });
   console.log('Deleted cars:', result.count);

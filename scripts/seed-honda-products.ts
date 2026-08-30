@@ -36,10 +36,10 @@ async function main() {
 
   // 1. Seed Vehicles & Vehicle Inventory
   for (const v of bikesAndScooters) {
-    const vehicle = await prisma.vehicle.upsert({
-      where: { modelName: v.name },
+    const vehicle = await prisma.vehicleMaster.upsert({
+      where: { name: v.name },
       update: { price: v.price, cc: v.cc, baseInsurance: v.baseInsurance },
-      create: { modelName: v.name, cc: v.cc, price: v.price, baseInsurance: v.baseInsurance },
+      create: { name: v.name, cc: v.cc, price: v.price, baseInsurance: v.baseInsurance },
     });
 
     for (const color of v.colors) {
@@ -68,7 +68,7 @@ async function main() {
           vin,
           engineNo: `ENG-${v.name.replace(/\s+/g, '')}-${i}`,
           category: v.category,
-          modelName: v.name,
+          name: v.name,
           cc: v.cc,
           color: v.colors[0],
           purchasePrice: v.price * 0.85, // 15% dealer margin approx
@@ -79,9 +79,9 @@ async function main() {
       });
     }
 
-    // Also populate ProductCatalog for the catalog page
+    // Also populate VehicleMaster for the catalog page
     const slugId = v.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    await prisma.productCatalog.upsert({
+    await prisma.vehicleMaster.upsert({
       where: { id: slugId },
       update: { price: v.price },
       create: {

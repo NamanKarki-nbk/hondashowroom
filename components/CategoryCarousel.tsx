@@ -12,7 +12,7 @@ export type Product = {
   id: string;
   name: string;
   category: string;
-  price: number;
+  basePrice: number;
   imageUrl: string;
   description: string | null;
 };
@@ -150,7 +150,7 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
                   >
                     <VehicleCard
                       title={vehicle.name}
-                      priceNpr={vehicle.price}
+                      priceNpr={vehicle.basePrice}
                       category={
                         vehicle.category === "POWER_PRODUCTS"
                           ? "Power Product"

@@ -10,9 +10,9 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  console.log("Seeding features and specifications to ProductCatalog...");
+  console.log("Seeding features and specifications to VehicleMaster...");
 
-  const products = await prisma.productCatalog.findMany();
+  const products = await prisma.vehicleMaster.findMany();
   let updatedCount = 0;
 
   for (const product of products) {
@@ -78,7 +78,7 @@ async function main() {
     }
 
     if (featuresData || specsData) {
-      await prisma.productCatalog.update({
+      await prisma.vehicleMaster.update({
         where: { id: product.id },
         data: {
           ...(featuresData && { features: featuresData }),

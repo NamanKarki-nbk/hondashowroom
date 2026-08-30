@@ -52,34 +52,32 @@ export async function POST(req: Request) {
           execute: async (input: z.infer<typeof flexSchema>) => {
             const queryStr = extractQueryStr(input);
             
-            const vehicles = await prisma.vehicle.findMany({
+            const vehicles = await prisma.vehicleMaster.findMany({
               where: queryStr ? {
-                modelName: {
+                name: {
                   contains: queryStr,
                   mode: 'insensitive',
                 },
               } : undefined,
               select: {
-                modelName: true,
-                cc: true,
-                price: true,
-                baseInsurance: true,
+                name: true,
+                category: true,
+                basePrice: true,
               },
               take: 5,
             });
 
-            const powerProductsAndCatalog = await prisma.productCatalog.findMany({
+            const powerProductsAndCatalog = await prisma.vehicleMaster.findMany({
               where: queryStr ? {
                 OR: [
                   { name: { contains: queryStr, mode: 'insensitive' } },
-                  { category: { contains: queryStr, mode: 'insensitive' } },
                   { description: { contains: queryStr, mode: 'insensitive' } },
                 ]
               } : undefined,
               select: {
                 name: true,
                 category: true,
-                price: true,
+                basePrice: true,
                 description: true,
               },
               take: 8,
@@ -95,9 +93,9 @@ export async function POST(req: Request) {
             const queryStr = extractQueryStr(input);
             let vehicle = null;
             if (queryStr) {
-              vehicle = await prisma.vehicle.findFirst({
+              vehicle = await prisma.vehicleMaster.findFirst({
                 where: {
-                  modelName: {
+                  name: {
                     contains: queryStr,
                     mode: 'insensitive',
                   },
@@ -105,7 +103,7 @@ export async function POST(req: Request) {
               });
             }
             if (!vehicle) {
-              vehicle = await prisma.vehicle.findFirst();
+              vehicle = await prisma.vehicleMaster.findFirst();
             }
             
             if (!vehicle) return { error: "No vehicles found in database" };
@@ -114,7 +112,7 @@ export async function POST(req: Request) {
             const patterns = ["CRF 300", "CB 350", "XR", "NX 200", "DIO 125 SMART", "DEFAULT"];
             let matchedPattern = "DEFAULT";
             for (const pattern of patterns) {
-              if (vehicle.modelName.toUpperCase().includes(pattern) && pattern !== "DEFAULT") {
+              if (vehicle.name.toUpperCase().includes(pattern) && pattern !== "DEFAULT") {
                 matchedPattern = pattern;
                 break;
               }
@@ -130,14 +128,14 @@ export async function POST(req: Request) {
             });
 
             return { 
-              vehicle: { modelName: vehicle.modelName, price: vehicle.price }, 
+              vehicle: { name: vehicle.name, price: vehicle.basePrice }, 
               serviceCharges: serviceCharges.map((opt: any) => ({
                 downpaymentPercent: opt.downpaymentPct,
                 tenureMonths: opt.tenureMonths,
                 serviceChargeAmount: opt.amount,
-                downpaymentAmount: Math.round(vehicle.price * (opt.downpaymentPct / 100)),
-                principalAmount: Math.round(vehicle.price - (vehicle.price * (opt.downpaymentPct / 100))),
-                estimatedMonthlyEMI: Math.round(((vehicle.price - (vehicle.price * (opt.downpaymentPct / 100))) * 1.14) / opt.tenureMonths)
+                downpaymentAmount: Math.round(vehicle.basePrice * (opt.downpaymentPct / 100)),
+                principalAmount: Math.round(vehicle.basePrice - (vehicle.basePrice * (opt.downpaymentPct / 100))),
+                estimatedMonthlyEMI: Math.round(((vehicle.basePrice - (vehicle.basePrice * (opt.downpaymentPct / 100))) * 1.14) / opt.tenureMonths)
               }))
             };
           },

@@ -9,16 +9,18 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status");
 
-    let whereClause = {};
-    if (status && status !== 'ALL') {
-      whereClause = { status };
-    }
-
     const invoices = await prisma.purchaseInvoice.findMany({
-      where: whereClause,
       include: {
         vehicles: {
-          select: { id: true, modelName: true, vinNumber: true }
+          select: { 
+            id: true, 
+            vin: true,
+            variant: {
+              select: {
+                vehicleMaster: { select: { name: true } }
+              }
+            }
+          }
         }
       },
       orderBy: { createdAt: 'desc' }
@@ -34,16 +36,14 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { invoiceNo, supplierName, invoiceDate, totalAmount, remarks } = body;
+    const { invoiceNo, invoiceDate, totalAmount, purchaseType } = body;
 
     const invoice = await prisma.purchaseInvoice.create({
       data: {
         invoiceNo,
-        supplierName,
         invoiceDate: new Date(invoiceDate),
         totalAmount: parseFloat(totalAmount),
-        remarks,
-        status: "RECEIVED"
+        purchaseType: purchaseType || "DEALER"
       }
     });
 
@@ -72,11 +72,11 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const { id, status } = await req.json();
+    const { id, purchaseType } = await req.json();
 
     const invoice = await prisma.purchaseInvoice.update({
       where: { id },
-      data: { status }
+      data: { purchaseType }
     });
 
     const cookieStore = await cookies();
@@ -90,7 +90,7 @@ export async function PATCH(req: NextRequest) {
       entityId: invoice.id,
       details: {
         invoiceNo: invoice.invoiceNo,
-        status: invoice.status,
+        purchaseType: invoice.purchaseType,
       }
     });
 

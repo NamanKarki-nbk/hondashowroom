@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     color: '#1a1a1a',
     textTransform: 'uppercase',
   },
-  vehiclePrice: {
+  vehicleVariant: {
     fontSize: 20,
     color: '#CC0000',
     marginTop: 8,
@@ -88,7 +88,7 @@ interface BrochurePDFProps {
   vehicle: {
     model: string;
     brand: string;
-    price: number;
+    basePrice: number;
     year: number;
     type: string;
     engineSize?: string;
@@ -111,7 +111,7 @@ const BrochurePDF = ({ vehicle }: BrochurePDFProps) => (
 
       <View style={styles.titleSection}>
         <Text style={styles.vehicleName}>{vehicle.brand} {vehicle.model}</Text>
-        <Text style={styles.vehiclePrice}>NPR {vehicle.price.toLocaleString()}</Text>
+        <Text style={styles.vehicleVariant}>NPR {vehicle.basePrice.toLocaleString()}</Text>
       </View>
 
       <View style={{ height: 250, backgroundColor: '#f8f9fa', borderRadius: 8, justifyContent: 'center', alignItems: 'center', marginBottom: 20 }}>

@@ -2,37 +2,37 @@
 
 import React, { useState, useMemo } from "react";
 import { Plus, Edit2, Trash2, X, Search } from "lucide-react";
-import type { FinancePlan } from "@prisma/client";
+import type { FinancePlan } from "@/app/generated/prisma";
 
 interface FinancePlansManagerProps {
   initialPlans: FinancePlan[];
 }
 
 export default function FinancePlansManager({ initialPlans }: FinancePlansManagerProps) {
-  const [plans, setPlans] = useState<FinancePlan[]>(initialPlans);
+  const [plans, setPlans] = useState<any[]>(initialPlans);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentPlan, setCurrentPlan] = useState<Partial<FinancePlan> | null>(null);
+  const [currentPlan, setCurrentPlan] = useState<any | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
   const filteredPlans = useMemo(() => {
     const q = searchQuery.toLowerCase();
     return plans.filter(
       (p) =>
-        p.modelName.toLowerCase().includes(q) ||
+        p.name.toLowerCase().includes(q) ||
         p.category.toLowerCase().includes(q)
     );
   }, [plans, searchQuery]);
 
-  const handleOpenModal = (plan?: FinancePlan) => {
+  const handleOpenModal = (plan?: any) => {
     if (plan) {
       setCurrentPlan({ ...plan });
     } else {
       setCurrentPlan({
-        modelName: "",
+        name: "",
         cc: 110,
         category: "SCOOTER",
-        vehiclePrice: 0,
+        vehicleVariant: 0,
         tenureMonths: 12,
         downPaymentPct: 60,
         interestRate: 10,
@@ -149,9 +149,9 @@ export default function FinancePlansManager({ initialPlans }: FinancePlansManage
               ) : (
                 filteredPlans.map((plan) => (
                   <tr key={plan.id} className="border-b border-gray-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-[#222] transition-colors whitespace-nowrap">
-                    <td className="p-4 font-medium text-slate-900 dark:text-white">{plan.modelName} ({plan.cc}cc)</td>
+                    <td className="p-4 font-medium text-slate-900 dark:text-white">{plan.name} ({plan.cc}cc)</td>
                     <td className="p-4 text-slate-600 dark:text-slate-400">{plan.category}</td>
-                    <td className="p-4 font-medium text-slate-900 dark:text-white">₹{plan.vehiclePrice.toLocaleString()}</td>
+                    <td className="p-4 font-medium text-slate-900 dark:text-white">₹{plan.vehicleVariant.toLocaleString()}</td>
                     <td className="p-4 text-slate-600 dark:text-slate-400">{plan.tenureMonths}</td>
                     <td className="p-4 text-slate-600 dark:text-slate-400">{plan.downPaymentPct}%</td>
                     <td className="p-4 text-slate-600 dark:text-slate-400">{plan.interestRate}%</td>
@@ -204,8 +204,8 @@ export default function FinancePlansManager({ initialPlans }: FinancePlansManage
                   <input
                     type="text"
                     required
-                    value={currentPlan.modelName || ""}
-                    onChange={(e) => setCurrentPlan({ ...currentPlan, modelName: e.target.value })}
+                    value={currentPlan.name || ""}
+                    onChange={(e) => setCurrentPlan({ ...currentPlan, name: e.target.value })}
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#2a2a2a] focus:ring-2 focus:ring-red-600 outline-none"
                     placeholder="e.g. DIO BS6 STD"
                   />
@@ -241,8 +241,8 @@ export default function FinancePlansManager({ initialPlans }: FinancePlansManage
                     type="number"
                     required
                     step="0.01"
-                    value={currentPlan.vehiclePrice || ""}
-                    onChange={(e) => setCurrentPlan({ ...currentPlan, vehiclePrice: Number(e.target.value) })}
+                    value={currentPlan.vehicleVariant || ""}
+                    onChange={(e) => setCurrentPlan({ ...currentPlan, vehicleVariant: Number(e.target.value) })}
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#2a2a2a] focus:ring-2 focus:ring-red-600 outline-none"
                   />
                 </div>

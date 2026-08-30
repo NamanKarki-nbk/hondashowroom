@@ -18,7 +18,9 @@ export async function GET(request: Request) {
           { phone: { contains: search } },
         ]
       },
-      orderBy: { order: 'asc' }
+      orderBy: {
+        order: 'asc'
+      } as any
     });
 
     return NextResponse.json(staff);
@@ -46,7 +48,7 @@ export async function POST(request: Request) {
         panNo,
         lastSalary: lastSalary ? parseFloat(lastSalary) : null,
         order: order ? parseInt(order) : 0,
-      }
+      } as any
     });
 
     const cookieStore = await cookies();

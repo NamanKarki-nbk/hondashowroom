@@ -18,6 +18,7 @@ interface ProductData {
   name: string;
   category: string;
   price: number;
+  basePrice: number;
   imageUrl: string;
   tagline: string;
   highlights: { label: string; value: string; icon: string }[];
@@ -148,15 +149,26 @@ export default function ProductPageClient({ vehicle }: { vehicle: ProductData })
                   "{vehicle.tagline}"
                 </p>
                 <div className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold xl:text-6xl font-black text-gray-900 dark:text-primary-foreground mb-6 font-sans">
-                   Starting At Rs. {vehicle.price.toLocaleString('en-IN')}
+                   Starting At Rs. {vehicle.basePrice.toLocaleString('en-IN')}
                 </div>
                 
                 {vehicle.variants && vehicle.variants.length > 0 && (
-                  <div className="flex flex-col gap-3 mb-10 xl:mb-14">
-                    {vehicle.variants.map((v, i) => (
-                      <div key={i} className="flex justify-between items-center bg-white dark:bg-slate-900 px-5 py-3 rounded-xl border border-gray-200 dark:border-slate-800 shadow-sm w-full max-w-sm">
-                        <span className="font-bold uppercase tracking-wider text-sm text-gray-700 dark:text-gray-300">{v.name}</span>
-                        <span className="font-black text-primary text-lg">{v.price || `Rs. ${vehicle.price.toLocaleString('en-IN')}`}</span>
+                  <div className="flex flex-col gap-4 mb-10 xl:mb-14">
+                    {vehicle.variants.map((v: any, i: number) => (
+                      <div key={i} className="flex flex-col bg-white dark:bg-slate-900 px-5 py-4 rounded-xl border border-gray-200 dark:border-slate-800 shadow-sm w-full max-w-sm transition-all hover:border-gray-400 dark:hover:border-slate-600">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="font-bold uppercase tracking-wider text-sm text-gray-700 dark:text-gray-300">{v.name}</span>
+                          <span className="font-black text-primary text-lg">{v.price || `Rs. ${vehicle.basePrice.toLocaleString('en-IN')}`}</span>
+                        </div>
+                        {v.specDifferences && Object.keys(v.specDifferences).length > 0 && (
+                          <div className="flex flex-wrap gap-2 mt-2 pt-3 border-t border-gray-100 dark:border-slate-800">
+                            {Object.entries(v.specDifferences).map(([key, val]) => (
+                              <div key={key} className="text-xs bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 px-2 py-1 rounded-md">
+                                <span className="font-semibold">{key}:</span> {String(val)}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -203,7 +215,7 @@ export default function ProductPageClient({ vehicle }: { vehicle: ProductData })
       <VehicleSpecs specs={vehicle.specifications} vehicleSlug={vehicle.id} fallbackImageUrl={vehicle.imageUrl} threeSixty={vehicle.threeSixty} />
 
       {/* EMI Calculator */}
-      <EmiCalculator vehicleName={vehicle.name} vehicleImage={vehicle.imageUrl} initialPrice={vehicle.price} />
+      <EmiCalculator vehicleName={vehicle.name} vehicleImage={vehicle.imageUrl} initialPrice={vehicle.basePrice} />
 
       {/* Testimonials Section */}
       <TestimonialsSection />

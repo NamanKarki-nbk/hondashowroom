@@ -22,11 +22,16 @@ export async function GET(req: Request) {
     const inventory = await prisma.vehicleInventory.findMany({
       where: {
         status: 'IN_STOCK',
-        ...(categoryFilter ? { category: { equals: categoryFilter, mode: 'insensitive' } } : {})
+        ...(categoryFilter ? { variant: { vehicleMaster: { category: categoryFilter.toUpperCase() as any } } } : {})
       },
       include: {
         branch: {
           select: { name: true }
+        },
+        variant: {
+          include: {
+            vehicleMaster: true
+          }
         }
       }
     });
@@ -35,7 +40,8 @@ export async function GET(req: Request) {
     const grouped: Record<string, Record<string, Record<string, number>>> = {};
 
     inventory.forEach(vehicle => {
-      const { modelName, color, branch } = vehicle;
+      const modelName = vehicle.variant?.vehicleMaster?.name || 'Unknown';
+      const { color, branch } = vehicle;
       const branchName = branch?.name || 'Unassigned';
 
       if (!grouped[modelName]) {

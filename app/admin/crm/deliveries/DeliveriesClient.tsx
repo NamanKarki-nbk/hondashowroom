@@ -112,7 +112,7 @@ export default function DeliveriesClient() {
                     <p className="text-xs text-gray-500">{delivery.customer.phone}</p>
                   </td>
                   <td className="px-4 py-3">
-                    <p className="text-gray-900 dark:text-white">{delivery.vehicle.modelName}</p>
+                    <p className="text-gray-900 dark:text-white">{delivery.vehicle.name}</p>
                     <p className="text-xs text-gray-500">VIN: {delivery.vehicle.vinNumber}</p>
                   </td>
                   <td className="px-4 py-3 text-gray-700 dark:text-gray-300">

@@ -121,12 +121,12 @@ const specsData = {
 async function main() {
   console.log("Updating missing specifications...");
   for (const [modelName, specifications] of Object.entries(specsData)) {
-    const product = await prisma.productCatalog.findFirst({
+    const product = await prisma.vehicleMaster.findFirst({
       where: { name: { contains: modelName, mode: 'insensitive' } }
     });
     
     if (product) {
-      await prisma.productCatalog.update({
+      await prisma.vehicleMaster.update({
         where: { id: product.id },
         data: { specifications }
       });

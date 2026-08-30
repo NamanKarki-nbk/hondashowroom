@@ -55,7 +55,7 @@ export async function GET(request: Request) {
         phone: tr.phone,
         source: 'TEST RIDE',
         status: tr.status === 'PENDING' ? 'NEW' : tr.status, // Map PENDING to NEW for UI consistency
-        interestedIn: tr.modelName,
+        interestedIn: tr.name,
         remarks: `Preferred Date: ${new Date(tr.preferredDate).toLocaleDateString()} | Slot: ${tr.timeSlot || 'N/A'} | Notes: ${tr.notes || 'None'}`,
         createdAt: tr.createdAt
       }))

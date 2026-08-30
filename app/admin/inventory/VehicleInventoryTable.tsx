@@ -10,7 +10,7 @@ type VehicleInventoryItem = {
   vin: string;
   engineNo: string;
   category: string;
-  modelName: string;
+  name: string;
   cc: number;
   color: string;
   daysInStock: number;
@@ -277,7 +277,7 @@ export default function VehicleInventoryTable() {
                       {item.indexNo || "-"}
                     </td>
                     <td className="py-4 px-6">
-                      <p className="text-sm font-black text-gray-900 dark:text-white">{item.modelName}</p>
+                      <p className="text-sm font-black text-gray-900 dark:text-white">{item.name}</p>
                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{item.category} • {item.cc}cc</p>
                     </td>
                     <td className="py-4 px-6">
@@ -424,7 +424,7 @@ export default function VehicleInventoryTable() {
                             {v.category}
                           </span>
                         </td>
-                        <td className="py-4 px-6 font-black text-gray-900 dark:text-white">{v.modelName}</td>
+                        <td className="py-4 px-6 font-black text-gray-900 dark:text-white">{v.name}</td>
                         <td className="py-4 px-6 font-mono font-medium text-gray-900 dark:text-white tracking-tight">{v.vin}</td>
                         <td className="py-4 px-6 font-mono text-sm text-gray-500 dark:text-gray-400">{v.engineNo}</td>
                         <td className="py-4 px-6 font-medium text-gray-600 dark:text-gray-300">
@@ -497,7 +497,7 @@ export default function VehicleInventoryTable() {
             
             <div className="p-6 space-y-6">
               <div className="bg-gray-50 dark:bg-slate-800/50 p-4 rounded-xl border border-gray-100 dark:border-slate-800">
-                <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">{routingVehicle.modelName}</p>
+                <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">{routingVehicle.name}</p>
                 <p className="text-xs text-gray-500 font-mono tracking-wider">VIN: {routingVehicle.vin}</p>
               </div>
 

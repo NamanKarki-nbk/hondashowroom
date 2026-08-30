@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { VehicleCategory } from '@/app/generated/prisma';
 import { prisma } from '@/lib/prisma';
 import { uploadToCloudinary, deleteFromCloudinary } from '@/lib/upload';
 import { z } from 'zod';
@@ -8,7 +9,7 @@ import { verifySessionToken } from "@/lib/session";
 
 export async function GET() {
   try {
-    const products = await prisma.productCatalog.findMany({
+    const products = await prisma.vehicleMaster.findMany({
       orderBy: { createdAt: 'desc' }
     });
     return NextResponse.json(products);
@@ -44,12 +45,12 @@ export async function POST(req: Request) {
 
     const imageUrl = await uploadToCloudinary(file, 'honda-showroom/products');
 
-    const product = await prisma.productCatalog.create({
+    const product = await prisma.vehicleMaster.create({
       data: {
         id: parsed.data.id,
         name: parsed.data.name,
-        category: parsed.data.category,
-        price: parsed.data.price,
+        category: parsed.data.category as VehicleCategory,
+        basePrice: parsed.data.price,
         description: parsed.data.description || null,
         imageUrl,
       }
@@ -67,7 +68,7 @@ export async function POST(req: Request) {
       details: {
         name: product.name,
         category: product.category,
-        price: product.price,
+        price: product.basePrice,
       },
     });
 
@@ -93,7 +94,7 @@ export async function PUT(req: Request) {
     if (file && file.size > 0) {
       imageUrl = await uploadToCloudinary(file, 'honda-showroom/products');
       
-      const existing = await prisma.productCatalog.findUnique({ where: { id: parsed.data.id } });
+      const existing = await prisma.vehicleMaster.findUnique({ where: { id: parsed.data.id } });
       if (existing && existing.imageUrl) {
         await deleteFromCloudinary(existing.imageUrl);
       }
@@ -101,8 +102,8 @@ export async function PUT(req: Request) {
 
     const dataToUpdate: any = {
       name: parsed.data.name,
-      category: parsed.data.category,
-      price: parsed.data.price,
+      category: parsed.data.category as VehicleCategory,
+      basePrice: parsed.data.price,
       description: parsed.data.description || null,
     };
     
@@ -110,7 +111,7 @@ export async function PUT(req: Request) {
       dataToUpdate.imageUrl = imageUrl;
     }
 
-    const product = await prisma.productCatalog.update({
+    const product = await prisma.vehicleMaster.update({
       where: { id: parsed.data.id },
       data: dataToUpdate
     });
@@ -127,7 +128,7 @@ export async function PUT(req: Request) {
       details: {
         name: product.name,
         category: product.category,
-        price: product.price,
+        price: product.basePrice,
       },
     });
 
@@ -143,7 +144,7 @@ export async function DELETE(req: Request) {
     const id = searchParams.get('id');
     if (!id) return NextResponse.json({ error: 'ID is required' }, { status: 400 });
 
-    await prisma.productCatalog.delete({
+    await prisma.vehicleMaster.delete({
       where: { id }
     });
 

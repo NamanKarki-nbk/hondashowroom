@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 
 interface QuotationProps {
   vehicleName: string;
-  vehiclePrice: number;
+  vehicleVariant: number;
   customerName?: string;
   financeDetails?: {
     downpaymentAmount: number;
@@ -93,7 +93,7 @@ interface QuotationProps {
 
 export const QuotationPDF: React.FC<QuotationProps> = ({ 
   vehicleName, 
-  vehiclePrice, 
+  vehicleVariant, 
   customerName, 
   financeDetails 
 }) => {
@@ -127,7 +127,7 @@ export const QuotationPDF: React.FC<QuotationProps> = ({
           </View>
           <View style={styles.row}>
             <Text style={styles.label}>Ex-Showroom Price</Text>
-            <Text style={styles.value}>{formatNPRPrice(vehiclePrice)}</Text>
+            <Text style={styles.value}>{formatNPRPrice(vehicleVariant)}</Text>
           </View>
         </View>
 

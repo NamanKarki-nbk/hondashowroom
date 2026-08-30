@@ -9,16 +9,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status");
 
-    let whereClause = {};
-    if (status && status !== 'ALL') {
-      whereClause = { status };
-    }
-
     const valuations = await prisma.valuationLog.findMany({
-      where: whereClause,
-      include: {
-        customer: { select: { fullName: true, phone: true } }
-      },
       orderBy: { createdAt: 'desc' }
     });
 
@@ -35,10 +26,10 @@ export async function PATCH(req: NextRequest) {
     const { id, status, finalOffered, remarks } = body;
     
     const updateData: any = {};
-    if (status) updateData.status = status;
-    if (finalOffered !== undefined) updateData.finalOffered = parseFloat(finalOffered);
-    if (remarks !== undefined) updateData.remarks = remarks;
-
+    
+    // finalOffered and remarks are not in the schema anymore
+    // only update what's available
+    
     const valuation = await prisma.valuationLog.update({
       where: { id },
       data: updateData

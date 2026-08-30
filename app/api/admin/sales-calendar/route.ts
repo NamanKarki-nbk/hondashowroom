@@ -64,7 +64,7 @@ export async function GET(request: Request) {
         type: 'DELIVERY',
         date: s.createdAt.toISOString(),
         title: `${s.invoiceNo} - ${s.customer.fullName}`,
-        subtitle: s.vehicle.modelName,
+        subtitle: (s.vehicle as any).name || s.vehicle.vin,
         status: 'Confirmed'
       })),
       ...testRides.map(t => ({
@@ -72,7 +72,7 @@ export async function GET(request: Request) {
         type: 'TEST_RIDE',
         date: t.preferredDate.toISOString(),
         title: `Test Ride: ${t.name}`,
-        subtitle: t.modelName,
+        subtitle: t.name,
         status: t.status
       })),
       ...services.map(s => ({

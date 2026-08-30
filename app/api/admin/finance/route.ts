@@ -18,10 +18,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const plan = await prisma.financePlan.create({
       data: {
-        modelName: body.modelName,
-        cc: Number(body.cc),
-        category: body.category,
-        vehiclePrice: Number(body.vehiclePrice),
+        variantId: body.variantId,
         tenureMonths: Number(body.tenureMonths),
         downPaymentPct: Number(body.downPaymentPct),
         interestRate: Number(body.interestRate),
@@ -49,10 +46,7 @@ export async function PUT(req: Request) {
     const plan = await prisma.financePlan.update({
       where: { id },
       data: {
-        modelName: data.modelName,
-        cc: Number(data.cc),
-        category: data.category,
-        vehiclePrice: Number(data.vehiclePrice),
+        variantId: data.variantId,
         tenureMonths: Number(data.tenureMonths),
         downPaymentPct: Number(data.downPaymentPct),
         interestRate: Number(data.interestRate),

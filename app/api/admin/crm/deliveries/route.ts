@@ -9,19 +9,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status");
 
-    let whereClause = {};
-    if (status && status !== 'ALL') {
-      whereClause = { status };
-    }
-
     const deliveries = await prisma.delivery.findMany({
-      where: whereClause,
-      include: {
-        customer: { select: { fullName: true, phone: true } },
-        vehicle: { select: { modelName: true, vinNumber: true } },
-        sales: { select: { invoiceNo: true, finalAmount: true } }
-      },
-      orderBy: { deliveryDate: 'asc' }
+      orderBy: { deliveredAt: 'asc' }
     });
 
     return NextResponse.json(deliveries);

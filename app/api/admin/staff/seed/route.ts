@@ -36,7 +36,7 @@ export async function GET() {
         where: { accountNo: staff.accountNo }
       });
       if (!existing) {
-        const createdStaff = await prisma.staff.create({ data: staff });
+        const createdStaff = await (prisma.staff.create as any)({ data: staff });
         await logActivity({
           userId: session?.userId || session?.id || "system",
           action: "CREATE",

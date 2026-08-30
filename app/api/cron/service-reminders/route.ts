@@ -18,22 +18,23 @@ export async function GET(request: Request) {
     // Find all uncompleted service reminders due in the next 7 days
     const upcomingReminders = await prisma.serviceReminder.findMany({
       where: {
-        isCompleted: false,
+        status: 'PENDING' as any,
         dueDate: {
           lte: nextWeek,
           gte: today
         }
-      }
+      },
+      include: { vehicle: true }
     });
 
     for (const reminder of upcomingReminders) {
       // Mock WhatsApp Send Logic
-      console.log(`[WhatsApp API] Sending reminder to Customer ID ${reminder.customerId} for VIN ${reminder.vehicleVin}. Service Type: ${reminder.serviceType}`);
+      console.log(`[WhatsApp API] Sending reminder to Customer ID ${reminder.customerId} for VIN ${reminder.vehicle?.vin}. Service Type: ${reminder.serviceType}`);
       
       // Update record to indicate notification sent
       await prisma.serviceReminder.update({
         where: { id: reminder.id },
-        data: { notifiedVia: 'WhatsApp' }
+        data: { status: 'NOTIFIED' as any }
       });
     }
 

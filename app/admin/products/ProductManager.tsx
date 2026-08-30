@@ -8,7 +8,7 @@ interface Product {
   id: string;
   name: string;
   category: string;
-  price: number;
+  basePrice: number;
   imageUrl: string;
   description: string | null;
   specs: any | null;
@@ -60,7 +60,7 @@ export default function ProductManager() {
         id: product.id,
         name: product.name,
         category: product.category,
-        price: product.price.toString(),
+        price: product.basePrice.toString(),
         description: product.description || "",
       });
     } else {
@@ -222,7 +222,7 @@ export default function ProductManager() {
                       {product.category}
                     </span>
                   </td>
-                  <td className="px-4 py-3 font-medium">NPR {product.price.toLocaleString('en-IN')}</td>
+                  <td className="px-4 py-3 font-medium">NPR {product.basePrice.toLocaleString('en-IN')}</td>
                   <td className="px-4 py-3 text-right">
                     <button
                       onClick={() => handleOpenModal(product)}

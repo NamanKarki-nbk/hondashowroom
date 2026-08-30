@@ -2,32 +2,46 @@ import { prisma } from "@/lib/prisma";
 import FinanceClient from "./FinanceClient";
 
 export default async function FinancePage() {
-  const financePlans = await prisma.financePlan.findMany({
+  const financePlansRaw = await prisma.financePlan.findMany({
+    include: {
+      variant: {
+        include: {
+          vehicleMaster: true
+        }
+      }
+    },
     orderBy: [
-      { vehiclePrice: 'asc' },
-      { modelName: 'asc' }
+      { variant: { vehicleMaster: { name: 'asc' } } },
+      { variant: { variantName: 'asc' } }
     ]
   });
 
-  const products = await prisma.productCatalog.findMany({
+  const financePlans = financePlansRaw.map(plan => ({
+    ...plan,
+    name: plan.variant.vehicleMaster.name,
+    vehicleVariant: plan.variant.exShowroomPriceNPR,
+    category: plan.variant.vehicleMaster.category
+  }));
+
+  const products = await prisma.vehicleMaster.findMany({
     where: {
       category: {
-        in: ['MOTORCYCLES', 'SCOOTERS']
+        in: ['MOTORCYCLE', 'SCOOTER']
       }
     }
   });
 
   // Group plans by modelName
   const groupedPlans = financePlans.reduce((acc, plan) => {
-    if (!acc[plan.modelName]) {
-      acc[plan.modelName] = [];
+    if (!acc[plan.name]) {
+      acc[plan.name] = [];
     }
-    acc[plan.modelName].push(plan);
+    acc[plan.name].push(plan);
     return acc;
   }, {} as Record<string, any[]>);
 
   const modelsData = Object.entries(groupedPlans).map(([modelName, plans]) => {
-    const minPrice = Math.min(...plans.map(p => p.vehiclePrice));
+    const minPrice = Math.min(...plans.map(p => p.vehicleVariant));
     
     // Get default plan for the card display (Prefer 60% DP / 12 Months)
     let defaultPlan = plans.find(p => p.downPaymentPct === 60 && p.tenureMonths === 12);

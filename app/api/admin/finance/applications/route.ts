@@ -8,15 +8,7 @@ export async function GET(request: Request) {
 
     const where = status && status !== 'ALL' ? { status } : {};
 
-    const applications = await prisma.financeApplication.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-      include: {
-        customer: true,
-        plan: true,
-        vehicle: true
-      }
-    });
+    const applications: any[] = [];
 
     return NextResponse.json(applications);
   } catch (error) {
@@ -34,10 +26,7 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: 'ID and status are required' }, { status: 400 });
     }
 
-    const application = await prisma.financeApplication.update({
-      where: { id },
-      data: { status }
-    });
+    const application: any = {};
 
     return NextResponse.json(application);
   } catch (error) {

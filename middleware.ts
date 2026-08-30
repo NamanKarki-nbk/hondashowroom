@@ -39,7 +39,7 @@ export async function middleware(request: NextRequest) {
   // 1. API Route Rate Limiting (Using Upstash Free Tier)
   if (pathname.startsWith("/api")) {
     if (ratelimit) {
-      const ip = request.ip ?? "127.0.0.1";
+      const ip = (request as any).ip ?? "127.0.0.1";
       const { success, limit, reset, remaining } = await ratelimit.limit(`ratelimit_${ip}`);
 
       if (!success) {

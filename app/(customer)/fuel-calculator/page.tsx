@@ -4,10 +4,15 @@ import FuelCalculatorClient from './FuelCalculatorClient'
 export const metadata = { title: 'Fuel Cost Calculator | Society Honda' }
 
 export default async function FuelCalculatorPage() {
-  const vehicles = await prisma.productCatalog.findMany({
-    where: { category: { in: ['MOTORCYCLES', 'SCOOTERS'] } },
-    select: { id: true, name: true, category: true, price: true, imageUrl: true }
+  const vehiclesRaw = await prisma.vehicleMaster.findMany({
+    where: { category: { in: ['MOTORCYCLE', 'SCOOTER'] } },
+    select: { id: true, name: true, category: true, basePrice: true, imageUrl: true }
   })
+  
+  const vehicles = vehiclesRaw.map(v => ({
+    ...v,
+    price: v.basePrice
+  }))
   
   return <FuelCalculatorClient vehicles={vehicles} />
 }

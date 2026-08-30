@@ -16,8 +16,7 @@ export async function GET(request: Request) {
         OR: [
           { fullName: { contains: query, mode: 'insensitive' } },
           { phone: { contains: query } },
-          { citizenshipNumber: { contains: query } },
-          { licenseNumber: { contains: query } }
+          { documents: { some: { docNumber: { contains: query } } } }
         ]
       },
       take: 5,
@@ -25,8 +24,9 @@ export async function GET(request: Request) {
         id: true,
         fullName: true,
         phone: true,
-        citizenshipNumber: true,
-        licenseNumber: true
+        documents: {
+          select: { docType: true, docNumber: true }
+        }
       }
     });
 

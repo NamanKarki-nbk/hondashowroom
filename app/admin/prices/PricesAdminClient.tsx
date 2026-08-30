@@ -2,51 +2,55 @@
 
 import { useState } from "react";
 import { Plus, Search, Edit2, Trash2, X } from "lucide-react";
-import { VehiclePrice } from "@/app/generated/prisma";
+// import { VehicleVariant } from "@/app/generated/prisma";
+type VehicleVariant = any;
 
 interface PricesAdminClientProps {
-  initialPrices: VehiclePrice[];
+  initialPrices: VehicleVariant[];
   costPrices: Record<string, number>;
 }
 
 export default function PricesAdminClient({ initialPrices, costPrices }: PricesAdminClientProps) {
-  const [prices, setPrices] = useState<VehiclePrice[]>(initialPrices);
+  const [prices, setPrices] = useState<any[]>(initialPrices);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
-    modelName: "",
-    variant: "",
-    category: "Motorcycle", // Default category
+    vehicleMasterId: "",
+    name: "", // Will be auto-filled or used for new
+    variantName: "",
+    category: "MOTORCYCLE", // Default category
     exShowroomPriceNPR: "",
     onRoadPriceNPR: "",
   });
 
   const filteredPrices = prices.filter(
     (price) =>
-      price.modelName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      price.variant?.toLowerCase().includes(searchQuery.toLowerCase())
+      price.vehicleMaster?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      price.variantName?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const resetForm = () => {
     setFormData({
-      modelName: "",
-      variant: "",
-      category: "Motorcycle",
+      vehicleMasterId: "",
+      name: "",
+      variantName: "",
+      category: "MOTORCYCLE",
       exShowroomPriceNPR: "",
       onRoadPriceNPR: "",
     });
     setEditingId(null);
   };
 
-  const handleOpenModal = (price?: VehiclePrice) => {
+  const handleOpenModal = (price?: any) => {
     if (price) {
       setFormData({
-        modelName: price.modelName,
-        variant: price.variant || "",
-        category: price.category,
+        vehicleMasterId: price.vehicleMasterId,
+        name: price.vehicleMaster?.name || "",
+        variantName: price.variantName || "",
+        category: price.vehicleMaster?.category || "MOTORCYCLE",
         exShowroomPriceNPR: price.exShowroomPriceNPR.toString(),
         onRoadPriceNPR: price.onRoadPriceNPR.toString(),
       });
@@ -148,15 +152,15 @@ export default function PricesAdminClient({ initialPrices, costPrices }: PricesA
             {filteredPrices.length > 0 ? (
               filteredPrices.map((price) => (
                 <tr key={price.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-4 py-4 text-sm font-medium text-slate-900 dark:text-white">{price.modelName}</td>
-                  <td className="px-4 py-4 text-sm text-slate-600 dark:text-slate-300">{price.variant || "-"}</td>
+                  <td className="px-4 py-4 text-sm font-medium text-slate-900 dark:text-white">{price.vehicleMaster?.name || "Unknown"}</td>
+                  <td className="px-4 py-4 text-sm text-slate-600 dark:text-slate-300">{price.variantName || "-"}</td>
                   <td className="px-4 py-4 text-sm">
                     <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                      {price.category}
+                      {price.vehicleMaster?.category || "Unknown"}
                     </span>
                   </td>
                   <td className="px-4 py-4 text-sm text-slate-900 dark:text-white font-medium">
-                    {costPrices[price.modelName] ? `Rs. ${Math.round(costPrices[price.modelName]).toLocaleString('en-IN')}` : <span className="text-slate-400 italic">No Stock</span>}
+                    {costPrices[price.id] ? `Rs. ${Math.round(costPrices[price.id]).toLocaleString('en-IN')}` : <span className="text-slate-400 italic">No Stock</span>}
                   </td>
                   <td className="px-4 py-4 text-sm text-slate-900 dark:text-white font-medium">
                     Rs. {price.exShowroomPriceNPR.toLocaleString('en-IN')}
@@ -216,8 +220,8 @@ export default function PricesAdminClient({ initialPrices, costPrices }: PricesA
                 <input
                   type="text"
                   required
-                  value={formData.modelName}
-                  onChange={(e) => setFormData({ ...formData, modelName: e.target.value })}
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-red-600 outline-none"
                   placeholder="e.g., Dio"
                 />
@@ -228,8 +232,8 @@ export default function PricesAdminClient({ initialPrices, costPrices }: PricesA
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Variant (Optional)</label>
                   <input
                     type="text"
-                    value={formData.variant}
-                    onChange={(e) => setFormData({ ...formData, variant: e.target.value })}
+                    value={formData.variantName}
+                    onChange={(e) => setFormData({ ...formData, variantName: e.target.value })}
                     className="w-full px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-red-600 outline-none"
                     placeholder="e.g., STD"
                   />

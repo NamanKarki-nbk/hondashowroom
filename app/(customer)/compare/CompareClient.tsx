@@ -8,8 +8,9 @@ import { Plus, X, Search, ChevronDown, ChevronUp, Check, Info } from 'lucide-rea
 type Vehicle = {
   id: string;
   name: string;
-  category: string;
+  category: string | any;
   price: number;
+  basePrice: number;
   imageUrl: string;
   specifications: Record<string, any> | null | any;
   description: string | null;
@@ -119,6 +120,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
   const [activeTab, setActiveTab] = useState<string>('All');
   const [popularTab, setPopularTab] = useState<'BIKES' | 'SCOOTERS' | 'RECENT'>('BIKES');
   const [recentComparisons, setRecentComparisons] = useState<string[][]>([]);
+  const [openAccordions, setOpenAccordions] = useState<string[]>([]);
 
   React.useEffect(() => {
     const saved = localStorage.getItem('recentComparisons');
@@ -159,7 +161,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
 
   const toggleAccordion = (title: string) => {
     if (openAccordions.includes(title)) {
-      setOpenAccordions(openAccordions.filter(t => t !== title));
+      setOpenAccordions(openAccordions.filter((t: string) => t !== title));
     } else {
       setOpenAccordions([...openAccordions, title]);
     }
@@ -329,7 +331,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                               </div>
                               <div className="mt-auto hidden sm:block">
                                 <h3 className="font-bold text-xs sm:text-sm text-gray-900 dark:text-gray-100 line-clamp-1">{vehicle.name}</h3>
-                                <p className="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5">₹ {vehicle.price.toLocaleString('en-IN')}</p>
+                                <p className="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs mt-0.5">₹ {vehicle.basePrice.toLocaleString('en-IN')}</p>
                               </div>
                             </div>
                           ) : (
@@ -563,7 +565,7 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                             <div className="mt-2 text-center">
                               <h3 className="font-bold text-xs line-clamp-1 text-gray-900 dark:text-primary-foreground">{vehicle.name}</h3>
                               <span className="text-[10px] text-gray-500 dark:text-gray-400 block mt-0.5">{vehicle.brand}</span>
-                              <span className="text-primary font-bold text-xs block mt-1">NPR {vehicle.price.toLocaleString('en-IN')}</span>
+                              <span className="text-primary font-bold text-xs block mt-1">NPR {vehicle.basePrice.toLocaleString('en-IN')}</span>
                             </div>
                           </>
                         ) : (
@@ -808,17 +810,17 @@ export default function CompareClient({ vehicles }: { vehicles: Vehicle[] }) {
                     <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">POPULAR BRANDS</span>
                   </div>
                   {brands.map(brand => {
-                    const isExpanded = expandedBrand === brand;
+                    const isExpanded = openAccordions.includes(brand);
                     const brandVehicles = vehicles.filter(v => v.brand === brand);
                     
                     const brandLower = brand.toLowerCase();
                     let brandLogo = `/brands/${brandLower.replace(/\s+/g, '')}.svg`;
                     if (brandLower === 'honda') brandLogo = '/honda-logo.svg';
-
+                    
                     return (
                       <div key={brand} className="border-b border-gray-200 dark:border-slate-800">
                         <button
-                          onClick={() => setExpandedBrand(isExpanded ? null : brand)}
+                          onClick={() => toggleAccordion(brand)}
                           className="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-950 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors text-left"
                         >
                           <div className="flex items-center gap-4">

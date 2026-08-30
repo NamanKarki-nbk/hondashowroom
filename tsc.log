@@ -1,0 +1,4 @@
+app/admin/prices/PricesAdminClient.tsx(235,37): error TS2339: Property 'variant' does not exist on type '{ vehicleMasterId: string; name: string; variantName: string; category: string; exShowroomPriceNPR: string; onRoadPriceNPR: string; }'.
+app/admin/prices/PricesAdminClient.tsx(236,65): error TS2353: Object literal may only specify known properties, and 'variant' does not exist in type 'SetStateAction<{ vehicleMasterId: string; name: string; variantName: string; category: string; exShowroomPriceNPR: string; onRoadPriceNPR: string; }>'.
+app/api/admin/settings/service-charges/route.ts(26,9): error TS2353: Object literal may only specify known properties, and 'serviceType' does not exist in type '((Without<ServiceChargeCreateInput, ServiceChargeUncheckedCreateInput> & ServiceChargeUncheckedCreateInput) | (Without<...> & ServiceChargeCreateInput)) & object'.
+app/layout.tsx(41,50): error TS2304: Cannot find name 'LayoutProps'.

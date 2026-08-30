@@ -8,19 +8,21 @@ export async function GET(req: Request) {
     const search = searchParams.get('search')?.toLowerCase() || '';
 
     // Fetch all vehicle inventory items
-    const inventoryItems = await prisma.vehicleInventory.findMany({});
+    const inventoryItems = await prisma.vehicleInventory.findMany({
+      include: { variant: { include: { vehicleMaster: true } } }
+    });
 
     // Fetch vehicles to map prices
-    const vehicles = await prisma.vehicle.findMany({
-      select: { modelName: true, price: true, colors: true }
+    const vehicles = await prisma.vehicleMaster.findMany({
+      select: { name: true, basePrice: true, colors: true }
     });
 
     const now = new Date();
 
     const mappedItems = inventoryItems.map(item => {
-      const vehicleDef = vehicles.find(v => v.modelName === item.modelName);
+      const vehicleDef = vehicles.find(v => v.name === item.variant?.vehicleMaster?.name);
       
-      const sellingPrice = vehicleDef ? vehicleDef.price : item.purchasePrice; // fallback
+      const sellingPrice = vehicleDef ? vehicleDef.basePrice : item.purchasePrice; // fallback
       
       // Calculate days in stock
       const daysInStock = differenceInDays(now, new Date(item.purchaseDate));
@@ -41,7 +43,7 @@ export async function GET(req: Request) {
     const filteredItems = mappedItems.filter(item => {
       if (!search) return true;
       return (
-        item.modelName.toLowerCase().includes(search) ||
+        (item.variant?.vehicleMaster?.name || '').toLowerCase().includes(search) ||
         item.vin.toLowerCase().includes(search) ||
         item.engineNo.toLowerCase().includes(search) ||
         (item.indexNo && item.indexNo.toLowerCase().includes(search))

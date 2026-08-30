@@ -49,12 +49,12 @@ const featuresData = {
 async function main() {
   console.log("Updating missing features...");
   for (const [modelName, features] of Object.entries(featuresData)) {
-    const product = await prisma.productCatalog.findFirst({
+    const product = await prisma.vehicleMaster.findFirst({
       where: { name: { contains: modelName, mode: 'insensitive' } }
     });
     
     if (product) {
-      await prisma.productCatalog.update({
+      await prisma.vehicleMaster.update({
         where: { id: product.id },
         data: { features }
       });

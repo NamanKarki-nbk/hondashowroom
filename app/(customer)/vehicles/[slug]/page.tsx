@@ -160,12 +160,17 @@ function generateMockData(vehicle: any) {
     }
   }
 
-  const variants = isPower ? [
+  const variants = vehicle.variants?.length > 0 ? vehicle.variants.map((v: any) => ({
+    name: v.variantName,
+    price: `NPR ${v.exShowroomPriceNPR.toLocaleString('en-IN')}`,
+    exShowroomPriceNPR: v.exShowroomPriceNPR,
+    specDifferences: v.specDifferences,
+    imageUrl: v.variantName.toLowerCase().includes('dlx') || v.variantName.toLowerCase().includes('dss') ? "/models/dio-dlx.png" : "/models/dio-std.png"
+  })) : (isPower ? [
     { name: "Standard", imageUrl: vehicle.imageUrl }
   ] : [
-    { name: "Dio BS6 110 STD", imageUrl: "/models/dio-std.png" },
-    { name: "Dio BS6 110 DLX", imageUrl: "/models/dio-dlx.png" }
-  ];
+    { name: "Standard", imageUrl: "/models/dio-std.png" }
+  ]);
 
   let threeSixty = null;
   // nameLower already declared above for feature image folder resolution
@@ -271,9 +276,16 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
   const { slug } = await params;
   
   // Fetch product from DB based on slug (which is the product ID)
-  const product = await prisma.productCatalog.findUnique({
+  const product = await prisma.vehicleMaster.findUnique({
     where: {
       id: slug
+    },
+    include: {
+      variants: {
+        orderBy: {
+          exShowroomPriceNPR: 'asc'
+        }
+      }
     }
   });
 
@@ -293,89 +305,16 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
   const isDio110 = ((nameLower.includes("dio") && !isDio125)) || slug === "dio-110";
 
   if (isDio110) {
-    let dio110StdPrice = "NPR 2,64,900";
-    let dio110DlxPrice = "NPR 2,84,900";
-
-    try {
-      const stdVariant = await prisma.vehicle.findFirst({
-        where: { modelName: { contains: "Dio 110 STD", mode: "insensitive" } }
-      });
-      if (stdVariant && stdVariant.price) {
-        dio110StdPrice = `NPR ${stdVariant.price.toLocaleString('en-IN')}`;
-      }
-
-      const dlxVariant = await prisma.vehicle.findFirst({
-        where: { modelName: { contains: "Dio 110 DLX", mode: "insensitive" } }
-      });
-      if (dlxVariant && dlxVariant.price) {
-        dio110DlxPrice = `NPR ${dlxVariant.price.toLocaleString('en-IN')}`;
-      }
-    } catch (error) {
-      console.error("Failed to fetch Dio 110 variant prices from DB:", error);
-    }
-
-    return <HondaDio110Page vehicle={enrichedProduct} stdPrice={dio110StdPrice} dlxPrice={dio110DlxPrice} />;
+    return <HondaDio110Page vehicle={enrichedProduct} />;
   }
 
 
   if (isDio125) {
-    let dio125StdPrice = "NPR 3,11,900";
-    let dio125DlxPrice = "NPR 3,31,900";
-
-    try {
-      const stdVariant = await prisma.vehicle.findFirst({
-        where: { modelName: { contains: "Dio 125 STD", mode: "insensitive" } }
-      });
-      if (stdVariant && stdVariant.price) {
-        dio125StdPrice = `NPR ${stdVariant.price.toLocaleString('en-IN')}`;
-      }
-
-      const dlxVariant = await prisma.vehicle.findFirst({
-        where: { modelName: { contains: "Dio 125 DLX", mode: "insensitive" } }
-      });
-      if (dlxVariant && dlxVariant.price) {
-        dio125DlxPrice = `NPR ${dlxVariant.price.toLocaleString('en-IN')}`;
-      }
-    } catch (error) {
-      console.error("Failed to fetch Dio 125 variant prices from DB:", error);
-    }
-
-    return <HondaDio125Page vehicle={enrichedProduct} stdPrice={dio125StdPrice} dlxPrice={dio125DlxPrice} />;
+    return <HondaDio125Page vehicle={enrichedProduct} />;
   }
 
   // Define if the vehicle should use the premium BigWing dark layout
   const isBigWing = enrichedProduct.name.toLowerCase().includes("nx 200") || enrichedProduct.name.toLowerCase().includes("hornet");
-
-  // Fetch variant prices for Shine models if applicable
-  const isShine = enrichedProduct.name.toLowerCase().includes("shine");
-  if (isShine) {
-    let drsPrice = "NPR 3,06,900";
-    let dssPrice = "NPR 3,19,900";
-    let modelPrefix = enrichedProduct.name.toLowerCase().includes("sp shine") ? "SP Shine BS6" : "CB Shine BS6";
-
-    try {
-      const drsVariant = await prisma.vehicle.findFirst({
-        where: { modelName: { contains: `${modelPrefix} DRS`, mode: "insensitive" } }
-      });
-      if (drsVariant && drsVariant.price) {
-        drsPrice = `NPR ${drsVariant.price.toLocaleString('en-IN')}`;
-      }
-
-      const dssVariant = await prisma.vehicle.findFirst({
-        where: { modelName: { contains: `${modelPrefix} DSS`, mode: "insensitive" } }
-      });
-      if (dssVariant && dssVariant.price) {
-        dssPrice = `NPR ${dssVariant.price.toLocaleString('en-IN')}`;
-      }
-    } catch (error) {
-      console.error(`Failed to fetch ${modelPrefix} variant prices from DB:`, error);
-    }
-
-    enrichedProduct.variants = [
-      { name: `${modelPrefix} DRS`, price: drsPrice, imageUrl: "/models/dio-std.png" },
-      { name: `${modelPrefix} DSS`, price: dssPrice, imageUrl: "/models/dio-dlx.png" }
-    ];
-  }
 
   return isBigWing ? (
     <BigWingProductPageClient vehicle={enrichedProduct} />

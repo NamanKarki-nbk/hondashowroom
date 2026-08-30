@@ -98,13 +98,13 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
                <div className="relative w-full h-48 md:h-64 mt-4">
                  <Image 
                    src={(selectedModel.imageUrl || "/inventory/honda-dio-bs6-125.png").replace('/product-catalog/', '/inventory/')} 
-                   alt={selectedModel.modelName}
+                   alt={selectedModel.name}
                    fill
                    className="object-contain drop-shadow-xl"
                  />
                </div>
                <div className="mt-6 text-center relative z-10">
-                 <h2 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight">{selectedModel.modelName}</h2>
+                 <h2 className="text-2xl md:text-3xl font-semibold font-black text-gray-900 dark:text-white uppercase tracking-tight">{selectedModel.name}</h2>
                  <p className="text-[#CC0000] font-bold text-lg mt-1">Ex-showroom NPR {selectedModel.minPrice.toLocaleString()}</p>
                </div>
             </div>
@@ -235,8 +235,8 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {filteredModels.map(model => (
-            <div key={model.modelName} className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-8 rounded-3xl flex flex-col group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
-              <h3 className="font-black text-xl md:text-2xl font-semibold text-gray-900 dark:text-white uppercase tracking-tight mb-1">{model.modelName}</h3>
+            <div key={model.name} className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-8 rounded-3xl flex flex-col group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
+              <h3 className="font-black text-xl md:text-2xl font-semibold text-gray-900 dark:text-white uppercase tracking-tight mb-1">{model.name}</h3>
               <p className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">
                 ({model.defaultDpPct}% DP / {model.defaultTenure} Months)
               </p>
@@ -248,7 +248,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
                 <div className="absolute inset-0 bg-[#CC0000]/5 rounded-full blur-2xl group-hover:bg-[#CC0000]/10 transition-colors"></div>
                 <Image 
                   src={(model.imageUrl || "/inventory/honda-dio-bs6-125.png").replace('/product-catalog/', '/inventory/')} 
-                  alt={model.modelName}
+                  alt={model.name}
                   fill
                   className="object-contain transform group-hover:scale-110 transition-transform duration-700 drop-shadow-xl p-2"
                 />

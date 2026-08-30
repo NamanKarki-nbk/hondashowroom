@@ -2,24 +2,24 @@ import { prisma } from './lib/prisma';
 
 const vehicles = [
   // Scooters
-  { modelName: 'Dio STD BS6', cc: 110, price: 264900, baseInsurance: 1500 },
-  { modelName: 'Dio DLX BS6', cc: 110, price: 284900, baseInsurance: 1500 },
-  { modelName: 'Dio 125 STD', cc: 125, price: 311900, baseInsurance: 1800 },
-  { modelName: 'Dio 125 DLX Smart', cc: 125, price: 331900, baseInsurance: 1800 },
+  { name: 'Dio STD BS6', cc: 110, price: 264900, baseInsurance: 1500 },
+  { name: 'Dio DLX BS6', cc: 110, price: 284900, baseInsurance: 1500 },
+  { name: 'Dio 125 STD', cc: 125, price: 311900, baseInsurance: 1800 },
+  { name: 'Dio 125 DLX Smart', cc: 125, price: 331900, baseInsurance: 1800 },
   
   // Motorcycles
-  { modelName: 'SP 125 DRS BS6', cc: 125, price: 306900, baseInsurance: 1800 },
-  { modelName: 'SP 125 DSS BS6', cc: 125, price: 319900, baseInsurance: 1800 },
-  { modelName: 'Shine 125 DRS BS6', cc: 125, price: 294900, baseInsurance: 1800 },
-  { modelName: 'Shine 125 DSS BS6', cc: 125, price: 305900, baseInsurance: 1800 },
-  { modelName: 'NX 200 DLX', cc: 200, price: 489900, baseInsurance: 2500 },
-  { modelName: 'HORNET 2.0 BS VI', cc: 200, price: 469900, baseInsurance: 2500 },
-  { modelName: 'XR 190LP', cc: 190, price: 769900, baseInsurance: 3000 },
-  { modelName: 'XR190LS DK', cc: 190, price: 798900, baseInsurance: 3000 },
-  { modelName: 'CB 350', cc: 350, price: 925900, baseInsurance: 4000 },
-  { modelName: 'HINESS CB350 RS', cc: 350, price: 975000, baseInsurance: 4000 },
-  { modelName: 'CRF 300 LAP', cc: 300, price: 2075000, baseInsurance: 6000 },
-  { modelName: 'CRF 300 RLAP', cc: 300, price: 2350000, baseInsurance: 6000 },
+  { name: 'SP 125 DRS BS6', cc: 125, price: 306900, baseInsurance: 1800 },
+  { name: 'SP 125 DSS BS6', cc: 125, price: 319900, baseInsurance: 1800 },
+  { name: 'Shine 125 DRS BS6', cc: 125, price: 294900, baseInsurance: 1800 },
+  { name: 'Shine 125 DSS BS6', cc: 125, price: 305900, baseInsurance: 1800 },
+  { name: 'NX 200 DLX', cc: 200, price: 489900, baseInsurance: 2500 },
+  { name: 'HORNET 2.0 BS VI', cc: 200, price: 469900, baseInsurance: 2500 },
+  { name: 'XR 190LP', cc: 190, price: 769900, baseInsurance: 3000 },
+  { name: 'XR190LS DK', cc: 190, price: 798900, baseInsurance: 3000 },
+  { name: 'CB 350', cc: 350, price: 925900, baseInsurance: 4000 },
+  { name: 'HINESS CB350 RS', cc: 350, price: 975000, baseInsurance: 4000 },
+  { name: 'CRF 300 LAP', cc: 300, price: 2075000, baseInsurance: 6000 },
+  { name: 'CRF 300 RLAP', cc: 300, price: 2350000, baseInsurance: 6000 },
 ];
 
 const serviceCharges = [
@@ -136,11 +136,11 @@ const serviceCharges = [
 async function main() {
   console.log('Seeding Vehicle database...');
   for (const v of vehicles) {
-    await prisma.vehicle.upsert({
-      where: { modelName: v.modelName },
+    await prisma.vehicleMaster.upsert({
+      where: { name: v.name },
       update: { price: v.price, cc: v.cc, baseInsurance: v.baseInsurance },
       create: {
-        modelName: v.modelName,
+        name: v.name,
         price: v.price,
         cc: v.cc,
         baseInsurance: v.baseInsurance,

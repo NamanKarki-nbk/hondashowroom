@@ -24,9 +24,18 @@ export async function GET(req: Request) {
         }
       },
       include: {
+        documents: true,
         sales: {
           include: {
-            vehicle: true
+            vehicle: {
+              include: {
+                variant: {
+                  include: {
+                    vehicleMaster: true
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -41,7 +50,7 @@ export async function GET(req: Request) {
       const totalSpend = c.sales.reduce((sum, sale) => sum + sale.finalAmount, 0);
 
       // Extract vehicles they own
-      const vehiclesOwned = c.sales.map(sale => sale.vehicle.modelName);
+      const vehiclesOwned = c.sales.map(sale => sale.vehicle.variant.vehicleMaster.name);
 
       return {
         id: c.id,
@@ -52,9 +61,9 @@ export async function GET(req: Request) {
         
         // KYC Status logic
         kycStatus: {
-          citizenship: c.citizenshipVerified,
-          license: c.licenseVerified,
-          nationalId: c.nationalIdVerified,
+          citizenship: c.documents?.some(d => d.docType === 'CITIZENSHIP' && d.isVerified) || false,
+          license: c.documents?.some(d => d.docType === 'LICENSE' && d.isVerified) || false,
+          nationalId: c.documents?.some(d => d.docType === 'NATIONAL_ID' && d.isVerified) || false,
           ocrVerified: c.ocrVerified,
           overallVerified: c.isVerified
         },

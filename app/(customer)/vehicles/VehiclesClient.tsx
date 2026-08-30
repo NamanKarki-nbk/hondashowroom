@@ -122,7 +122,7 @@ export default function VehiclesClient({ products }: { products: any[] }) {
             <VehicleCard 
               key={idx} 
               title={vehicle.name}
-              priceNpr={vehicle.price}
+              priceNpr={vehicle.basePrice}
               cc={vehicle.specifications?.cc || undefined}
               slug={vehicle.id}
               category={vehicle.category}

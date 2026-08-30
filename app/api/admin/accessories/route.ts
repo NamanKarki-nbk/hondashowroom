@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { uploadToCloudinary, deleteFromCloudinary } from "@/lib/upload";
+import { StockStatus } from "@/app/generated/prisma";
 
 export async function GET() {
   try {
@@ -42,7 +43,7 @@ export async function POST(req: Request) {
         price: Number(price),
         imageUrl,
         description,
-        stockStatus: stockStatus || "IN_STOCK",
+        stockStatus: (stockStatus as StockStatus) || StockStatus.IN_STOCK,
         vehicleType: vehicleType || "Universal",
         compatibility: compatibility || [],
       },
@@ -97,7 +98,7 @@ export async function PUT(req: Request) {
         price: Number(price),
         imageUrl,
         description,
-        stockStatus,
+        stockStatus: stockStatus as StockStatus,
         vehicleType: vehicleType || "Universal",
         compatibility: compatibility || [],
       },

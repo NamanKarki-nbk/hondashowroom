@@ -3,13 +3,14 @@ import { prisma } from '@/lib/prisma';
 import { logActivity } from '@/lib/activityLogger';
 import { verifySessionToken } from '@/lib/session';
 import { cookies } from 'next/headers';
+import { BookingStatus } from '@/app/generated/prisma';
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
 
-    const where = status && status !== 'ALL' ? { status } : {};
+    const where = status && status !== 'ALL' ? { status: status as BookingStatus } : {};
 
     const serviceBookings = await prisma.serviceBooking.findMany({
       where,
@@ -37,7 +38,7 @@ export async function PATCH(request: Request) {
 
     const serviceBooking = await prisma.serviceBooking.update({
       where: { id },
-      data: { status }
+      data: { status: status as BookingStatus }
     });
 
     const cookieStore = await cookies();

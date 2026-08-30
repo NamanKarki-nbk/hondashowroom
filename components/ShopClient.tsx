@@ -11,7 +11,7 @@ export type Product = {
   id: string;
   name: string;
   category: string;
-  price: number;
+  basePrice: number;
   imageUrl: string;
   description: string | null;
   // Mock properties for advanced filtering
@@ -158,13 +158,13 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
       return (p.cc ?? 0) >= ccRange[0] && (p.cc ?? 0) <= ccRange[1];
     });
 
-    result = result.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
+    result = result.filter(p => p.basePrice >= priceRange[0] && p.basePrice <= priceRange[1]);
 
     // Sort
     if (sortBy === "price-asc") {
-      result = [...result].sort((a, b) => a.price - b.price);
+      result = [...result].sort((a, b) => a.basePrice - b.basePrice);
     } else if (sortBy === "price-desc") {
-      result = [...result].sort((a, b) => b.price - a.price);
+      result = [...result].sort((a, b) => b.basePrice - a.basePrice);
     } else {
       // Default sort order
       const orderMap: Record<string, number> = {
@@ -307,7 +307,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                 >
                   <VehicleCard
                     title={vehicle.name}
-                    priceNpr={vehicle.price}
+                    priceNpr={vehicle.basePrice}
                     category={
                       vehicle.category === "POWER_PRODUCTS" ? "Power Product" : 
                       vehicle.category === "AUTOMOBILES" ? "Automobile" : 
