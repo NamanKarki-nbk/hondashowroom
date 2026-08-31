@@ -43,7 +43,7 @@ export default function VehicleSpecs({ specs, vehicleSlug = "dio-125", fallbackI
   if (!specKeys.length) return null;
 
   return (
-    <section id="specs" className="py-24 px-6 bg-background  transition-colors duration-300 min-h-screen flex items-center">
+    <section id="specs" className="py-24 px-4 sm:px-6 md:px-12 lg:px-16 bg-background  transition-colors duration-300 min-h-screen flex items-center">
       <div className="max-w-[1600px] w-full mx-auto">
         <div className="text-center mb-12 xl:mb-20">
           <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl xl:text-6xl font-extrabold text-gray-900 dark:text-primary-foreground">Get to know your ride</h2>

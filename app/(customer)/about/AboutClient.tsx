@@ -67,7 +67,7 @@ export default function AboutClient({ happyCustomers = 0, branchesCount = 0 }: {
           />
         </motion.div>
         
-        <div className="relative z-20 max-w-[1200px] w-full mx-auto px-4 sm:px-6 md:px-12 text-center pt-20">
+        <div className="relative z-20 max-w-[1600px] w-full mx-auto px-4 sm:px-6 md:px-12 lg:px-16 text-center pt-20">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -88,7 +88,7 @@ export default function AboutClient({ happyCustomers = 0, branchesCount = 0 }: {
       </section>
 
       {/* Stats Section / By the Numbers */}
-      <section className="relative z-30 -mt-16 sm:-mt-24 max-w-[1200px] mx-auto px-4 sm:px-6 md:px-12">
+      <section className="relative z-30 -mt-16 sm:-mt-24 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         <FadeIn>
           <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-100 dark:border-white/5">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x-0 md:divide-x divide-y md:divide-y-0 divide-gray-100 dark:divide-white/10">
@@ -116,7 +116,7 @@ export default function AboutClient({ happyCustomers = 0, branchesCount = 0 }: {
       </section>
 
       {/* Our Story Section */}
-      <section className="py-24 max-w-[1200px] mx-auto px-4 sm:px-6 md:px-12">
+      <section className="py-24 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <FadeIn direction="right">
             <div className="relative group">
@@ -178,7 +178,7 @@ export default function AboutClient({ happyCustomers = 0, branchesCount = 0 }: {
 
       {/* Core Values Section */}
       <section className="py-24 bg-gray-50 dark:bg-[#141b2b] border-y border-gray-200 dark:border-white/5">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-12">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
           <FadeIn>
             <div className="text-center mb-16">
               <h2 className="text-sm font-bold uppercase tracking-widest text-[#cd302b] mb-3">Our Core Values</h2>
@@ -222,7 +222,7 @@ export default function AboutClient({ happyCustomers = 0, branchesCount = 0 }: {
       </section>
 
       {/* Executive Management */}
-      <section className="py-24 max-w-[1200px] mx-auto px-4 sm:px-6 md:px-12">
+      <section className="py-24 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         <FadeIn>
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div>
@@ -291,7 +291,7 @@ export default function AboutClient({ happyCustomers = 0, branchesCount = 0 }: {
 
       {/* CTA Section */}
       <section className="py-20 mb-10">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-12">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
           <FadeIn>
             <div className="bg-gray-900 dark:bg-slate-900 rounded-3xl p-10 md:p-16 text-center relative overflow-hidden shadow-2xl">
               <div className="absolute inset-0 bg-gradient-to-tr from-[#cd302b]/20 to-transparent opacity-50" />

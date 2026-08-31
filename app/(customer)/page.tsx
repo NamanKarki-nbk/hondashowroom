@@ -4,6 +4,7 @@ import { ArrowRight, ChevronRight, Phone, Search, Menu, ChevronDown } from "luci
 import Logo from "@/components/Logo";
 import { prisma } from "@/lib/prisma";
 import ClientOnly from "@/components/ClientOnly";
+import { parseBlogContent } from "@/lib/blog";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -107,18 +108,21 @@ export default async function CustomerLandingPage() {
     take: 4
   });
 
-  const blogs = rawBlogs.map((b, i) => ({
-    id: b.id,
-    slug: b.id,
-    title: b.title,
-    excerpt: b.content.substring(0, 150) + '...',
-    category: i === 0 ? "Featured" : "News",
-    categoryColor: i === 0 ? "bg-red-500" : "bg-gray-500",
-    date: new Date(b.createdAt).toLocaleDateString(),
-    readTime: "5 min read",
-    image: b.imageUrl || "/images/finance-hero.jpg",
-    featured: i === 0,
-  }));
+  const blogs = rawBlogs.map((b, i) => {
+    const parsed = parseBlogContent(b);
+    return {
+      id: parsed.id,
+      slug: parsed.slug,
+      title: parsed.title,
+      excerpt: parsed.summary,
+      category: parsed.category,
+      categoryColor: i === 0 ? "bg-red-500" : "bg-gray-500",
+      date: new Date(parsed.createdAt).toLocaleDateString(),
+      readTime: `${parsed.readingTime} min read`,
+      image: parsed.imageUrl || "/images/finance-hero.jpg",
+      featured: i === 0,
+    };
+  });
 
   const homeAccessories = await prisma.accessory.findMany({
     take: 4,

@@ -1,19 +1,16 @@
 import React from 'react';
-import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { Calendar, User, ArrowLeft } from 'lucide-react';
+import { Calendar, User, ArrowLeft, Clock, Tag } from 'lucide-react';
 import Link from 'next/link';
+import { getBlogPostBySlug } from '@/lib/blog';
 
 export const dynamic = 'force-dynamic';
 
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  // Since slug is ID for now based on how HondaBlogSection was built
-  const { slug: blogId } = await params;
+  const { slug } = await params;
   
-  const blog = await prisma.blog.findUnique({
-    where: { id: blogId }
-  });
+  const blog = await getBlogPostBySlug(slug);
 
   if (!blog) {
     notFound();
@@ -32,7 +29,9 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           </h1>
           <div className="flex flex-wrap items-center gap-6 text-sm font-semibold text-white/80 uppercase tracking-wider">
             <span className="flex items-center gap-2"><Calendar className="w-5 h-5" /> {new Date(blog.createdAt).toLocaleDateString()}</span>
-            <span className="flex items-center gap-2"><User className="w-5 h-5" /> {blog.author}</span>
+            <span className="flex items-center gap-2"><User className="w-5 h-5" /> {blog.author || 'Admin'}</span>
+            <span className="flex items-center gap-2"><Clock className="w-5 h-5" /> {blog.readingTime} min read</span>
+            <span className="flex items-center gap-2"><Tag className="w-5 h-5" /> {blog.category}</span>
           </div>
         </div>
       </div>
@@ -53,52 +52,46 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             </div>
           )}
           <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-black prose-a:text-primary">
-            {(() => {
-              try {
-                const data = JSON.parse(blog.content);
-                return (
-                  <div className="flex flex-col gap-8 not-prose">
-                    <div className="bg-gray-50 dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-gray-100 dark:border-slate-700">
-                      <p className="text-xl md:text-2xl font-medium text-gray-800 dark:text-gray-200 leading-relaxed mb-4">
-                        {data.summary}
-                      </p>
-                      <div className="flex flex-wrap gap-4 text-sm font-bold text-gray-500 uppercase tracking-wider">
-                        {data.category && <span>• {data.category}</span>}
-                        {data.readingTime && <span>• {data.readingTime} min read</span>}
-                      </div>
-                    </div>
-                    
-                    {data.sections?.map((section: any, idx: number) => (
-                      <div key={idx} className="mt-8">
-                        <h2 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white mb-4">
-                          {section.title}
-                        </h2>
-                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg md:text-xl">
-                          {section.description}
-                        </p>
-                      </div>
-                    ))}
+            {blog.isStructured ? (
+              <div className="flex flex-col gap-8 not-prose">
+                <div className="bg-gray-50 dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-gray-100 dark:border-slate-700">
+                  <p className="text-xl md:text-2xl font-medium text-gray-800 dark:text-gray-200 leading-relaxed mb-4">
+                    {blog.summary}
+                  </p>
+                  <div className="flex flex-wrap gap-4 text-sm font-bold text-gray-500 uppercase tracking-wider">
+                    {blog.category && <span>• {blog.category}</span>}
+                    {blog.readingTime && <span>• {blog.readingTime} min read</span>}
                   </div>
-                );
-              } catch (e) {
-                // Fallback to simple Markdown-like renderer
-                return blog.content.split('\n\n').map((paragraph, index) => {
-                  if (paragraph.startsWith('**') && paragraph.includes('**', 2)) {
-                    const parts = paragraph.split('**');
-                    return (
-                      <p key={index} className="mb-6 text-gray-700 dark:text-gray-300 leading-relaxed text-lg whitespace-pre-wrap">
-                        {parts.map((part, i) => i % 2 === 1 ? <strong key={i} className="text-gray-900 dark:text-white font-black">{part}</strong> : part)}
-                      </p>
-                    );
-                  }
+                </div>
+                
+                {blog.sections?.map((section: any, idx: number) => (
+                  <div key={idx} className="mt-8">
+                    <h2 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white mb-4">
+                      {section.title}
+                    </h2>
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg md:text-xl">
+                      {section.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              blog.rawContent.split('\n\n').map((paragraph, index) => {
+                if (paragraph.startsWith('**') && paragraph.includes('**', 2)) {
+                  const parts = paragraph.split('**');
                   return (
                     <p key={index} className="mb-6 text-gray-700 dark:text-gray-300 leading-relaxed text-lg whitespace-pre-wrap">
-                      {paragraph}
+                      {parts.map((part, i) => i % 2 === 1 ? <strong key={i} className="text-gray-900 dark:text-white font-black">{part}</strong> : part)}
                     </p>
                   );
-                });
-              }
-            })()}
+                }
+                return (
+                  <p key={index} className="mb-6 text-gray-700 dark:text-gray-300 leading-relaxed text-lg whitespace-pre-wrap">
+                    {paragraph}
+                  </p>
+                );
+              })
+            )}
           </div>
         </div>
       </div>

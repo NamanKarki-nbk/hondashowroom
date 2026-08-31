@@ -40,13 +40,13 @@ export async function POST(req: Request) {
       const newInvoice = await prisma.purchaseInvoice.upsert({
         where: { invoiceNo: invoice.invoiceNo },
         update: {
-          invoiceDate: invoice.invoiceDate || null,
+          invoiceDate: invoice.invoiceDate ? new Date(invoice.invoiceDate) : null,
           totalAmount: invoice.totalAmount || 0,
           purchaseType: invoice.purchaseType || 'Standard',
         },
         create: {
           invoiceNo: invoice.invoiceNo,
-          invoiceDate: invoice.invoiceDate || null,
+          invoiceDate: invoice.invoiceDate ? new Date(invoice.invoiceDate) : null,
           totalAmount: invoice.totalAmount || 0,
           purchaseType: invoice.purchaseType || 'Standard',
         }
@@ -74,6 +74,26 @@ export async function POST(req: Request) {
       where: { name: { contains: 'Damak' } }
     });
 
+    const variants = await prisma.vehicleVariant.findMany({
+      include: { vehicleMaster: true }
+    });
+
+    function findVariantId(modelName: string) {
+      if (modelName === "CB Dio BS6 110 STD") return variants.find(v => v.vehicleMaster.name.includes("Dio BS6 110") && v.variantName.includes("STD"))?.id;
+      if (modelName === "CB Dio BS6 110 DLX") return variants.find(v => v.vehicleMaster.name.includes("Dio BS6 110") && v.variantName.includes("DLX"))?.id;
+      if (modelName === "CB Dio BS6 125 STD") return variants.find(v => v.vehicleMaster.name.includes("Dio BS6 125") && v.variantName.includes("STD"))?.id;
+      if (modelName === "CB Dio BS6 125 DLX") return variants.find(v => v.vehicleMaster.name.includes("Dio BS6 125") && v.variantName.includes("DLX"))?.id;
+      if (modelName === "CB Shine BS6 DRS") return variants.find(v => v.vehicleMaster.name.includes("CB Shine BS6 125") && v.variantName.includes("DRS"))?.id;
+      if (modelName === "CB Shine BS6 DSS") return variants.find(v => v.vehicleMaster.name.includes("CB Shine BS6 125") && v.variantName.includes("DSS"))?.id;
+      if (modelName === "SP Shine BS6 DRS") return variants.find(v => v.vehicleMaster.name.includes("SP Shine BS6 125") && v.variantName.includes("DRS"))?.id;
+      if (modelName === "SP Shine BS6 DSS") return variants.find(v => v.vehicleMaster.name.includes("SP Shine BS6 125") && v.variantName.includes("DSS"))?.id;
+      if (modelName === "NX 200") return variants.find(v => v.vehicleMaster.name.includes("NX 200"))?.id;
+      if (modelName === "CB Hornet 2.0") return variants.find(v => v.vehicleMaster.name.includes("Hornet 2.0"))?.id;
+      
+      // Fallback
+      return variants.find(v => modelName.includes(v.vehicleMaster.name) || v.vehicleMaster.name.includes(modelName))?.id || variants[0]?.id;
+    }
+
     for (const vehicle of vehicles) {
       try {
         let validDate = new Date();
@@ -84,13 +104,27 @@ export async function POST(req: Request) {
           }
         }
 
+        const { modelName, category, cc, vin, engineNo, color, purchasePrice, purchaseMethod, rtoStatus, status } = vehicle;
+        const variantId = findVariantId(modelName);
+
+        if (!variantId) {
+          throw new Error(`Variant not found for model: ${modelName}`);
+        }
+
         const createdVehicle = await prisma.vehicleInventory.create({
           data: {
-            ...vehicle,
+            vin,
+            engineNo,
+            color,
+            purchasePrice: Number(purchasePrice),
+            purchaseMethod: purchaseMethod || 'BG',
+            rtoStatus: rtoStatus || null,
+            status: status || 'IN_STOCK',
             purchaseDate: validDate,
             indexNo: `D1-P${currentIndex}`,
             purchaseInvoiceId: purchaseInvoiceId,
             branchId: damakBranch?.id || undefined,
+            variantId: variantId,
           }
         });
 

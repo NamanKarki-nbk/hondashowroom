@@ -30,7 +30,7 @@ const TESTIMONIALS = [
 
 export default function TestimonialsSection() {
   return (
-    <section className="py-24 px-6 bg-background border-t border-gray-100 dark:border-slate-800 overflow-hidden">
+    <section className="py-24 px-4 sm:px-6 md:px-12 lg:px-16 bg-background border-t border-gray-100 dark:border-slate-800 overflow-hidden">
       <div className="max-w-[1600px] mx-auto w-full">
         <div className="text-center mb-16 xl:mb-24">
           <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6 text-gray-900 dark:text-gray-100 uppercase">

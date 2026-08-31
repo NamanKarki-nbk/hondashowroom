@@ -81,7 +81,7 @@ export default function PriceListPage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 mt-12">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 mt-12">
         {/* Search Bar */}
         <div className="relative mb-12 max-w-md">
           <input

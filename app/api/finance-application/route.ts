@@ -34,27 +34,24 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const application = await prisma.financeApplication.create({
+    const application = await prisma.lead.create({
       data: {
         customerId: customer.id,
-        planId: data.planId,
-        loanAmount: data.loanAmount,
-        downPayment: data.downPayment,
-        tenureMonths: data.tenureMonths,
-        monthlyEmi: data.monthlyEmi,
-        employmentType: data.employmentType,
-        monthlyIncome: data.monthlyIncome,
-        status: 'PENDING'
+        name: customer.fullName,
+        phone: customer.phone,
+        interestedIn: data.planId ? `Finance Plan ID: ${data.planId}` : 'Vehicle Finance',
+        source: 'Finance Application',
+        status: 'NEW',
+        remarks: `Loan Amount: ${data.loanAmount}, Down Payment: ${data.downPayment}, Tenure: ${data.tenureMonths} months, EMI: ${data.monthlyEmi}, Employment: ${data.employmentType}, Income: ${data.monthlyIncome}`
       }
     });
 
     // Create admin notification
     await prisma.adminNotification.create({
       data: {
-        userId: 'ADMIN', // Generic admin notification
         type: 'FINANCE',
         title: 'New Finance Application',
-        message: `${customer.fullName} applied for a loan of Rs. ${data.loanAmount.toLocaleString()}`,
+        message: `${customer.fullName} applied for a loan of Rs. ${data.loanAmount?.toLocaleString()}`,
         link: '/admin/finance/applications'
       }
     });

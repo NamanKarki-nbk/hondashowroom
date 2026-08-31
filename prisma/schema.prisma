@@ -96,6 +96,9 @@ enum NotificationType {
   AMC_BOOKING
   SERVICE_BOOKING
   QUOTATION
+  DIGITAL_QUOTATION
+  VEHICLE_BOOKING
+  FINANCE
 }
 
 enum SaleType {
@@ -111,22 +114,22 @@ enum VehicleCategory {
 }
 
 model User {
-  id           String    @id @default(uuid())
+  id           String   @id @default(uuid())
   fullName     String?
-  phone        String    @unique
-  email        String?   @unique
+  phone        String   @unique
+  email        String?  @unique
   passwordHash String?
-  role         UserRole  @default(USER) // Enum
+  role         UserRole @default(USER) // Enum
   avatarUrl    String?
 
-  address      String?
-  gender       Gender?
-  dobAd        DateTime? // Changed to DateTime
-  dobBs        String?
+  address String?
+  gender  Gender?
+  dobAd   DateTime? // Changed to DateTime
+  dobBs   String?
 
-  isVerified   Boolean   @default(false)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   customerProfile Customer?
   staffProfile    Staff?
@@ -166,12 +169,12 @@ model Customer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  sales        SalesTransaction[]
-  services     ServiceRecord[]
-  leads        Lead[]
-  bookings     ServiceBooking[]
-  testRides    TestRideBooking[]
-  reminders    ServiceReminder[]
+  sales     SalesTransaction[]
+  services  ServiceRecord[]
+  leads     Lead[]
+  bookings  ServiceBooking[]
+  testRides TestRideBooking[]
+  reminders ServiceReminder[]
 }
 
 model CustomerDocument {
@@ -184,8 +187,8 @@ model CustomerDocument {
   backUrl    String?
   isVerified Boolean      @default(false)
 
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([customerId, docType])
   @@index([customerId])
@@ -205,7 +208,7 @@ model Lead {
   customer     Customer?  @relation(fields: [customerId], references: [id])
   name         String
   phone        String
-  source       String     
+  source       String
   status       LeadStatus @default(NEW)
   interestedIn String? // Vehicle model
   remarks      String?    @db.Text
@@ -220,57 +223,57 @@ model VehicleMaster {
   id             String          @id @default(uuid())
   name           String
   category       VehicleCategory
-  basePrice      Float           // Renamed from price to clarify
+  basePrice      Float // Renamed from price to clarify
   imageUrl       String
   description    String?
   specifications Json?
   features       Json?
 
-  variants       VehicleVariant[]
-  colors         VehicleColor[]
+  variants VehicleVariant[]
+  colors   VehicleColor[]
 
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model VehicleVariant {
-  id                 String         @id @default(uuid())
+  id                 String        @id @default(uuid())
   vehicleMasterId    String
-  vehicleMaster      VehicleMaster  @relation(fields: [vehicleMasterId], references: [id])
-  variantName        String         // Renamed from variant
+  vehicleMaster      VehicleMaster @relation(fields: [vehicleMasterId], references: [id])
+  variantName        String // Renamed from variant
   exShowroomPriceNPR Float
   onRoadPriceNPR     Float
   specDifferences    Json?
 
-  inventory          VehicleInventory[]
-  financePlans       FinancePlan[]
+  inventory    VehicleInventory[]
+  financePlans FinancePlan[]
 
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([vehicleMasterId, variantName])
   @@index([vehicleMasterId])
 }
 
 model VehicleColor {
-  id              String         @id @default(uuid())
+  id              String        @id @default(uuid())
   vehicleMasterId String
-  vehicleMaster   VehicleMaster  @relation(fields: [vehicleMasterId], references: [id])
+  vehicleMaster   VehicleMaster @relation(fields: [vehicleMasterId], references: [id])
   name            String
   hexCode         String
   imageUrl        String?
   finishType      String?
-  isPopular       Boolean        @default(false)
+  isPopular       Boolean       @default(false)
 
   @@index([vehicleMasterId])
 }
 
 model VehicleInventory {
-  id        String  @id @default(uuid())
-  indexNo   String? @unique // Custom sequential index (e.g. D1-P1)
-  vin       String  @unique // Chassis No
-  engineNo  String  @unique
-  color     String
+  id       String  @id @default(uuid())
+  indexNo  String? @unique // Custom sequential index (e.g. D1-P1)
+  vin      String  @unique // Chassis No
+  engineNo String  @unique
+  color    String
 
   variantId String
   variant   VehicleVariant @relation(fields: [variantId], references: [id])
@@ -440,10 +443,10 @@ model ServiceBooking {
 }
 
 model SalesTarget {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   year      Int
-  month     Int      // 1-12
-  monthName String?  // e.g., "April 2026"
+  month     Int // 1-12
+  monthName String? // e.g., "April 2026"
   target    Int
 
   createdAt DateTime @default(now())
@@ -504,9 +507,9 @@ model Delivery {
 }
 
 model FinancePlan {
-  id             String @id @default(uuid())
-  variantId      String
-  variant        VehicleVariant @relation(fields: [variantId], references: [id])
+  id        String         @id @default(uuid())
+  variantId String
+  variant   VehicleVariant @relation(fields: [variantId], references: [id])
 
   tenureMonths   Int
   downPaymentPct Int
@@ -599,17 +602,17 @@ model Offer {
 }
 
 model Branch {
-  id        String   @id @default(uuid())
-  name      String
-  address   String
-  phone     String
-  mapUrl    String?
-  latitude  Float?
-  longitude Float?
-  isEmergency Boolean @default(false)
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(uuid())
+  name        String
+  address     String
+  phone       String
+  mapUrl      String?
+  latitude    Float?
+  longitude   Float?
+  isEmergency Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   testRides     TestRideBooking[]
   vehicles      VehicleInventory[]
@@ -683,7 +686,7 @@ model AdminNotification {
   type      NotificationType
   title     String
   message   String
-  link      String?  // Deep link: /admin/crm/leads etc
+  link      String? // Deep link: /admin/crm/leads etc
   isRead    Boolean          @default(false)
   createdAt DateTime         @default(now())
 
@@ -702,8 +705,8 @@ model ActivityLog {
   id        String   @id @default(uuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
-  action    String   // e.g., "CREATE", "UPDATE", "DELETE", "LOGIN"
-  entity    String   // e.g., "Lead", "VehicleInventory", "SystemSetting"
+  action    String // e.g., "CREATE", "UPDATE", "DELETE", "LOGIN"
+  entity    String // e.g., "Lead", "VehicleInventory", "SystemSetting"
   entityId  String?
   details   Json?
   createdAt DateTime @default(now())

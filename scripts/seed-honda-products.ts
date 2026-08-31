@@ -36,21 +36,56 @@ async function main() {
 
   // 1. Seed Vehicles & Vehicle Inventory
   for (const v of bikesAndScooters) {
+    const slugId = v.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    
+    const imageUrl = v.name.toLowerCase().includes('dio 125') ? '/inventory/honda-dio-bs6-125.png' :
+                     v.name.toLowerCase().includes('dio') ? '/inventory/honda-dio-bs6-110.png' :
+                     v.name.toLowerCase().includes('sp shine') ? '/inventory/honda-sp-125-.png' :
+                     v.name.toLowerCase().includes('shine') ? '/inventory/honda-shine-bs6.png' :
+                     v.name.toLowerCase().includes('hornet') ? '/inventory/cb-hornet-2-0.png' :
+                     v.name.toLowerCase().includes('nx 200') ? '/inventory/honda-nx-200.png' :
+                     "/placeholder.png";
+
     const vehicle = await prisma.vehicleMaster.upsert({
-      where: { name: v.name },
-      update: { price: v.price, cc: v.cc, baseInsurance: v.baseInsurance },
-      create: { name: v.name, cc: v.cc, price: v.price, baseInsurance: v.baseInsurance },
+      where: { id: slugId },
+      update: { basePrice: v.price },
+      create: { 
+        id: slugId,
+        name: v.name, 
+        category: v.category,
+        basePrice: v.price, 
+        imageUrl 
+      },
+    });
+
+    const variantName = v.name.includes("Dio") ? "DLX" : "STD";
+    const variant = await prisma.vehicleVariant.upsert({
+      where: {
+        vehicleMasterId_variantName: {
+          vehicleMasterId: vehicle.id,
+          variantName: variantName
+        }
+      },
+      update: {
+        exShowroomPriceNPR: v.price,
+        onRoadPriceNPR: v.price + (v.baseInsurance || 15000)
+      },
+      create: {
+        vehicleMasterId: vehicle.id,
+        variantName: variantName,
+        exShowroomPriceNPR: v.price,
+        onRoadPriceNPR: v.price + (v.baseInsurance || 15000)
+      }
     });
 
     for (const color of v.colors) {
-      // First find if exists (because there is no unique constraint on (vehicleId, name) in schema yet)
       const existingColor = await prisma.vehicleColor.findFirst({
-        where: { vehicleId: vehicle.id, name: color }
+        where: { vehicleMasterId: vehicle.id, name: color }
       });
       if (!existingColor) {
         await prisma.vehicleColor.create({
           data: {
-            vehicleId: vehicle.id,
+            vehicleMasterId: vehicle.id,
             name: color,
             hexCode: color,
           }
@@ -67,37 +102,15 @@ async function main() {
         create: {
           vin,
           engineNo: `ENG-${v.name.replace(/\s+/g, '')}-${i}`,
-          category: v.category,
-          name: v.name,
-          cc: v.cc,
           color: v.colors[0],
           purchasePrice: v.price * 0.85, // 15% dealer margin approx
           purchaseDate: new Date(),
           purchaseMethod: "COMPANY_DISPATCH",
-          status: "IN_STOCK"
+          status: "IN_STOCK",
+          variantId: variant.id
         }
       });
     }
-
-    // Also populate VehicleMaster for the catalog page
-    const slugId = v.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    await prisma.vehicleMaster.upsert({
-      where: { id: slugId },
-      update: { price: v.price },
-      create: {
-        id: slugId,
-        name: v.name,
-        category: v.category,
-        price: v.price,
-        imageUrl: v.name.toLowerCase().includes('dio 125') ? '/inventory/honda-dio-bs6-125.png' :
-                  v.name.toLowerCase().includes('dio') ? '/inventory/honda-dio-bs6-110.png' :
-                  v.name.toLowerCase().includes('sp shine') ? '/inventory/honda-sp-125-.png' :
-                  v.name.toLowerCase().includes('shine') ? '/inventory/honda-shine-bs6.png' :
-                  v.name.toLowerCase().includes('hornet') ? '/inventory/cb-hornet-2-0.png' :
-                  v.name.toLowerCase().includes('nx 200') ? '/inventory/honda-nx-200.png' :
-                  "/placeholder.png",
-      }
-    });
   }
 
   // 2. Seed Service Charges

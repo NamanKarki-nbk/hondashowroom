@@ -149,6 +149,8 @@ export default function BlogManager() {
           <thead className="text-gray-500 bg-gray-50 dark:bg-slate-950/50 border-y border-gray-100 dark:border-slate-800">
             <tr>
               <th className="px-4 py-3 font-medium">Post</th>
+              <th className="px-4 py-3 font-medium">Category</th>
+              <th className="px-4 py-3 font-medium">Read Time</th>
               <th className="px-4 py-3 font-medium">Author</th>
               <th className="px-4 py-3 font-medium">Date</th>
               <th className="px-4 py-3 font-medium text-right">Actions</th>
@@ -157,11 +159,11 @@ export default function BlogManager() {
           <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
             {isLoading ? (
               <tr>
-                <td colSpan={4} className="text-center py-8 text-gray-500">Loading blogs...</td>
+                <td colSpan={6} className="text-center py-8 text-gray-500">Loading blogs...</td>
               </tr>
             ) : filteredBlogs.length === 0 ? (
               <tr>
-                <td colSpan={4} className="text-center py-8 text-gray-500">No blog posts found.</td>
+                <td colSpan={6} className="text-center py-8 text-gray-500">No blog posts found.</td>
               </tr>
             ) : (
               filteredBlogs.map(blog => (
@@ -177,8 +179,38 @@ export default function BlogManager() {
                       </div>
                       <div className="truncate max-w-[250px]">
                         <p className="font-semibold text-gray-900 dark:text-white truncate">{blog.title}</p>
+                        <p className="text-xs text-gray-500 truncate mt-1">
+                          {(() => {
+                            try {
+                              const data = JSON.parse(blog.content);
+                              return data.summary || blog.content.substring(0, 100);
+                            } catch {
+                              return blog.content.substring(0, 100);
+                            }
+                          })()}
+                        </p>
                       </div>
                     </div>
+                  </td>
+                  <td className="px-4 py-3 text-gray-600 dark:text-gray-400 text-sm">
+                    {(() => {
+                      try {
+                        const data = JSON.parse(blog.content);
+                        return data.category ? <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-xs font-semibold">{data.category}</span> : 'General';
+                      } catch {
+                        return 'General';
+                      }
+                    })()}
+                  </td>
+                  <td className="px-4 py-3 text-gray-600 dark:text-gray-400 text-sm">
+                    {(() => {
+                      try {
+                        const data = JSON.parse(blog.content);
+                        return data.readingTime ? `${data.readingTime} min` : '5 min';
+                      } catch {
+                        return '5 min';
+                      }
+                    })()}
                   </td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
                     {blog.author || 'Admin'}

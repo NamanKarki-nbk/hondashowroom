@@ -97,7 +97,7 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
   return (
     <section className="py-16 md:py-24 lg:py-32 w-full bg-gray-50/50 dark:bg-slate-950 transition-colors duration-300">
       <div className="px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px] relative overflow-hidden min-h-[500px]">
-        <div className="text-left mb-16 px-6 max-w-7xl mx-auto w-full">
+        <div className="text-left mb-16 px-6 mx-auto w-full">
           <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white tracking-tighter uppercase mb-10">
             Explore Models
           </h2>
@@ -129,7 +129,7 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
         </div>
 
         {/* Carousel */}
-        <div className="relative group max-w-7xl mx-auto">
+        <div className="relative group mx-auto">
           <div className="overflow-hidden" ref={emblaRef}>
             <AnimatePresence mode="wait">
               <motion.div 

@@ -210,8 +210,8 @@ export default function SalesAnalysisPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                {loading ? (
+              <tbody className={`transition-opacity duration-200 ${loading && data.length > 0 ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+                {loading && data.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="text-center py-12">
                       <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />

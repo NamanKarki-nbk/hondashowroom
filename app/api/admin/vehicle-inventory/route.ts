@@ -92,3 +92,30 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Failed to fetch inventory' }, { status: 500 });
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ error: 'Vehicle ID is required' }, { status: 400 });
+    }
+
+    await prisma.$transaction([
+      prisma.stockTransferLog.deleteMany({ where: { vehicleId: id } }),
+      prisma.serviceReminder.deleteMany({ where: { vehicleId: id } }),
+      prisma.serviceRecord.deleteMany({ where: { vehicleId: id } }),
+      prisma.salesTransaction.deleteMany({ where: { vehicleId: id } }),
+      prisma.vehicleInventory.delete({ where: { id } }),
+    ]);
+
+    return NextResponse.json({ success: true, message: 'Vehicle deleted successfully' });
+  } catch (error: any) {
+    console.error('Failed to delete vehicle:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete vehicle' },
+      { status: 500 }
+    );
+  }
+}

@@ -224,7 +224,7 @@ export default function ProductPageClient({ vehicle }: { vehicle: ProductData })
       <FaqSection />
 
       {/* Booking Form / Enquiry */}
-      <section id="book" className="py-24 px-6 bg-background dark:bg-[#090909] border-t border-gray-200 dark:border-slate-800 transition-colors duration-300">
+      <section id="book" className="py-24 px-4 sm:px-6 md:px-12 lg:px-16 bg-background dark:bg-[#090909] border-t border-gray-200 dark:border-slate-800 transition-colors duration-300">
         <div className="max-w-4xl mx-auto">
           <div className="bg-background dark:bg-[#111112] border border-gray-200 dark:border-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden transition-colors duration-300">
              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-bl-full pointer-events-none"></div>

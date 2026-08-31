@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Filter, Upload, Plus, FileCheck, Receipt, Calendar, Tag, Info, X, Database, RefreshCw, MapPin, Truck } from "lucide-react";
+import { Search, Filter, Upload, Plus, FileCheck, Receipt, Calendar, Tag, Info, X, Database, RefreshCw, MapPin, Truck, Car, CheckCircle2, Clock, MinusCircle, Wallet, Settings2, Route, Trash2 } from "lucide-react";
 import Link from "next/link";
 
 type VehicleInventoryItem = {
@@ -24,6 +24,7 @@ export default function VehicleInventoryTable() {
   const [items, setItems] = useState<VehicleInventoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState("total");
 
   const [uploading, setUploading] = useState(false);
   const [parsedVehicles, setParsedVehicles] = useState<any>(null);
@@ -189,6 +190,45 @@ export default function VehicleInventoryTable() {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this vehicle?")) return;
+    
+    try {
+      const res = await fetch(`/api/admin/vehicle-inventory?id=${id}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        showNotification('Vehicle deleted successfully', 'success');
+        fetchInventory();
+      } else {
+        const data = await res.json();
+        showNotification(data.error || 'Failed to delete vehicle', 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      showNotification('An error occurred while deleting.', 'error');
+    }
+  };
+
+  const displayedItems = items.filter(item => {
+    if (activeTab === 'total') return true;
+    const branch = branches.find(b => b.id === item.branchId);
+    const branchName = branch?.name?.toLowerCase() || '';
+    if (activeTab === 'damak') return branchName.includes('damak');
+    if (activeTab === 'urlabari') return branchName.includes('urlabari');
+    return true;
+  });
+
+  const totalVehicles = displayedItems.length;
+  const inStockCount = displayedItems.filter(i => i.status === 'In Stock' || i.status === 'Available' || i.status === 'IN_STOCK').length;
+  const soldReservedCount = displayedItems.filter(i => i.status === 'Sold' || i.status === 'Reserved' || i.status === 'SOLD').length;
+  const outOfStockCount = displayedItems.filter(i => i.status === 'Out of Stock' || i.status === 'OUT_OF_STOCK').length;
+  const totalValue = displayedItems.reduce((sum, item) => sum + item.sellingPrice, 0);
+
+  const inStockPercent = totalVehicles ? ((inStockCount / totalVehicles) * 100).toFixed(1) : 0;
+  const soldReservedPercent = totalVehicles ? ((soldReservedCount / totalVehicles) * 100).toFixed(1) : 0;
+  const outOfStockPercent = totalVehicles ? ((outOfStockCount / totalVehicles) * 100).toFixed(1) : 0;
+
   return (
     <div className="space-y-6">
       {notification && (
@@ -218,25 +258,110 @@ export default function VehicleInventoryTable() {
               disabled={uploading}
             />
           </label>
-          <button className="flex items-center gap-2 bg-primary hover:bg-red-800 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-md transition-all">
+          <button className="flex items-center gap-2 bg-[#d8232a] hover:bg-red-800 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-md transition-all">
             <Plus className="w-4 h-4" /> Add Vehicle
           </button>
         </div>
       </div>
 
+      {/* Tabs */}
+      <div className="flex items-center gap-8 border-b border-gray-200 dark:border-gray-800 mt-4 overflow-x-auto hide-scrollbar">
+        <button 
+          onClick={() => setActiveTab("total")}
+          className={`flex items-center gap-2 pb-4 text-sm font-bold tracking-wide transition-colors whitespace-nowrap ${activeTab === "total" ? "text-[#d8232a] border-b-2 border-[#d8232a]" : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"}`}
+        >
+          <Car className="w-4 h-4" /> Total Inventory
+        </button>
+        <button 
+          onClick={() => setActiveTab("damak")}
+          className={`flex items-center gap-2 pb-4 text-sm font-bold tracking-wide transition-colors whitespace-nowrap ${activeTab === "damak" ? "text-[#d8232a] border-b-2 border-[#d8232a]" : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"}`}
+        >
+          <Database className="w-4 h-4" /> Damak Inventory
+        </button>
+        <button 
+          onClick={() => setActiveTab("urlabari")}
+          className={`flex items-center gap-2 pb-4 text-sm font-bold tracking-wide transition-colors whitespace-nowrap ${activeTab === "urlabari" ? "text-[#d8232a] border-b-2 border-[#d8232a]" : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"}`}
+        >
+          <Settings2 className="w-4 h-4" /> Urlabari Inventory
+        </button>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* Total Vehicles */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-gray-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-[#d8232a] shrink-0">
+            <Car className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-gray-500 mb-0.5">Total Vehicles</p>
+            <h3 className="text-2xl font-black text-gray-900 dark:text-white leading-none">{totalVehicles}</h3>
+            <p className="text-[10px] font-semibold text-gray-400 mt-1">All locations</p>
+          </div>
+        </div>
+
+        {/* In Stock */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-gray-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-500 shrink-0">
+            <CheckCircle2 className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-gray-500 mb-0.5">In Stock</p>
+            <h3 className="text-2xl font-black text-gray-900 dark:text-white leading-none">{inStockCount}</h3>
+            <p className="text-[10px] font-bold text-green-500 mt-1">{inStockPercent}% of total</p>
+          </div>
+        </div>
+
+        {/* Sold / Reserved */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-gray-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-yellow-50 dark:bg-yellow-900/20 flex items-center justify-center text-yellow-500 shrink-0">
+            <Clock className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-gray-500 mb-0.5">Sold / Reserved</p>
+            <h3 className="text-2xl font-black text-gray-900 dark:text-white leading-none">{soldReservedCount}</h3>
+            <p className="text-[10px] font-bold text-yellow-500 mt-1">{soldReservedPercent}% of total</p>
+          </div>
+        </div>
+
+        {/* Out of Stock */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-gray-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-[#d8232a] shrink-0">
+            <MinusCircle className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-gray-500 mb-0.5">Out of Stock</p>
+            <h3 className="text-2xl font-black text-gray-900 dark:text-white leading-none">{outOfStockCount}</h3>
+            <p className="text-[10px] font-bold text-[#d8232a] mt-1">{outOfStockPercent}% of total</p>
+          </div>
+        </div>
+
+        {/* Total Value */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-gray-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-500 shrink-0">
+            <Wallet className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-gray-500 mb-0.5">Total Value (Selling)</p>
+            <h3 className="text-lg lg:text-xl font-black text-gray-900 dark:text-white leading-tight">NPR {totalValue.toLocaleString('en-IN')}</h3>
+            <p className="text-[10px] font-semibold text-gray-400 mt-1">Across all vehicles</p>
+          </div>
+        </div>
+      </div>
+
       {/* Search and Filter Bar */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl p-3 flex flex-col sm:flex-row gap-3 shadow-sm border border-gray-100 dark:border-slate-800">
-        <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+      <div className="bg-white dark:bg-slate-900 rounded-xl p-2 flex flex-col sm:flex-row items-center gap-3 shadow-sm border border-gray-200 dark:border-slate-800">
+        <div className="relative flex-1 w-full">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
             placeholder="Search by Model, VIN, or Engine No..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-transparent text-gray-900 dark:text-white outline-none pl-11 pr-4 py-2 placeholder:text-gray-400 text-sm font-medium"
+            className="w-full bg-transparent text-gray-900 dark:text-white outline-none pl-10 pr-4 py-1.5 placeholder:text-gray-400 text-sm font-medium"
           />
         </div>
-        <button className="flex items-center gap-2 px-6 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+        <button className="flex items-center gap-2 px-5 py-1.5 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shrink-0">
           <Filter className="w-4 h-4" /> Filter
         </button>
       </div>
@@ -257,72 +382,89 @@ export default function VehicleInventoryTable() {
                 <th className="py-5 px-6 whitespace-nowrap text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
-              {loading ? (
+            <tbody className={`divide-y divide-gray-50 dark:divide-gray-800 transition-opacity duration-200 ${loading && items.length > 0 ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+              {loading && items.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-gray-400 text-sm font-medium">
                     Loading inventory...
                   </td>
                 </tr>
-              ) : items.length === 0 ? (
+              ) : displayedItems.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-gray-400 text-sm font-medium">
                     No vehicles found matching criteria.
                   </td>
                 </tr>
               ) : (
-                items.map((item, idx) => (
+                displayedItems.map((item, idx) => (
                   <tr key={item.id} className={`group hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors ${idx % 2 === 0 ? 'bg-transparent' : 'bg-zinc-50 dark:bg-slate-900'}`}>
-                    <td className="py-4 px-6 text-xs font-bold text-gray-600 dark:text-gray-400">
+                    <td className="py-4 px-6 text-xs font-semibold text-gray-500 dark:text-gray-400">
                       {item.indexNo || "-"}
                     </td>
                     <td className="py-4 px-6">
-                      <p className="text-sm font-black text-gray-900 dark:text-white">{item.name}</p>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{item.category} • {item.cc}cc</p>
+                      <p className="text-sm font-bold text-gray-900 dark:text-white">{item.name}</p>
+                      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{item.category} • {item.cc}cc</p>
                     </td>
                     <td className="py-4 px-6">
                       <p className="text-xs font-bold text-gray-700 dark:text-gray-300 font-mono tracking-wider">{item.vin}</p>
-                      <p className="text-[10px] font-medium text-gray-400 font-mono">{item.engineNo}</p>
+                      <p className="text-[10px] font-medium text-gray-400 font-mono mt-0.5">{item.engineNo}</p>
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-2">
                         <div 
-                          className="w-3 h-3 rounded-full shadow-sm border border-gray-200"
+                          className="w-2.5 h-2.5 rounded-full shadow-sm border border-gray-200"
                           style={{ backgroundColor: item.hexCode }}
                         />
-                        <span className="text-xs font-bold text-gray-600 dark:text-gray-300">
+                        <span className="text-xs font-semibold text-gray-600 dark:text-gray-300">
                           {item.color}
                         </span>
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <span className="text-xs font-black text-green-600 dark:text-green-500">
+                      <span className="text-xs font-bold text-green-600 dark:text-green-500">
                         {item.daysInStock} Days
                       </span>
                     </td>
                     <td className="py-4 px-6">
-                      <span className="text-sm font-black text-gray-900 dark:text-white">
+                      <span className="text-sm font-bold text-gray-900 dark:text-white">
                         NPR {item.sellingPrice.toLocaleString("en-IN")}
                       </span>
                     </td>
                     <td className="py-4 px-6">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400">
-                        In Stock
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-green-50 text-green-600 border border-green-100 dark:bg-green-900/40 dark:text-green-400 dark:border-green-800/50">
+                        {(() => {
+                          const branch = branches.find(b => b.id === item.branchId);
+                          const branchName = branch?.name?.toLowerCase() || '';
+                          const isStock = item.status === 'In Stock' || item.status === 'Available' || item.status === 'IN_STOCK';
+                          if (isStock) {
+                            if (branchName.includes('damak')) return 'Stock In Damak';
+                            if (branchName.includes('urlabari')) return 'Stock In Urlabari';
+                            return 'In Stock';
+                          }
+                          return item.status === 'SOLD' ? 'Sold' : item.status;
+                        })()}
                       </span>
                     </td>
                     <td className="py-4 px-6 text-right">
                       <div className="flex justify-end gap-2">
                         <button 
                           onClick={() => setRoutingVehicle(item)}
-                          className="bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider shadow-sm transition-colors flex items-center gap-1"
+                          className="bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5"
                         >
-                          <Truck className="w-3 h-3" /> Route
+                          <Route className="w-3.5 h-3.5" /> Route
                         </button>
                         <Link href={`/admin/pos?vin=${item.vin}`}>
-                          <button className="bg-primary hover:bg-red-800 text-white px-5 py-1.5 rounded text-xs font-bold uppercase tracking-wider shadow-sm transition-colors">
+                          <button className="bg-[#d8232a] hover:bg-red-800 text-white px-4 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-colors">
                             Sell
                           </button>
                         </Link>
+                        <button 
+                          onClick={() => handleDelete(item.id)}
+                          className="bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 p-1.5 rounded-md transition-colors"
+                          title="Delete Vehicle"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -424,7 +566,7 @@ export default function VehicleInventoryTable() {
                             {v.category}
                           </span>
                         </td>
-                        <td className="py-4 px-6 font-black text-gray-900 dark:text-white">{v.name}</td>
+                        <td className="py-4 px-6 font-black text-gray-900 dark:text-white">{v.modelName}</td>
                         <td className="py-4 px-6 font-mono font-medium text-gray-900 dark:text-white tracking-tight">{v.vin}</td>
                         <td className="py-4 px-6 font-mono text-sm text-gray-500 dark:text-gray-400">{v.engineNo}</td>
                         <td className="py-4 px-6 font-medium text-gray-600 dark:text-gray-300">

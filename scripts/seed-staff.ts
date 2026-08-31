@@ -30,7 +30,19 @@ async function main() {
       where: { accountNo: staff.accountNo }
     });
     if (!existing) {
-      await prisma.staff.create({ data: staff });
+      const user = await prisma.user.create({
+        data: {
+          fullName: staff.name,
+          phone: Math.floor(Math.random() * 10000000000).toString(),
+          role: 'STAFF'
+        }
+      });
+      await prisma.staff.create({ 
+        data: {
+          ...staff,
+          userId: user.id
+        } 
+      });
     }
   }
   console.log('Staff seeding complete!');

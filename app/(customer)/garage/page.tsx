@@ -29,8 +29,8 @@ export default function GaragePage() {
   const [activeVehicle] = useState(OWNED_VEHICLES[0]);
 
   return (
-    <div className="min-h-screen bg-background dark:bg-slate-950 text-gray-100 pt-24 pb-20 px-6 selection:bg-primary selection:text-primary-foreground overflow-x-hidden">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 space-y-12">
+    <div className="min-h-screen bg-background dark:bg-slate-950 text-gray-100 pt-24 pb-20 px-4 sm:px-6 md:px-12 lg:px-16 selection:bg-primary selection:text-primary-foreground overflow-x-hidden">
+      <div className="max-w-[1600px] mx-auto space-y-12">
         
         {/* Profile Header */}
         <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-8 backdrop-blur-md flex flex-col md:flex-row items-center gap-6 relative overflow-hidden shadow-2xl">

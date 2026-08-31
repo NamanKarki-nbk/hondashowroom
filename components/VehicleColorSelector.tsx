@@ -28,7 +28,7 @@ export default function VehicleColorSelector({ vehicleName, colors, imageUrl }: 
   const activeColorObj = colors[activeColorIndex];
 
   return (
-    <section id="colors" className="py-24 px-6 bg-[#09090B] text-primary-foreground relative min-h-screen flex items-center justify-center overflow-hidden transition-colors duration-500">
+    <section id="colors" className="py-24 px-4 sm:px-6 md:px-12 lg:px-16 bg-[#09090B] text-primary-foreground relative min-h-screen flex items-center justify-center overflow-hidden transition-colors duration-500">
       {/* Ambient background glow matching the active or hovered color */}
       <motion.div 
         className="absolute inset-0 opacity-15"
@@ -38,7 +38,7 @@ export default function VehicleColorSelector({ vehicleName, colors, imageUrl }: 
         transition={{ duration: 0.6, ease: "easeOut" }}
       />
       
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 w-full relative z-10 flex flex-col items-center">
+      <div className="max-w-[1600px] mx-auto w-full relative z-10 flex flex-col items-center">
         <div className="text-center mb-10 w-full">
           <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl font-extrabold uppercase tracking-tight text-white drop-shadow-md">Select Color</h2>
           <p className="text-gray-400 mt-2 text-lg">Personalize your {vehicleName}</p>

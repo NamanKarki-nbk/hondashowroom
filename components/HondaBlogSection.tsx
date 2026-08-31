@@ -34,7 +34,7 @@ export default function HondaBlogSection({ blogs }: { blogs: BlogProps[] }) {
 
   return (
     <section className="py-24 px-4 sm:px-6 md:px-12 lg:px-16 mx-auto w-full max-w-[1600px] bg-background dark:bg-slate-950">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 w-full">
+      <div className="w-full">
 
         {/* Section Header */}
         <div className="flex items-end justify-between mb-12">

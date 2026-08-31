@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     }
 
     await createAdminNotification({
-      type: type as any,
+      type: type as any, // keeping as any if NotificationType hasn't fully propagated in types, but it's safe now since it's in schema
       title,
       message: `${name} ${actionText} ${interestedIn || 'Honda vehicle'}.`,
       link: isQuotation ? '/admin/crm/quotations' : '/admin/crm/leads'

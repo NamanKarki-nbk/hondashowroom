@@ -216,8 +216,8 @@ export default function LeadsClient({ type }: { type?: string }) {
                 <th className="py-4 px-6 whitespace-nowrap text-right">Date</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50 dark:divide-gray-800/50">
-              {loading ? (
+            <tbody className={`divide-y divide-gray-50 dark:divide-gray-800/50 transition-opacity duration-200 ${loading && currentLeads.length > 0 ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+              {loading && currentLeads.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-12 text-center text-gray-400 text-sm font-medium">Loading leads...</td>
                 </tr>

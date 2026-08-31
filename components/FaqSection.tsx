@@ -31,8 +31,8 @@ export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-24 px-6 bg-background border-t border-gray-100 dark:border-slate-800">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 w-full">
+    <section className="py-24 px-4 sm:px-6 md:px-12 lg:px-16 bg-background border-t border-gray-100 dark:border-slate-800">
+      <div className="max-w-[1600px] mx-auto w-full">
         <div className="text-center mb-16">
           <h2 className="text-2xl md:text-3xl font-semibold md:text-4xl font-bold md:text-4xl font-bold md:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6 text-gray-900 dark:text-gray-100 uppercase">
             FREQUENTLY ASKED <span className="text-primary">QUESTIONS</span>
@@ -40,7 +40,7 @@ export default function FaqSection() {
           <p className="text-lg xl:text-2xl text-gray-600 dark:text-gray-400">Got questions? We've got answers to help you ride with confidence.</p>
         </div>
 
-        <div className="space-y-4 max-w-4xl mx-auto">
+        <div className="space-y-4 max-w-5xl mx-auto">
           {FAQS.map((faq, index) => (
             <div 
               key={index}

@@ -47,9 +47,8 @@ export default function BranchStockPage() {
       setLoading(false);
     }
   };
-
   const filteredModels = data?.models.filter(m => 
-    m.name.toLowerCase().includes(search.toLowerCase())
+    (m?.name || "").toLowerCase().includes((search || "").toLowerCase())
   ) || [];
 
   return (
@@ -92,8 +91,8 @@ export default function BranchStockPage() {
           </div>
         </div>
       </div>
-
-      {loading ? (
+      <div className={`transition-opacity duration-200 ${loading && data ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+        {loading && !data ? (
         <div className="flex items-center justify-center py-20">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
         </div>
@@ -159,6 +158,7 @@ export default function BranchStockPage() {
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 }

@@ -32,6 +32,7 @@ export async function POST(req: Request) {
     // Extract Metadata
     let invoiceNo = `INV-${Math.floor(Math.random() * 1000000)}`;
     let totalAmount = 0;
+    let foundVatTotal = false;
     let purchaseType = "Cash";
     let purchaseDateStr = new Date().toISOString().split('T')[0];
     let maxPages = 999;
@@ -50,10 +51,10 @@ export async function POST(req: Request) {
     ];
 
     const COLORS = [
-      "DAZZLE YELLOW METALLIC", "MATTE MARSHAL GREEN METALLIC", "MATTE AXIS GREY METALLIC", "MAT AXIS GREY METALLIC", "MATTE AXIS GRAY METALLIC",
-      "PEARL IGNEOUS BLACK", "VIBRANT ORANGE ( STRIPE )", "VIBRANT ORANGE", "SPORTS RED 2", "SPORTS RED", 
-      "CANDY JAZZY BLUE ( STRIPE )", "CANDY JAZZY BLUE", "SILVER", "MATTE DARK BLUE", "MAT SANGRIA RED METALLIC", "MATTE SANGRIA RED METALLIC",
-      "PEARL NIGHTSTAR BLACK", "PEARL SIREN BLUE", "MATTE MARVEL BLUE METALLIC", "PEARL DEEP GROUND GREY", "GREY",
+      "DAZZLE YELLOW METALLIC", "MATTE MARSHAL GREEN METALLIC", "MATTE AXIS GREY METALLIC", "MAT AXIS GREY METALLIC", "MATTE AXIS GRAY METALLIC", "MAT AXIS GRAY METALLIC",
+      "PEARL IGNEOUS BLACK", "VIBRANT ORANGE ( STRIPE )", "VIBRANT ORANGE", "SPORTS RED 2", "SPORT RED 2", "SPORTS RED", 
+      "CANDY JAZZY BLUE ( STRIPE )", "CANDY JAZZY BLUE", "SILVER", "MATTE DARK BLUE", "MAT SANGRIA RED METALLIC", "MATTE SANGRIA RED METALLIC", "MATT RED METALLIC",
+      "PEARL NIGHTSTAR BLACK", "PEARL SIREN BLUE", "MATTE MARVEL BLUE METALLIC", "PEARL DEEP GROUND GREY", "PEARL DEEP GROUND", "GREY",
       "RED METALLIC", "REBEL RED", "RED", "PEARL AMAZING WHITE", "MAPPLE BROWN METALLIC", "BLACK", "GENY GREY METALLIC",
       "ATHLETIC BLUE METALLIC", "DECENT BLUE METALLIC", "IMPERIAL RED METALLIC", "MATTE SELENE SILVER METALLIC"
     ];
@@ -67,9 +68,17 @@ export async function POST(req: Request) {
       
       // Total Amount
       // Supports "Total Amount: 100,000" or "Total NPR Incl. VAT 3,651,517.11"
-      const amtMatch = line.match(/Total(?:.*?)[\s:]*(?:Rs\.?|NPR)?[\s:]*([\d]{1,3}(?:,[\d]{2,3})*(?:\.\d{1,6})?)/i);
-      if (amtMatch) {
-        totalAmount = parseFloat(amtMatch[1].replace(/,/g, ''));
+      if (!foundVatTotal) {
+        const vatMatch = line.match(/Total\s+NPR\s+Incl\.?\s+VAT[\s:]*(?:Rs\.?|NPR)?[\s:]*([\d]{1,3}(?:,[\d]{2,3})*(?:\.\d{1,6})?)/i);
+        if (vatMatch) {
+          totalAmount = parseFloat(vatMatch[1].replace(/,/g, ''));
+          foundVatTotal = true;
+        } else {
+          const amtMatch = line.match(/Total(?:.*?)[\s:]*(?:Rs\.?|NPR)?[\s:]*([\d]{1,3}(?:,[\d]{2,3})*(?:\.\d{1,6})?)/i);
+          if (amtMatch) {
+            totalAmount = parseFloat(amtMatch[1].replace(/,/g, ''));
+          }
+        }
       }
       
       // Credit Type
@@ -169,21 +178,87 @@ export async function POST(req: Request) {
         modelName = "NX 200";
       }
 
-      // Find Color dynamically from 'Color : NH1 (BLACK)' or 'COLOUR : BLACK'
+      // Find Color dynamically
       let color = "Unknown Color";
-      // Capture the rest of the line after Color: or Colour:
-      const colorLineRegex = /Colou?r[\s:]+(.*)/i;
-      const colorMatch = context.match(colorLineRegex);
       
-      if (colorMatch) {
-        // Keep the exact string written (e.g. "NH1 (BLACK)"), don't strip parentheses
-        color = colorMatch[1].trim();
-      } else {
-        // Fallback: loop through known colors if explicit format is missing
-        for (const c of COLORS) {
-          if (context.toUpperCase().includes(c.toUpperCase())) {
-            color = c;
+      // 1. Search for color pattern like "B221X (Candy Jazzy Blue" closest to the VIN
+      let closestColorDistance = Infinity;
+      const colorRegex = /\b([A-Z0-9]{3,6})\s*\(([A-Za-z0-9\s]+)\)?/g;
+      let cMatch;
+      let closestCode = "";
+      let closestRawName = "";
+      
+      while ((cMatch = colorRegex.exec(context)) !== null) {
+        const distance = Math.abs(cMatch.index - 400); // 400 is the center where VIN is
+        // We ensure we only match if it's within a reasonable distance (prevents grabbing next page's colors)
+        if (distance < closestColorDistance && distance < 300) {
+          closestColorDistance = distance;
+          closestCode = cMatch[1].toUpperCase();
+          closestRawName = cMatch[2].trim().toUpperCase()
+            .replace(/\s+/g, ' ')
+            .replace(/METALIC/g, 'METALLIC')
+            .replace(/\bMATT\b/g, 'MATTE');
+        }
+      }
+      
+      if (closestCode) {
+        // Create a lexicon of valid color words to filter out garbage like "00006" and "SYAKAR"
+        const VALID_WORDS = new Set(COLORS.flatMap(c => c.toUpperCase().split(/[\s()]+/)).filter(Boolean));
+        VALID_WORDS.add("MAT");
+        VALID_WORDS.add("MATT");
+        VALID_WORDS.add("MATTE");
+        VALID_WORDS.add("METALIC");
+        
+        const cleanWords = closestRawName.split(/\s+/).filter(w => VALID_WORDS.has(w));
+        const cleanPrefix = cleanWords.join(' ');
+        
+        let matchedName = "Unknown Color";
+        const sortedColors = [...COLORS].sort((a, b) => b.length - a.length);
+        
+        for (const c of sortedColors) {
+          const cleanC = c.toUpperCase().replace(/\s+/g, ' ');
+          if (cleanPrefix && (cleanC.startsWith(cleanPrefix) || cleanPrefix.startsWith(cleanC))) {
+            matchedName = c;
             break;
+          }
+        }
+        
+        // If it still couldn't match, fallback to exact containment
+        if (matchedName === "Unknown Color" && cleanPrefix) {
+          let bestMatch = "";
+          for (const c of sortedColors) {
+            const cleanC = c.toUpperCase().replace(/\s+/g, ' ');
+            if (cleanPrefix.includes(cleanC) || cleanC.includes(cleanPrefix)) {
+              if (c.length > bestMatch.length) {
+                bestMatch = c;
+              }
+            }
+          }
+          if (bestMatch) matchedName = bestMatch;
+        }
+        
+        color = `${closestCode} (${matchedName})`;
+      } else {
+        // Fallback: search for "Colour :" closest to VIN
+        let closestDist = Infinity;
+        let cText = "";
+        const fallbackRegex = /Colou?r[\s:]+([^\r\n]+)/ig;
+        let fMatch;
+        while ((fMatch = fallbackRegex.exec(context)) !== null) {
+          const d = Math.abs(fMatch.index - 400);
+          if (d < closestDist) {
+            closestDist = d;
+            cText = fMatch[1].trim();
+          }
+        }
+        if (cText) {
+          const cleanUpper = cText.toUpperCase().replace(/\s+/g, ' ');
+          for (const c of [...COLORS].sort((a, b) => b.length - a.length)) {
+            const cleanC = c.toUpperCase().replace(/\s+/g, ' ');
+            if (cleanUpper.includes(cleanC)) {
+              color = c;
+              break;
+            }
           }
         }
       }
@@ -224,7 +299,22 @@ export async function POST(req: Request) {
         purchasePrice = Math.round(priceWithVat / 100) * 100;
       }
 
+      // Try to find the Sequence Number (S.N.) to sort the vehicles correctly
+      // Look for a number followed by the HS code (8711) or "DIO" or "SHINE" near the VIN
+      let sequenceId = 999;
+      const snRegex = /(?:\n|\r)\s*(\d{1,3})\s+(?:8711|DIO|SHINE|CB|NX|SP|UNIT)\b/ig;
+      let sMatch;
+      let closestSnDist = Infinity;
+      while ((sMatch = snRegex.exec(context)) !== null) {
+         const d = Math.abs(sMatch.index - 400); // center of context
+         if (d < closestSnDist && d < 200) {
+           closestSnDist = d;
+           sequenceId = parseInt(sMatch[1], 10);
+         }
+      }
+
       vehiclesToInsert.push({
+        sequenceId,
         vin,
         engineNo,
         category,
@@ -243,9 +333,18 @@ export async function POST(req: Request) {
       }, { status: 400 });
     }
 
+    // Sort by sequenceId so they appear serially D1-P1...D1-P13
+    vehiclesToInsert.sort((a, b) => a.sequenceId - b.sequenceId);
+    
+    // Clean up sequenceId from final output payload as frontend doesn't need it
+    const finalVehicles = vehiclesToInsert.map(v => {
+      const { sequenceId, ...rest } = v;
+      return rest;
+    });
+
     const invoice = {
       invoiceNo,
-      totalAmount: totalAmount || (vehiclesToInsert.length * 200000), // fallback if not found
+      totalAmount: totalAmount || (finalVehicles.length * 200000), // fallback if not found
       purchaseType,
       invoiceDate: purchaseDateStr
     };
@@ -253,9 +352,9 @@ export async function POST(req: Request) {
     // Return the parsed vehicles and invoice so the frontend can preview them before saving
     return NextResponse.json({ 
       success: true, 
-      message: `Successfully parsed ${vehiclesToInsert.length} vehicles. Please review and confirm.`,
+      message: `Successfully parsed ${finalVehicles.length} vehicles. Please review and confirm.`,
       invoice,
-      vehicles: vehiclesToInsert 
+      vehicles: finalVehicles 
     });
 
   } catch (error) {

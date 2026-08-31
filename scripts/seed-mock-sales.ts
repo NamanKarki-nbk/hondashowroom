@@ -46,19 +46,21 @@ async function main() {
       const uniqueId = Math.floor(Math.random() * 1000000000);
       
       // 2. Create a dummy vehicle
+      const vehicleMaster = await prisma.vehicleMaster.findFirst();
+      const variant = await prisma.vehicleVariant.findFirst();
+      if (!variant) throw new Error("Please run seed-honda-products.ts first to populate variants");
+
       const vehicle = await prisma.vehicleInventory.create({
         data: {
           vin: `MOCKVIN${uniqueId}`,
           engineNo: `MOCKENG${uniqueId}`,
-          category: "MOTORCYCLE",
-          name: "Mock Model",
-          cc: 125,
           color: "Mock Color",
           purchasePrice: 100000,
           purchaseDate: new Date(year, month - 2, 1),
           purchaseMethod: "Cash",
           status: "SOLD",
-          createdAt: createdAt
+          createdAt: createdAt,
+          variantId: variant.id
         }
       });
 

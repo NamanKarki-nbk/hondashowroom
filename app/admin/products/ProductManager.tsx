@@ -29,7 +29,7 @@ export default function ProductManager() {
     id: "",
     name: "",
     category: "SCOOTER",
-    price: "",
+    basePrice: "",
     description: "",
   });
 
@@ -60,7 +60,7 @@ export default function ProductManager() {
         id: product.id,
         name: product.name,
         category: product.category,
-        price: product.basePrice.toString(),
+        basePrice: product.basePrice.toString(),
         description: product.description || "",
       });
     } else {
@@ -70,7 +70,7 @@ export default function ProductManager() {
         id: "",
         name: "",
         category: "SCOOTER",
-        price: "",
+        basePrice: "",
         description: "",
       });
     }
@@ -91,7 +91,7 @@ export default function ProductManager() {
     payload.append('id', finalId);
     payload.append('name', formData.name);
     payload.append('category', formData.category);
-    payload.append('price', formData.price.toString());
+    payload.append('basePrice', formData.basePrice.toString());
     payload.append('description', formData.description);
     
     if (selectedFile) {
@@ -300,8 +300,8 @@ export default function ProductManager() {
                   <input
                     type="number"
                     required
-                    value={formData.price}
-                    onChange={e => setFormData({...formData, price: e.target.value})}
+                    value={formData.basePrice}
+                    onChange={e => setFormData({...formData, basePrice: e.target.value})}
                     placeholder="e.g. 264900"
                     className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
                   />

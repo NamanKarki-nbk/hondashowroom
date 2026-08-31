@@ -1,8 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { sendAdminAlert } from "@/lib/mailer";
 
+import { NotificationType } from "@prisma/client";
+
 interface CreateNotificationParams {
-  type: "NEW_LEAD" | "TEST_RIDE" | "AMC_BOOKING" | "SERVICE_BOOKING";
+  type: NotificationType;
   title: string;
   message: string;
   link?: string;

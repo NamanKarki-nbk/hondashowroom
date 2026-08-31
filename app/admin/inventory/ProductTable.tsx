@@ -117,8 +117,8 @@ export default function ProductTable() {
               <th className="px-4 py-3 text-right sticky right-0 bg-gray-50 dark:bg-slate-900 border-l border-gray-200 dark:border-slate-800 z-10">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {loading ? (
+          <tbody className={`divide-y divide-gray-100 dark:divide-slate-800/50 transition-opacity duration-200 ${loading && products.length > 0 ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+            {loading && products.length === 0 ? (
               <tr>
                 <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
                   Loading products...
