@@ -7,9 +7,9 @@ import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
-export default async function BlogDetailPage({ params }: { params: { slug: string } }) {
+export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   // Since slug is ID for now based on how HondaBlogSection was built
-  const blogId = params.slug;
+  const { slug: blogId } = await params;
   
   const blog = await prisma.blog.findUnique({
     where: { id: blogId }
