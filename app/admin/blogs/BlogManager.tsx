@@ -256,16 +256,145 @@ export default function BlogManager() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Content (Markdown supported)</label>
-                <textarea
-                  required
-                  value={formData.content}
-                  onChange={e => setFormData({...formData, content: e.target.value})}
-                  placeholder="Write your article here..."
-                  rows={8}
-                  className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none resize-y"
-                />
+              <div className="pt-2">
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400">Content</label>
+                  <button 
+                    type="button" 
+                    onClick={() => {
+                      if (formData.content.startsWith('{')) {
+                        // Switch to Markdown
+                        if (confirm("Switching to Markdown will stringify your structured content. Continue?")) {
+                          setFormData({...formData, content: ""});
+                        }
+                      } else {
+                        // Switch to JSON
+                        setFormData({...formData, content: JSON.stringify({
+                          summary: formData.content || "",
+                          postType: "ARTICLE",
+                          readingTime: 5,
+                          category: "General",
+                          sections: []
+                        }, null, 2)});
+                      }
+                    }}
+                    className="text-xs font-bold text-primary hover:underline"
+                  >
+                    Toggle Format (JSON/Markdown)
+                  </button>
+                </div>
+                
+                {(() => {
+                  try {
+                    // Try parsing as JSON to show structured editor
+                    if (!formData.content.trim().startsWith('{')) throw new Error("Not JSON");
+                    const data = JSON.parse(formData.content);
+                    
+                    const updateJson = (newData: any) => {
+                      setFormData({...formData, content: JSON.stringify(newData, null, 2)});
+                    };
+
+                    return (
+                      <div className="space-y-4 bg-gray-50/50 dark:bg-slate-900/50 p-4 rounded-xl border border-gray-100 dark:border-slate-800">
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-gray-500 mb-1">Summary</label>
+                          <textarea
+                            value={data.summary || ''}
+                            onChange={e => updateJson({...data, summary: e.target.value})}
+                            rows={3}
+                            className="w-full bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-[10px] uppercase font-bold text-gray-500 mb-1">Category</label>
+                            <input
+                              type="text"
+                              value={data.category || ''}
+                              onChange={e => updateJson({...data, category: e.target.value})}
+                              className="w-full bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] uppercase font-bold text-gray-500 mb-1">Reading Time (mins)</label>
+                            <input
+                              type="number"
+                              value={data.readingTime || ''}
+                              onChange={e => updateJson({...data, readingTime: parseInt(e.target.value) || 0})}
+                              className="w-full bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="pt-2 border-t border-gray-200 dark:border-slate-700">
+                          <div className="flex justify-between items-center mb-3">
+                            <label className="block text-[10px] uppercase font-bold text-gray-500">Sections</label>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newSections = [...(data.sections || []), { title: '', description: '' }];
+                                updateJson({...data, sections: newSections});
+                              }}
+                              className="text-xs bg-primary/10 text-primary px-2 py-1 rounded font-bold hover:bg-primary/20"
+                            >
+                              + Add Section
+                            </button>
+                          </div>
+                          <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2">
+                            {(data.sections || []).map((sec: any, idx: number) => (
+                              <div key={idx} className="bg-white dark:bg-slate-950 p-3 rounded-lg border border-gray-200 dark:border-slate-800 relative">
+                                <button 
+                                  type="button"
+                                  onClick={() => {
+                                    const newSections = data.sections.filter((_: any, i: number) => i !== idx);
+                                    updateJson({...data, sections: newSections});
+                                  }}
+                                  className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+                                <input
+                                  type="text"
+                                  placeholder="Section Title"
+                                  value={sec.title}
+                                  onChange={e => {
+                                    const newSections = [...data.sections];
+                                    newSections[idx].title = e.target.value;
+                                    updateJson({...data, sections: newSections});
+                                  }}
+                                  className="w-full bg-transparent border-b border-gray-200 dark:border-slate-700 pb-1 mb-2 text-sm font-bold focus:border-primary outline-none"
+                                />
+                                <textarea
+                                  placeholder="Section Description..."
+                                  value={sec.description}
+                                  onChange={e => {
+                                    const newSections = [...data.sections];
+                                    newSections[idx].description = e.target.value;
+                                    updateJson({...data, sections: newSections});
+                                  }}
+                                  rows={3}
+                                  className="w-full bg-transparent text-sm focus:ring-0 outline-none resize-y"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  } catch (e) {
+                    // Fallback to markdown textarea
+                    return (
+                      <textarea
+                        required
+                        value={formData.content}
+                        onChange={e => setFormData({...formData, content: e.target.value})}
+                        placeholder="Write your article here..."
+                        rows={8}
+                        className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none resize-y"
+                      />
+                    );
+                  }
+                })()}
               </div>
 
               <div className="pt-4 flex gap-3">
