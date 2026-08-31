@@ -290,6 +290,8 @@ export default function HondaDio125Page({ vehicle }: HondaDio125PageProps = {}) 
 
         {/* 5. Highlight and Feature */}
         <DioFeaturesGrid 
+          imageFit="cover"
+          imageBgClass="bg-slate-900 dark:bg-[#1C1C20]"
           features={(vehicle?.features || []).map((f: any, i: number) => {
             let Icon = Sparkles;
             const titleLower = (f.title || '').toLowerCase();

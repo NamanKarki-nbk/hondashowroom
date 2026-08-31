@@ -92,7 +92,15 @@ const DIO_FEATURES: FeatureCard[] = [
   },
 ];
 
-export default function DioFeaturesGrid({ features }: { features?: FeatureCard[] }) {
+export default function DioFeaturesGrid({ 
+  features,
+  imageFit = "cover",
+  imageBgClass = "bg-slate-900 dark:bg-[#1C1C20]"
+}: { 
+  features?: FeatureCard[];
+  imageFit?: "cover" | "contain";
+  imageBgClass?: string;
+}) {
   const displayFeatures = features && features.length > 0 ? features : DIO_FEATURES;
 
   return (
@@ -122,12 +130,12 @@ export default function DioFeaturesGrid({ features }: { features?: FeatureCard[]
               >
                 <div>
                   {/* Feature Image Banner */}
-                  <div className="relative aspect-[4/3] w-full bg-slate-900 dark:bg-[#1C1C20] overflow-hidden">
+                  <div className={`relative aspect-[4/3] w-full overflow-hidden ${imageBgClass}`}>
                     <ImageWithFallback
                       src={feat.image}
                       fallbackSrc={feat.fallbackImage}
                       alt={feat.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                      className={`w-full h-full group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100 ${imageFit === "contain" ? "object-contain p-4" : "object-cover"}`}
                     />
                     
                     {feat.tag && (
