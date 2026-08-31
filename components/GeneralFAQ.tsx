@@ -59,7 +59,7 @@ export default function FAQSection() {
         </div>
 
         {/* Tabs */}
-        <div className="flex justify-center mb-10 w-full max-w-5xl mx-auto px-4">
+        <div className="flex justify-center mb-10 w-full mx-auto">
           <div className="flex w-full overflow-hidden bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-lg">
             {CATEGORIES.map((category) => (
               <button
@@ -78,7 +78,7 @@ export default function FAQSection() {
         </div>
 
         {/* Accordion Container */}
-        <div className="w-full max-w-5xl mx-auto space-y-4 px-4 sm:px-0">
+        <div className="w-full mx-auto space-y-4">
           {filteredFaqs.length === 0 ? (
             <div className="text-center py-10 text-gray-500">No questions found in this category.</div>
           ) : (
