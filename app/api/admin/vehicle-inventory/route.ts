@@ -12,9 +12,9 @@ export async function GET(req: Request) {
       include: { variant: { include: { vehicleMaster: true } } }
     });
 
-    // Fetch vehicles to map prices
+    // Fetch vehicles to map prices and details
     const vehicles = await prisma.vehicleMaster.findMany({
-      select: { name: true, basePrice: true, colors: true }
+      select: { name: true, basePrice: true, colors: true, category: true, specifications: true }
     });
 
     const now = new Date();
@@ -28,11 +28,24 @@ export async function GET(req: Request) {
       const daysInStock = differenceInDays(now, new Date(item.purchaseDate));
       
       // Attempt to find color hex if exists
-      const colorDef = vehicleDef?.colors.find(c => c.name.toLowerCase() === item.color.toLowerCase() || item.color.includes(c.name));
+      const colorDef = vehicleDef?.colors?.find((c: any) => c.name.toLowerCase() === item.color.toLowerCase() || item.color.includes(c.name));
       const hexCode = colorDef ? colorDef.hexCode : "#CCCCCC";
+
+      let cc = 0;
+      if (vehicleDef?.specifications && typeof vehicleDef.specifications === 'object') {
+        const specs = vehicleDef.specifications as any;
+        const engineSpecs = specs.Engine_Performance || [];
+        const displacement = engineSpecs.find((s: any) => s.label === 'Displacement');
+        if (displacement && displacement.value) {
+          cc = parseFloat(displacement.value) || 0;
+        }
+      }
 
       return {
         ...item,
+        name: vehicleDef?.name || item.variant?.vehicleMaster?.name || "Unknown Model",
+        category: vehicleDef?.category || "N/A",
+        cc,
         sellingPrice,
         daysInStock: daysInStock >= 0 ? daysInStock : 0,
         hexCode
