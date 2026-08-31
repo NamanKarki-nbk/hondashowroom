@@ -21,22 +21,13 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950 pb-24">
-      {/* Hero Banner */}
-      <div className="w-full relative h-[400px] md:h-[500px] bg-slate-900 flex items-end">
-        {blog.imageUrl && (
-          <Image 
-            src={blog.imageUrl} 
-            alt={blog.title} 
-            fill 
-            className="object-cover opacity-50"
-            priority
-          />
-        )}
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-          <Link href="/blog" className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors mb-6 text-sm font-bold uppercase tracking-wider">
+      {/* Simple Header */}
+      <div className="w-full bg-slate-900 py-16 md:py-24">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Link href="/blog" className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors mb-8 text-sm font-bold uppercase tracking-wider">
             <ArrowLeft className="w-4 h-4" /> Back to Blogs
           </Link>
-          <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-6 leading-tight">
+          <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-8 leading-tight">
             {blog.title}
           </h1>
           <div className="flex flex-wrap items-center gap-6 text-sm font-semibold text-white/80 uppercase tracking-wider">
@@ -49,6 +40,18 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
         <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 md:p-12 shadow-xl border border-gray-100 dark:border-slate-800">
+          {blog.imageUrl && (
+            <div className="w-full rounded-2xl overflow-hidden mb-12 bg-gray-100 dark:bg-slate-800 shadow-sm border border-gray-100 dark:border-slate-800">
+              <Image 
+                src={blog.imageUrl} 
+                alt={blog.title} 
+                width={1200}
+                height={675}
+                className="w-full h-auto object-contain"
+                priority
+              />
+            </div>
+          )}
           <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-black prose-a:text-primary">
             {/* Simple Markdown-like renderer without external packages */}
             {blog.content.split('\n\n').map((paragraph, index) => {
