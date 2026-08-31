@@ -122,12 +122,12 @@ export default function DioFeaturesGrid({ features }: { features?: FeatureCard[]
               >
                 <div>
                   {/* Feature Image Banner */}
-                  <div className="relative h-44 w-full bg-gray-100 dark:bg-[#1C1C20] overflow-hidden">
+                  <div className="relative aspect-[4/3] w-full bg-slate-900 dark:bg-[#1C1C20] overflow-hidden">
                     <ImageWithFallback
                       src={feat.image}
                       fallbackSrc={feat.fallbackImage}
                       alt={feat.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                     />
                     
                     {feat.tag && (

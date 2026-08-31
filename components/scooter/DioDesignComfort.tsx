@@ -118,12 +118,12 @@ export default function DioDesignComfort() {
                 </div>
 
                 {/* Card Visual Banner */}
-                <div className="relative h-44 w-full bg-gray-100 dark:bg-slate-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-slate-800">
+                <div className="relative aspect-[4/3] w-full bg-slate-900 dark:bg-slate-900 rounded-2xl overflow-hidden border border-gray-100 dark:border-slate-800">
                   <ImageWithFallback
                     src={item.image}
                     fallbackSrc={item.fallbackImage}
                     alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                   />
                 </div>
               </div>

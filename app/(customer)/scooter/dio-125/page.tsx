@@ -304,8 +304,8 @@ export default function HondaDio125Page({ vehicle }: HondaDio125PageProps = {}) 
               subtitle: "",
               description: f.description,
               icon: Icon,
-              image: f.image.startsWith("/") ? f.image : `/images/features/dio125/${f.image}`,
-              fallbackImage: "/inventory/honda-dio-bs6-125.png"
+              image: f.image || "",
+              fallbackImage: ""
             };
           })} 
         />

@@ -69,14 +69,12 @@ function generateMockData(vehicle: any) {
       return {
         title: f,
         description: "",
-        image: "/models/hero-1.png"
+        image: ""
       };
     }
     return {
       ...f,
-      image: f.image && !f.image.startsWith("/") && featureImageFolder
-        ? `/images/features/${featureImageFolder}/${f.image}`
-        : f.image || "/models/hero-1.png"
+      image: f.image && f.image.startsWith('http') ? f.image : ""
     };
   }) : featuresRaw;
 

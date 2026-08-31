@@ -6,12 +6,6 @@ import { logActivity } from '@/lib/activityLogger';
 
 export async function GET(request: Request) {
   try {
-    const token = (await cookies()).get("session")?.value;
-    const session = token ? await verifySessionToken(token) : null;
-    if (!session || session.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category');
 
@@ -39,9 +33,9 @@ export async function GET(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    const token = (await cookies()).get("session")?.value;
+    const token = (await cookies()).get("auth_session")?.value;
     const session = token ? await verifySessionToken(token) : null;
-    if (!session || session.role !== 'ADMIN') {
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

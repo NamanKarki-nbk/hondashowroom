@@ -29,7 +29,7 @@ const ratelimit = redis
   ? new Ratelimit({
       redis: redis,
       limiter: Ratelimit.slidingWindow(100, "60 s"),
-      analytics: true,
+      analytics: false,
     }) 
   : null;
 

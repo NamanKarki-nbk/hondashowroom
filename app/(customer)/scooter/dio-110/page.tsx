@@ -309,8 +309,8 @@ export default function HondaDio110Page({
               subtitle: "",
               description: f.description,
               icon: Icon,
-              image: f.image.startsWith("/") ? f.image : `/images/features/dio110/${f.image}`,
-              fallbackImage: "/inventory/honda-dio-bs6-110.png"
+              image: f.image || "",
+              fallbackImage: ""
             };
           })} 
         />

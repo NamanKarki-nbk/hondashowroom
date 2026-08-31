@@ -35,22 +35,22 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
   };
 
   const scooters = products
-    .filter((p) => p.category === "SCOOTERS")
+    .filter((p) => p.category === "SCOOTER")
     .sort((a, b) => getSortIndex(a.name, scooterOrder) - getSortIndex(b.name, scooterOrder));
     
   const motorcycles = products
-    .filter((p) => p.category === "MOTORCYCLES")
+    .filter((p) => p.category === "MOTORCYCLE")
     .sort((a, b) => getSortIndex(a.name, motorcycleOrder) - getSortIndex(b.name, motorcycleOrder));
     
-  const power = products.filter((p) => p.category === "POWER_PRODUCTS");
+  const power = products.filter((p) => p.category === "POWER_PRODUCT");
 
   const TABS = useMemo(() => [
-    { id: "SCOOTERS", label: "SCOOTERS", data: scooters },
-    { id: "MOTORCYCLES", label: "MOTORCYCLES", data: motorcycles },
+    { id: "SCOOTER", label: "SCOOTER", data: scooters },
+    { id: "MOTORCYCLE", label: "MOTORCYCLE", data: motorcycles },
     { id: "POWER", label: "POWER PRODUCTS", data: power },
   ].filter((tab) => tab.data.length > 0), [products]);
 
-  const [activeTab, setActiveTab] = useState("SCOOTERS");
+  const [activeTab, setActiveTab] = useState("SCOOTER");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -152,11 +152,11 @@ export default function CategoryCarousel({ products }: CategoryCarouselProps) {
                       title={vehicle.name}
                       priceNpr={vehicle.basePrice}
                       category={
-                        vehicle.category === "POWER_PRODUCTS"
+                        vehicle.category === "POWER_PRODUCT"
                           ? "Power Product"
-                          : vehicle.category === "AUTOMOBILES"
+                          : vehicle.category === "AUTOMOBILE"
                             ? "Automobile"
-                            : vehicle.category === "SCOOTERS"
+                            : vehicle.category === "SCOOTER"
                               ? "Scooter"
                               : "Motorcycle"
                       }

@@ -28,7 +28,7 @@ export default function ProductManager() {
   const [formData, setFormData] = useState({
     id: "",
     name: "",
-    category: "SCOOTERS",
+    category: "SCOOTER",
     price: "",
     description: "",
   });
@@ -69,7 +69,7 @@ export default function ProductManager() {
       setFormData({
         id: "",
         name: "",
-        category: "SCOOTERS",
+        category: "SCOOTER",
         price: "",
         description: "",
       });
@@ -135,7 +135,7 @@ export default function ProductManager() {
     }
   };
 
-  const categoryOrder = ["SCOOTERS", "MOTORCYCLES", "POWER_PRODUCTS"];
+  const categoryOrder = ["SCOOTER", "MOTORCYCLE", "POWER_PRODUCT"];
   const filteredProducts = products
     .filter(p => 
       p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -290,9 +290,9 @@ export default function ProductManager() {
                     onChange={e => setFormData({...formData, category: e.target.value})}
                     className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
                   >
-                    <option value="SCOOTERS">Scooters</option>
-                    <option value="MOTORCYCLES">Motorcycles</option>
-                    <option value="POWER_PRODUCTS">Power Products</option>
+                    <option value="SCOOTER">Scooters</option>
+                    <option value="MOTORCYCLE">Motorcycles</option>
+                    <option value="POWER_PRODUCT">Power Products</option>
                   </select>
                 </div>
                 <div>

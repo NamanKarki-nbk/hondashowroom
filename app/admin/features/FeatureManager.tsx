@@ -19,6 +19,13 @@ interface Vehicle {
   imageUrl: string;
 }
 
+function getFeatureImageUrl(vehicleName: string, imageSrc: string): string {
+  if (!imageSrc) return "";
+  if (imageSrc.startsWith('http')) return imageSrc;
+  
+  return "";
+}
+
 export default function FeatureManager() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
@@ -217,7 +224,7 @@ export default function FeatureManager() {
             >
               <div className="w-10 h-10 bg-white dark:bg-slate-950 rounded-lg p-1 shrink-0 flex items-center justify-center">
                 {v.imageUrl && (
-                  <Image src={v.imageUrl} alt={v.name} width={40} height={40} className="object-contain drop-shadow-md" />
+                  <img src={v.imageUrl} alt={v.name} className="w-full h-full object-contain drop-shadow-md" />
                 )}
               </div>
               <div className="truncate">
@@ -242,7 +249,7 @@ export default function FeatureManager() {
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-white rounded-lg p-1 shrink-0 flex items-center justify-center shadow-sm">
                   {selectedVehicle.imageUrl && (
-                    <Image src={selectedVehicle.imageUrl} alt={selectedVehicle.name} width={40} height={40} className="object-contain" />
+                    <img src={selectedVehicle.imageUrl} alt={selectedVehicle.name} className="w-full h-full object-contain" />
                   )}
                 </div>
                 <div>
@@ -282,7 +289,7 @@ export default function FeatureManager() {
                     <div key={idx} className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl overflow-hidden group shadow-sm hover:shadow-md transition-all">
                       <div className="h-40 bg-gray-100 dark:bg-black/20 relative flex items-center justify-center p-4">
                         {feature.image ? (
-                          <img src={feature.image.startsWith('http') ? feature.image : `/models/features/${feature.image}`} alt={feature.title} className="object-contain w-full h-full drop-shadow-md" />
+                          <img src={getFeatureImageUrl(selectedVehicle.name, feature.image)} alt={feature.title} className="object-contain w-full h-full drop-shadow-md" />
                         ) : (
                           <ImageIcon className="w-8 h-8 text-gray-300 dark:text-gray-700" />
                         )}
@@ -349,7 +356,7 @@ export default function FeatureManager() {
                 
                 {formData.image && (
                   <div className="mb-3 w-32 h-32 bg-gray-100 dark:bg-slate-800 rounded-lg overflow-hidden flex items-center justify-center p-2 relative border border-gray-200 dark:border-slate-700">
-                    <img src={formData.image.startsWith('http') ? formData.image : `/models/features/${formData.image}`} alt="Preview" className="max-w-full max-h-full object-contain" />
+                    <img src={getFeatureImageUrl(selectedVehicle.name, formData.image)} alt="Preview" className="max-w-full max-h-full object-contain" />
                   </div>
                 )}
 

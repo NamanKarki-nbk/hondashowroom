@@ -5,9 +5,9 @@ import { verifySessionToken } from "@/lib/session";
 
 export async function POST(request: Request) {
   try {
-    const token = (await cookies()).get("session")?.value;
+    const token = (await cookies()).get("auth_session")?.value;
     const session = token ? await verifySessionToken(token) : null;
-    if (!session || session.role !== 'ADMIN') {
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
