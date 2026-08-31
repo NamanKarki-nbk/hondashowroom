@@ -53,22 +53,52 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             </div>
           )}
           <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-black prose-a:text-primary">
-            {/* Simple Markdown-like renderer without external packages */}
-            {blog.content.split('\n\n').map((paragraph, index) => {
-              if (paragraph.startsWith('**') && paragraph.includes('**', 2)) {
-                const parts = paragraph.split('**');
+            {(() => {
+              try {
+                const data = JSON.parse(blog.content);
                 return (
-                  <p key={index} className="mb-6 text-gray-700 dark:text-gray-300 leading-relaxed text-lg whitespace-pre-wrap">
-                    {parts.map((part, i) => i % 2 === 1 ? <strong key={i} className="text-gray-900 dark:text-white font-black">{part}</strong> : part)}
-                  </p>
+                  <div className="flex flex-col gap-8 not-prose">
+                    <div className="bg-gray-50 dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-gray-100 dark:border-slate-700">
+                      <p className="text-xl md:text-2xl font-medium text-gray-800 dark:text-gray-200 leading-relaxed mb-4">
+                        {data.summary}
+                      </p>
+                      <div className="flex flex-wrap gap-4 text-sm font-bold text-gray-500 uppercase tracking-wider">
+                        {data.category && <span>• {data.category}</span>}
+                        {data.readingTime && <span>• {data.readingTime} min read</span>}
+                      </div>
+                    </div>
+                    
+                    {data.sections?.map((section: any, idx: number) => (
+                      <div key={idx} className="mt-8">
+                        <h2 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white mb-4">
+                          {section.title}
+                        </h2>
+                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg md:text-xl">
+                          {section.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 );
+              } catch (e) {
+                // Fallback to simple Markdown-like renderer
+                return blog.content.split('\n\n').map((paragraph, index) => {
+                  if (paragraph.startsWith('**') && paragraph.includes('**', 2)) {
+                    const parts = paragraph.split('**');
+                    return (
+                      <p key={index} className="mb-6 text-gray-700 dark:text-gray-300 leading-relaxed text-lg whitespace-pre-wrap">
+                        {parts.map((part, i) => i % 2 === 1 ? <strong key={i} className="text-gray-900 dark:text-white font-black">{part}</strong> : part)}
+                      </p>
+                    );
+                  }
+                  return (
+                    <p key={index} className="mb-6 text-gray-700 dark:text-gray-300 leading-relaxed text-lg whitespace-pre-wrap">
+                      {paragraph}
+                    </p>
+                  );
+                });
               }
-              return (
-                <p key={index} className="mb-6 text-gray-700 dark:text-gray-300 leading-relaxed text-lg whitespace-pre-wrap">
-                  {paragraph}
-                </p>
-              );
-            })}
+            })()}
           </div>
         </div>
       </div>

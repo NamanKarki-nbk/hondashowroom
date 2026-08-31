@@ -50,7 +50,14 @@ export default async function BlogListingPage() {
                     {blog.title}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 line-clamp-3">
-                    {blog.content.replace(/[#*`]/g, '').substring(0, 150)}...
+                    {(() => {
+                      try {
+                        const parsed = JSON.parse(blog.content);
+                        return parsed.summary || blog.content.substring(0, 150) + '...';
+                      } catch (e) {
+                        return blog.content.replace(/[#*`]/g, '').substring(0, 150) + '...';
+                      }
+                    })()}
                   </p>
                   <div className="mt-auto flex items-center text-primary font-bold uppercase tracking-wider text-sm gap-2 group-hover:gap-3 transition-all">
                     Read More <ArrowRight className="w-4 h-4" />
