@@ -421,7 +421,7 @@ export default function VehicleInventoryTable() {
                           className="w-2.5 h-2.5 rounded-full shadow-sm border border-gray-200"
                           style={{ backgroundColor: item.hexCode }}
                         />
-                        <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">
+                        <span className="text-xs font-semibold text-gray-600 dark:text-gray-300">
                           {item.color}
                         </span>
                       </div>
