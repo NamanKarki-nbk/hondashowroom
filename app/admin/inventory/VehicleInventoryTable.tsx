@@ -23,6 +23,15 @@ type VehicleInventoryItem = {
   };
 };
 
+const formatVariant = (name?: string) => {
+  if (!name) return '';
+  if (/std|standard/i.test(name)) return 'STD';
+  if (/dlx|deluxe/i.test(name)) return 'DLX';
+  const match = name.match(/\(([^)]+)\)/);
+  if (match) return match[1].toUpperCase();
+  return name.replace(/Standard/i, 'STD').replace(/Deluxe/i, 'DLX');
+};
+
 export default function VehicleInventoryTable() {
   const [items, setItems] = useState<VehicleInventoryItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -406,7 +415,7 @@ export default function VehicleInventoryTable() {
                     </td>
                     <td className="py-4 px-6">
                       <p className="text-sm font-bold text-gray-900 dark:text-white">
-                        {item.name} {item.variant?.variantName === 'Standard' ? 'STD' : item.variant?.variantName === 'Deluxe' ? 'DLX' : item.variant?.variantName || ''}
+                        {item.name} {item.variant?.variantName ? formatVariant(item.variant.variantName) : ''}
                       </p>
                       <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
                         {item.category} • {item.cc}cc
