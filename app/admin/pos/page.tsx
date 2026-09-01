@@ -32,6 +32,7 @@ function POSContent() {
   // Payment Method fields
   const [pmCashAmount, setPmCashAmount] = useState<number>(0);
   const [bankTransfers, setBankTransfers] = useState([{ bankName: "", transactionId: "", amount: 0 }]);
+  const [pmChequeBankName, setPmChequeBankName] = useState("");
   const [pmChequeNumber, setPmChequeNumber] = useState("");
   const [pmChequeDate, setPmChequeDate] = useState("");
   const [pmChequeAmount, setPmChequeAmount] = useState<number>(0);
@@ -604,7 +605,7 @@ function POSContent() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Bank Name</label>
-                      <input type="text" value={pmBankName} onChange={e => setPmBankName(e.target.value)} placeholder="e.g. Nabil Bank" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                      <input type="text" value={pmChequeBankName} onChange={e => setPmChequeBankName(e.target.value)} placeholder="e.g. Nabil Bank" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Cheque Number</label>
