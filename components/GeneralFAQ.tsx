@@ -78,7 +78,7 @@ export default function FAQSection() {
         </div>
 
         {/* Accordion Container */}
-        <div className="w-full mx-auto space-y-4">
+        <div className="w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 items-start">
           {filteredFaqs.length === 0 ? (
             <div className="text-center py-10 text-gray-500">No questions found in this category.</div>
           ) : (
