@@ -234,8 +234,8 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {filteredModels.map(model => (
-            <div key={model.name} className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-8 rounded-3xl flex flex-col group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
+        {filteredModels.map((model, idx) => (
+            <div key={model.id || `${model.name}-${idx}`} className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-8 rounded-3xl flex flex-col group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
               <h3 className="font-black text-xl md:text-2xl font-semibold text-gray-900 dark:text-white uppercase tracking-tight mb-1">{model.name}</h3>
               <p className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">
                 ({model.defaultDpPct}% DP / {model.defaultTenure} Months)
