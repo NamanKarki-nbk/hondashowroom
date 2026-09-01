@@ -16,6 +16,7 @@ function POSContent() {
   const [discountType, setDiscountType] = useState<"Normal" | "Scheme">("Normal");
   const [discountAmount, setDiscountAmount] = useState<number>(0);
   const [accessories, setAccessories] = useState<string>("");
+  const [accessoriesAmount, setAccessoriesAmount] = useState<number>(0);
   
   // Exchange fields
   const [oldVehicleModel, setOldVehicleModel] = useState("");
@@ -388,17 +389,40 @@ function POSContent() {
                   </div>
 
                   {/* Accessories */}
-                  <div className="space-y-2 pt-2 border-t border-zinc-100 dark:border-slate-800/50">
+                  <div className="space-y-4 pt-4 border-t border-zinc-100 dark:border-slate-800/50">
                     <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider flex items-center gap-2">
                       <PackagePlus className="w-4 h-4" /> Accessories Given
                     </label>
-                    <textarea 
-                      value={accessories}
-                      onChange={e => setAccessories(e.target.value)}
-                      placeholder="E.g., Helmet, Bike Cover, Leg Guard..."
-                      rows={2}
-                      className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-pink-500 outline-none transition-all resize-none" 
-                    />
+                    <div className="p-3 bg-zinc-50 dark:bg-black/30 border border-zinc-200 dark:border-white/10 rounded-xl">
+                      <div className="flex items-center gap-2 text-sm text-zinc-700 dark:text-gray-300 font-medium">
+                        <CheckCircle className="w-4 h-4 text-green-500" /> Helmet (Free)
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-zinc-700 dark:text-gray-300 font-medium mt-2">
+                        <CheckCircle className="w-4 h-4 text-green-500" /> Seat Cover (Free)
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Extra Accessories</label>
+                        <textarea 
+                          value={accessories}
+                          onChange={e => setAccessories(e.target.value)}
+                          placeholder="E.g., Bike Cover, Leg Guard..."
+                          rows={2}
+                          className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-pink-500 outline-none transition-all resize-none" 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Accessories Amount (Rs.)</label>
+                        <input 
+                          type="number" 
+                          value={accessoriesAmount || ""}
+                          onChange={e => setAccessoriesAmount(Number(e.target.value))}
+                          placeholder="0"
+                          className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-pink-500 outline-none transition-all" 
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -474,12 +498,19 @@ function POSContent() {
                   </div>
                 )}
                 
+                {accessoriesAmount > 0 && (
+                  <div className="group flex justify-between items-center text-base p-2 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-lg transition-colors">
+                    <span className="text-zinc-600 dark:text-gray-400 flex items-center gap-2"><PackagePlus className="w-4 h-4 text-zinc-500 dark:text-gray-500" /> Extra Accessories</span>
+                    <span className="text-zinc-900 dark:text-white font-semibold">+ Rs. {accessoriesAmount.toLocaleString()}</span>
+                  </div>
+                )}
+                
                 <div className="pt-8 mt-4">
                    <div className="bg-gradient-to-br from-zinc-100 to-zinc-50 dark:from-black/80 dark:to-slate-900/80 p-6 rounded-2xl border border-zinc-200 dark:border-white/10 relative overflow-hidden shadow-inner">
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-orange-500 to-primary opacity-80"></div>
                       <span className="text-zinc-600 dark:text-gray-400 text-sm font-bold uppercase tracking-widest block mb-2">Total Receivable</span>
                       <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-gray-400 tracking-tighter">
-                        Rs. {activeVehicle ? Math.max(0, activeVehicle.price - (discountAmount || 0) - (showExchange ? (valuationAmount || 0) : 0)).toLocaleString() : "0"}
+                        Rs. {activeVehicle ? Math.max(0, activeVehicle.price - (discountAmount || 0) - (showExchange ? (valuationAmount || 0) : 0) + (accessoriesAmount || 0)).toLocaleString() : "0"}
                       </div>
                    </div>
                 </div>
