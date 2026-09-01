@@ -409,7 +409,7 @@ export default function VehicleInventoryTable() {
               ) : (
                 displayedItems.map((item, idx) => (
                   <tr key={item.id} className={`group hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors ${idx % 2 === 0 ? 'bg-transparent' : 'bg-zinc-50 dark:bg-slate-900'}`}>
-                    <td className="py-4 px-6 text-xs font-semibold text-gray-500 dark:text-gray-400">
+                    <td className="py-4 px-6 text-sm font-medium text-gray-600 dark:text-gray-400">
                       {item.indexNo || "-"}
                     </td>
                     <td className="py-4 px-6">
@@ -427,11 +427,11 @@ export default function VehicleInventoryTable() {
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <p className="text-xs font-bold text-gray-700 dark:text-gray-300 font-mono tracking-wider">{item.vin}</p>
-                      <p className="text-[10px] font-medium text-gray-400 font-mono mt-0.5">{item.engineNo}</p>
+                      <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 font-mono">{item.vin}</p>
+                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 font-mono mt-1">{item.engineNo}</p>
                     </td>
                     <td className="py-4 px-6">
-                      <span className="text-xs font-bold text-green-600 dark:text-green-500">
+                      <span className="text-sm font-semibold text-green-600 dark:text-green-500">
                         {item.daysInStock} Days
                       </span>
                     </td>
@@ -441,7 +441,7 @@ export default function VehicleInventoryTable() {
                       </span>
                     </td>
                     <td className="py-4 px-6">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-green-50 text-green-600 border border-green-100 dark:bg-green-900/40 dark:text-green-400 dark:border-green-800/50">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/40 dark:text-green-400 dark:border-green-800/50">
                         {(() => {
                           const branch = branches.find(b => b.id === item.branchId);
                           const branchName = branch?.name?.toLowerCase() || '';
