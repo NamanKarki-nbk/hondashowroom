@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
-import { Search, UserPlus, CreditCard, FileText, CheckCircle, Calculator, ChevronRight, Zap, ArrowRight, ShieldCheck, Tag } from "lucide-react";
+import { Search, UserPlus, CreditCard, FileText, CheckCircle, Calculator, ChevronRight, Zap, ArrowRight, ShieldCheck, Tag, Briefcase } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 function POSContent() {
@@ -11,6 +11,7 @@ function POSContent() {
   const [customerSearchQuery, setCustomerSearchQuery] = useState("");
   const [customerSearchResults, setCustomerSearchResults] = useState<any[]>([]);
   const [isSearchingCustomer, setIsSearchingCustomer] = useState(false);
+  const [purchaseMethod, setPurchaseMethod] = useState("FULL CASH");
   const [paymentMethod, setPaymentMethod] = useState("Bank Transfer");
 
   // Read URL params to auto-search VIN if provided
@@ -234,13 +235,41 @@ function POSContent() {
               </div>
             </div>
 
+            {/* Purchase Method Card */}
+            <div className={`bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl border border-zinc-200 dark:border-white/5 rounded-3xl p-6 md:p-8 shadow-xl dark:shadow-2xl relative overflow-hidden transition-all duration-500 delay-75 ${(!activeVehicle || !customer.name) ? 'opacity-50 grayscale pointer-events-none' : 'opacity-100 hover:border-orange-500/30'}`}>
+              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-transparent opacity-50"></div>
+              
+              <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6 flex items-center gap-3 uppercase tracking-wider">
+                <Briefcase className="w-5 h-5 text-orange-500 dark:text-orange-400" /> 
+                3. Purchase Method
+              </h2>
+              <div className="flex flex-wrap gap-3">
+                {["FULL CASH", "EXCHANGE", "FINANCE", "CREDIT", "FINANCE & EXCHANGE"].map(method => (
+                  <button 
+                    key={method}
+                    onClick={() => setPurchaseMethod(method)}
+                    className={`relative px-5 py-3 rounded-xl border text-sm transition-all duration-300 overflow-hidden group flex-grow sm:flex-grow-0 ${
+                      purchaseMethod === method 
+                        ? "bg-orange-50 dark:bg-orange-500/10 border-orange-400 dark:border-orange-500 text-orange-700 dark:text-orange-400 shadow-[0_0_15px_rgba(249,115,22,0.15)]" 
+                        : "bg-zinc-50 dark:bg-black/50 border-zinc-200 dark:border-white/10 text-zinc-600 dark:text-gray-400 hover:border-zinc-400 dark:hover:border-white/30 hover:bg-zinc-100 dark:hover:bg-white/5"
+                    }`}
+                  >
+                    {purchaseMethod === method && (
+                      <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 dark:from-orange-500/20 to-transparent opacity-50"></div>
+                    )}
+                    <span className="relative z-10 font-bold tracking-wide">{method}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Payment Method Card */}
             <div className={`bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl border border-zinc-200 dark:border-white/5 rounded-3xl p-6 md:p-8 shadow-xl dark:shadow-2xl relative overflow-hidden transition-all duration-500 delay-100 ${(!activeVehicle || !customer.name) ? 'opacity-50 grayscale pointer-events-none' : 'opacity-100 hover:border-purple-500/30'}`}>
               <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-500 to-transparent opacity-50"></div>
               
               <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6 flex items-center gap-3 uppercase tracking-wider">
                 <CreditCard className="w-5 h-5 text-purple-500 dark:text-purple-400" /> 
-                3. Payment Method
+                4. Payment Method
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {["Bank Transfer", "Cheque", "eSewa", "Cash"].map(method => (
