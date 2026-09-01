@@ -18,6 +18,9 @@ type VehicleInventoryItem = {
   status: string;
   hexCode: string;
   branchId?: string;
+  variant?: {
+    variantName: string;
+  };
 };
 
 export default function VehicleInventoryTable() {
@@ -403,7 +406,10 @@ export default function VehicleInventoryTable() {
                     </td>
                     <td className="py-4 px-6">
                       <p className="text-sm font-bold text-gray-900 dark:text-white">{item.name}</p>
-                      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{item.category} • {item.cc}cc</p>
+                      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+                        {item.category} • {item.cc}cc 
+                        {item.variant?.variantName ? ` • ${item.variant.variantName}` : ''}
+                      </p>
                     </td>
                     <td className="py-4 px-6">
                       <p className="text-xs font-bold text-gray-700 dark:text-gray-300 font-mono tracking-wider">{item.vin}</p>
