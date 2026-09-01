@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
-import { Search, UserPlus, CreditCard, FileText, CheckCircle, Calculator, ChevronRight, Zap, ArrowRight, ShieldCheck, Tag, Briefcase } from "lucide-react";
+import { Search, UserPlus, CreditCard, FileText, CheckCircle, Calculator, ChevronRight, Zap, ArrowRight, ShieldCheck, Tag, Briefcase, Percent, PackagePlus, Repeat, Landmark } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 function POSContent() {
@@ -13,6 +13,20 @@ function POSContent() {
   const [isSearchingCustomer, setIsSearchingCustomer] = useState(false);
   const [purchaseMethod, setPurchaseMethod] = useState("FULL CASH");
   const [paymentMethod, setPaymentMethod] = useState("Bank Transfer");
+  const [discountType, setDiscountType] = useState<"Normal" | "Scheme">("Normal");
+  const [discountAmount, setDiscountAmount] = useState<number>(0);
+  const [accessories, setAccessories] = useState<string>("");
+  
+  // Exchange fields
+  const [oldVehicleModel, setOldVehicleModel] = useState("");
+  const [oldVehicleNumber, setOldVehicleNumber] = useState("");
+  const [valuationAmount, setValuationAmount] = useState<number>(0);
+  const [valuationBy, setValuationBy] = useState("");
+
+  // Finance fields
+  const [downPayment, setDownPayment] = useState<number>(0);
+  const [financeCompany, setFinanceCompany] = useState("");
+  const [financeDuration, setFinanceDuration] = useState("");
 
   // Read URL params to auto-search VIN if provided
   const searchParams = useSearchParams();
@@ -83,6 +97,16 @@ function POSContent() {
   };
 
   const commission = activeVehicle ? Math.round(activeVehicle.price * 0.015) : 0;
+
+  // Determine step numbers dynamically based on purchaseMethod
+  const showExchange = purchaseMethod === "EXCHANGE" || purchaseMethod === "FINANCE & EXCHANGE";
+  const showFinance = purchaseMethod === "FINANCE" || purchaseMethod === "FINANCE & EXCHANGE";
+  
+  let currentStep = 3;
+  const exchangeStep = showExchange ? ++currentStep : -1;
+  const financeStep = showFinance ? ++currentStep : -1;
+  const offersStep = ++currentStep;
+  const paymentStep = ++currentStep;
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-slate-950 text-zinc-900 dark:text-gray-100 p-4 md:p-8 relative overflow-hidden transition-colors duration-300">
@@ -263,13 +287,130 @@ function POSContent() {
               </div>
             </div>
 
+            {/* Exchange Details Card (Conditional) */}
+            {showExchange && (
+              <div className={`bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl border border-zinc-200 dark:border-white/5 rounded-3xl p-6 md:p-8 shadow-xl dark:shadow-2xl relative overflow-hidden transition-all duration-500 delay-75 ${(!activeVehicle || !customer.name) ? 'opacity-50 grayscale pointer-events-none' : 'opacity-100 hover:border-blue-500/30'}`}>
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-blue-500 to-transparent opacity-50"></div>
+                
+                <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6 flex items-center gap-3 uppercase tracking-wider">
+                  <Repeat className="w-5 h-5 text-blue-500 dark:text-blue-400" /> 
+                  {exchangeStep}. Exchange Details
+                </h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider ml-1">Old Vehicle Model</label>
+                    <input type="text" value={oldVehicleModel} onChange={e => setOldVehicleModel(e.target.value)} placeholder="E.g., Shine 125 2018" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-blue-500 outline-none transition-all" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider ml-1">Old Vehicle Number</label>
+                    <input type="text" value={oldVehicleNumber} onChange={e => setOldVehicleNumber(e.target.value)} placeholder="E.g., Ba 22 Pa 1234" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-blue-500 outline-none transition-all" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider ml-1">Valuation Amount (Rs.)</label>
+                    <input type="number" value={valuationAmount || ""} onChange={e => setValuationAmount(Number(e.target.value))} placeholder="0" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-blue-500 outline-none transition-all" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider ml-1">Valuation By</label>
+                    <input type="text" value={valuationBy} onChange={e => setValuationBy(e.target.value)} placeholder="Evaluator Name" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-blue-500 outline-none transition-all" />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Finance Details Card (Conditional) */}
+            {showFinance && (
+              <div className={`bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl border border-zinc-200 dark:border-white/5 rounded-3xl p-6 md:p-8 shadow-xl dark:shadow-2xl relative overflow-hidden transition-all duration-500 delay-100 ${(!activeVehicle || !customer.name) ? 'opacity-50 grayscale pointer-events-none' : 'opacity-100 hover:border-emerald-500/30'}`}>
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-emerald-500 to-transparent opacity-50"></div>
+                
+                <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6 flex items-center gap-3 uppercase tracking-wider">
+                  <Landmark className="w-5 h-5 text-emerald-500 dark:text-emerald-400" /> 
+                  {financeStep}. Finance Details
+                </h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider ml-1">Finance Company / Bank Name</label>
+                    <input type="text" value={financeCompany} onChange={e => setFinanceCompany(e.target.value)} placeholder="E.g., Syakar Finance, Nabil Bank" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-emerald-500 outline-none transition-all" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider ml-1">Down Payment (Rs.)</label>
+                    <input type="number" value={downPayment || ""} onChange={e => setDownPayment(Number(e.target.value))} placeholder="0" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-emerald-500 outline-none transition-all" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider ml-1">Duration (Months)</label>
+                    <input type="number" value={financeDuration || ""} onChange={e => setFinanceDuration(e.target.value)} placeholder="E.g., 24, 36" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-emerald-500 outline-none transition-all" />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Offers & Accessories Card (Always shown now) */}
+            <div className={`bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl border border-zinc-200 dark:border-white/5 rounded-3xl p-6 md:p-8 shadow-xl dark:shadow-2xl relative overflow-hidden transition-all duration-500 delay-100 ${(!activeVehicle || !customer.name) ? 'opacity-50 grayscale pointer-events-none' : 'opacity-100 hover:border-pink-500/30'}`}>
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-pink-500 to-transparent opacity-50"></div>
+                
+                <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6 flex items-center gap-3 uppercase tracking-wider">
+                  <Percent className="w-5 h-5 text-pink-500 dark:text-pink-400" /> 
+                  {offersStep}. Offers & Accessories
+                </h2>
+                
+                <div className="space-y-6">
+                  {/* Discount Type */}
+                  <div className="space-y-3">
+                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Discount Type</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {["Normal", "Scheme"].map(type => (
+                        <button 
+                          key={type}
+                          onClick={() => setDiscountType(type as "Normal" | "Scheme")}
+                          className={`relative p-3 rounded-xl border text-sm transition-all duration-300 overflow-hidden group ${
+                            discountType === type 
+                              ? "bg-pink-50 dark:bg-pink-500/10 border-pink-400 dark:border-pink-500 text-pink-700 dark:text-pink-400 shadow-[0_0_15px_rgba(236,72,153,0.15)]" 
+                              : "bg-zinc-50 dark:bg-black/50 border-zinc-200 dark:border-white/10 text-zinc-600 dark:text-gray-400 hover:border-zinc-400 dark:hover:border-white/30"
+                          }`}
+                        >
+                          <span className="relative z-10 font-bold">{type} Discount</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Discount Amount */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Discount Amount (Rs.)</label>
+                    <input 
+                      type="number" 
+                      value={discountAmount || ""}
+                      onChange={e => setDiscountAmount(Number(e.target.value))}
+                      placeholder="0"
+                      className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-pink-500 outline-none transition-all" 
+                    />
+                  </div>
+
+                  {/* Accessories */}
+                  <div className="space-y-2 pt-2 border-t border-zinc-100 dark:border-slate-800/50">
+                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider flex items-center gap-2">
+                      <PackagePlus className="w-4 h-4" /> Accessories Given
+                    </label>
+                    <textarea 
+                      value={accessories}
+                      onChange={e => setAccessories(e.target.value)}
+                      placeholder="E.g., Helmet, Bike Cover, Leg Guard..."
+                      rows={2}
+                      className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-pink-500 outline-none transition-all resize-none" 
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Payment Method Card */}
             <div className={`bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl border border-zinc-200 dark:border-white/5 rounded-3xl p-6 md:p-8 shadow-xl dark:shadow-2xl relative overflow-hidden transition-all duration-500 delay-100 ${(!activeVehicle || !customer.name) ? 'opacity-50 grayscale pointer-events-none' : 'opacity-100 hover:border-purple-500/30'}`}>
               <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-500 to-transparent opacity-50"></div>
               
               <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6 flex items-center gap-3 uppercase tracking-wider">
                 <CreditCard className="w-5 h-5 text-purple-500 dark:text-purple-400" /> 
-                4. Payment Method
+                {paymentStep}. Payment Method
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {["Bank Transfer", "Cheque", "eSewa", "Cash"].map(method => (
@@ -320,13 +461,27 @@ function POSContent() {
                   <span className="text-zinc-600 dark:text-gray-400 flex items-center gap-2"><Tag className="w-4 h-4 text-zinc-500 dark:text-gray-500" /> Registration & Tax</span>
                   <span className="text-zinc-500 dark:text-gray-500 font-medium italic">At Actuals</span>
                 </div>
+
+                {showExchange && valuationAmount > 0 && (
+                  <div className="group flex justify-between items-center text-base p-2 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-lg transition-colors border border-blue-100 dark:border-blue-500/20">
+                    <span className="text-blue-600 dark:text-blue-400 flex items-center gap-2 font-bold"><Repeat className="w-4 h-4" /> Exchange Valuation</span>
+                    <span className="text-blue-600 dark:text-blue-400 font-black">- Rs. {valuationAmount.toLocaleString()}</span>
+                  </div>
+                )}
+
+                {discountAmount > 0 && (
+                  <div className="group flex justify-between items-center text-base p-2 hover:bg-pink-50 dark:hover:bg-pink-500/10 rounded-lg transition-colors border border-pink-100 dark:border-pink-500/20">
+                    <span className="text-pink-600 dark:text-pink-400 flex items-center gap-2 font-bold"><Percent className="w-4 h-4" /> {discountType} Discount</span>
+                    <span className="text-pink-600 dark:text-pink-400 font-black">- Rs. {discountAmount.toLocaleString()}</span>
+                  </div>
+                )}
                 
                 <div className="pt-8 mt-4">
                    <div className="bg-gradient-to-br from-zinc-100 to-zinc-50 dark:from-black/80 dark:to-slate-900/80 p-6 rounded-2xl border border-zinc-200 dark:border-white/10 relative overflow-hidden shadow-inner">
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-orange-500 to-primary opacity-80"></div>
                       <span className="text-zinc-600 dark:text-gray-400 text-sm font-bold uppercase tracking-widest block mb-2">Total Receivable</span>
                       <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-gray-400 tracking-tighter">
-                        Rs. {activeVehicle ? activeVehicle.price.toLocaleString() : "0"}
+                        Rs. {activeVehicle ? Math.max(0, activeVehicle.price - (discountAmount || 0) - (showExchange ? (valuationAmount || 0) : 0)).toLocaleString() : "0"}
                       </div>
                    </div>
                 </div>
