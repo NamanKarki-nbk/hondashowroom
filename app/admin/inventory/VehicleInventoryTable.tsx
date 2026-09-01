@@ -387,7 +387,6 @@ export default function VehicleInventoryTable() {
                 <th className="py-5 px-6 whitespace-nowrap">Page No.</th>
                 <th className="py-5 px-6 whitespace-nowrap">Model Details</th>
                 <th className="py-5 px-6 whitespace-nowrap">VIN | Engine No</th>
-                <th className="py-5 px-6 whitespace-nowrap">Color</th>
                 <th className="py-5 px-6 whitespace-nowrap">Days In Stock</th>
                 <th className="py-5 px-6 whitespace-nowrap">Price (Selling)</th>
                 <th className="py-5 px-6 whitespace-nowrap">Status</th>
@@ -397,13 +396,13 @@ export default function VehicleInventoryTable() {
             <tbody className={`divide-y divide-gray-50 dark:divide-gray-800 transition-opacity duration-200 ${loading && items.length > 0 ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
               {loading && items.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-gray-400 text-sm font-medium">
+                  <td colSpan={7} className="py-12 text-center text-gray-400 text-sm font-medium">
                     Loading inventory...
                   </td>
                 </tr>
               ) : displayedItems.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-gray-400 text-sm font-medium">
+                  <td colSpan={7} className="py-12 text-center text-gray-400 text-sm font-medium">
                     No vehicles found matching criteria.
                   </td>
                 </tr>
@@ -417,24 +416,19 @@ export default function VehicleInventoryTable() {
                       <p className="text-sm font-bold text-gray-900 dark:text-white">
                         {item.name} {item.variant?.variantName ? formatVariant(item.variant.variantName) : ''}
                       </p>
-                      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
-                        {item.category} • {item.cc}cc
-                      </p>
-                    </td>
-                    <td className="py-4 px-6">
-                      <p className="text-xs font-bold text-gray-700 dark:text-gray-300 font-mono tracking-wider">{item.vin}</p>
-                      <p className="text-[10px] font-medium text-gray-400 font-mono mt-0.5">{item.engineNo}</p>
-                    </td>
-                    <td className="py-4 px-6">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 mt-1">
                         <div 
                           className="w-2.5 h-2.5 rounded-full shadow-sm border border-gray-200"
                           style={{ backgroundColor: item.hexCode }}
                         />
-                        <span className="text-xs font-semibold text-gray-600 dark:text-gray-300">
+                        <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">
                           {item.color}
                         </span>
                       </div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <p className="text-xs font-bold text-gray-700 dark:text-gray-300 font-mono tracking-wider">{item.vin}</p>
+                      <p className="text-[10px] font-medium text-gray-400 font-mono mt-0.5">{item.engineNo}</p>
                     </td>
                     <td className="py-4 px-6">
                       <span className="text-xs font-bold text-green-600 dark:text-green-500">
