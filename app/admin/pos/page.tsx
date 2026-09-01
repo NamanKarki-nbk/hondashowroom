@@ -29,6 +29,15 @@ function POSContent() {
   const [financeCompany, setFinanceCompany] = useState("");
   const [financeDuration, setFinanceDuration] = useState("");
 
+  // Payment Method fields
+  const [pmCashAmount, setPmCashAmount] = useState<number>(0);
+  const [pmBankName, setPmBankName] = useState("");
+  const [pmTransactionId, setPmTransactionId] = useState("");
+  const [pmBankAmount, setPmBankAmount] = useState<number>(0);
+  const [pmChequeNumber, setPmChequeNumber] = useState("");
+  const [pmChequeDate, setPmChequeDate] = useState("");
+  const [pmChequeAmount, setPmChequeAmount] = useState<number>(0);
+
   // Read URL params to auto-search VIN if provided
   const searchParams = useSearchParams();
   const vinParam = searchParams?.get("vin");
@@ -441,8 +450,8 @@ function POSContent() {
                 <CreditCard className="w-5 h-5 text-purple-500 dark:text-purple-400" /> 
                 {paymentStep}. Payment Method
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {["Bank Transfer", "Cheque", "eSewa", "Cash"].map(method => (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                {["Cash", "Bank Transfer", "Cash + Bank Transfer", "Cheque"].map(method => (
                   <button 
                     key={method}
                     onClick={() => setPaymentMethod(method)}
@@ -455,9 +464,94 @@ function POSContent() {
                     {paymentMethod === method && (
                       <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 dark:from-purple-500/20 to-transparent opacity-50"></div>
                     )}
-                    <span className="relative z-10 font-semibold">{method}</span>
+                    <span className="relative z-10 font-semibold text-sm sm:text-base">{method}</span>
                   </button>
                 ))}
+              </div>
+
+              {/* Dynamic Payment Input Forms */}
+              <div className="bg-zinc-50 dark:bg-black/20 p-5 rounded-2xl border border-zinc-200 dark:border-white/5">
+                {paymentMethod === "Cash" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Cash Received Amount (Rs.)</label>
+                      <input type="number" value={pmCashAmount || ""} onChange={e => setPmCashAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                    </div>
+                  </div>
+                )}
+
+                {paymentMethod === "Bank Transfer" && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Bank Name / Wallet</label>
+                      <input type="text" value={pmBankName} onChange={e => setPmBankName(e.target.value)} placeholder="e.g. Nabil Bank, eSewa" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Transaction ID / Ref</label>
+                      <input type="text" value={pmTransactionId} onChange={e => setPmTransactionId(e.target.value)} placeholder="e.g. 123456789" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Transferred Amount (Rs.)</label>
+                      <input type="number" value={pmBankAmount || ""} onChange={e => setPmBankAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                    </div>
+                  </div>
+                )}
+
+                {paymentMethod === "Cash + Bank Transfer" && (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-6">
+                    <div className="space-y-4 lg:border-r border-zinc-200 dark:border-white/10 lg:pr-6">
+                      <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200 flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-purple-500"></span> Cash Portion
+                      </h3>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Cash Received (Rs.)</label>
+                        <input type="number" value={pmCashAmount || ""} onChange={e => setPmCashAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                      </div>
+                    </div>
+                    <div className="space-y-4 lg:pl-2">
+                      <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200 flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-purple-500"></span> Bank Transfer Portion
+                      </h3>
+                      <div className="grid grid-cols-1 gap-4">
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Bank / Wallet</label>
+                          <input type="text" value={pmBankName} onChange={e => setPmBankName(e.target.value)} placeholder="e.g. Nabil Bank" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Transaction ID</label>
+                            <input type="text" value={pmTransactionId} onChange={e => setPmTransactionId(e.target.value)} placeholder="e.g. 123456" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Bank Amt (Rs.)</label>
+                            <input type="number" value={pmBankAmount || ""} onChange={e => setPmBankAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {paymentMethod === "Cheque" && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Bank Name</label>
+                      <input type="text" value={pmBankName} onChange={e => setPmBankName(e.target.value)} placeholder="e.g. Nabil Bank" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Cheque Number</label>
+                      <input type="text" value={pmChequeNumber} onChange={e => setPmChequeNumber(e.target.value)} placeholder="e.g. 98765432" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Cheque Date</label>
+                      <input type="date" value={pmChequeDate} onChange={e => setPmChequeDate(e.target.value)} className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Cheque Amount (Rs.)</label>
+                      <input type="number" value={pmChequeAmount || ""} onChange={e => setPmChequeAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
