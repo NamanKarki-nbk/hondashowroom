@@ -107,10 +107,18 @@ function POSContent() {
   };
 
   const commission = activeVehicle ? Math.round(activeVehicle.price * 0.015) : 0;
-
-  // Determine step numbers dynamically based on purchaseMethod
-  const showExchange = purchaseMethod === "EXCHANGE" || purchaseMethod === "FINANCE & EXCHANGE";
-  const showFinance = purchaseMethod === "FINANCE" || purchaseMethod === "FINANCE & EXCHANGE";
+  const showExchange = purchaseMethod.includes("EXCHANGE");
+  const showFinance = purchaseMethod.includes("FINANCE");
+  
+  const totalReceivable = activeVehicle ? Math.max(0, activeVehicle.price - (discountAmount || 0) - (showExchange ? (valuationAmount || 0) : 0) + (accessoriesAmount || 0)) : 0;
+  
+  let totalReceived = 0;
+  if (paymentMethod === "Cash") totalReceived = pmCashAmount || 0;
+  else if (paymentMethod === "Bank Transfer") totalReceived = pmBankAmount || 0;
+  else if (paymentMethod === "Cash + Bank Transfer") totalReceived = (pmCashAmount || 0) + (pmBankAmount || 0);
+  else if (paymentMethod === "Cheque") totalReceived = pmChequeAmount || 0;
+  
+  const dueAmount = Math.max(0, totalReceivable - totalReceived);
   
   let currentStep = 3;
   const exchangeStep = showExchange ? ++currentStep : -1;
@@ -606,13 +614,30 @@ function POSContent() {
                   </div>
                 )}
                 
-                <div className="pt-8 mt-4">
+                <div className="pt-8 mt-4 space-y-4">
                    <div className="bg-gradient-to-br from-zinc-100 to-zinc-50 dark:from-black/80 dark:to-slate-900/80 p-6 rounded-2xl border border-zinc-200 dark:border-white/10 relative overflow-hidden shadow-inner">
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-orange-500 to-primary opacity-80"></div>
                       <span className="text-zinc-600 dark:text-gray-400 text-sm font-bold uppercase tracking-widest block mb-2">Total Receivable</span>
                       <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-gray-400 tracking-tighter">
-                        Rs. {activeVehicle ? Math.max(0, activeVehicle.price - (discountAmount || 0) - (showExchange ? (valuationAmount || 0) : 0) + (accessoriesAmount || 0)).toLocaleString() : "0"}
+                        Rs. {totalReceivable.toLocaleString()}
                       </div>
+                   </div>
+                   
+                   <div className="flex flex-col sm:flex-row gap-4">
+                     <div className="flex-1 bg-gradient-to-br from-zinc-100 to-zinc-50 dark:from-black/80 dark:to-slate-900/80 p-5 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-inner">
+                       <span className="text-zinc-600 dark:text-gray-400 text-xs font-bold uppercase tracking-widest block mb-1">Total Received</span>
+                       <div className="text-2xl font-black text-zinc-900 dark:text-white">
+                         Rs. {totalReceived.toLocaleString()}
+                       </div>
+                     </div>
+                     {dueAmount > 0 && (
+                       <div className="flex-1 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/40 dark:to-red-900/40 p-5 rounded-2xl border border-red-200 dark:border-red-500/20 shadow-inner">
+                         <span className="text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-widest block mb-1">Amount Due</span>
+                         <div className="text-2xl font-black text-red-600 dark:text-red-400">
+                           Rs. {dueAmount.toLocaleString()}
+                         </div>
+                       </div>
+                     )}
                    </div>
                 </div>
               </div>
