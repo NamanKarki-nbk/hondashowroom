@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
-import { Search, UserPlus, CreditCard, FileText, CheckCircle, Calculator, ChevronRight, Zap, ArrowRight, ShieldCheck, Tag, Briefcase, Percent, PackagePlus, Repeat, Landmark } from "lucide-react";
+import { Search, UserPlus, CreditCard, FileText, CheckCircle, Calculator, ChevronRight, Zap, ArrowRight, ShieldCheck, Tag, Briefcase, Percent, PackagePlus, Repeat, Landmark, X, Plus } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 function POSContent() {
@@ -31,9 +31,7 @@ function POSContent() {
 
   // Payment Method fields
   const [pmCashAmount, setPmCashAmount] = useState<number>(0);
-  const [pmBankName, setPmBankName] = useState("");
-  const [pmTransactionId, setPmTransactionId] = useState("");
-  const [pmBankAmount, setPmBankAmount] = useState<number>(0);
+  const [bankTransfers, setBankTransfers] = useState([{ bankName: "", transactionId: "", amount: 0 }]);
   const [pmChequeNumber, setPmChequeNumber] = useState("");
   const [pmChequeDate, setPmChequeDate] = useState("");
   const [pmChequeAmount, setPmChequeAmount] = useState<number>(0);
@@ -113,9 +111,11 @@ function POSContent() {
   const totalReceivable = activeVehicle ? Math.max(0, activeVehicle.price - (discountAmount || 0) - (showExchange ? (valuationAmount || 0) : 0) + (accessoriesAmount || 0)) : 0;
   
   let totalReceived = 0;
+  const totalBankAmount = bankTransfers.reduce((sum, bt) => sum + (bt.amount || 0), 0);
+  
   if (paymentMethod === "Cash") totalReceived = pmCashAmount || 0;
-  else if (paymentMethod === "Bank Transfer") totalReceived = pmBankAmount || 0;
-  else if (paymentMethod === "Cash + Bank Transfer") totalReceived = (pmCashAmount || 0) + (pmBankAmount || 0);
+  else if (paymentMethod === "Bank Transfer") totalReceived = totalBankAmount;
+  else if (paymentMethod === "Cash + Bank Transfer") totalReceived = (pmCashAmount || 0) + totalBankAmount;
   else if (paymentMethod === "Cheque") totalReceived = pmChequeAmount || 0;
   
   const dueAmount = Math.max(0, totalReceivable - totalReceived);
@@ -489,19 +489,49 @@ function POSContent() {
                 )}
 
                 {paymentMethod === "Bank Transfer" && (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Bank Name / Wallet</label>
-                      <input type="text" value={pmBankName} onChange={e => setPmBankName(e.target.value)} placeholder="e.g. Nabil Bank, eSewa" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Transaction ID / Ref</label>
-                      <input type="text" value={pmTransactionId} onChange={e => setPmTransactionId(e.target.value)} placeholder="e.g. 123456789" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Transferred Amount (Rs.)</label>
-                      <input type="number" value={pmBankAmount || ""} onChange={e => setPmBankAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
-                    </div>
+                  <div className="space-y-4">
+                    {bankTransfers.map((bt, idx) => (
+                      <div key={idx} className="grid grid-cols-1 md:grid-cols-3 gap-4 relative bg-white dark:bg-black/20 p-4 rounded-xl border border-zinc-200 dark:border-white/5">
+                        {bankTransfers.length > 1 && (
+                          <button 
+                            onClick={() => setBankTransfers(bankTransfers.filter((_, i) => i !== idx))}
+                            className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors shadow-lg z-10"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        )}
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Bank Name / Wallet</label>
+                          <input type="text" value={bt.bankName} onChange={e => {
+                            const newArr = [...bankTransfers];
+                            newArr[idx].bankName = e.target.value;
+                            setBankTransfers(newArr);
+                          }} placeholder="e.g. Nabil Bank, eSewa" className="w-full bg-zinc-50 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Transaction ID / Ref</label>
+                          <input type="text" value={bt.transactionId} onChange={e => {
+                            const newArr = [...bankTransfers];
+                            newArr[idx].transactionId = e.target.value;
+                            setBankTransfers(newArr);
+                          }} placeholder="e.g. 123456789" className="w-full bg-zinc-50 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Transferred Amount (Rs.)</label>
+                          <input type="number" value={bt.amount || ""} onChange={e => {
+                            const newArr = [...bankTransfers];
+                            newArr[idx].amount = Number(e.target.value);
+                            setBankTransfers(newArr);
+                          }} placeholder="0" className="w-full bg-zinc-50 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                        </div>
+                      </div>
+                    ))}
+                    <button 
+                      onClick={() => setBankTransfers([...bankTransfers, { bankName: "", transactionId: "", amount: 0 }])}
+                      className="text-sm font-semibold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 flex items-center gap-2 px-2"
+                    >
+                      <Plus className="w-4 h-4" /> Add Another Transfer
+                    </button>
                   </div>
                 )}
 
@@ -520,21 +550,51 @@ function POSContent() {
                       <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200 flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-purple-500"></span> Bank Transfer Portion
                       </h3>
-                      <div className="grid grid-cols-1 gap-4">
-                        <div className="space-y-2">
-                          <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Bank / Wallet</label>
-                          <input type="text" value={pmBankName} onChange={e => setPmBankName(e.target.value)} placeholder="e.g. Nabil Bank" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Transaction ID</label>
-                            <input type="text" value={pmTransactionId} onChange={e => setPmTransactionId(e.target.value)} placeholder="e.g. 123456" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                      <div className="space-y-4">
+                        {bankTransfers.map((bt, idx) => (
+                          <div key={idx} className="grid grid-cols-1 gap-4 relative bg-white dark:bg-black/20 p-4 rounded-xl border border-zinc-200 dark:border-white/5">
+                            {bankTransfers.length > 1 && (
+                              <button 
+                                onClick={() => setBankTransfers(bankTransfers.filter((_, i) => i !== idx))}
+                                className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors shadow-lg z-10"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            )}
+                            <div className="space-y-2">
+                              <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Bank / Wallet</label>
+                              <input type="text" value={bt.bankName} onChange={e => {
+                                const newArr = [...bankTransfers];
+                                newArr[idx].bankName = e.target.value;
+                                setBankTransfers(newArr);
+                              }} placeholder="e.g. Nabil Bank" className="w-full bg-zinc-50 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Transaction ID</label>
+                                <input type="text" value={bt.transactionId} onChange={e => {
+                                  const newArr = [...bankTransfers];
+                                  newArr[idx].transactionId = e.target.value;
+                                  setBankTransfers(newArr);
+                                }} placeholder="e.g. 123456" className="w-full bg-zinc-50 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                              </div>
+                              <div className="space-y-2">
+                                <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Bank Amt (Rs.)</label>
+                                <input type="number" value={bt.amount || ""} onChange={e => {
+                                  const newArr = [...bankTransfers];
+                                  newArr[idx].amount = Number(e.target.value);
+                                  setBankTransfers(newArr);
+                                }} placeholder="0" className="w-full bg-zinc-50 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                              </div>
+                            </div>
                           </div>
-                          <div className="space-y-2">
-                            <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Bank Amt (Rs.)</label>
-                            <input type="number" value={pmBankAmount || ""} onChange={e => setPmBankAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
-                          </div>
-                        </div>
+                        ))}
+                        <button 
+                          onClick={() => setBankTransfers([...bankTransfers, { bankName: "", transactionId: "", amount: 0 }])}
+                          className="text-sm font-semibold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 flex items-center gap-2 px-2"
+                        >
+                          <Plus className="w-4 h-4" /> Add Another Transfer
+                        </button>
                       </div>
                     </div>
                   </div>
