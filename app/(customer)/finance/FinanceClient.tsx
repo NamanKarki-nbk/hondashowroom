@@ -96,9 +96,9 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
             <div className="md:w-1/2 bg-white dark:bg-slate-900 p-8 flex flex-col justify-center items-center relative overflow-hidden">
                <div className="absolute top-0 right-0 w-32 h-32 bg-[#CC0000]/10 rounded-full blur-3xl"></div>
                <div className="relative w-full h-48 md:h-64 mt-4">
-                 <Image 
+                <Image 
                    src={(selectedModel.imageUrl || "/inventory/honda-dio-bs6-125.png").replace('/product-catalog/', '/inventory/')} 
-                   alt={selectedModel.name}
+                   alt={selectedModel.name || "Honda Vehicle"}
                    fill
                    className="object-contain drop-shadow-xl"
                  />
@@ -248,7 +248,7 @@ export default function FinanceClient({ modelsData }: { modelsData: any[] }) {
                 <div className="absolute inset-0 bg-[#CC0000]/5 rounded-full blur-2xl group-hover:bg-[#CC0000]/10 transition-colors"></div>
                 <Image 
                   src={(model.imageUrl || "/inventory/honda-dio-bs6-125.png").replace('/product-catalog/', '/inventory/')} 
-                  alt={model.name}
+                  alt={model.name || "Honda Vehicle"}
                   fill
                   className="object-contain transform group-hover:scale-110 transition-transform duration-700 drop-shadow-xl p-2"
                 />
