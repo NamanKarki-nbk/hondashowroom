@@ -404,13 +404,20 @@ function POSContent() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Extra Accessories</label>
-                        <textarea 
+                        <select 
                           value={accessories}
                           onChange={e => setAccessories(e.target.value)}
-                          placeholder="E.g., Bike Cover, Leg Guard..."
-                          rows={2}
-                          className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-pink-500 outline-none transition-all resize-none" 
-                        />
+                          className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-pink-500 outline-none transition-all appearance-none" 
+                        >
+                          <option value="">-- Blank --</option>
+                          <option value="Bike Cover">Bike Cover</option>
+                          {activeVehicle?.category !== 'SCOOTER' && (
+                            <>
+                              <option value="Legguard">Legguard</option>
+                              <option value="Bike Cover & Legguard">Bike Cover & Legguard</option>
+                            </>
+                          )}
+                        </select>
                       </div>
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Accessories Amount (Rs.)</label>
