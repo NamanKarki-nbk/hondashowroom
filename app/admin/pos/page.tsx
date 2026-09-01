@@ -11,7 +11,7 @@ function POSContent() {
   const [customerSearchQuery, setCustomerSearchQuery] = useState("");
   const [customerSearchResults, setCustomerSearchResults] = useState<any[]>([]);
   const [isSearchingCustomer, setIsSearchingCustomer] = useState(false);
-  const [purchaseMethod, setPurchaseMethod] = useState("FULL CASH");
+  const [purchaseMethod, setPurchaseMethod] = useState("CASH");
   const [paymentMethod, setPaymentMethod] = useState("Bank Transfer");
   const [discountType, setDiscountType] = useState<"Normal" | "Scheme">("Normal");
   const [discountAmount, setDiscountAmount] = useState<number>(0);
@@ -278,7 +278,7 @@ function POSContent() {
                 3. Purchase Method
               </h2>
               <div className="flex flex-wrap gap-3">
-                {["FULL CASH", "EXCHANGE", "FINANCE", "CREDIT", "FINANCE & EXCHANGE"].map(method => (
+                {["CASH", "EXCHANGE", "FINANCE", "FINANCE & EXCHANGE"].map(method => (
                   <button 
                     key={method}
                     onClick={() => setPurchaseMethod(method)}
