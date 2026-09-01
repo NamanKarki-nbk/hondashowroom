@@ -36,7 +36,14 @@ function POSContent() {
       const res = await fetch(`/api/admin/customers/search?q=${encodeURIComponent(query)}`);
       if (res.ok) {
         const data = await res.json();
-        setCustomerSearchResults(data.customers || []);
+        // Prevent race condition: only update if the query matches the current input state
+        // We use a functional state update to access the absolute latest state
+        setCustomerSearchQuery((latestQuery) => {
+          if (latestQuery === query) {
+            setCustomerSearchResults(data.customers || []);
+          }
+          return latestQuery;
+        });
       }
     } catch (error) {
       console.error(error);
