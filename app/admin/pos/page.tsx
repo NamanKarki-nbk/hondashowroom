@@ -12,7 +12,7 @@ function POSContent() {
   const [customerSearchResults, setCustomerSearchResults] = useState<any[]>([]);
   const [isSearchingCustomer, setIsSearchingCustomer] = useState(false);
   const [purchaseMethod, setPurchaseMethod] = useState("CASH");
-  const [paymentMethod, setPaymentMethod] = useState("Bank Transfer");
+  const [paymentMethod, setPaymentMethod] = useState("Cash");
   const [discountType, setDiscountType] = useState<"Normal" | "Scheme">("Normal");
   const [discountAmount, setDiscountAmount] = useState<number>(0);
   const [accessories, setAccessories] = useState<string>("");
