@@ -31,13 +31,13 @@ export async function POST(req: Request) {
         role: 'user',
         content: [
           { type: 'text', text: getPromptForDocType(documentType) },
-          { type: 'image', image: front.buffer, mimeType: front.mimeType }
+          { type: 'file', data: front.buffer, mediaType: front.mimeType }
         ]
       }
     ];
 
     if (back) {
-      messages[0].content.push({ type: 'image', image: back.buffer, mimeType: back.mimeType });
+      messages[0].content.push({ type: 'file', data: back.buffer, mediaType: back.mimeType });
     }
 
     let schema;
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
     }
 
     const result = await generateObject({
-      model: google('gemini-1.5-flash'),
+      model: google('gemini-2.5-flash'),
       schema: schema,
       messages: messages,
     });
