@@ -142,10 +142,27 @@ export async function POST(req: Request) {
       // Find Temp Registration No
       let tempRegistrationNo = null;
       const singleLineContext = context.replace(/[\r\n]+/g, ' ');
-      const regRegex = /Reg\s*No\.?[\s:]+([A-Z0-9\s-]+?)(?=\s*Chassis|\s*Engine|\s*Colou?r|\s*Make|\s*Model|\s*$)/i;
-      const regMatch = singleLineContext.match(regRegex);
-      if (regMatch) {
-        tempRegistrationNo = regMatch[1].trim().replace(/-\s+/g, '-');
+      // Attempt 1: Handle split dashed formats (e.g., "KOSHI PRADESH-04-" ... "003PA6434")
+      const prefixRegex = /(?:Reg\s*No\.?[\s:]+)?([A-Z0-9\s]+-\s*\d+\s*-(?:\s*\d+\s*-)?)/i;
+      const prefixMatch = singleLineContext.match(prefixRegex);
+      
+      if (prefixMatch) {
+        let prefix = prefixMatch[1].trim().replace(/\s*-\s*/g, '-');
+        const suffixRegex = /\b(\d{2,4}[A-Z]{1,2}\d{3,4})\b/i;
+        const suffixMatch = singleLineContext.match(suffixRegex);
+        
+        if (suffixMatch) {
+          tempRegistrationNo = prefix + suffixMatch[1];
+        } else {
+          tempRegistrationNo = prefix;
+        }
+      } else {
+        // Attempt 2: Fallback
+        const regRegex = /Reg\s*No\.?[\s:]+([A-Z0-9\s-]+?)(?=\s*Chassis|\s*Engine|\s*Colou?r|\s*Make|\s*Model|\s*$)/i;
+        const regMatch = singleLineContext.match(regRegex);
+        if (regMatch) {
+          tempRegistrationNo = regMatch[1].trim().replace(/-\s+/g, '-');
+        }
       }
 
       // Find Model using Strict Domain Rules (Prevents cross-contamination of terms like 125, DLX, BS6)
