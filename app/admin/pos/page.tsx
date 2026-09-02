@@ -117,7 +117,8 @@ function POSContent() {
   if (paymentMethod === "Cash") totalReceived = pmCashAmount || 0;
   else if (paymentMethod === "Bank Transfer") totalReceived = totalBankAmount;
   else if (paymentMethod === "Cash + Bank Transfer") totalReceived = (pmCashAmount || 0) + totalBankAmount;
-  else if (paymentMethod === "Cheque") totalReceived = pmChequeAmount || 0;
+  else if (paymentMethod === "Cheque") totalReceived = 0; // Cheque is for security only
+
   
   const dueAmount = Math.max(0, totalReceivable - totalReceived);
   
