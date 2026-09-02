@@ -85,11 +85,11 @@ export default async function PDIPrintPage({ params }: { params: Promise<{ id: s
                 </tr>
                 <tr className="border-b border-black">
                   <td className="p-1 border-r border-black font-bold">Temp. Registration No.</td>
-                  <td className="p-1 uppercase"></td>
+                  <td className="p-1 uppercase">{transaction.vehicle.tempRegistrationNo || ""}</td>
                 </tr>
                 <tr>
                   <td className="p-1 border-r border-black font-bold">Mechi Registration No.</td>
-                  <td className="p-1 uppercase"></td>
+                  <td className="p-1 uppercase">{transaction.vehicle.mechiRegistrationNo || ""}</td>
                 </tr>
               </tbody>
             </table>

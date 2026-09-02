@@ -8,7 +8,7 @@ export default async function UndertakingPrintPage({ params }: { params: Promise
   const transaction = await prisma.salesTransaction.findUnique({
     where: { id },
     include: {
-      customer: { include: { documents: true } },
+      customer: { include: { documents: true, user: true } },
       vehicle: { include: { variant: true } },
       receipts: true
     }
@@ -25,9 +25,10 @@ export default async function UndertakingPrintPage({ params }: { params: Promise
   
   const citizenship = transaction.customer.documents.find(d => d.docType === 'CITIZENSHIP')?.docNumber || "";
   const firstReceipt = transaction.receipts[0] ? transaction.receipts[0].receiptNo : "";
+  const dobAdFormatted = transaction.customer?.user?.dobAd ? new Date(transaction.customer.user.dobAd).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : "";
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-white text-black p-4 md:p-8 min-h-screen text-[13px] leading-tight print:p-0 print:pt-[1.5in]">
+    <div className="w-full max-w-4xl mx-auto bg-white text-black p-4 md:p-8 min-h-screen text-[13px] leading-tight print:p-0 print:pt-4">
       <style>{`
         @media print {
           @page { size: letter; margin: 0; }
@@ -39,7 +40,7 @@ export default async function UndertakingPrintPage({ params }: { params: Promise
       </div>
 
       <div className="flex justify-between items-start mb-6 border-b border-black pb-4">
-        <div className="w-1/3 print:invisible">
+        <div className="w-1/3">
           <h1 className="text-xl font-bold uppercase">Society Enterprises Pvt. Ltd.</h1>
           <p>Urlabari-05, Morang</p>
           <p>9801615250 / 9801708936</p>
@@ -95,7 +96,7 @@ export default async function UndertakingPrintPage({ params }: { params: Promise
                 </tr>
                 <tr className="border-b border-black">
                   <td className="p-1 border-r border-black font-bold">Temporary Registration No.</td>
-                  <td className="p-1"></td>
+                  <td className="p-1 uppercase">{transaction.vehicle.tempRegistrationNo || ""}</td>
                 </tr>
               </tbody>
             </table>
@@ -155,7 +156,7 @@ export default async function UndertakingPrintPage({ params }: { params: Promise
                 </tr>
                 <tr className="border-b border-black">
                   <td className="p-1 border-r border-black font-bold w-1/3">Date of Birth (AD)</td>
-                  <td className="p-1 uppercase"></td>
+                  <td className="p-1 uppercase">{dobAdFormatted}</td>
                 </tr>
                 <tr className="border-b border-black">
                   <td className="p-1 border-r border-black font-bold w-1/3">Citizenship No.</td>

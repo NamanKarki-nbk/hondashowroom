@@ -50,6 +50,7 @@ const navCategories = [
       { name: "Branch Stock Matrix", href: "/admin/inventory/branch-stock" },
       { name: "Multi-Branch Transfer", href: "/admin/inventory/transfer" },
       { name: "Purchase Invoices", href: "/admin/inventory/purchase-invoices" },
+      { name: "Update Registration", href: "/admin/inventory/registration" },
       { name: "Spare Parts", href: "/admin/inventory/spare-parts" },
     ]
   },
