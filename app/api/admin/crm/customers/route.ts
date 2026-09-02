@@ -65,7 +65,7 @@ export async function GET(req: Request) {
           license: c.documents?.some(d => d.docType === 'LICENSE' && d.isVerified) || false,
           nationalId: c.documents?.some(d => d.docType === 'NATIONAL_ID' && d.isVerified) || false,
           ocrVerified: c.ocrVerified,
-          overallVerified: c.isVerified
+          overallVerified: c.isVerified || c.documents?.some(d => d.isVerified) || false
         },
 
         // Sales Info

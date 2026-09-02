@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
       ...user,
       ...(customer || {}),
       isVerified: user.isVerified,
-      kycVerified: customer?.isVerified || false,
+      kycVerified: customer?.isVerified || documents.some(d => d.isVerified) || false,
       
       // Map documents back to flat structure for the frontend
       citizenshipVerified: citz?.isVerified || false,
@@ -154,6 +154,18 @@ export async function PATCH(req: NextRequest) {
       await upsertDoc(DocumentType.CITIZENSHIP, "citizenship");
       await upsertDoc(DocumentType.LICENSE, "license");
       await upsertDoc(DocumentType.NATIONAL_ID, "nationalId");
+
+      // Auto-verify customer if ANY single document is verified
+      const allDocs = await prisma.customerDocument.findMany({
+        where: { customerId: customer.id }
+      });
+      const hasAnyVerifiedDoc = allDocs.some(d => d.isVerified);
+      if (hasAnyVerifiedDoc && !customer.isVerified) {
+        await prisma.customer.update({
+          where: { id: customer.id },
+          data: { isVerified: true }
+        });
+      }
     }
 
     // Refetch the full user structure similar to GET
@@ -178,7 +190,7 @@ export async function PATCH(req: NextRequest) {
       ...finalUser,
       ...(finalCustomer || {}),
       isVerified: finalUser?.isVerified || false,
-      kycVerified: finalCustomer?.isVerified || false,
+      kycVerified: finalCustomer?.isVerified || finalDocuments.some(d => d.isVerified) || false,
       
       citizenshipVerified: c?.isVerified || false,
       citizenshipNumber: c?.docNumber || "",
