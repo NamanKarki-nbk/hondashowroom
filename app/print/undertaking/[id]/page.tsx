@@ -27,13 +27,19 @@ export default async function UndertakingPrintPage({ params }: { params: Promise
   const firstReceipt = transaction.receipts[0] ? transaction.receipts[0].receiptNo : "";
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-white text-black p-4 md:p-8 min-h-screen text-[13px] leading-tight">
+    <div className="w-full max-w-4xl mx-auto bg-white text-black p-4 md:p-8 min-h-screen text-[13px] leading-tight print:p-0 print:pt-[1.5in]">
+      <style>{`
+        @media print {
+          @page { size: letter; margin: 0; }
+          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+      `}</style>
       <div className="print:hidden p-4 bg-gray-100 flex justify-center sticky top-0 shadow-sm z-50 mb-4">
         <button id="print-btn" className="bg-primary text-white px-6 py-2 rounded-lg font-bold shadow hover:bg-red-700 transition">Print Undertaking</button>
       </div>
 
       <div className="flex justify-between items-start mb-6 border-b border-black pb-4">
-        <div className="w-1/3">
+        <div className="w-1/3 print:invisible">
           <h1 className="text-xl font-bold uppercase">Society Enterprises Pvt. Ltd.</h1>
           <p>Urlabari-05, Morang</p>
           <p>9801615250 / 9801708936</p>

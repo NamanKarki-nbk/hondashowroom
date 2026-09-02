@@ -30,11 +30,13 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
 
   const firstReceipt = transaction.receipts[0] ? transaction.receipts[0].receiptNo : "N/A";
 
-  const ReceiptCopy = ({ isCustomer }: { isCustomer: boolean }) => (
-    <div className="w-full max-w-3xl mx-auto p-4 md:p-8 bg-white text-black mb-8 border-b-2 border-dashed border-gray-300 print:border-none print:mb-16 print:break-inside-avoid">
-      <div className="text-center mb-6">
-        <h1 className="text-xl font-bold uppercase tracking-wide">SOCIETY ENTERPRISES PRIVATE LIMITED</h1>
-        <p className="text-sm">Damak-05, Jhapa, Nepal</p>
+  const ReceiptCopy = ({ isCustomer, isFirst }: { isCustomer: boolean, isFirst?: boolean }) => (
+    <div className={`w-full max-w-3xl mx-auto p-4 md:p-8 bg-white text-black mb-4 border-b-2 border-dashed border-gray-300 print:border-none print:mb-2 print:break-inside-avoid ${isFirst ? 'print:pt-[1.5in]' : 'print:pt-2'}`}>
+      <div className="text-center mb-4">
+        <div className="print:hidden">
+          <h1 className="text-xl font-bold uppercase tracking-wide">SOCIETY ENTERPRISES PRIVATE LIMITED</h1>
+          <p className="text-sm">Damak-05, Jhapa, Nepal</p>
+        </div>
         <h2 className="text-lg font-bold mt-2">Money Receipt {isCustomer ? "(Customer Copy)" : "(Office Copy)"}</h2>
       </div>
 
@@ -95,14 +97,34 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
             <td className="p-2 text-right">{f(transaction.totalAmountPaid)}</td>
           </tr>
           <tr className="border-b border-black font-bold">
-            <td className="p-2 border-r border-black">Amount Receivable (Due)</td>
+            <td className="p-2 border-r border-black">Amount Receivable</td>
+            <td className="p-2 border-r border-black text-center"></td>
+            <td className="p-2 text-right">{f(transaction.dueAmount)}</td>
+          </tr>
+          <tr className="border-b border-black">
+            <td className="p-2 border-r border-black">Less - 2ndPayment :</td>
+            <td className="p-2 border-r border-black text-center"></td>
+            <td className="p-2 text-right">0.00</td>
+          </tr>
+          <tr className="border-b border-black font-bold">
+            <td className="p-2 border-r border-black">Amount Receivable</td>
+            <td className="p-2 border-r border-black text-center"></td>
+            <td className="p-2 text-right">{f(transaction.dueAmount)}</td>
+          </tr>
+          <tr className="border-b border-black">
+            <td className="p-2 border-r border-black">Less - 3rd Payment :</td>
+            <td className="p-2 border-r border-black text-center"></td>
+            <td className="p-2 text-right">0.00</td>
+          </tr>
+          <tr className="border-b border-black font-bold">
+            <td className="p-2 border-r border-black">Amount Receivable</td>
             <td className="p-2 border-r border-black text-center"></td>
             <td className="p-2 text-right">{f(transaction.dueAmount)}</td>
           </tr>
         </tbody>
       </table>
 
-      <div className="flex justify-between items-end mt-16 text-sm font-medium">
+      <div className="flex justify-between items-end mt-8 text-sm font-medium">
         <div className="w-48 text-center border-t border-black pt-2">Customer Signature</div>
         <div className="w-48 text-center border-t border-black pt-2">Prepared By</div>
         <div className="w-48 text-center border-t border-black pt-2">Authorized Signature</div>
@@ -117,6 +139,12 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
 
   return (
     <div className="w-full bg-white text-black min-h-screen">
+      <style>{`
+        @media print {
+          @page { size: letter; margin: 0; }
+          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+      `}</style>
       <div className="print:hidden p-4 bg-gray-100 flex justify-center sticky top-0 shadow-sm z-50">
         <button 
           id="print-btn"
@@ -128,7 +156,7 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
       </div>
       
       <div className="p-0 m-0">
-        <ReceiptCopy isCustomer={true} />
+        <ReceiptCopy isCustomer={true} isFirst={true} />
         <ReceiptCopy isCustomer={false} />
       </div>
 

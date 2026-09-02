@@ -21,13 +21,19 @@ export default async function PDIPrintPage({ params }: { params: Promise<{ id: s
   const englishDateStr = printDate.toISOString().split("T")[0];
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-white text-black p-4 md:p-8 min-h-screen text-[13px] leading-tight">
+    <div className="w-full max-w-4xl mx-auto bg-white text-black p-4 md:p-8 min-h-screen text-[13px] leading-tight print:p-0 print:pt-[1.5in]">
+      <style>{`
+        @media print {
+          @page { size: letter; margin: 0; }
+          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+      `}</style>
       <div className="print:hidden p-4 bg-gray-100 flex justify-center sticky top-0 shadow-sm z-50 mb-4">
         <button id="print-btn" className="bg-primary text-white px-6 py-2 rounded-lg font-bold shadow hover:bg-red-700 transition">Print PDI</button>
       </div>
 
       <div className="flex justify-between items-start mb-6">
-        <div className="w-1/3">
+        <div className="w-1/3 print:invisible">
           <h1 className="text-xl font-bold uppercase text-red-600 print:text-black">HONDA</h1>
           <p className="font-bold">Society Enterprises Pvt. Ltd.</p>
           <p>Damak-05, Jhapa</p>
