@@ -102,10 +102,14 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: 'Vehicle ID is required' }, { status: 400 });
     }
 
+    const transactions = await prisma.salesTransaction.findMany({ where: { vehicleId: id }, select: { id: true } });
+    const transactionIds = transactions.map(t => t.id);
+
     await prisma.$transaction([
       prisma.stockTransferLog.deleteMany({ where: { vehicleId: id } }),
       prisma.serviceReminder.deleteMany({ where: { vehicleId: id } }),
       prisma.serviceRecord.deleteMany({ where: { vehicleId: id } }),
+      prisma.paymentReceipt.deleteMany({ where: { transactionId: { in: transactionIds } } }),
       prisma.salesTransaction.deleteMany({ where: { vehicleId: id } }),
       prisma.vehicleInventory.delete({ where: { id } }),
     ]);
