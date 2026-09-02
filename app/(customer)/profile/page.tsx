@@ -169,57 +169,6 @@ export default function ProfilePage() {
     });
   };
 
-  const preprocessForOCR = (base64Image: string): Promise<string> => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) {
-          resolve(base64Image);
-          return;
-        }
-        
-        ctx.drawImage(img, 0, 0);
-        
-        try {
-          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          const data = imageData.data;
-          
-          const contrast = 1.5;
-          const intercept = 128 * (1 - contrast);
-          
-          for (let i = 0; i < data.length; i += 4) {
-              let r = data[i];
-              let g = data[i+1];
-              let b = data[i+2];
-              
-              // Grayscale
-              let gray = 0.299 * r + 0.587 * g + 0.114 * b;
-              // Contrast
-              gray = gray * contrast + intercept;
-              // Binary Threshold
-              const finalValue = gray > 140 ? 255 : 0;
-              
-              data[i] = finalValue;
-              data[i+1] = finalValue;
-              data[i+2] = finalValue;
-          }
-          
-          ctx.putImageData(imageData, 0, 0);
-          resolve(canvas.toDataURL("image/jpeg", 0.9));
-        } catch (e) {
-          console.error("Canvas preprocessing error:", e);
-          resolve(base64Image);
-        }
-      };
-      img.onerror = () => resolve(base64Image);
-      img.src = base64Image;
-    });
-  };
-
   const handleScan = async () => {
     if (!frontImage || !backImage) {
       setMessage({ type: "error", text: "Please upload both Front and Back photos to scan." });
@@ -230,121 +179,37 @@ export default function ProfilePage() {
     setMessage({ type: "", text: "" });
 
     try {
+      // Still extract face from front image for display
       const extractedFace = await extractFaceFromID(frontImage);
       
-      const { createWorker } = await import('tesseract.js');
-      const worker = await createWorker('eng');
+      const res = await fetch('/api/profile/extract-document', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          frontImage,
+          backImage,
+          documentType: activeTab
+        })
+      });
       
-      let extractedNumber = "";
-      let parsedName = "";
-      let parsedDobAd = "";
-      let parsedDobBs = "";
-      let parsedCitizenshipNo = "";
-      let parsedGender = "";
-
-      // Only OCR the Back Image (English Side)
-      const cleanedBack = await preprocessForOCR(backImage);
-      const backResult = await worker.recognize(cleanedBack);
-      const fullText = backResult.data.text;
-      
-      console.log("[OCR] Back text:", fullText);
-
-      // Extract Name
-      const nameMatch = fullText.match(/(?:Full\s*Name|Name)[^\nA-Za-z]*([A-Za-z \t]+)/i);
-      if (nameMatch) {
-          let rawName = nameMatch[1].trim();
-          rawName = rawName.replace(/(Date|DOB|Birth|Sex|Gender|Year).*$/i, '').trim();
-          
-          // Validation: Ensure it looks like a real name (at least 2 words, mostly alphabet)
-          let words = rawName.split(/\s+/).filter(w => /^[a-zA-Z]+$/.test(w) && w.length >= 2);
-          if (words.length >= 2) {
-              parsedName = words.join(" ").toUpperCase();
-          }
-      }
-
-      if (activeTab === 'CITIZENSHIP') {
-        // Document Number
-        const explicitMatch = fullText.match(/Citizenship Certificate No[\.\:\-\s]*([0-9O\-\s]+)/i);
-        const numberRegex = /(?:[0-9O]{2,}\s*[\-\/]\s*[0-9O]{2,}\s*[\-\/]\s*[0-9O]{2,}\s*[\-\/]\s*[0-9O]{3,})|(?:[0-9O]{2,}\s*[/\-]\s*[0-9O]{2,}\s*[/\-]\s*[0-9O]{4,})/;
-        let match = fullText.match(numberRegex);
-        
-        if (explicitMatch) {
-          let cleanNum = explicitMatch[1].replace(/O/g, '0').replace(/[\s\-]/g, '');
-          if (cleanNum.length === 11) {
-              extractedNumber = cleanNum.replace(/(\d{2})(\d{2})(\d{2})(\d{5})/, '$1-$2-$3-$4');
-          } else {
-              extractedNumber = explicitMatch[1].replace(/O/g, '0').trim().replace(/\s/g, ''); 
-          }
-        } else if (match) {
-          let cleanNum = match[0].replace(/O/g, '0').replace(/[\s\-]/g, '');
-          if (cleanNum.length === 11) {
-              extractedNumber = cleanNum.replace(/(\d{2})(\d{2})(\d{2})(\d{5})/, '$1-$2-$3-$4');
-          } else {
-              extractedNumber = match[0].replace(/O/g, '0').replace(/\s+/g, '');
-          }
-        }
-        
-        // DOB (AD)
-        const dobBlockMatch = fullText.match(/(?:Date\s*of\s*Birth|DOB|Birth)[\s\S]{0,150}/i);
-        const dobBlock = dobBlockMatch ? dobBlockMatch[0] : fullText;
-
-        const yearM = dobBlock.match(/(19\d{2}|20\d{2})/);
-        const monthM = dobBlock.match(/(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)/i);
-        const numbers = [...dobBlock.matchAll(/\b([0-3]?\d)\b/g)].map(m => m[1]);
-        const validDays = numbers.filter(n => parseInt(n) > 0 && parseInt(n) <= 31);
-        
-        if (yearM && monthM && validDays.length > 0) {
-            const year = yearM[1];
-            let month = monthM[1].toUpperCase().substring(0, 3);
-            const day = String(validDays[validDays.length - 1]).padStart(2, '0');
-            
-            const monthMap: Record<string, string> = {
-                'JAN': '01', 'FEB': '02', 'MAR': '03', 'APR': '04', 'MAY': '05', 'JUN': '06',
-                'JUL': '07', 'AUG': '08', 'SEP': '09', 'OCT': '10', 'NOV': '11', 'DEC': '12'
-            };
-            
-            month = monthMap[month] || month.padStart(2, '0');
-            parsedDobAd = `${year}-${month}-${day}`;
-        }
-        
-        // Gender
-        const genderMatch = fullText.match(/Sex[\:\-\s]*(Male|Female|Other)/i);
-        if (genderMatch) {
-            parsedGender = genderMatch[1].toUpperCase();
-        }
-
-      } 
-      else if (activeTab === 'LICENSE') {
-        const dlMatch = fullText.match(/[D0O]\.?\s*[LI]\.?\s*No[\.\:\s]*([A-Z0-9\-]+)/i);
-        if (dlMatch) extractedNumber = dlMatch[1].replace(/O/g, '0');
-        
-        const dobMatch = fullText.match(/[D0O]\.?\s*[O0]\.?\s*B\.?\s*[\:\-]?\s*([\d\-\/]+)/i);
-        if (dobMatch) {
-          parsedDobAd = dobMatch[1].trim();
-        }
-
-        const citzMatch = fullText.match(/Citizenship\s*No[\.\:\s]*([A-Z\d\-]+)/i);
-        if (citzMatch) parsedCitizenshipNo = citzMatch[1].trim().replace(/O/g, '0');
-      }
-      else if (activeTab === 'NATIONAL_ID') {
-        const ninMatch = fullText.match(/N(?:ational)?\s*I(?:dentity)?\s*N(?:umber)?[\s\.\:]*([\d\-]+)/i);
-        if (ninMatch) extractedNumber = ninMatch[1];
-        
-        const dobAdMatch = fullText.match(/D\.?\s*O\.?\s*B\.?\s*[\:\-]?\s*([\d\-\/]+)/i);
-        if (dobAdMatch) {
-          parsedDobAd = dobAdMatch[1].trim();
-        }
-
-        const dobBsMatch = fullText.match(/(?:20\d\d[-/]\d\d[-/]\d\d)/);
-        if (dobBsMatch) {
-          parsedDobBs = dobBsMatch[0];
-        }
-
-        const citzMatch = fullText.match(/Citizenship\s*No[\.\:\s]*([\d\-]+)/i);
-        if (citzMatch) parsedCitizenshipNo = citzMatch[1].trim();
+      if (!res.ok) {
+        throw new Error('OCR API failed');
       }
       
-      await worker.terminate();
+      const data = await res.json();
+      
+      if (data.error) {
+         throw new Error(data.error);
+      }
+      
+      console.log("[OCR] API Response:", data);
+
+      let extractedNumber = data.documentNumber || "";
+      let parsedName = data.fullName || "";
+      let parsedDobAd = data.dobAd || "";
+      let parsedDobBs = data.dobBs || "";
+      let parsedCitizenshipNo = data.citizenshipNumber || "";
+      let parsedGender = data.gender || "";
 
       // Determine verification status cross-checking
       const hasCoreIdentity = formData.citizenshipVerified || formData.licenseVerified || formData.nationalIdVerified;
@@ -353,7 +218,7 @@ export default function ProfilePage() {
         // Cross-validation
         const nameMatches = !parsedName || formData.fullName.toLowerCase() === parsedName.toLowerCase();
         const dobMatches = !parsedDobAd || formData.dobAd === parsedDobAd;
-        const citzMatches = !formData.citizenshipVerified || (formData.citizenshipNumber === parsedCitizenshipNo);
+        const citzMatches = !formData.citizenshipVerified || !parsedCitizenshipNo || (formData.citizenshipNumber === parsedCitizenshipNo);
 
         if (!nameMatches || !dobMatches || !citzMatches) {
           setMessage({ type: "error", text: "Verification Failed: Details on document do not match verified profile." });
@@ -390,7 +255,7 @@ export default function ProfilePage() {
       setMessage({ type: "success", text: `${activeTab.replace('_', ' ')} Scanned! Review the data and confirm.` });
     } catch (err) {
       console.error("OCR Error:", err);
-      setMessage({ type: "error", text: "OCR failed. Please try again or enter manually." });
+      setMessage({ type: "error", text: "Could not extract data automatically. Please enter details manually." });
     } finally {
       setIsScanning(false);
     }
