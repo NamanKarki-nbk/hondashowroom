@@ -8,6 +8,7 @@ interface Vehicle {
   indexNo: string | null;
   vin: string;
   engineNo: string;
+  name?: string;
   tempRegistrationNo: string | null;
   mechiRegistrationNo: string | null;
   variant: {
@@ -42,10 +43,10 @@ export default function UpdateRegistrationPage() {
   const fetchVehicles = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("/api/admin/inventory");
+      const res = await fetch("/api/admin/vehicle-inventory");
       const data = await res.json();
-      if (data.vehicles) {
-        setVehicles(data.vehicles);
+      if (Array.isArray(data)) {
+        setVehicles(data);
       }
     } catch (error) {
       console.error("Failed to fetch vehicles:", error);
@@ -127,7 +128,9 @@ export default function UpdateRegistrationPage() {
                 filteredVehicles.map(v => (
                   <tr key={v.id} className="border-b border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
                     <td className="px-6 py-4">
-                      <div className="font-medium text-slate-900 dark:text-white">{v.variant?.variantName}</div>
+                      <div className="font-medium text-slate-900 dark:text-white">
+                        {v.name || v.variant?.variantName || "Unknown Vehicle"}
+                      </div>
                       <div className="text-xs text-slate-500 mt-1">
                         Index: {v.indexNo || 'N/A'} • VIN: {v.vin}
                       </div>
