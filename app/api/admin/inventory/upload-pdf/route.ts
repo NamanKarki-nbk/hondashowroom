@@ -139,6 +139,14 @@ export async function POST(req: Request) {
         }
       }
 
+      // Find Temp Registration No
+      let tempRegistrationNo = null;
+      const regRegex = /Reg\s*No\.?[\s:]+([^\r\n]+)/i;
+      const regMatch = context.match(regRegex);
+      if (regMatch) {
+        tempRegistrationNo = regMatch[1].split('Engine')[0].trim();
+      }
+
       // Find Model using Strict Domain Rules (Prevents cross-contamination of terms like 125, DLX, BS6)
       let modelName = "Unknown Model";
       let category = "MOTORCYCLE"; // default
@@ -324,6 +332,7 @@ export async function POST(req: Request) {
         purchasePrice,
         purchaseDate: new Date(purchaseDateStr),
         purchaseMethod: purchaseType,
+        tempRegistrationNo,
       });
     }
 

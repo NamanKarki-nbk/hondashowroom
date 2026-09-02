@@ -104,7 +104,7 @@ export async function POST(req: Request) {
           }
         }
 
-        const { modelName, category, cc, vin, engineNo, color, purchasePrice, purchaseMethod, rtoStatus, status } = vehicle;
+        const { modelName, category, cc, vin, engineNo, color, purchasePrice, purchaseMethod, rtoStatus, status, tempRegistrationNo } = vehicle;
         const variantId = findVariantId(modelName);
 
         if (!variantId) {
@@ -119,6 +119,7 @@ export async function POST(req: Request) {
             purchasePrice: Number(purchasePrice),
             purchaseMethod: purchaseMethod || 'BG',
             rtoStatus: rtoStatus || null,
+            tempRegistrationNo: tempRegistrationNo || null,
             status: status || 'IN_STOCK',
             purchaseDate: validDate,
             indexNo: `D1-P${currentIndex}`,
