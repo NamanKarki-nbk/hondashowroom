@@ -23,7 +23,7 @@ export default async function PDIPrintPage({ params }: { params: Promise<{ id: s
   return (
     <div className="w-full max-w-4xl mx-auto bg-white text-black p-4 md:p-8 min-h-screen text-[13px] leading-tight">
       <div className="print:hidden p-4 bg-gray-100 flex justify-center sticky top-0 shadow-sm z-50 mb-4">
-        <button className="bg-primary text-white px-6 py-2 rounded-lg font-bold shadow hover:bg-red-700 transition" onClick="window.print()">Print PDI</button>
+        <button id="print-btn" className="bg-primary text-white px-6 py-2 rounded-lg font-bold shadow hover:bg-red-700 transition">Print PDI</button>
       </div>
 
       <div className="flex justify-between items-start mb-6">
@@ -219,7 +219,7 @@ export default async function PDIPrintPage({ params }: { params: Promise<{ id: s
         </div>
       </div>
       
-      <script dangerouslySetInnerHTML={{ __html: `setTimeout(() => window.print(), 500);` }} />
+      <script dangerouslySetInnerHTML={{ __html: `document.getElementById('print-btn')?.addEventListener('click', () => window.print()); setTimeout(() => window.print(), 500);` }} />
     </div>
   );
 }

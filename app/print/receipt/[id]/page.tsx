@@ -119,9 +119,9 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
     <div className="w-full bg-white text-black min-h-screen">
       <div className="print:hidden p-4 bg-gray-100 flex justify-center sticky top-0 shadow-sm z-50">
         <button 
+          id="print-btn"
           className="bg-primary text-white px-6 py-2 rounded-lg font-bold shadow hover:bg-red-700 transition"
           autoFocus
-          onClick="window.print()" // Can't use onClick in server component, will add client script below
         >
           Print Receipt
         </button>
@@ -132,7 +132,7 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
         <ReceiptCopy isCustomer={false} />
       </div>
 
-      <script dangerouslySetInnerHTML={{ __html: `setTimeout(() => window.print(), 500);` }} />
+      <script dangerouslySetInnerHTML={{ __html: `document.getElementById('print-btn')?.addEventListener('click', () => window.print()); setTimeout(() => window.print(), 500);` }} />
     </div>
   );
 }
