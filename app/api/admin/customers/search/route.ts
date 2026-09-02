@@ -26,7 +26,7 @@ export async function GET(request: Request) {
         phone: true,
         isVerified: true,
         documents: {
-          select: { docType: true, docNumber: true }
+          select: { docType: true, docNumber: true, isVerified: true }
         }
       }
     });
@@ -34,9 +34,11 @@ export async function GET(request: Request) {
     const formattedCustomers = customers.map(c => {
       const citizenship = c.documents.find(d => d.docType === 'CITIZENSHIP')?.docNumber;
       const license = c.documents.find(d => d.docType === 'DRIVING_LICENSE' || d.docType === 'LICENSE')?.docNumber;
+      const isAnyDocumentVerified = c.documents.some(d => d.isVerified);
       
       return {
         ...c,
+        isVerified: c.isVerified || isAnyDocumentVerified,
         citizenshipNumber: citizenship,
         licenseNumber: license
       };
