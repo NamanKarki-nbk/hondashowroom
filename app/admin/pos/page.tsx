@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 function POSContent() {
   const [vinSearch, setVinSearch] = useState("");
   const [activeVehicle, setActiveVehicle] = useState<any>(null);
-  const [customer, setCustomer] = useState({ name: "", phone: "", id: "", customerId: "" });
+  const [customer, setCustomer] = useState({ name: "", phone: "", id: "", customerId: "", isVerified: false });
   const [customerSearchQuery, setCustomerSearchQuery] = useState("");
   const [customerSearchResults, setCustomerSearchResults] = useState<any[]>([]);
   const [isSearchingCustomer, setIsSearchingCustomer] = useState(false);
@@ -113,6 +113,65 @@ function POSContent() {
       setVinError("Failed to search vehicle");
     } finally {
       setIsSearchingVin(false);
+    }
+  };
+
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleGenerateInvoice = async () => {
+    setIsGenerating(true);
+    try {
+      const payload = {
+        vehicleId: activeVehicle?.id,
+        customerId: customer.customerId,
+        purchaseMethod,
+        paymentMethod,
+        discountType,
+        discountAmount,
+        accessories,
+        accessoriesAmount,
+        oldVehicleModel,
+        oldVehicleNumber,
+        valuationAmount,
+        valuationBy,
+        downPayment,
+        financeCompany,
+        financeDuration,
+        pmCashAmount,
+        bankTransfers,
+        pmChequeBankName,
+        pmChequeNumber,
+        pmChequeDate,
+        pmChequeAmount,
+        dueLoanDays,
+        dueTerms,
+        serviceBookNo,
+        wantsInsurance,
+        insuranceCompany,
+        insuranceType,
+        insuranceAmount,
+        totalReceivable,
+        totalReceived,
+        dueAmount
+      };
+
+      const res = await fetch("/api/admin/pos/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Failed to generate invoice");
+      }
+
+      alert("Tax Invoice Generated Successfully!");
+      window.location.href = "/admin/sales-history";
+    } catch (error: any) {
+      alert(error.message || "Failed to generate invoice");
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -246,11 +305,15 @@ function POSContent() {
                         <div 
                           key={c.id} 
                           onClick={() => {
+                            if (!c.isVerified) {
+                              alert("This customer is not verified. Please verify the customer's KYC details before proceeding.");
+                            }
                             setCustomer({
                               name: c.fullName || "",
                               phone: c.phone || "",
                               id: c.citizenshipNumber || c.licenseNumber || "",
-                              customerId: c.id
+                              customerId: c.id,
+                              isVerified: c.isVerified || false
                             });
                             setCustomerSearchQuery("");
                             setCustomerSearchResults([]);
@@ -272,6 +335,13 @@ function POSContent() {
                     </div>
                   )}
                 </div>
+                
+                {customer.name && !customer.isVerified && (
+                  <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-xl text-sm font-semibold flex items-center gap-3 border border-red-200 dark:border-red-900/50">
+                    <AlertCircle className="w-5 h-5 shrink-0" />
+                    <span>This customer is not verified. Please verify their KYC documents to proceed.</span>
+                  </div>
+                )}
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
                   <div className="space-y-2">
@@ -785,10 +855,11 @@ function POSContent() {
 
               <div className="mt-8 pt-8 border-t border-zinc-200 dark:border-white/10">
                 <button 
-                  disabled={!activeVehicle || !customer.name}
+                  disabled={!activeVehicle || !customer.name || isGenerating}
+                  onClick={handleGenerateInvoice}
                   className="w-full bg-zinc-900 dark:bg-white text-white dark:text-black hover:bg-zinc-800 dark:hover:bg-gray-200 py-5 rounded-2xl font-black text-lg uppercase tracking-wider transition-all flex justify-center items-center gap-3 disabled:opacity-50 disabled:hover:bg-zinc-900 dark:disabled:hover:bg-white shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  <FileText className="w-6 h-6" /> Generate Tax Invoice
+                  <FileText className="w-6 h-6" /> {isGenerating ? "Processing..." : "Generate Tax Invoice"}
                 </button>
                 <p className="text-center text-xs text-zinc-500 dark:text-gray-500 mt-4 font-medium uppercase tracking-widest">By generating, you confirm customer verification.</p>
               </div>
