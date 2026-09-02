@@ -117,6 +117,7 @@ function POSContent() {
   };
 
   const [isGenerating, setIsGenerating] = useState(false);
+  const [successTransactionId, setSuccessTransactionId] = useState<string | null>(null);
 
   const handleGenerateInvoice = async () => {
     setIsGenerating(true);
@@ -166,8 +167,8 @@ function POSContent() {
         throw new Error(error.error || "Failed to generate invoice");
       }
 
-      alert("Tax Invoice Generated Successfully!");
-      window.location.href = "/admin/sales-history";
+      const data = await res.json();
+      setSuccessTransactionId(data.transaction.id);
     } catch (error: any) {
       alert(error.message || "Failed to generate invoice");
     } finally {
@@ -197,6 +198,48 @@ function POSContent() {
   const financeStep = showFinance ? ++currentStep : -1;
   const offersStep = ++currentStep;
   const paymentStep = ++currentStep;
+
+  if (successTransactionId) {
+    return (
+      <div className="min-h-screen bg-zinc-50 dark:bg-slate-950 text-zinc-900 dark:text-gray-100 p-4 md:p-8 relative overflow-hidden transition-colors duration-300 flex items-center justify-center">
+        {/* Dynamic Background */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/10 dark:bg-primary/20 blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse" style={{ animationDuration: '8s' }}></div>
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-green-900/10 dark:bg-green-900/20 blur-[150px] mix-blend-multiply dark:mix-blend-screen animate-pulse" style={{ animationDuration: '12s' }}></div>
+        </div>
+
+        <div className="bg-white/80 dark:bg-slate-900/60 backdrop-blur-3xl border border-zinc-200 dark:border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl max-w-3xl w-full text-center animate-in zoom-in-95 duration-500 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-400 to-emerald-600"></div>
+          
+          <div className="w-24 h-24 bg-gradient-to-br from-green-100 to-green-50 dark:from-green-500/20 dark:to-green-900/20 border border-green-200 dark:border-green-500/30 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
+            <CheckCircle className="w-12 h-12" />
+          </div>
+          
+          <h1 className="text-4xl font-black text-zinc-900 dark:text-white mb-3 tracking-tight">Transaction Complete!</h1>
+          <p className="text-zinc-500 dark:text-gray-400 mb-10 text-lg">The vehicle has been successfully sold. You can now download the necessary documents below.</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <a href={`/api/download/receipt/${successTransactionId}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 p-6 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-white/5 hover:border-primary/50 hover:bg-zinc-100 dark:hover:bg-white/5 transition-all group shadow-sm hover:shadow-md hover:-translate-y-1">
+              <FileText className="w-10 h-10 text-zinc-400 group-hover:text-primary transition-colors" />
+              <span className="font-bold text-sm text-zinc-700 dark:text-gray-300 group-hover:text-primary transition-colors uppercase tracking-widest">Cash Receipt</span>
+            </a>
+            <a href={`/api/download/undertaking/${successTransactionId}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 p-6 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-white/5 hover:border-blue-500/50 hover:bg-zinc-100 dark:hover:bg-white/5 transition-all group shadow-sm hover:shadow-md hover:-translate-y-1">
+              <ShieldCheck className="w-10 h-10 text-zinc-400 group-hover:text-blue-500 transition-colors" />
+              <span className="font-bold text-sm text-zinc-700 dark:text-gray-300 group-hover:text-blue-500 transition-colors uppercase tracking-widest">Undertaking</span>
+            </a>
+            <a href={`/api/download/pdi/${successTransactionId}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 p-6 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-white/5 hover:border-orange-500/50 hover:bg-zinc-100 dark:hover:bg-white/5 transition-all group shadow-sm hover:shadow-md hover:-translate-y-1">
+              <CheckCircle className="w-10 h-10 text-zinc-400 group-hover:text-orange-500 transition-colors" />
+              <span className="font-bold text-sm text-zinc-700 dark:text-gray-300 group-hover:text-orange-500 transition-colors uppercase tracking-widest">PDI Check Sheet</span>
+            </a>
+          </div>
+
+          <button onClick={() => window.location.reload()} className="bg-zinc-900 dark:bg-white text-white dark:text-black hover:bg-zinc-800 dark:hover:bg-gray-200 px-8 py-5 rounded-2xl font-black uppercase tracking-widest transition-all w-full flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(0,0,0,0.2)] hover:scale-[1.02] active:scale-[0.98]">
+            <Repeat className="w-6 h-6" /> Start New Transaction
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-slate-950 text-zinc-900 dark:text-gray-100 p-4 md:p-8 relative overflow-hidden transition-colors duration-300">
