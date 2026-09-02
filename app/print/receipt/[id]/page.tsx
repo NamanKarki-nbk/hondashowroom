@@ -3,9 +3,10 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import NepaliDate from "nepali-date-converter";
 
-export default async function ReceiptPrintPage({ params }: { params: { id: string } }) {
+export default async function ReceiptPrintPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const transaction = await prisma.salesTransaction.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       customer: true,
       vehicle: {
