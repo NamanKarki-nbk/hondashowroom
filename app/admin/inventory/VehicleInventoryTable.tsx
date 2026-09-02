@@ -563,6 +563,7 @@ export default function VehicleInventoryTable() {
                       <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Model Name</th>
                       <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">VIN / Chassis</th>
                       <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Engine No</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Temp Reg No</th>
                       <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Colour</th>
                       <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Purchase Price</th>
                     </tr>
@@ -579,6 +580,9 @@ export default function VehicleInventoryTable() {
                         <td className="py-4 px-6 font-black text-gray-900 dark:text-white">{v.modelName}</td>
                         <td className="py-4 px-6 font-mono font-medium text-gray-900 dark:text-white tracking-tight">{v.vin}</td>
                         <td className="py-4 px-6 font-mono text-sm text-gray-500 dark:text-gray-400">{v.engineNo}</td>
+                        <td className="py-4 px-6 font-mono text-sm font-medium text-slate-700 dark:text-slate-300">
+                          {v.tempRegistrationNo || <span className="text-gray-300 dark:text-gray-700">N/A</span>}
+                        </td>
                         <td className="py-4 px-6 font-medium text-gray-600 dark:text-gray-300">
                           <div className="flex items-center gap-2">
                             <div className="w-2.5 h-2.5 rounded-full bg-gray-300 dark:bg-gray-600 border border-gray-400 dark:border-gray-500"></div>
