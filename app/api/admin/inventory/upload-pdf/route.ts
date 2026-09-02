@@ -141,10 +141,11 @@ export async function POST(req: Request) {
 
       // Find Temp Registration No
       let tempRegistrationNo = null;
-      const regRegex = /Reg\s*No\.?[\s:]+([^\r\n]+)/i;
-      const regMatch = context.match(regRegex);
+      const singleLineContext = context.replace(/[\r\n]+/g, ' ');
+      const regRegex = /Reg\s*No\.?[\s:]+([A-Z0-9\s-]+?)(?=\s*Engine\s*No|\s*$)/i;
+      const regMatch = singleLineContext.match(regRegex);
       if (regMatch) {
-        tempRegistrationNo = regMatch[1].split('Engine')[0].trim();
+        tempRegistrationNo = regMatch[1].trim().replace(/-\s+/g, '-');
       }
 
       // Find Model using Strict Domain Rules (Prevents cross-contamination of terms like 125, DLX, BS6)
