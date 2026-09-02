@@ -120,6 +120,11 @@ function POSContent() {
   const [successTransactionId, setSuccessTransactionId] = useState<string | null>(null);
 
   const handleGenerateInvoice = async () => {
+    if (!customer.isVerified) {
+      alert("Cannot generate invoice. This customer is not verified. Please verify their KYC first.");
+      return;
+    }
+
     setIsGenerating(true);
     try {
       const payload = {
@@ -131,12 +136,12 @@ function POSContent() {
         discountAmount,
         accessories,
         accessoriesAmount,
-        oldVehicleModel,
-        oldVehicleNumber,
-        valuationAmount,
+        exchangeModel: oldVehicleModel,
+        exchangeNumber: oldVehicleNumber,
+        exchangeValue: valuationAmount,
         valuationBy,
-        downPayment,
-        financeCompany,
+        downpayment: downPayment,
+        financerName: financeCompany,
         financeDuration,
         pmCashAmount,
         bankTransfers,
@@ -219,15 +224,15 @@ function POSContent() {
           <p className="text-zinc-500 dark:text-gray-400 mb-10 text-lg">The vehicle has been successfully sold. You can now download the necessary documents below.</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <a href={`/api/download/receipt/${successTransactionId}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 p-6 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-white/5 hover:border-primary/50 hover:bg-zinc-100 dark:hover:bg-white/5 transition-all group shadow-sm hover:shadow-md hover:-translate-y-1">
+            <a href={`/print/receipt/${successTransactionId}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 p-6 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-white/5 hover:border-primary/50 hover:bg-zinc-100 dark:hover:bg-white/5 transition-all group shadow-sm hover:shadow-md hover:-translate-y-1">
               <FileText className="w-10 h-10 text-zinc-400 group-hover:text-primary transition-colors" />
               <span className="font-bold text-sm text-zinc-700 dark:text-gray-300 group-hover:text-primary transition-colors uppercase tracking-widest">Cash Receipt</span>
             </a>
-            <a href={`/api/download/undertaking/${successTransactionId}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 p-6 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-white/5 hover:border-blue-500/50 hover:bg-zinc-100 dark:hover:bg-white/5 transition-all group shadow-sm hover:shadow-md hover:-translate-y-1">
+            <a href={`/print/undertaking/${successTransactionId}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 p-6 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-white/5 hover:border-blue-500/50 hover:bg-zinc-100 dark:hover:bg-white/5 transition-all group shadow-sm hover:shadow-md hover:-translate-y-1">
               <ShieldCheck className="w-10 h-10 text-zinc-400 group-hover:text-blue-500 transition-colors" />
               <span className="font-bold text-sm text-zinc-700 dark:text-gray-300 group-hover:text-blue-500 transition-colors uppercase tracking-widest">Undertaking</span>
             </a>
-            <a href={`/api/download/pdi/${successTransactionId}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 p-6 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-white/5 hover:border-orange-500/50 hover:bg-zinc-100 dark:hover:bg-white/5 transition-all group shadow-sm hover:shadow-md hover:-translate-y-1">
+            <a href={`/print/pdi/${successTransactionId}`} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-4 p-6 rounded-2xl bg-zinc-50 dark:bg-black/20 border border-zinc-200 dark:border-white/5 hover:border-orange-500/50 hover:bg-zinc-100 dark:hover:bg-white/5 transition-all group shadow-sm hover:shadow-md hover:-translate-y-1">
               <CheckCircle className="w-10 h-10 text-zinc-400 group-hover:text-orange-500 transition-colors" />
               <span className="font-bold text-sm text-zinc-700 dark:text-gray-300 group-hover:text-orange-500 transition-colors uppercase tracking-widest">PDI Check Sheet</span>
             </a>

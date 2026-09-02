@@ -10,12 +10,26 @@ export async function POST(request: Request) {
       vehicleId,
       customerId,
       purchaseMethod,
+      paymentMethod,
       totalReceivable,
       totalReceived,
       dueAmount,
       accessoriesAmount,
       discountAmount,
-      insuranceAmount
+      insuranceAmount,
+      exchangeModel,
+      exchangeNumber,
+      exchangeValue,
+      downpayment,
+      financerName,
+      financeDuration,
+      pmCashAmount,
+      bankTransfers,
+      pmChequeBankName,
+      pmChequeNumber,
+      pmChequeDate,
+      pmChequeAmount,
+      accessories
     } = data;
 
     if (!vehicleId || !customerId) {
@@ -47,11 +61,64 @@ export async function POST(request: Request) {
           finalAmount: totalReceivable,
           commission: 0,
           totalAmountPaid: totalReceived,
-          dueAmount: dueAmount
+          dueAmount: dueAmount,
+          exchangeModel,
+          exchangeNumber,
+          exchangeValue,
+          downpayment,
+          financerName,
+          installments: financeDuration ? parseInt(financeDuration) : null,
+          accessories: accessories ? JSON.stringify(accessories) : null
         }
       });
 
-      // 2. Update vehicle inventory status
+      // 2. Create PaymentReceipts based on paymentMethod
+      if (paymentMethod === 'Cash' || paymentMethod === 'Cash + Bank Transfer') {
+        const cashAmt = paymentMethod === 'Cash' ? totalReceived : (pmCashAmount || 0);
+        if (cashAmt > 0) {
+          await tx.paymentReceipt.create({
+            data: {
+              receiptNo: `REC-${Date.now()}-C`,
+              transactionId: sale.id,
+              amount: cashAmt,
+              paymentMethod: 'Cash',
+              remarks: 'Cash Payment'
+            }
+          });
+        }
+      }
+
+      if (paymentMethod === 'Bank Transfer' || paymentMethod === 'Cash + Bank Transfer') {
+        if (bankTransfers && Array.isArray(bankTransfers)) {
+          for (const transfer of bankTransfers) {
+            if (transfer.amount > 0) {
+              await tx.paymentReceipt.create({
+                data: {
+                  receiptNo: `REC-${Date.now()}-B-${Math.floor(Math.random()*1000)}`,
+                  transactionId: sale.id,
+                  amount: Number(transfer.amount),
+                  paymentMethod: 'Bank Transfer',
+                  remarks: `Bank: ${transfer.bankName}, Ref: ${transfer.reference}`
+                }
+              });
+            }
+          }
+        }
+      }
+
+      if (paymentMethod === 'Cheque' && pmChequeAmount > 0) {
+        await tx.paymentReceipt.create({
+           data: {
+             receiptNo: `REC-${Date.now()}-CQ`,
+             transactionId: sale.id,
+             amount: Number(pmChequeAmount),
+             paymentMethod: 'Cheque',
+             remarks: `Bank: ${pmChequeBankName}, No: ${pmChequeNumber}, Date: ${pmChequeDate}`
+           }
+        });
+      }
+
+      // 3. Update vehicle inventory status
       await tx.vehicleInventory.update({
         where: { id: vehicleId },
         data: { status: 'SOLD' }

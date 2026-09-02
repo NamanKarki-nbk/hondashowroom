@@ -24,13 +24,25 @@ export async function GET(request: Request) {
         id: true,
         fullName: true,
         phone: true,
+        isVerified: true,
         documents: {
           select: { docType: true, docNumber: true }
         }
       }
     });
 
-    return NextResponse.json({ customers });
+    const formattedCustomers = customers.map(c => {
+      const citizenship = c.documents.find(d => d.docType === 'CITIZENSHIP')?.docNumber;
+      const license = c.documents.find(d => d.docType === 'DRIVING_LICENSE' || d.docType === 'LICENSE')?.docNumber;
+      
+      return {
+        ...c,
+        citizenshipNumber: citizenship,
+        licenseNumber: license
+      };
+    });
+
+    return NextResponse.json({ customers: formattedCustomers });
   } catch (error) {
     console.error('Customer search error:', error);
     return NextResponse.json({ error: 'Failed to search customers' }, { status: 500 });
