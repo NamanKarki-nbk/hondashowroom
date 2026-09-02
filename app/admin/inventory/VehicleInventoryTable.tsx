@@ -386,7 +386,7 @@ export default function VehicleInventoryTable() {
               <tr className="border-b border-gray-100 dark:border-slate-800 text-[10px] font-black uppercase tracking-widest text-gray-400">
                 <th className="py-5 px-6 whitespace-nowrap">Page No.</th>
                 <th className="py-5 px-6 whitespace-nowrap">Model Details</th>
-                <th className="py-5 px-6 whitespace-nowrap">VIN | Engine No</th>
+                <th className="py-5 px-6 whitespace-nowrap">VIN | Engine No | Temp Reg No</th>
                 <th className="py-5 px-6 whitespace-nowrap">Days In Stock</th>
                 <th className="py-5 px-6 whitespace-nowrap">Price (Selling)</th>
                 <th className="py-5 px-6 whitespace-nowrap">Status</th>
@@ -429,6 +429,9 @@ export default function VehicleInventoryTable() {
                     <td className="py-4 px-6">
                       <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 font-mono">{item.vin}</p>
                       <p className="text-xs font-medium text-gray-500 dark:text-gray-400 font-mono mt-1">{item.engineNo}</p>
+                      {item.tempRegistrationNo && (
+                        <p className="text-xs font-bold text-slate-600 dark:text-slate-300 font-mono mt-1 bg-slate-100 dark:bg-slate-800 inline-block px-1.5 py-0.5 rounded">{item.tempRegistrationNo}</p>
+                      )}
                     </td>
                     <td className="py-4 px-6">
                       <span className="text-sm font-semibold text-green-600 dark:text-green-500">
@@ -488,7 +491,7 @@ export default function VehicleInventoryTable() {
       {/* Premium Preview Modal for Parsed Vehicles */}
       {parsedVehicles && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 transition-all duration-300 animate-in fade-in zoom-in-95">
-          <div className="bg-white dark:bg-slate-950 rounded-3xl shadow-2xl border border-gray-200 dark:border-slate-800 w-full max-w-6xl max-h-[92vh] flex flex-col overflow-hidden ring-1 ring-black/5 dark:ring-white/10">
+          <div className="bg-white dark:bg-slate-950 rounded-3xl shadow-2xl border border-gray-200 dark:border-slate-800 w-full max-w-[1400px] max-h-[92vh] flex flex-col overflow-hidden ring-1 ring-black/5 dark:ring-white/10">
             
             {/* Header Area with Subtle Gradient */}
             <div className="p-6 md:px-8 border-b border-gray-100 dark:border-slate-800 bg-gradient-to-r from-gray-50 to-white dark:from-[#151515] dark:to-[#0B0B0C] relative">
@@ -558,14 +561,14 @@ export default function VehicleInventoryTable() {
                 <table className="w-full text-left text-sm border-collapse">
                   <thead className="bg-gray-50/90 dark:bg-white/5 backdrop-blur-md sticky top-0 z-10">
                     <tr>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">#</th>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Category</th>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Model Name</th>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">VIN / Chassis</th>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Engine No</th>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Temp Reg No</th>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Colour</th>
-                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800">Purchase Price</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800 whitespace-nowrap">#</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800 whitespace-nowrap">Category</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800 whitespace-nowrap">Model Name</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800 whitespace-nowrap">VIN / Chassis</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800 whitespace-nowrap">Engine No</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800 whitespace-nowrap">Temp Reg No</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800 whitespace-nowrap">Colour</th>
+                      <th className="py-4 px-6 text-xs uppercase tracking-wider font-bold text-gray-500 border-b border-gray-200 dark:border-slate-800 whitespace-nowrap">Purchase Price</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 dark:divide-white/5">
@@ -578,9 +581,9 @@ export default function VehicleInventoryTable() {
                           </span>
                         </td>
                         <td className="py-4 px-6 font-black text-gray-900 dark:text-white">{v.modelName}</td>
-                        <td className="py-4 px-6 font-mono font-medium text-gray-900 dark:text-white tracking-tight">{v.vin}</td>
-                        <td className="py-4 px-6 font-mono text-sm text-gray-500 dark:text-gray-400">{v.engineNo}</td>
-                        <td className="py-4 px-6 font-mono text-sm font-medium text-slate-700 dark:text-slate-300">
+                        <td className="py-4 px-6 font-mono font-medium text-gray-900 dark:text-white tracking-tight whitespace-nowrap">{v.vin}</td>
+                        <td className="py-4 px-6 font-mono text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">{v.engineNo}</td>
+                        <td className="py-4 px-6 font-mono text-sm font-medium text-slate-700 dark:text-slate-300 whitespace-nowrap">
                           {v.tempRegistrationNo || <span className="text-gray-300 dark:text-gray-700">N/A</span>}
                         </td>
                         <td className="py-4 px-6 font-medium text-gray-600 dark:text-gray-300">
