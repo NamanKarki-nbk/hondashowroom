@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
-import { Search, UserPlus, CreditCard, FileText, CheckCircle, Calculator, ChevronRight, Zap, ArrowRight, ShieldCheck, Tag, Briefcase, Percent, PackagePlus, Repeat, Landmark, X, Plus } from "lucide-react";
+import { Search, UserPlus, CreditCard, FileText, CheckCircle, Calculator, ChevronRight, Zap, ArrowRight, ShieldCheck, Tag, Briefcase, Percent, PackagePlus, Repeat, Landmark, X, Plus, AlertCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 function POSContent() {
@@ -36,6 +36,10 @@ function POSContent() {
   const [pmChequeNumber, setPmChequeNumber] = useState("");
   const [pmChequeDate, setPmChequeDate] = useState("");
   const [pmChequeAmount, setPmChequeAmount] = useState<number>(0);
+  
+  // Due Amount fields
+  const [dueLoanDays, setDueLoanDays] = useState("");
+  const [dueTerms, setDueTerms] = useState("");
 
   // Read URL params to auto-search VIN if provided
   const searchParams = useSearchParams();
@@ -643,7 +647,7 @@ function POSContent() {
               
               <div className="space-y-6 flex-1">
                 <div className="group flex justify-between items-center text-base p-2 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-lg transition-colors">
-                  <span className="text-zinc-600 dark:text-gray-400 flex items-center gap-2"><Tag className="w-4 h-4 text-zinc-500 dark:text-gray-500" /> Base Price</span>
+                  <span className="text-zinc-600 dark:text-gray-400 flex items-center gap-2"><Tag className="w-4 h-4 text-zinc-500 dark:text-gray-500" /> Vehicle Price</span>
                   <span className="text-zinc-900 dark:text-white font-semibold">Rs. {activeVehicle ? activeVehicle.price.toLocaleString() : "0"}</span>
                 </div>
                 <div className="group flex justify-between items-center text-base p-2 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-lg transition-colors">
@@ -701,6 +705,23 @@ function POSContent() {
                        </div>
                      )}
                    </div>
+                   {dueAmount > 0 && (
+                     <div className="mt-4 p-5 rounded-2xl border border-red-200 dark:border-red-500/20 bg-red-50/50 dark:bg-red-950/20 space-y-4">
+                       <h4 className="text-sm font-bold text-red-700 dark:text-red-400 flex items-center gap-2">
+                         <AlertCircle className="w-4 h-4" /> Due Amount Details
+                       </h4>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <div className="space-y-2">
+                           <label className="text-xs font-bold text-zinc-600 dark:text-gray-400 uppercase tracking-wider">Loan Duration (Days)</label>
+                           <input type="number" value={dueLoanDays} onChange={e => setDueLoanDays(e.target.value)} placeholder="e.g. 15" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-red-500 outline-none transition-all" />
+                         </div>
+                         <div className="space-y-2">
+                           <label className="text-xs font-bold text-zinc-600 dark:text-gray-400 uppercase tracking-wider">Terms & Conditions / Deposit Date</label>
+                           <input type="text" value={dueTerms} onChange={e => setDueTerms(e.target.value)} placeholder="e.g. Will deposit on 15th Aug" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-red-500 outline-none transition-all" />
+                         </div>
+                       </div>
+                     </div>
+                   )}
                 </div>
               </div>
 
