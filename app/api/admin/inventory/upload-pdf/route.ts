@@ -142,7 +142,7 @@ export async function POST(req: Request) {
       // Find Temp Registration No
       let tempRegistrationNo = null;
       const singleLineContext = context.replace(/[\r\n]+/g, ' ');
-      const regRegex = /Reg\s*No\.?[\s:]+([A-Z0-9\s-]+?)(?=\s*Engine\s*No|\s*$)/i;
+      const regRegex = /Reg\s*No\.?[\s:]+([A-Z0-9\s-]+?)(?=\s*Chassis|\s*Engine|\s*Colou?r|\s*Make|\s*Model|\s*$)/i;
       const regMatch = singleLineContext.match(regRegex);
       if (regMatch) {
         tempRegistrationNo = regMatch[1].trim().replace(/-\s+/g, '-');
