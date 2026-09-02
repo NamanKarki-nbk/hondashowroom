@@ -40,6 +40,13 @@ function POSContent() {
   // Due Amount fields
   const [dueLoanDays, setDueLoanDays] = useState("");
   const [dueTerms, setDueTerms] = useState("");
+  
+  // Warranty & Insurance
+  const [serviceBookNo, setServiceBookNo] = useState("");
+  const [wantsInsurance, setWantsInsurance] = useState(false);
+  const [insuranceCompany, setInsuranceCompany] = useState("Protective Micro Insurance");
+  const [insuranceType, setInsuranceType] = useState("3rd Party");
+  const [insuranceAmount, setInsuranceAmount] = useState<number>(0);
 
   // Read URL params to auto-search VIN if provided
   const searchParams = useSearchParams();
@@ -626,6 +633,57 @@ function POSContent() {
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+
+            {/* Step 6: Warranty & Insurance */}
+            <div className="bg-white/90 dark:bg-slate-900/60 backdrop-blur-3xl border border-zinc-200 dark:border-white/10 rounded-3xl p-6 md:p-8 shadow-xl dark:shadow-2xl transition-all hover:border-zinc-300 dark:hover:border-white/20">
+              <h2 className="text-xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight flex items-center gap-3">
+                <ShieldCheck className="w-6 h-6 text-primary" />
+                6. WARRANTY & INSURANCE
+              </h2>
+              
+              <div className="space-y-8">
+                {/* Service Book */}
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Service Book No. (Required for Warranty) <span className="text-red-500">*</span></label>
+                  <input type="text" value={serviceBookNo} onChange={e => setServiceBookNo(e.target.value)} placeholder="Enter Service Book Number" className="w-full md:w-1/2 bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-primary outline-none transition-all" />
+                </div>
+
+                {/* Insurance Toggle */}
+                <div className="pt-4 border-t border-zinc-100 dark:border-white/5 space-y-4">
+                  <label className="flex items-center gap-3 cursor-pointer group w-fit">
+                    <div className={`w-6 h-6 rounded-md flex items-center justify-center border transition-all ${wantsInsurance ? 'bg-primary border-primary' : 'bg-white dark:bg-black/50 border-zinc-300 dark:border-white/20 group-hover:border-primary'}`}>
+                      {wantsInsurance && <CheckCircle className="w-4 h-4 text-white" />}
+                    </div>
+                    <span className="text-sm font-bold text-zinc-700 dark:text-gray-300">Customer wants help buying Insurance (Optional)</span>
+                    <input type="checkbox" className="hidden" checked={wantsInsurance} onChange={e => setWantsInsurance(e.target.checked)} />
+                  </label>
+
+                  {wantsInsurance && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 bg-zinc-50 dark:bg-black/20 p-5 rounded-2xl border border-zinc-200 dark:border-white/5">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Insurance Company</label>
+                        <select value={insuranceCompany} onChange={e => setInsuranceCompany(e.target.value)} className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-primary outline-none transition-all appearance-none cursor-pointer">
+                          <option value="Protective Micro Insurance">Protective Micro Insurance</option>
+                          <option value="Other">Other Company</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Insurance Type</label>
+                        <select value={insuranceType} onChange={e => setInsuranceType(e.target.value)} className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-primary outline-none transition-all appearance-none cursor-pointer">
+                          <option value="3rd Party">3rd Party</option>
+                          <option value="Full Party">Full Party</option>
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Premium Amount (Rs.)</label>
+                        <input type="number" value={insuranceAmount || ""} onChange={e => setInsuranceAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-primary outline-none transition-all" />
+                        <p className="text-[10px] text-zinc-400 dark:text-gray-500 italic mt-1">*Paid separately, not added to POS invoice</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
