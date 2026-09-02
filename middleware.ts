@@ -39,22 +39,27 @@ export async function middleware(request: NextRequest) {
   // 1. API Route Rate Limiting (Using Upstash Free Tier)
   if (pathname.startsWith("/api")) {
     if (ratelimit) {
-      const ip = (request as any).ip ?? "127.0.0.1";
-      const { success, limit, reset, remaining } = await ratelimit.limit(`ratelimit_${ip}`);
+      try {
+        const ip = (request as any).ip ?? "127.0.0.1";
+        const { success, limit, reset, remaining } = await ratelimit.limit(`ratelimit_${ip}`);
 
-      if (!success) {
-        return new NextResponse(
-          JSON.stringify({ error: "Too Many Requests" }),
-          {
-            status: 429,
-            headers: {
-              "Content-Type": "application/json",
-              "X-RateLimit-Limit": limit.toString(),
-              "X-RateLimit-Remaining": remaining.toString(),
-              "X-RateLimit-Reset": reset.toString(),
-            },
-          }
-        );
+        if (!success) {
+          return new NextResponse(
+            JSON.stringify({ error: "Too Many Requests" }),
+            {
+              status: 429,
+              headers: {
+                "Content-Type": "application/json",
+                "X-RateLimit-Limit": limit.toString(),
+                "X-RateLimit-Remaining": remaining.toString(),
+                "X-RateLimit-Reset": reset.toString(),
+              },
+            }
+          );
+        }
+      } catch (error) {
+        // If Redis is unreachable, fail open so we don't bring down the whole app
+        console.warn("Rate limit check failed, allowing request:", error);
       }
     }
 
