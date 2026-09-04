@@ -24,6 +24,11 @@ export async function GET(req: Request) {
         }
       },
       include: {
+        user: {
+          select: {
+            avatarUrl: true
+          }
+        },
         documents: true,
         sales: {
           include: {
@@ -55,6 +60,7 @@ export async function GET(req: Request) {
       return {
         id: c.id,
         fullName: c.fullName,
+        avatarUrl: c.user?.avatarUrl || null,
         phone: c.phone,
         email: c.email || "N/A",
         address: c.address || "N/A",

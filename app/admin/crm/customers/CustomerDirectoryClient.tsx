@@ -6,6 +6,7 @@ import { Search, Loader2, ShieldCheck, Mail, Phone, Calendar, ArrowUpRight, User
 interface Customer {
   id: string;
   fullName: string;
+  avatarUrl?: string | null;
   phone: string;
   email: string;
   address: string;
@@ -22,7 +23,10 @@ interface Customer {
   createdAt: string;
 }
 
+import { useRouter } from 'next/navigation';
+
 export default function CustomerDirectoryClient() {
+  const router = useRouter();
   const [data, setData] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -105,13 +109,26 @@ export default function CustomerDirectoryClient() {
           </thead>
           <tbody className="divide-y divide-gray-100 dark:divide-zinc-800/50">
             {data.map((customer) => (
-              <tr key={customer.id} className="hover:bg-gray-50/50 dark:hover:bg-zinc-800/30 transition-colors group cursor-pointer">
+              <tr 
+                key={customer.id} 
+                onClick={() => router.push(`/admin/crm/customers/${customer.id}`)}
+                className="hover:bg-gray-50/50 dark:hover:bg-zinc-800/30 transition-colors group cursor-pointer"
+              >
                 {/* 1. Details */}
                 <td className="px-6 py-4">
-                  <div className="flex flex-col">
-                    <span className="font-black text-gray-900 dark:text-white tracking-tight">{customer.fullName}</span>
-                    <div className="flex items-center gap-1 text-xs font-bold text-gray-400 mt-0.5 uppercase">
-                      <Calendar className="w-3.5 h-3.5" /> Added {formatDate(customer.createdAt)}
+                  <div className="flex items-center gap-3">
+                    {customer.avatarUrl ? (
+                      <img src={customer.avatarUrl} alt={customer.fullName} className="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-zinc-700" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-[#CC0000]/10 dark:bg-[#CC0000]/20 flex items-center justify-center text-[#CC0000] font-bold border border-[#CC0000]/20">
+                        {customer.fullName.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div className="flex flex-col">
+                      <span className="font-black text-gray-900 dark:text-white tracking-tight">{customer.fullName}</span>
+                      <div className="flex items-center gap-1 text-xs font-bold text-gray-400 mt-0.5 uppercase">
+                        <Calendar className="w-3.5 h-3.5" /> Added {formatDate(customer.createdAt)}
+                      </div>
                     </div>
                   </div>
                 </td>
