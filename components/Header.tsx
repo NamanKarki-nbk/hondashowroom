@@ -154,6 +154,7 @@ export default function Header({ initialIsLoggedIn = false }: { initialIsLoggedI
                     <div className="bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl border border-gray-100 dark:border-white/10 rounded-2xl shadow-xl overflow-hidden py-2 flex flex-col p-2">
                       <Link href="/admin/dashboard" className="px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors text-sm font-bold flex items-center justify-between">Admin <ArrowRight className="w-3 h-3" /></Link>
                       <Link href="/profile" className="px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors text-sm font-bold">My Profile</Link>
+                      <Link href="/referrals" className="px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors text-sm font-bold">Refer & Earn</Link>
                       <button onClick={handleLogout} className="px-4 py-3 rounded-xl hover:bg-red-500/10 hover:text-primary transition-colors text-sm font-bold text-left text-gray-500">Log Out</button>
                     </div>
                   </div>
@@ -228,6 +229,7 @@ export default function Header({ initialIsLoggedIn = false }: { initialIsLoggedI
                   ) : (
                     <>
                       <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-primary transition-colors">My Profile</Link>
+                      <Link href="/referrals" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-primary transition-colors">Refer & Earn</Link>
                       <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} className="text-left text-gray-500 hover:text-primary transition-colors uppercase font-bold">Log Out</button>
                     </>
                   )}
