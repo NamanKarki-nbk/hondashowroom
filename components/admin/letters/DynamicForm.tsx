@@ -87,6 +87,7 @@ export default function DynamicForm({
   const [endDate, setEndDate] = useState<string>("");
   const [isAutofilling, setIsAutofilling] = useState<boolean>(false);
   const [staffList, setStaffList] = useState<any[]>([]);
+  const [isStaffLoaded, setIsStaffLoaded] = useState<boolean>(false);
   const [products, setProducts] = useState<any[]>([]);
   const [paramsProcessed, setParamsProcessed] = useState(false);
 
@@ -165,8 +166,12 @@ export default function DynamicForm({
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) setStaffList(data);
+        setIsStaffLoaded(true);
       })
-      .catch(console.error);
+      .catch((e) => {
+        console.error(e);
+        setIsStaffLoaded(true);
+      });
   }, []);
 
   // Fetch latest remaining balance when docType changes to Cash Incentive Claim
@@ -631,10 +636,14 @@ export default function DynamicForm({
             </div>
 
             <div className="mt-6 border border-gray-200 dark:border-slate-700/60 shadow-sm rounded-xl overflow-hidden bg-white dark:bg-slate-900">
-              {staffList.length === 0 ? (
+              {!isStaffLoaded ? (
                 <div className="p-8 text-center text-sm font-medium text-gray-500 flex flex-col items-center justify-center">
                   <div className="w-8 h-8 border-4 border-gray-200 border-t-[#CC0000] rounded-full animate-spin mb-4"></div>
                   Loading staff data... If this persists, please refresh the page.
+                </div>
+              ) : staffList.length === 0 ? (
+                <div className="p-8 text-center text-sm font-medium text-gray-500 flex flex-col items-center justify-center">
+                  No staff members found. Please add them in the Staff Directory.
                 </div>
               ) : (
                 <div className="overflow-x-auto">
