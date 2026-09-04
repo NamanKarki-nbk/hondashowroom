@@ -43,7 +43,7 @@ export default function StaffClient() {
       const url = new URL("/api/admin/settings/staff", window.location.origin);
       if (search) url.searchParams.append("search", search);
 
-      const res = await fetch(url.toString());
+      const res = await fetch(url.toString(), { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         setStaff(data);
