@@ -4,9 +4,10 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronLeft, User, Phone, Mail, MapPin, Calendar, ShieldCheck, Car, FileText } from 'lucide-react';
 
-export default async function CustomerDetailsPage({ params }: { params: { id: string } }) {
+export default async function CustomerDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
   const customer = await prisma.customer.findUnique({
-    where: { id: params.id },
+    where: { id: resolvedParams.id },
     include: {
       user: true,
       documents: true,
@@ -117,14 +118,23 @@ export default async function CustomerDetailsPage({ params }: { params: { id: st
             {customer.sales.length > 0 ? (
               <div className="space-y-3">
                 {customer.sales.map((sale) => (
-                  <div key={sale.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-800/50 border border-gray-100 dark:border-zinc-700/50 rounded-xl">
-                    <div>
-                      <p className="font-bold text-gray-900 dark:text-white">{sale.vehicle.variant.vehicleMaster.name}</p>
-                      <p className="text-xs font-medium text-gray-500 mt-1">VIN: {sale.vehicle.vin} | Engine: {sale.vehicle.engineNo}</p>
+                  <div key={sale.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 dark:bg-zinc-800/50 border border-gray-100 dark:border-zinc-700/50 rounded-xl gap-4">
+                    <div className="flex items-center gap-4">
+                      {sale.vehicle.variant.vehicleMaster.imageUrl ? (
+                        <img src={sale.vehicle.variant.vehicleMaster.imageUrl} alt={sale.vehicle.variant.vehicleMaster.name} className="w-16 h-16 object-contain rounded-lg bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 p-1" />
+                      ) : (
+                        <div className="w-16 h-16 rounded-lg bg-gray-200 dark:bg-zinc-700 flex items-center justify-center border border-gray-300 dark:border-zinc-600">
+                          <Car className="w-6 h-6 text-gray-400" />
+                        </div>
+                      )}
+                      <div>
+                        <p className="font-bold text-gray-900 dark:text-white">{sale.vehicle.variant.vehicleMaster.name}</p>
+                        <p className="text-xs font-medium text-gray-500 mt-1">VIN: {sale.vehicle.vin} | Engine: {sale.vehicle.engineNo}</p>
+                      </div>
                     </div>
-                    <div className="text-right">
+                    <div className="sm:text-right flex flex-row sm:flex-col justify-between sm:justify-end items-center sm:items-end mt-2 sm:mt-0">
                       <p className="font-bold text-gray-900 dark:text-white">{formatCurrency(sale.finalAmount)}</p>
-                      <p className="text-xs font-medium text-gray-500 mt-1">{formatDate(sale.date)}</p>
+                      <p className="text-xs font-medium text-gray-500 mt-1 sm:mt-1">{formatDate(sale.date)}</p>
                     </div>
                   </div>
                 ))}
