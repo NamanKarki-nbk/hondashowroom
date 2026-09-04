@@ -125,9 +125,9 @@ export function numberToNepaliWords(num: number): string {
  */
 export function getNepaliFiscalYear(date: Date): string {
   const time = date.getTime();
-  if (time >= new Date('2026-07-17').getTime() && time <= new Date('2027-07-16').getTime()) return '2083।84';
-  if (time >= new Date('2025-07-16').getTime() && time < new Date('2026-07-17').getTime()) return '2082।83';
-  if (time >= new Date('2024-07-16').getTime() && time < new Date('2025-07-16').getTime()) return '2081।82';
+  if (time >= new Date('2026-07-17').getTime() && time <= new Date('2027-07-16').getTime()) return '2083/84';
+  if (time >= new Date('2025-07-16').getTime() && time < new Date('2026-07-17').getTime()) return '2082/83';
+  if (time >= new Date('2024-07-16').getTime() && time < new Date('2025-07-16').getTime()) return '2081/82';
   
   // Fallback estimation
   const year = date.getFullYear();
@@ -136,5 +136,5 @@ export function getNepaliFiscalYear(date: Date): string {
   const isNewFY = month > 6 || (month === 6 && day >= 16);
   const startBS = year + 57 - (isNewFY ? 0 : 1);
   const endBS = startBS + 1;
-  return `${startBS}।${endBS.toString().slice(2)}`;
+  return `${startBS}/${endBS.toString().slice(2)}`;
 }

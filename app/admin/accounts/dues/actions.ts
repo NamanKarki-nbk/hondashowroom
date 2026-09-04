@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { generateReceiptNo } from "@/lib/sequence";
 
 export async function addPayment(
   transactionId: string,
@@ -20,7 +21,7 @@ export async function addPayment(
     const newDueAmount = tx.dueAmount - amount;
     const newTotalPaid = tx.totalAmountPaid + amount;
 
-    const receiptNo = `REC-${Date.now()}-C`;
+    const receiptNo = await generateReceiptNo();
 
     const receipt = await prisma.paymentReceipt.create({
       data: {

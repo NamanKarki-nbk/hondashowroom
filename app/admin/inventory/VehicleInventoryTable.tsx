@@ -234,12 +234,10 @@ export default function VehicleInventoryTable() {
   const totalVehicles = displayedItems.length;
   const inStockCount = displayedItems.filter(i => i.status === 'In Stock' || i.status === 'Available' || i.status === 'IN_STOCK').length;
   const soldReservedCount = displayedItems.filter(i => i.status === 'Sold' || i.status === 'Reserved' || i.status === 'SOLD').length;
-  const outOfStockCount = displayedItems.filter(i => i.status === 'Out of Stock' || i.status === 'OUT_OF_STOCK').length;
   const totalValue = displayedItems.reduce((sum, item) => sum + item.sellingPrice, 0);
 
   const inStockPercent = totalVehicles ? ((inStockCount / totalVehicles) * 100).toFixed(1) : 0;
   const soldReservedPercent = totalVehicles ? ((soldReservedCount / totalVehicles) * 100).toFixed(1) : 0;
-  const outOfStockPercent = totalVehicles ? ((outOfStockCount / totalVehicles) * 100).toFixed(1) : 0;
 
   return (
     <div className="space-y-6">
@@ -299,7 +297,7 @@ export default function VehicleInventoryTable() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Vehicles */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-gray-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-[#d8232a] shrink-0">
@@ -336,17 +334,7 @@ export default function VehicleInventoryTable() {
           </div>
         </div>
 
-        {/* Out of Stock */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-gray-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-[#d8232a] shrink-0">
-            <MinusCircle className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-xs font-bold text-gray-500 mb-0.5">Out of Stock</p>
-            <h3 className="text-2xl font-black text-gray-900 dark:text-white leading-none">{outOfStockCount}</h3>
-            <p className="text-[10px] font-bold text-[#d8232a] mt-1">{outOfStockPercent}% of total</p>
-          </div>
-        </div>
+
 
         {/* Total Value */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-gray-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
@@ -460,17 +448,27 @@ export default function VehicleInventoryTable() {
                     </td>
                     <td className="py-4 px-6 text-right">
                       <div className="flex justify-end gap-2">
-                        <button 
-                          onClick={() => setRoutingVehicle(item)}
-                          className="bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5"
-                        >
-                          <Route className="w-3.5 h-3.5" /> Route
-                        </button>
-                        <Link href={`/admin/pos?vin=${item.vin}`}>
-                          <button className="bg-[#d8232a] hover:bg-red-800 text-white px-4 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-colors">
-                            Sell
-                          </button>
-                        </Link>
+                        {item.status === 'SOLD' ? (
+                          <Link href={`/admin/sales-history?search=${item.vin}`}>
+                            <button className="bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 px-4 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-colors">
+                              View Details
+                            </button>
+                          </Link>
+                        ) : (
+                          <>
+                            <button 
+                              onClick={() => setRoutingVehicle(item)}
+                              className="bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5"
+                            >
+                              <Route className="w-3.5 h-3.5" /> Route
+                            </button>
+                            <Link href={`/admin/pos?vin=${item.vin}`}>
+                              <button className="bg-[#d8232a] hover:bg-red-800 text-white px-4 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-colors">
+                                Sell
+                              </button>
+                            </Link>
+                          </>
+                        )}
                         <button 
                           onClick={() => handleDelete(item.id)}
                           className="bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 p-1.5 rounded-md transition-colors"

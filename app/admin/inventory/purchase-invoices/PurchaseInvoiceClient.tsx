@@ -13,7 +13,7 @@ export default function PurchaseInvoiceClient() {
   
   const [formData, setFormData] = useState({
     invoiceNo: '',
-    supplierName: '',
+    purchaseType: '',
     invoiceDate: new Date().toISOString().split('T')[0],
     totalAmount: '',
     remarks: ''
@@ -67,7 +67,7 @@ export default function PurchaseInvoiceClient() {
       if (res.ok) {
         setIsModalOpen(false);
         setFormData({
-          invoiceNo: '', supplierName: '', invoiceDate: new Date().toISOString().split('T')[0], totalAmount: '', remarks: ''
+          invoiceNo: '', purchaseType: '', invoiceDate: new Date().toISOString().split('T')[0], totalAmount: '', remarks: ''
         });
         fetchInvoices();
       } else {
@@ -82,7 +82,7 @@ export default function PurchaseInvoiceClient() {
 
   const filteredInvoices = invoices.filter(inv => 
     inv.invoiceNo.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    inv.supplierName.toLowerCase().includes(searchQuery.toLowerCase())
+    (inv.purchaseType && inv.purchaseType.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
@@ -110,7 +110,7 @@ export default function PurchaseInvoiceClient() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search by invoice # or supplier..."
+              placeholder="Search by invoice # or purchase via..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-xl text-sm focus:ring-2 focus:ring-primary outline-none"
@@ -130,7 +130,7 @@ export default function PurchaseInvoiceClient() {
           <thead className="text-gray-500 bg-gray-50 dark:bg-slate-950/50 border-y border-gray-100 dark:border-slate-800">
             <tr>
               <th className="px-4 py-3 font-medium">Invoice No</th>
-              <th className="px-4 py-3 font-medium">Supplier</th>
+              <th className="px-4 py-3 font-medium">Purchase Via</th>
               <th className="px-4 py-3 font-medium">Date</th>
               <th className="px-4 py-3 font-medium">Total Amount</th>
               <th className="px-4 py-3 font-medium">Vehicles Linked</th>
@@ -152,8 +152,8 @@ export default function PurchaseInvoiceClient() {
                   <td className="px-4 py-3 font-semibold text-gray-900 dark:text-white">
                     {inv.invoiceNo}
                   </td>
-                  <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
-                    {inv.supplierName}
+                  <td className="px-4 py-4 text-gray-500 dark:text-gray-400">
+                    {inv.purchaseType || '-'}
                   </td>
                   <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
                     {format(new Date(inv.invoiceDate), 'MMM d, yyyy')}
@@ -204,8 +204,8 @@ export default function PurchaseInvoiceClient() {
                 <input required type="text" value={formData.invoiceNo} onChange={e => setFormData({...formData, invoiceNo: e.target.value})} className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none" placeholder="INV-001" />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Supplier Name</label>
-                <input required type="text" value={formData.supplierName} onChange={e => setFormData({...formData, supplierName: e.target.value})} className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none" placeholder="Supplier Pvt Ltd" />
+                <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Purchase Via</label>
+                <input required type="text" value={formData.purchaseType} onChange={e => setFormData({...formData, purchaseType: e.target.value})} className="w-full bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none" placeholder="e.g. Syakar Trading Company" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Invoice Date</label>

@@ -9,8 +9,30 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status");
 
-    const deliveries = await prisma.delivery.findMany({
-      orderBy: { deliveredAt: 'asc' }
+    const whereClause: any = {
+      // Only include SalesTransactions that have a scheduled, delivered or rescheduled status, 
+      // or if status is ALL, include all transactions that are not PENDING.
+    };
+
+    if (status && status !== 'ALL') {
+      whereClause.deliveryStatus = status;
+    }
+
+    const deliveries = await prisma.salesTransaction.findMany({
+      where: whereClause,
+      include: {
+        customer: true,
+        vehicle: {
+          include: {
+            variant: {
+              include: {
+                vehicleMaster: true
+              }
+            }
+          }
+        }
+      },
+      orderBy: { deliveryDate: 'asc' }
     });
 
     return NextResponse.json(deliveries);
@@ -23,16 +45,29 @@ export async function GET(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
-    const { id, status, feedbackScore, feedbackText } = body;
+    const { id, status, feedbackScore, keyNo, tyreMake, batteryNo } = body;
     
     const updateData: any = {};
-    if (status) updateData.status = status;
+    if (status) {
+      updateData.deliveryStatus = status;
+      // When marked as DELIVERED, make sure deliveryDate is set if not already
+      if (status === 'DELIVERED') {
+        updateData.deliveryDate = new Date();
+      }
+    }
+    
     if (feedbackScore !== undefined) updateData.feedbackScore = parseInt(feedbackScore);
-    if (feedbackText !== undefined) updateData.feedbackText = feedbackText;
+    if (keyNo !== undefined) updateData.keyNo = keyNo;
+    if (tyreMake !== undefined) updateData.tyreMake = tyreMake;
+    if (batteryNo !== undefined) updateData.batteryNo = batteryNo;
 
-    const delivery = await prisma.delivery.update({
+    const delivery = await prisma.salesTransaction.update({
       where: { id },
-      data: updateData
+      data: updateData,
+      include: {
+        customer: true,
+        vehicle: true
+      }
     });
 
     const cookieStore = await cookies();
@@ -42,14 +77,18 @@ export async function PATCH(req: NextRequest) {
     await logActivity({
       userId: session?.userId || session?.id || "system",
       action: "UPDATE",
-      entity: "Lead",
+      entity: "SalesTransaction",
       entityId: delivery.id,
       details: {
-        customerName: delivery.customerName,
-        vehicleName: delivery.vehicleName,
-        rating: delivery.rating ?? null,
+        action: "Handover Updated",
+        customerName: delivery.customer.fullName,
+        vehicleName: delivery.vehicle.name,
+        status: delivery.deliveryStatus,
+        keyNo: delivery.keyNo
       }
     });
+
+    // TODO: Send Email/SMS to customer
 
     return NextResponse.json(delivery);
   } catch (error) {

@@ -11,9 +11,7 @@ export const revalidate = 0;
 export default async function ExchangeLogPage() {
   const exchangeSales = await prisma.salesTransaction.findMany({
     where: {
-      exchangeModel: {
-        not: null
-      }
+      paymentType: 'EXCHANGE'
     },
     include: {
       customer: true,

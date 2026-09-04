@@ -26,7 +26,7 @@ function toWords(num: number): string {
 
 import PrintButtons from './PrintButtons';
 
-export default async function PaymentReceiptPrintPage({
+export default async function Page({
   params,
 }: {
   params: Promise<{ id: string }>;

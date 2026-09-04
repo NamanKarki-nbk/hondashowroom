@@ -18,13 +18,24 @@ cloudinary.config({
 export async function uploadToCloudinary(file: File, folder: string = 'honda-showroom'): Promise<string> {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
+  
+  const isPdf = file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf';
+
+  const uploadOptions: any = {
+    folder,
+    resource_type: isPdf ? 'raw' : 'auto', 
+  };
+  
+  if (isPdf) {
+    // For raw files via stream, Cloudinary doesn't know the extension unless we provide a public_id
+    // generate a random string + .pdf
+    const randomName = Math.random().toString(36).substring(2, 15);
+    uploadOptions.public_id = `${randomName}.pdf`;
+  }
 
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder,
-        resource_type: 'auto', // auto detect image/video
-      },
+      uploadOptions,
       (error, result) => {
         if (error) {
           console.error("Cloudinary upload error:", error);
@@ -48,25 +59,22 @@ export async function uploadToCloudinary(file: File, folder: string = 'honda-sho
  */
 export async function deleteFromCloudinary(secureUrl: string): Promise<void> {
   try {
-    // Extract the public ID from the URL
-    // Example URL: https://res.cloudinary.com/demo/image/upload/v1234567890/honda-showroom/abcxyz.jpg
-    // We need 'honda-showroom/abcxyz'
-    
-    // First, let's remove everything up to /upload/
+    const isRaw = secureUrl.includes('/raw/upload/');
     const urlParts = secureUrl.split('/upload/');
     if (urlParts.length !== 2) return;
     
-    // urlParts[1] is like v1234567890/honda-showroom/abcxyz.jpg
     const pathWithVersion = urlParts[1];
-    
-    // Remove the version part (vXXXXXXXXX/)
     const pathWithoutVersion = pathWithVersion.replace(/^v\d+\//, '');
     
-    // Remove the extension (.jpg, .png, etc)
-    const publicId = pathWithoutVersion.substring(0, pathWithoutVersion.lastIndexOf('.'));
+    // For raw files, the publicId INCLUDES the extension.
+    // For images, the publicId EXCLUDES the extension.
+    let publicId = pathWithoutVersion;
+    if (!isRaw) {
+      publicId = pathWithoutVersion.substring(0, pathWithoutVersion.lastIndexOf('.'));
+    }
     
     if (publicId) {
-      await cloudinary.uploader.destroy(publicId);
+      await cloudinary.uploader.destroy(publicId, { resource_type: isRaw ? 'raw' : 'image' });
     }
   } catch (error) {
     console.error("Error deleting from Cloudinary:", error);

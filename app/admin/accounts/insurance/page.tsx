@@ -41,8 +41,10 @@ export default async function InsurancePage() {
     totalCustomerPaid += (tx.insurance || 0);
 
     const modelName = tx.vehicle.variant.vehicleMaster.name.toLowerCase();
+    const variantName = tx.vehicle.variant.variantName.toLowerCase();
+    const combinedName = `${modelName} ${variantName}`;
     const type = (tx.insuranceType || "3RD PARTY").toUpperCase();
-    const pmilPrice = priceMap.get(`${modelName}-${type}`) || 0;
+    const pmilPrice = priceMap.get(`${combinedName}-${type}`) || priceMap.get(`${modelName}-${type}`) || 0;
     
     totalPmilCost += pmilPrice;
 
@@ -73,6 +75,7 @@ export default async function InsurancePage() {
         <InsuranceClient
           insuredVehicles={JSON.parse(JSON.stringify(enrichedVehicles))}
           insurancePayments={JSON.parse(JSON.stringify(insurancePayments))}
+          priceList={JSON.parse(JSON.stringify(priceList))}
           totalCustomerPaid={totalCustomerPaid}
           totalPmilCost={totalPmilCost}
           totalCommission={totalCommission}

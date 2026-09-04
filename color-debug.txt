@@ -1,0 +1,236 @@
+
+--- DEBUG UNKNOWN COLOR ---
+Code: NHC75
+Raw: PEARL DEEP 00006 SYAKAR NO
+Matched: cMatch[2] was null
+Context: stomer must do the transfer of ownership within 15 days from the bill date.
+THIS BILL BEING COMPUTER GENERATED DOES NOT REQUIRE ANY SIGNATURE OR SEAL.
+(E. & O. E) Goods once sold are not exchangeable or returnable.
+Exchanger: 
+SPECIFICATION :
+GROUND)
+Color : NHC75 (PEARL DEEP 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6548
+Reg No. : KOSHI PRADESH-04-
+Engine No. : JF99E      7028150
+VIN : ME4JK452DTW013173                                                                        1
+9     8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+SPECIFICATION :
+Color : R393 (SPORT RED 2)
+00004
+Syakar No. : HMBRTSPI83/84-
+003PA6525
+Reg No. : KOSHI PRADESH-04
+---------------------------
+
+--- DEBUG UNKNOWN COLOR ---
+Code: NH303
+Raw: MAT AXIS GRAY 00006 SYAKAR NO
+Matched: cMatch[2] was null
+Context: er must do the transfer of ownership within 15 days from the bill date.
+THIS BILL BEING COMPUTER GENERATED DOES NOT REQUIRE ANY SIGNATURE OR SEAL.
+(E. & O. E) Goods once sold are not exchangeable or returnable.
+Exchanger: 
+SPECIFICATION :
+METALIC)
+Color : NH303 (MAT AXIS GRAY 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6584
+Reg No. : KOSHI PRADESH-04-
+Engine No. : JF99E      7033875
+VIN : ME4JK452GTW016036                                                                        1
+11    8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+SPECIFICATION :
+GROUND)
+Color : NHC75 (PEARL DEEP 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6547
+Reg No. : KOSHI P
+---------------------------
+
+--- DEBUG UNKNOWN COLOR ---
+Code: NHC75
+Raw: PEARL DEEP 00006 SYAKAR NO
+Matched: cMatch[2] was null
+Context:                                       1
+11    8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+SPECIFICATION :
+GROUND)
+Color : NHC75 (PEARL DEEP 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6547
+Reg No. : KOSHI PRADESH-04-
+Engine No. : JF99E      7030640
+VIN : ME4JK452ETW014073                                                                         1
+10    8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+S.N   HS Code        No.                              Description                                                Qty.
+---------------------------
+
+--- DEBUG UNKNOWN COLOR ---
+Code: NHC75
+Raw: PEARL DEEP 00006 SYAKAR NO
+Matched: cMatch[2] was null
+Context: stomer must do the transfer of ownership within 15 days from the bill date.
+THIS BILL BEING COMPUTER GENERATED DOES NOT REQUIRE ANY SIGNATURE OR SEAL.
+(E. & O. E) Goods once sold are not exchangeable or returnable.
+Exchanger: 
+SPECIFICATION :
+GROUND)
+Color : NHC75 (PEARL DEEP 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6551
+Reg No. : KOSHI PRADESH-04-
+Engine No. : JF99E      7028665
+VIN : ME4JK452DTW013151                                                                        1
+13    8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+SPECIFICATION :
+METALIC)
+Color : NH303 (MAT AXIS GRAY 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6586
+Reg No. : KOS
+---------------------------
+
+--- DEBUG UNKNOWN COLOR ---
+Code: NH303
+Raw: MAT AXIS GRAY 00006 SYAKAR NO
+Matched: cMatch[2] was null
+Context:                                   1
+13    8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+SPECIFICATION :
+METALIC)
+Color : NH303 (MAT AXIS GRAY 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6586
+Reg No. : KOSHI PRADESH-04-
+Engine No. : JF99E      7033872
+VIN : ME4JK452GTW016043                                                                        1
+12    8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+S.N   HS Code        No.                              Description                                                Qty. 
+---------------------------
+
+--- DEBUG UNKNOWN COLOR ---
+Code: NHC75
+Raw: PEARL DEEP 00006 SYAKAR NO
+Matched: cMatch[2] was null
+Context: stomer must do the transfer of ownership within 15 days from the bill date.
+THIS BILL BEING COMPUTER GENERATED DOES NOT REQUIRE ANY SIGNATURE OR SEAL.
+(E. & O. E) Goods once sold are not exchangeable or returnable.
+Exchanger: 
+SPECIFICATION :
+GROUND)
+Color : NHC75 (PEARL DEEP 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6548
+Reg No. : KOSHI PRADESH-04-
+Engine No. : JF99E      7028150
+VIN : ME4JK452DTW013173                                                                        1
+9     8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+SPECIFICATION :
+Color : R393 (SPORT RED 2)
+00004
+Syakar No. : HMBRTSPI83/84-
+003PA6525
+Reg No. : KOSHI PRADESH-04
+---------------------------
+
+--- DEBUG UNKNOWN COLOR ---
+Code: NH303
+Raw: MAT AXIS GRAY 00006 SYAKAR NO
+Matched: cMatch[2] was null
+Context: er must do the transfer of ownership within 15 days from the bill date.
+THIS BILL BEING COMPUTER GENERATED DOES NOT REQUIRE ANY SIGNATURE OR SEAL.
+(E. & O. E) Goods once sold are not exchangeable or returnable.
+Exchanger: 
+SPECIFICATION :
+METALIC)
+Color : NH303 (MAT AXIS GRAY 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6584
+Reg No. : KOSHI PRADESH-04-
+Engine No. : JF99E      7033875
+VIN : ME4JK452GTW016036                                                                        1
+11    8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+SPECIFICATION :
+GROUND)
+Color : NHC75 (PEARL DEEP 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6547
+Reg No. : KOSHI P
+---------------------------
+
+--- DEBUG UNKNOWN COLOR ---
+Code: NHC75
+Raw: PEARL DEEP 00006 SYAKAR NO
+Matched: cMatch[2] was null
+Context:                                       1
+11    8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+SPECIFICATION :
+GROUND)
+Color : NHC75 (PEARL DEEP 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6547
+Reg No. : KOSHI PRADESH-04-
+Engine No. : JF99E      7030640
+VIN : ME4JK452ETW014073                                                                         1
+10    8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+S.N   HS Code        No.                              Description                                                Qty.
+---------------------------
+
+--- DEBUG UNKNOWN COLOR ---
+Code: NHC75
+Raw: PEARL DEEP 00006 SYAKAR NO
+Matched: cMatch[2] was null
+Context: stomer must do the transfer of ownership within 15 days from the bill date.
+THIS BILL BEING COMPUTER GENERATED DOES NOT REQUIRE ANY SIGNATURE OR SEAL.
+(E. & O. E) Goods once sold are not exchangeable or returnable.
+Exchanger: 
+SPECIFICATION :
+GROUND)
+Color : NHC75 (PEARL DEEP 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6551
+Reg No. : KOSHI PRADESH-04-
+Engine No. : JF99E      7028665
+VIN : ME4JK452DTW013151                                                                        1
+13    8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+SPECIFICATION :
+METALIC)
+Color : NH303 (MAT AXIS GRAY 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6586
+Reg No. : KOS
+---------------------------
+
+--- DEBUG UNKNOWN COLOR ---
+Code: NH303
+Raw: MAT AXIS GRAY 00006 SYAKAR NO
+Matched: cMatch[2] was null
+Context:                                   1
+13    8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+SPECIFICATION :
+METALIC)
+Color : NH303 (MAT AXIS GRAY 
+00006
+Syakar No. : HMBRTSPI83/84-
+003PA6586
+Reg No. : KOSHI PRADESH-04-
+Engine No. : JF99E      7033872
+VIN : ME4JK452GTW016043                                                                        1
+12    8711              DIO STD 125               DIO STD 125 BS6                                              1     UNIT          274,247.7876           4.06228                 274,247.79
+S.N   HS Code        No.                              Description                                                Qty. 
+---------------------------

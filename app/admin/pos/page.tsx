@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
-import { Search, UserPlus, CreditCard, FileText, CheckCircle, Calculator, ChevronRight, Zap, ArrowRight, ShieldCheck, Tag, Briefcase, Percent, PackagePlus, Repeat, Landmark, X, Plus, AlertCircle } from "lucide-react";
+import { Search, UserPlus, CreditCard, FileText, CheckCircle, Calculator, ChevronRight, Zap, ArrowRight, ShieldCheck, Tag, Briefcase, Percent, PackagePlus, Repeat, Landmark, X, Plus, AlertCircle, UploadCloud, RefreshCw } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 function POSContent() {
@@ -26,9 +26,12 @@ function POSContent() {
 
   // Finance fields
   const [downPayment, setDownPayment] = useState<number>(0);
+  const [financeAmount, setFinanceAmount] = useState<number>(0);
   const [financeCompany, setFinanceCompany] = useState("");
-  const [financeDuration, setFinanceDuration] = useState("");
-
+  const [financePdfUrl, setFinancePdfUrl] = useState("");
+  
+  // File Upload State
+  const [isUploading, setIsUploading] = useState(false);
   // Payment Method fields
   const [pmCashAmount, setPmCashAmount] = useState<number>(0);
   const [bankTransfers, setBankTransfers] = useState([{ bankName: "", transactionId: "", amount: 0 }]);
@@ -120,6 +123,55 @@ function POSContent() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [successTransactionId, setSuccessTransactionId] = useState<string | null>(null);
 
+  const [isUploadingPdf, setIsUploadingPdf] = useState(false);
+
+  const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingPdf(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("/api/admin/pos/parse-finance-pdf", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Failed to parse PDF");
+      const data = await res.json();
+
+      if (data.managerDiscount > 0) {
+        setDiscountType("Normal");
+        setDiscountAmount(data.managerDiscount);
+      } else {
+        setDiscountType("Normal");
+        setDiscountAmount(0);
+      }
+
+      if (data.financeCompany) setFinanceCompany(data.financeCompany);
+      if (data.downPayment > 0) setDownPayment(data.downPayment);
+      if (data.financeAmount > 0) setFinanceAmount(data.financeAmount);
+      
+      if (data.pdfUrl) setFinancePdfUrl(data.pdfUrl);
+      
+      if (data.insuranceFee > 0) {
+        setWantsInsurance(true);
+        setInsuranceAmount(data.insuranceFee);
+        setInsuranceCompany("Other");
+        setInsuranceType("Full Party");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Error parsing PDF. Please check the file format.");
+    } finally {
+      setIsUploadingPdf(false);
+      // Reset input so same file can be uploaded again if needed
+      e.target.value = '';
+    }
+  };
+
   const handleGenerateInvoice = async () => {
     if (!customer.isVerified) {
       alert("Cannot generate invoice. This customer is not verified. Please verify their KYC first.");
@@ -143,7 +195,8 @@ function POSContent() {
         valuationBy,
         downpayment: downPayment,
         financerName: financeCompany,
-        financeDuration,
+        financePdfUrl,
+        financeAmount,
         pmCashAmount,
         bankTransfers,
         pmChequeBankName,
@@ -184,12 +237,11 @@ function POSContent() {
   };
 
   const commission = activeVehicle ? Math.round(activeVehicle.price * 0.015) : 0;
-  const showExchange = purchaseMethod.includes("EXCHANGE");
-  const showFinance = purchaseMethod.includes("FINANCE");
+  const showExchange = purchaseMethod === "EXCHANGE" || purchaseMethod === "FINANCE & EXCHANGE";
+  const showFinance = purchaseMethod === "FINANCE" || purchaseMethod === "FINANCE & EXCHANGE";
+  const totalReceivable = activeVehicle ? Math.max(0, activeVehicle.price - (discountAmount || 0) - (showExchange ? (valuationAmount || 0) : 0) - (showFinance ? (financeAmount || 0) : 0) + (accessoriesAmount || 0)) : 0;
   
-  const totalReceivable = activeVehicle ? Math.max(0, activeVehicle.price - (discountAmount || 0) - (showExchange ? (valuationAmount || 0) : 0) + (accessoriesAmount || 0)) : 0;
-  
-  let totalReceived = 0;
+  let totalReceived = pmCashAmount + bankTransfers.reduce((sum, bt) => sum + (bt.amount || 0), 0) + pmChequeAmount;
   const totalBankAmount = bankTransfers.reduce((sum, bt) => sum + (bt.amount || 0), 0);
   
   if (paymentMethod === "Cash") totalReceived = pmCashAmount || 0;
@@ -459,11 +511,22 @@ function POSContent() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider ml-1">Valuation Amount (Rs.)</label>
-                    <input type="number" value={valuationAmount || ""} onChange={e => setValuationAmount(Number(e.target.value))} placeholder="0" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-blue-500 outline-none transition-all" />
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <span className="text-zinc-500 dark:text-zinc-400 font-medium">Rs.</span>
+                      </div>
+                      <input type="number" value={valuationAmount || ""} onChange={e => setValuationAmount(Number(e.target.value))} placeholder="0" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-zinc-900 dark:text-white focus:border-blue-500 outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider ml-1">Valuation By</label>
-                    <input type="text" value={valuationBy} onChange={e => setValuationBy(e.target.value)} placeholder="Evaluator Name" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-blue-500 outline-none transition-all" />
+                    <select value={valuationBy} onChange={e => setValuationBy(e.target.value)} className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-blue-500 outline-none transition-all appearance-none cursor-pointer">
+                      <option value="">Select Evaluator</option>
+                      <option value="DEVYANI RECONDITION">DEVYANI RECONDITION</option>
+                      <option value="KANTIPUR RECONDITION">KANTIPUR RECONDITION</option>
+                      <option value="LAXMI RIJAL">LAXMI RIJAL</option>
+                      <option value="GYANU RAJBANSHI">GYANU RAJBANSHI</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -478,6 +541,25 @@ function POSContent() {
                   <Landmark className="w-5 h-5 text-emerald-500 dark:text-emerald-400" /> 
                   {financeStep}. Finance Details
                 </h2>
+
+                <div className="mb-6 p-5 border-2 border-dashed border-emerald-500/30 rounded-2xl bg-emerald-50/50 dark:bg-emerald-500/5 relative group hover:border-emerald-500/60 transition-colors">
+                  <div className="flex flex-col items-center justify-center text-center space-y-2">
+                    {isUploadingPdf ? (
+                      <RefreshCw className="w-8 h-8 text-emerald-500 animate-spin" />
+                    ) : (
+                      <UploadCloud className="w-8 h-8 text-emerald-500 group-hover:scale-110 transition-transform" />
+                    )}
+                    <h3 className="font-bold text-zinc-900 dark:text-white">Upload Syakar Quotation PDF</h3>
+                    <p className="text-xs text-zinc-500 dark:text-gray-400">Auto-fills Down Payment, Finance Amount, Discount & Insurance</p>
+                    <input 
+                      type="file" 
+                      accept=".pdf" 
+                      onChange={handlePdfUpload} 
+                      disabled={isUploadingPdf}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                    />
+                  </div>
+                </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="space-y-2 md:col-span-2">
@@ -486,18 +568,28 @@ function POSContent() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider ml-1">Down Payment (Rs.)</label>
-                    <input type="number" value={downPayment || ""} onChange={e => setDownPayment(Number(e.target.value))} placeholder="0" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-emerald-500 outline-none transition-all" />
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <span className="text-zinc-500 dark:text-zinc-400 font-medium">Rs.</span>
+                      </div>
+                      <input type="number" value={downPayment || ""} onChange={e => setDownPayment(Number(e.target.value))} placeholder="0" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-zinc-900 dark:text-white focus:border-emerald-500 outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                    </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider ml-1">Duration (Months)</label>
-                    <input type="number" value={financeDuration || ""} onChange={e => setFinanceDuration(e.target.value)} placeholder="E.g., 24, 36" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-emerald-500 outline-none transition-all" />
+                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider ml-1">Finance Amount (Rs.)</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <span className="text-zinc-500 dark:text-zinc-400 font-medium">Rs.</span>
+                      </div>
+                      <input type="number" value={financeAmount || ""} onChange={e => setFinanceAmount(Number(e.target.value))} placeholder="0" className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-zinc-900 dark:text-white focus:border-emerald-500 outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
             {/* Offers & Accessories Card (Always shown now) */}
-            <div className={`bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl border border-zinc-200 dark:border-white/5 rounded-3xl p-6 md:p-8 shadow-xl dark:shadow-2xl relative overflow-hidden transition-all duration-500 delay-100 ${(!activeVehicle || !customer.name) ? 'opacity-50 grayscale pointer-events-none' : 'opacity-100 hover:border-pink-500/30'}`}>
+            <div className={`bg-white/80 dark:bg-slate-900/40 backdrop-blur-2xl border border-zinc-200 dark:border-white/5 rounded-3xl p-6 md:p-8 shadow-xl dark:shadow-2xl relative overflow-hidden transition-all duration-500 delay-100 ${(!activeVehicle || !customer.name) ? 'opacity-50 grayscale pointer-events-none' : 'opacity-100 hover:border-red-500/30'}`}>
                 <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-pink-500 to-transparent opacity-50"></div>
                 
                 <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6 flex items-center gap-3 uppercase tracking-wider">
@@ -516,7 +608,7 @@ function POSContent() {
                           onClick={() => setDiscountType(type as "Normal" | "Scheme")}
                           className={`relative p-3 rounded-xl border text-sm transition-all duration-300 overflow-hidden group ${
                             discountType === type 
-                              ? "bg-pink-50 dark:bg-pink-500/10 border-pink-400 dark:border-pink-500 text-pink-700 dark:text-pink-400 shadow-[0_0_15px_rgba(236,72,153,0.15)]" 
+                              ? "bg-red-50 dark:bg-red-900/20 border-red-500 text-red-600 dark:text-red-400 shadow-[0_0_15px_rgba(220,38,38,0.15)]" 
                               : "bg-zinc-50 dark:bg-black/50 border-zinc-200 dark:border-white/10 text-zinc-600 dark:text-gray-400 hover:border-zinc-400 dark:hover:border-white/30"
                           }`}
                         >
@@ -528,14 +620,19 @@ function POSContent() {
 
                   {/* Discount Amount */}
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Discount Amount (Rs.)</label>
-                    <input 
-                      type="number" 
-                      value={discountAmount || ""}
-                      onChange={e => setDiscountAmount(Number(e.target.value))}
-                      placeholder="0"
-                      className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-pink-500 outline-none transition-all" 
-                    />
+                    <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Discount Amount</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <span className="text-zinc-500 dark:text-zinc-400 font-medium">Rs.</span>
+                      </div>
+                      <input 
+                        type="number" 
+                        value={discountAmount || ""}
+                        onChange={e => setDiscountAmount(Number(e.target.value))}
+                        placeholder="0"
+                        className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-zinc-900 dark:text-white focus:border-primary outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                      />
+                    </div>
                   </div>
 
                   {/* Accessories */}
@@ -557,7 +654,7 @@ function POSContent() {
                         <select 
                           value={accessories}
                           onChange={e => setAccessories(e.target.value)}
-                          className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-pink-500 outline-none transition-all appearance-none" 
+                          className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-primary outline-none transition-all appearance-none" 
                         >
                           <option value="">-- Blank --</option>
                           <option value="Bike Cover">Bike Cover</option>
@@ -571,13 +668,18 @@ function POSContent() {
                       </div>
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Accessories Amount (Rs.)</label>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                          <span className="text-zinc-500 dark:text-zinc-400 font-medium">Rs.</span>
+                        </div>
                         <input 
                           type="number" 
                           value={accessoriesAmount || ""}
                           onChange={e => setAccessoriesAmount(Number(e.target.value))}
                           placeholder="0"
-                          className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-pink-500 outline-none transition-all" 
+                          className="w-full bg-zinc-100 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-zinc-900 dark:text-white focus:border-primary outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
                         />
+                      </div>
                       </div>
                     </div>
                   </div>
@@ -616,7 +718,12 @@ function POSContent() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Cash Received Amount (Rs.)</label>
-                      <input type="number" value={pmCashAmount || ""} onChange={e => setPmCashAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                          <span className="text-zinc-500 dark:text-zinc-400 font-medium">Rs.</span>
+                        </div>
+                        <input type="number" value={pmCashAmount || ""} onChange={e => setPmCashAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                      </div>
                     </div>
                   </div>
                 )}
@@ -651,11 +758,16 @@ function POSContent() {
                         </div>
                         <div className="space-y-2">
                           <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Transferred Amount (Rs.)</label>
-                          <input type="number" value={bt.amount || ""} onChange={e => {
-                            const newArr = [...bankTransfers];
-                            newArr[idx].amount = Number(e.target.value);
-                            setBankTransfers(newArr);
-                          }} placeholder="0" className="w-full bg-zinc-50 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                              <span className="text-zinc-500 dark:text-zinc-400 font-medium">Rs.</span>
+                            </div>
+                            <input type="number" value={bt.amount || ""} onChange={e => {
+                              const newArr = [...bankTransfers];
+                              newArr[idx].amount = Number(e.target.value);
+                              setBankTransfers(newArr);
+                            }} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -676,7 +788,12 @@ function POSContent() {
                       </h3>
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Cash Received (Rs.)</label>
-                        <input type="number" value={pmCashAmount || ""} onChange={e => setPmCashAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                          <span className="text-zinc-500 dark:text-zinc-400 font-medium">Rs.</span>
+                        </div>
+                        <input type="number" value={pmCashAmount || ""} onChange={e => setPmCashAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                      </div>
                       </div>
                     </div>
                     <div className="space-y-4 lg:pl-2">
@@ -713,11 +830,16 @@ function POSContent() {
                               </div>
                               <div className="space-y-2">
                                 <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Bank Amt (Rs.)</label>
-                                <input type="number" value={bt.amount || ""} onChange={e => {
-                                  const newArr = [...bankTransfers];
-                                  newArr[idx].amount = Number(e.target.value);
-                                  setBankTransfers(newArr);
-                                }} placeholder="0" className="w-full bg-zinc-50 dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                                <div className="relative">
+                                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <span className="text-zinc-500 dark:text-zinc-400 font-medium">Rs.</span>
+                                  </div>
+                                  <input type="number" value={bt.amount || ""} onChange={e => {
+                                    const newArr = [...bankTransfers];
+                                    newArr[idx].amount = Number(e.target.value);
+                                    setBankTransfers(newArr);
+                                  }} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -749,7 +871,12 @@ function POSContent() {
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Cheque Amount (Rs.)</label>
-                      <input type="number" value={pmChequeAmount || ""} onChange={e => setPmChequeAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all" />
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                          <span className="text-zinc-500 dark:text-zinc-400 font-medium">Rs.</span>
+                        </div>
+                        <input type="number" value={pmChequeAmount || ""} onChange={e => setPmChequeAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-zinc-900 dark:text-white focus:border-purple-500 outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                      </div>
                     </div>
                   </div>
                 )}
@@ -781,7 +908,7 @@ function POSContent() {
                   </label>
 
                   {wantsInsurance && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 bg-zinc-50 dark:bg-black/20 p-5 rounded-2xl border border-zinc-200 dark:border-white/5">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 bg-zinc-50 dark:bg-black/20 p-5 rounded-2xl border border-zinc-200 dark:border-white/5">
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Insurance Company</label>
                         <select value={insuranceCompany} onChange={e => setInsuranceCompany(e.target.value)} className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-primary outline-none transition-all appearance-none cursor-pointer">
@@ -797,12 +924,13 @@ function POSContent() {
                         </select>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Policy No.</label>
-                        <input type="text" value={policyNo} onChange={e => setPolicyNo(e.target.value)} placeholder="e.g. POL-2024-001" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-primary outline-none transition-all" />
-                      </div>
-                      <div className="space-y-2">
                         <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Premium Amount (Rs.)</label>
-                        <input type="number" value={insuranceAmount || ""} onChange={e => setInsuranceAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-primary outline-none transition-all" />
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                          <span className="text-zinc-500 dark:text-zinc-400 font-medium">Rs.</span>
+                        </div>
+                        <input type="number" value={insuranceAmount || ""} onChange={e => setInsuranceAmount(Number(e.target.value))} placeholder="0" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-zinc-900 dark:text-white focus:border-primary outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                      </div>
                         <p className="text-[10px] text-zinc-400 dark:text-gray-500 italic mt-1">*Paid separately, not added to POS invoice</p>
                       </div>
                     </div>
@@ -832,14 +960,7 @@ function POSContent() {
                   <span className="text-zinc-600 dark:text-gray-400 flex items-center gap-2"><Tag className="w-4 h-4 text-zinc-500 dark:text-gray-500" /> Vehicle Price</span>
                   <span className="text-zinc-900 dark:text-white font-semibold">Rs. {activeVehicle ? activeVehicle.price.toLocaleString() : "0"}</span>
                 </div>
-                <div className="group flex justify-between items-center text-base p-2 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-lg transition-colors">
-                  <span className="text-zinc-600 dark:text-gray-400 flex items-center gap-2"><Tag className="w-4 h-4 text-zinc-500 dark:text-gray-500" /> VAT (13%)</span>
-                  <span className="text-zinc-900 dark:text-white font-semibold">Inclusive</span>
-                </div>
-                <div className="group flex justify-between items-center text-base p-2 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-lg transition-colors">
-                  <span className="text-zinc-600 dark:text-gray-400 flex items-center gap-2"><Tag className="w-4 h-4 text-zinc-500 dark:text-gray-500" /> Registration & Tax</span>
-                  <span className="text-zinc-500 dark:text-gray-500 font-medium italic">At Actuals</span>
-                </div>
+
 
                 {showExchange && valuationAmount > 0 && (
                   <div className="group flex justify-between items-center text-base p-2 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-lg transition-colors border border-blue-100 dark:border-blue-500/20">
@@ -848,10 +969,17 @@ function POSContent() {
                   </div>
                 )}
 
+                {showFinance && financeAmount > 0 && (
+                  <div className="group flex justify-between items-center text-base p-2 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-lg transition-colors border border-blue-100 dark:border-blue-500/20">
+                    <span className="text-blue-600 dark:text-blue-400 flex items-center gap-2 font-bold"><Landmark className="w-4 h-4" /> Finance Amount</span>
+                    <span className="text-blue-600 dark:text-blue-400 font-black">- Rs. {financeAmount.toLocaleString()}</span>
+                  </div>
+                )}
+
                 {discountAmount > 0 && (
-                  <div className="group flex justify-between items-center text-base p-2 hover:bg-pink-50 dark:hover:bg-pink-500/10 rounded-lg transition-colors border border-pink-100 dark:border-pink-500/20">
-                    <span className="text-pink-600 dark:text-pink-400 flex items-center gap-2 font-bold"><Percent className="w-4 h-4" /> {discountType} Discount</span>
-                    <span className="text-pink-600 dark:text-pink-400 font-black">- Rs. {discountAmount.toLocaleString()}</span>
+                  <div className="group flex justify-between items-center text-base p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors border border-red-100 dark:border-red-900/30">
+                    <span className="text-red-600 dark:text-red-400 flex items-center gap-2 font-bold"><Percent className="w-4 h-4" /> {discountType} Discount</span>
+                    <span className="text-red-600 dark:text-red-400 font-black">- Rs. {discountAmount.toLocaleString()}</span>
                   </div>
                 )}
                 
@@ -895,7 +1023,7 @@ function POSContent() {
                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                          <div className="space-y-2">
                            <label className="text-xs font-bold text-zinc-600 dark:text-gray-400 uppercase tracking-wider">Loan Duration (Days)</label>
-                           <input type="number" value={dueLoanDays} onChange={e => setDueLoanDays(e.target.value)} placeholder="e.g. 15" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-red-500 outline-none transition-all" />
+                           <input type="number" value={dueLoanDays} onChange={e => setDueLoanDays(e.target.value)} placeholder="e.g. 15" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-red-500 outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
                          </div>
                          <div className="space-y-2">
                            <label className="text-xs font-bold text-zinc-600 dark:text-gray-400 uppercase tracking-wider">Terms & Conditions / Deposit Date</label>

@@ -9,24 +9,38 @@ export const metadata = {
 export const revalidate = 0;
 
 export default async function FinanceTrackerPage() {
-  const financeSales = await prisma.salesTransaction.findMany({
-    where: {
-      paymentType: 'FINANCE'
-    },
-    include: {
-      customer: true,
-      vehicle: {
-        include: {
-          variant: {
-            include: { vehicleMaster: true }
+  const [financeSales, bulkPayments, financePlans] = await Promise.all([
+    prisma.salesTransaction.findMany({
+      where: {
+        paymentType: 'FINANCE'
+      },
+      include: {
+        customer: true,
+        vehicle: {
+          include: {
+            variant: {
+              include: { vehicleMaster: true }
+            }
           }
         }
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
-    },
-    orderBy: {
-      createdAt: 'desc'
-    }
-  });
+    }),
+    prisma.financeBulkPayment.findMany({
+      orderBy: {
+        date: 'desc'
+      }
+    }),
+    prisma.financePlan.findMany({
+      include: {
+        variant: {
+          include: { vehicleMaster: true }
+        }
+      }
+    })
+  ]);
 
   return (
     <div className="bg-transparent text-gray-900 dark:text-gray-100 p-4 md:p-8 h-full transition-colors duration-300">
@@ -39,7 +53,7 @@ export default async function FinanceTrackerPage() {
           </div>
         </header>
 
-        <FinanceTrackerClient initialSales={financeSales} />
+        <FinanceTrackerClient initialSales={financeSales} initialBulkPayments={bulkPayments} financePlans={financePlans} />
       </div>
     </div>
   );

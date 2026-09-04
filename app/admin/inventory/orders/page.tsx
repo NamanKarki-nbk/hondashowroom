@@ -24,7 +24,14 @@ export default async function OrdersPage() {
   // Fetch all vehicle variants (grouped by master) and colors for the form
   const masters = await prisma.vehicleMaster.findMany({
     include: {
-      variants: true,
+      variants: {
+        include: {
+          inventory: {
+            where: { status: 'IN_STOCK' },
+            select: { id: true, color: true }
+          }
+        }
+      },
       colors: true,
     },
     orderBy: { name: "asc" },

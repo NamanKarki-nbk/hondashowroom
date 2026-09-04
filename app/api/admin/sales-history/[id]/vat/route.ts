@@ -7,18 +7,20 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    const { vatBillNo, vatBillIssuedDate } = await request.json();
+    const { vatBillNo, vatBillIssuedDate, invoiceNo } = await request.json();
 
     const updated = await prisma.salesTransaction.update({
       where: { id },
       data: {
         vatBillNo: vatBillNo || null,
         vatBillIssuedDate: vatBillIssuedDate ? new Date(vatBillIssuedDate) : null,
+        ...(invoiceNo !== undefined && { invoiceNo: invoiceNo || null }),
       },
       select: {
         id: true,
         vatBillNo: true,
         vatBillIssuedDate: true,
+        invoiceNo: true,
       },
     });
 

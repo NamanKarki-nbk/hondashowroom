@@ -9,12 +9,27 @@ export const metadata = {
 export const revalidate = 0;
 
 export default async function FinanceAdminPage() {
-  const initialPlans = await prisma.financePlan.findMany({
+  const plans = await prisma.financePlan.findMany({
     orderBy: { createdAt: 'desc' },
+    include: {
+      variant: {
+        include: {
+          vehicleMaster: true
+        }
+      }
+    }
   });
 
+  const initialPlans = plans.map(p => ({
+    ...p,
+    name: p.variant.vehicleMaster.name,
+    category: p.variant.vehicleMaster.category,
+    cc: p.variant.variantName, // using variantName for the "cc" display
+    vehicleVariant: p.variant.exShowroomPriceNPR, // mapping price to vehicleVariant for the display
+  }));
+
   return (
-    <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+    <div className="max-w-[1600px] mx-auto p-4 sm:p-6 lg:p-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Finance Plans</h1>
         <p className="text-gray-500 dark:text-gray-400 mt-2">Manage pre-calculated finance plans, EMIs, and loan data.</p>

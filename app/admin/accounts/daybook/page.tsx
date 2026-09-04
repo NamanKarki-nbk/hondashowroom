@@ -7,20 +7,39 @@ export const metadata = {
 
 export const revalidate = 0;
 
-function toDateRange(dateStr: string) {
-  const start = new Date(dateStr + "T00:00:00.000Z");
-  // Adjust for NPT (+5:45) — store as UTC boundaries
-  const dayStart = new Date(dateStr + "T00:00:00+05:45");
-  const dayEnd = new Date(dateStr + "T23:59:59+05:45");
-  return { dayStart, dayEnd };
+function toDateRange(dateStr: string, mode: "day" | "month" | "year") {
+  const date = new Date(dateStr + "T00:00:00+05:45");
+  const year = date.getFullYear();
+  const month = date.getMonth();
+
+  if (mode === "year") {
+    return {
+      dayStart: new Date(`${year}-01-01T00:00:00+05:45`),
+      dayEnd: new Date(`${year}-12-31T23:59:59+05:45`)
+    };
+  } else if (mode === "month") {
+    const lastDay = new Date(year, month + 1, 0).getDate();
+    const monthStr = String(month + 1).padStart(2, "0");
+    return {
+      dayStart: new Date(`${year}-${monthStr}-01T00:00:00+05:45`),
+      dayEnd: new Date(`${year}-${monthStr}-${lastDay}T23:59:59+05:45`)
+    };
+  } else {
+    return {
+      dayStart: new Date(dateStr + "T00:00:00+05:45"),
+      dayEnd: new Date(dateStr + "T23:59:59+05:45")
+    };
+  }
 }
 
 export default async function DayBookPage({
   searchParams,
 }: {
-  searchParams: Promise<{ date?: string }>;
+  searchParams: Promise<{ date?: string; mode?: string }>;
 }) {
   const sp = await searchParams;
+  const mode = (sp.mode || "day") as "day" | "month" | "year";
+  
   // Default to today in NPT
   const todayNPT = new Date(
     new Date().toLocaleString("en-US", { timeZone: "Asia/Kathmandu" })
@@ -28,7 +47,7 @@ export default async function DayBookPage({
   const defaultDate = todayNPT.toISOString().split("T")[0];
   const selectedDate = sp.date || defaultDate;
 
-  const { dayStart, dayEnd } = toDateRange(selectedDate);
+  const { dayStart, dayEnd } = toDateRange(selectedDate, mode);
 
   // Income: All PaymentReceipts on this day
   const receipts = await prisma.paymentReceipt.findMany({
@@ -56,8 +75,16 @@ export default async function DayBookPage({
     orderBy: { createdAt: "asc" },
   });
 
+  // General Income: All DayBookIncome on this day
+  const generalIncomes = await prisma.dayBookIncome.findMany({
+    where: {
+      date: { gte: dayStart, lte: dayEnd },
+    },
+    orderBy: { createdAt: "asc" },
+  });
+
   // Opening balance = sum of all receipts BEFORE this day - sum of all expenses BEFORE this day
-  const [prevReceiptsSum, prevExpensesSum] = await Promise.all([
+  const [prevReceiptsSum, prevExpensesSum, prevIncomesSum] = await Promise.all([
     prisma.paymentReceipt.aggregate({
       _sum: { amount: true },
       where: { createdAt: { lt: dayStart } },
@@ -66,11 +93,15 @@ export default async function DayBookPage({
       _sum: { amount: true },
       where: { date: { lt: dayStart } },
     }),
+    prisma.dayBookIncome.aggregate({
+      _sum: { amount: true },
+      where: { date: { lt: dayStart } },
+    }),
   ]);
 
   const openingBalance =
-    (prevReceiptsSum._sum.amount || 0) - (prevExpensesSum._sum.amount || 0);
-  const totalIncome = receipts.reduce((s, r) => s + r.amount, 0);
+    (prevReceiptsSum._sum.amount || 0) + (prevIncomesSum._sum.amount || 0) - (prevExpensesSum._sum.amount || 0);
+  const totalIncome = receipts.reduce((s, r) => s + r.amount, 0) + generalIncomes.reduce((s, i) => s + i.amount, 0);
   const totalExpenses = expenses.reduce((s, e) => s + e.amount, 0);
   const closingBalance = openingBalance + totalIncome - totalExpenses;
 
@@ -89,7 +120,9 @@ export default async function DayBookPage({
         <DayBookClient
           selectedDate={selectedDate}
           defaultDate={defaultDate}
+          mode={mode}
           receipts={JSON.parse(JSON.stringify(receipts))}
+          generalIncomes={JSON.parse(JSON.stringify(generalIncomes))}
           expenses={JSON.parse(JSON.stringify(expenses))}
           openingBalance={openingBalance}
           totalIncome={totalIncome}

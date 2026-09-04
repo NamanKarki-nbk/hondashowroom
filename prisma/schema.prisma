@@ -43,24 +43,26 @@ model Staff {
 }
 
 model Customer {
-  id          String             @id @default(uuid())
-  userId      String?            @unique
-  fullName    String
-  phone       String             @unique
-  email       String?
-  address     String?
-  isVerified  Boolean            @default(false)
-  ocrVerified Boolean            @default(false)
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  user        User?              @relation(fields: [userId], references: [id])
-  documents   CustomerDocument[]
-  leads       Lead[]
-  sales       SalesTransaction[]
-  bookings    ServiceBooking[]
-  services    ServiceRecord[]
-  reminders   ServiceReminder[]
-  testRides   TestRideBooking[]
+  id            String             @id @default(uuid())
+  userId        String?            @unique
+  fullName      String
+  phone         String             @unique
+  email         String?
+  address       String?
+  isVerified    Boolean            @default(false)
+  ocrVerified   Boolean            @default(false)
+  loyaltyPoints Int                @default(0)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  user          User?              @relation(fields: [userId], references: [id])
+  documents     CustomerDocument[]
+  leads         Lead[]
+  sales         SalesTransaction[]
+  bookings      ServiceBooking[]
+  services      ServiceRecord[]
+  reminders     ServiceReminder[]
+  testRides     TestRideBooking[]
+  referrals     Referral[]
 }
 
 model CustomerDocument {
@@ -120,62 +122,62 @@ model VehicleMaster {
 }
 
 model VehicleVariant {
-  id                 String             @id @default(uuid())
+  id                 String              @id @default(uuid())
   vehicleMasterId    String
   variantName        String
   exShowroomPriceNPR Float
   onRoadPriceNPR     Float
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
   specDifferences    Json?
   financePlans       FinancePlan[]
   inventory          VehicleInventory[]
   purchaseOrderItems PurchaseOrderItem[]
-  vehicleMaster      VehicleMaster      @relation(fields: [vehicleMasterId], references: [id])
+  vehicleMaster      VehicleMaster       @relation(fields: [vehicleMasterId], references: [id])
 
   @@unique([vehicleMasterId, variantName])
   @@index([vehicleMasterId])
 }
 
 model VehicleColor {
-  id              String        @id @default(uuid())
-  vehicleMasterId String
-  name            String
-  hexCode         String
-  imageUrl        String?
-  finishType      String?
-  isPopular       Boolean       @default(false)
-  vehicleMaster   VehicleMaster @relation(fields: [vehicleMasterId], references: [id])
+  id                 String              @id @default(uuid())
+  vehicleMasterId    String
+  name               String
+  hexCode            String
+  imageUrl           String?
+  finishType         String?
+  isPopular          Boolean             @default(false)
+  vehicleMaster      VehicleMaster       @relation(fields: [vehicleMasterId], references: [id])
   purchaseOrderItems PurchaseOrderItem[]
 
   @@index([vehicleMasterId])
 }
 
 model VehicleInventory {
-  id                String             @id @default(uuid())
-  indexNo           String?            @unique
-  vin               String             @unique
-  engineNo          String             @unique
-  color             String
-  variantId         String
-  purchasePrice     Float
-  purchaseDate      DateTime
-  purchaseMethod    String
-  rtoStatus         String?
-  tempRegistrationNo String?
+  id                  String             @id @default(uuid())
+  indexNo             String?            @unique
+  vin                 String             @unique
+  engineNo            String             @unique
+  color               String
+  variantId           String
+  purchasePrice       Float
+  purchaseDate        DateTime
+  purchaseMethod      String
+  rtoStatus           String?
+  tempRegistrationNo  String?
   mechiRegistrationNo String?
-  status            VehicleStatus      @default(IN_STOCK)
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  purchaseInvoiceId String?
-  branchId          String?
-  saleTransaction   SalesTransaction?
-  services          ServiceRecord[]
-  reminders         ServiceReminder[]
-  transfers         StockTransferLog[]
-  branch            Branch?            @relation(fields: [branchId], references: [id])
-  purchaseInvoice   PurchaseInvoice?   @relation(fields: [purchaseInvoiceId], references: [id])
-  variant           VehicleVariant     @relation(fields: [variantId], references: [id])
+  status              VehicleStatus      @default(IN_STOCK)
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  purchaseInvoiceId   String?
+  branchId            String?
+  saleTransaction     SalesTransaction?
+  services            ServiceRecord[]
+  reminders           ServiceReminder[]
+  transfers           StockTransferLog[]
+  branch              Branch?            @relation(fields: [branchId], references: [id])
+  purchaseInvoice     PurchaseInvoice?   @relation(fields: [purchaseInvoiceId], references: [id])
+  variant             VehicleVariant     @relation(fields: [variantId], references: [id])
 
   @@index([variantId])
   @@index([status])
@@ -213,7 +215,7 @@ model Letter {
 
 model SalesTransaction {
   id                 String           @id @default(uuid())
-  invoiceNo          String           @unique
+  invoiceNo          String?          @unique
   vehicleId          String           @unique
   customerId         String
   saleType           SaleType         @default(RETAIL)
@@ -232,23 +234,35 @@ model SalesTransaction {
   financerName       String?
   downpayment        Float?
   financeAmount      Float?
-  monthlyInstallment Float?
   installments       Int?
-  interestRate       Float?
+  financePdfUrl      String?
   exchangeModel      String?
   exchangeNumber     String?
   exchangeValue      Float?
+  exchangerPaid      Float            @default(0)
   accessories        Json?
   serviceBookNo      String?
   insuranceCompany   String?
   insuranceType      String?
   policyNo           String?
+  insuranceExpiry    DateTime?
   vatBillNo          String?
   vatBillIssuedDate  DateTime?
   remarks            String?
+  clientId           String?
+
+  // Delivery Handover details
+  deliveryStatus     DeliveryStatus   @default(PENDING)
+  deliveryDate       DateTime?
+  keyNo              String?
+  tyreMake           String?
+  batteryNo          String?
+  feedbackScore      Int?
+
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
   receipts           PaymentReceipt[]
+  exchangerReceipts  ExchangerPaymentReceipt[]
   customer           Customer         @relation(fields: [customerId], references: [id])
   vehicle            VehicleInventory @relation(fields: [vehicleId], references: [id])
 
@@ -257,6 +271,20 @@ model SalesTransaction {
 }
 
 model PaymentReceipt {
+  id            String           @id @default(uuid())
+  receiptNo     String           @unique
+  transactionId String
+  amount        Float
+  paymentMethod String
+  remarks       String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  transaction   SalesTransaction @relation(fields: [transactionId], references: [id])
+
+  @@index([transactionId])
+}
+
+model ExchangerPaymentReceipt {
   id            String           @id @default(uuid())
   receiptNo     String           @unique
   transactionId String
@@ -377,6 +405,7 @@ model FinancePlan {
   emi            Float
   totalInterest  Float
   registration   Float
+  serviceCharge  Float          @default(0)
   insurance      Float
   insuranceTotal Float?
   totalCost      Float
@@ -594,8 +623,8 @@ model InsurancePayment {
 model InsurancePriceList {
   id            String   @id @default(uuid())
   modelName     String
-  insuranceType String   // "3RD PARTY" | "FULL PARTY"
-  maxPrice      Float    // Amount paid to PMIL
+  insuranceType String // "3RD PARTY" | "FULL PARTY"
+  maxPrice      Float // Amount paid to PMIL
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -608,6 +637,16 @@ model DayBookExpense {
   description String
   amount      Float
   category    String   @default("General")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model DayBookIncome {
+  id          String   @id @default(uuid())
+  description String
+  category    String
+  amount      Float
+  date        DateTime @db.Date
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -645,8 +684,10 @@ enum Gender {
 
 enum UserRole {
   USER
-  ADMIN
   STAFF
+  MANAGER
+  ADMIN
+  SUPERADMIN
 }
 
 enum LeadStatus {
@@ -703,6 +744,19 @@ enum NotificationType {
   FINANCE
 }
 
+enum ReferralStatus {
+  PENDING
+  SUCCESS
+  REWARDED
+}
+
+enum DeliveryStatus {
+  PENDING
+  SCHEDULED
+  DELIVERED
+  RESCHEDULED
+}
+
 enum SaleType {
   RETAIL
   CORPORATE
@@ -739,4 +793,32 @@ model PurchaseOrderItem {
   color     VehicleColor   @relation(fields: [colorId], references: [id])
 
   @@index([orderId])
+}
+
+model Referral {
+  id            String         @id @default(uuid())
+  referrerId    String
+  referredName  String
+  referredPhone String         @unique
+  status        ReferralStatus @default(PENDING)
+  rewardPoints  Int            @default(0)
+  remarks       String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  referrer Customer @relation(fields: [referrerId], references: [id])
+
+  @@index([referrerId])
+  @@index([status])
+}
+
+model FinanceBulkPayment {
+  id               String   @id @default(uuid())
+  date             DateTime
+  bankTransactionId String
+  receivedBank     String
+  amount           Float
+  sender           String   @default("Syakar Hire Purchase Pvt. Ltd.")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }

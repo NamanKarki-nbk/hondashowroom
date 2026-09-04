@@ -53,7 +53,37 @@ export default function OrdersClient({ orders: initialOrders, masters }: Props) 
 
   const getColorsForVariant = (variantId: string) => {
     const master = masters.find(m => m.variants.some((v: any) => v.id === variantId));
-    return master ? master.colors : [];
+    if (!master) return [];
+    
+    const dbColors = master.colors.map((c: any) => ({ id: c.id, name: c.name }));
+    const invColors = master.variants
+      .flatMap((v: any) => v.inventory || [])
+      .map((inv: any) => inv.color)
+      .filter(Boolean);
+      
+    // Combine unique by name
+    const allColors = [...dbColors];
+    for (const cName of invColors) {
+      if (!allColors.find(c => c.name === cName)) {
+        allColors.push({ id: cName, name: cName });
+      }
+    }
+    return allColors;
+  };
+
+  const getStock = (variantId: string, colorId: string) => {
+    if (!variantId || !colorId) return 0;
+    const master = masters.find(m => m.variants.some((v: any) => v.id === variantId));
+    if (!master) return 0;
+    const variant = master.variants.find((v: any) => v.id === variantId);
+    if (!variant || !variant.inventory) return 0;
+    
+    // colorId might be a UUID from VehicleColor, or it might be the color name directly
+    let colorName = colorId;
+    const dbColor = master.colors.find((c: any) => c.id === colorId);
+    if (dbColor) colorName = dbColor.name;
+    
+    return variant.inventory.filter((inv: any) => inv.color === colorName).length;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -204,7 +234,7 @@ export default function OrdersClient({ orders: initialOrders, masters }: Props) 
             <div className="space-y-4">
               {items.map((item, index) => (
                 <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-gray-50/50 dark:bg-slate-800/20 p-4 rounded-2xl border border-gray-100 dark:border-slate-700/50">
-                  <div className="md:col-span-5">
+                  <div className="md:col-span-4">
                     <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Model & Variant</label>
                     <select
                       required
@@ -224,21 +254,30 @@ export default function OrdersClient({ orders: initialOrders, masters }: Props) 
                   </div>
                   <div className="md:col-span-4">
                     <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Color</label>
-                    <select
+                    <input
+                      type="text"
                       required
+                      list={`colors-${index}`}
                       value={item.colorId}
                       onChange={(e) => handleItemChange(index, "colorId", e.target.value)}
                       className={inputCls}
                       disabled={!item.variantId}
-                    >
-                      <option value="">Select Color</option>
+                      placeholder="Type or select color"
+                    />
+                    <datalist id={`colors-${index}`}>
                       {getColorsForVariant(item.variantId).map((c: any) => (
-                        <option key={c.id} value={c.id}>{c.name}</option>
+                        <option key={c.id || c.name} value={c.id}>{c.name}</option>
                       ))}
-                    </select>
+                    </datalist>
+                  </div>
+                  <div className="md:col-span-1">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1" title="Current In Stock">Stock</label>
+                    <div className="w-full bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center justify-center">
+                      {getStock(item.variantId, item.colorId)}
+                    </div>
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Quantity</label>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Needed Qty</label>
                     <input
                       type="number"
                       required

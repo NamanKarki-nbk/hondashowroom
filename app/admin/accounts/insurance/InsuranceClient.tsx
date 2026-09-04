@@ -4,7 +4,7 @@ import { useState } from "react";
 import { format } from "date-fns";
 import {
   Shield, ShieldCheck, Send, Plus, X, AlertCircle, CheckCircle2,
-  CreditCard, Wallet, FileText, Building2, Eye, Loader2,
+  CreditCard, Wallet, FileText, Building2, Eye, Loader2, Edit2, Check, Percent, Settings2
 } from "lucide-react";
 
 const formatNPR = (amount: number) =>
@@ -21,6 +21,7 @@ type InsuredVehicle = {
   insuranceCompany: string | null;
   insuranceType: string | null;
   policyNo: string | null;
+  insuranceExpiry?: string | null;
   createdAt: string;
   customer: { fullName: string; phone: string; address?: string | null; email?: string | null };
   vehicle: {
@@ -48,21 +49,35 @@ type InsurancePayment = {
   createdAt: string;
 };
 
+type InsurancePriceList = {
+  id: string;
+  modelName: string;
+  insuranceType: string;
+  maxPrice: number;
+};
+
 interface Props {
   insuredVehicles: InsuredVehicle[];
   insurancePayments: InsurancePayment[];
-  totalInsuranceValue: number;
+  priceList: InsurancePriceList[];
+  totalCustomerPaid: number;
+  totalPmilCost: number;
+  totalCommission: number;
   totalPaid: number;
 }
 
 export default function InsuranceClient({
   insuredVehicles,
   insurancePayments: initialPayments,
-  totalInsuranceValue,
+  priceList: initialPriceList,
+  totalCustomerPaid,
+  totalPmilCost,
+  totalCommission,
   totalPaid: initialTotalPaid,
 }: Props) {
-  const [activeTab, setActiveTab] = useState<"vehicles" | "payments">("vehicles");
+  const [activeTab, setActiveTab] = useState<"vehicles" | "payments" | "rates">("vehicles");
   const [payments, setPayments] = useState(initialPayments);
+  const [priceList, setPriceList] = useState(initialPriceList);
   const [totalPaid, setTotalPaid] = useState(initialTotalPaid);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -81,6 +96,19 @@ export default function InsuranceClient({
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [emailSuccess, setEmailSuccess] = useState("");
   const [emailError, setEmailError] = useState("");
+
+  // Edit Policy Modal
+  const [editingVehicle, setEditingVehicle] = useState<InsuredVehicle | null>(null);
+  const [editPolicyNo, setEditPolicyNo] = useState("");
+  const [editExpiryDate, setEditExpiryDate] = useState("");
+  const [isEditingPolicy, setIsEditingPolicy] = useState(false);
+  const [editSuccess, setEditSuccess] = useState("");
+  const [editError, setEditError] = useState("");
+
+  // Rate Editing
+  const [editingRateId, setEditingRateId] = useState<string | null>(null);
+  const [editingRatePrice, setEditingRatePrice] = useState<number | "">(0);
+  const [isSavingRate, setIsSavingRate] = useState(false);
 
   const filteredVehicles = insuredVehicles.filter(
     (tx) =>
@@ -131,6 +159,7 @@ export default function InsuranceClient({
     setIsSendingEmail(true);
     setEmailError("");
     setEmailSuccess("");
+
     try {
       const res = await fetch("/api/admin/accounts/insurance/send-email", {
         method: "POST",
@@ -139,7 +168,7 @@ export default function InsuranceClient({
       });
       const data = await res.json();
       if (res.ok) {
-        setEmailSuccess("Email sent successfully to societykarki07@gmail.com!");
+        setEmailSuccess("Email sent successfully!");
       } else {
         setEmailError(data.error || "Failed to send email");
       }
@@ -150,35 +179,101 @@ export default function InsuranceClient({
     }
   };
 
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingVehicle) return;
+    setIsEditingPolicy(true);
+    setEditError("");
+    setEditSuccess("");
+
+    try {
+      const res = await fetch("/api/admin/accounts/insurance/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: editingVehicle.id,
+          policyNo: editPolicyNo,
+          insuranceExpiry: editExpiryDate || null,
+        }),
+      });
+
+      if (res.ok) {
+        setEditSuccess("Policy details updated successfully!");
+        setTimeout(() => {
+          setEditingVehicle(null);
+          window.location.reload();
+        }, 1500);
+      } else {
+        const data = await res.json();
+        setEditError(data.error || "Failed to update policy");
+      }
+    } catch {
+      setEditError("Network error. Please try again.");
+    } finally {
+      setIsEditingPolicy(false);
+    }
+  };
+
+  const handleSaveRate = async (id: string) => {
+    if (editingRatePrice === "") return;
+    setIsSavingRate(true);
+    try {
+      const res = await fetch("/api/admin/accounts/insurance/rate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, maxPrice: editingRatePrice }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setPriceList((prev) =>
+          prev.map((p) => (p.id === id ? { ...p, maxPrice: data.updated.maxPrice } : p))
+        );
+        setEditingRateId(null);
+        window.location.reload(); // Refresh to recalculate KPIs
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSavingRate(false);
+    }
+  };
+
   const inputCls = "w-full bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl px-4 py-3 text-gray-900 dark:text-white placeholder-zinc-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm";
 
-  const remainingToPay = totalInsuranceValue - totalPaid;
+  const remainingToPay = totalPmilCost - totalPaid;
 
   return (
     <div className="space-y-6">
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="bg-white dark:bg-slate-900/50 backdrop-blur-xl border border-gray-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm group hover:border-primary/30 transition-all">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
+        <div className="bg-white dark:bg-slate-900/50 backdrop-blur-xl border border-gray-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm">
           <div className="p-3 bg-blue-50 dark:bg-blue-500/10 rounded-2xl text-blue-500 w-fit mb-4">
             <Shield className="w-6 h-6" />
           </div>
           <p className="text-3xl font-black text-gray-900 dark:text-white">{insuredVehicles.length}</p>
           <p className="text-sm text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mt-1">Insured Vehicles</p>
         </div>
-        <div className="bg-white dark:bg-slate-900/50 backdrop-blur-xl border border-gray-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm group hover:border-primary/30 transition-all">
-          <div className="p-3 bg-amber-50 dark:bg-amber-500/10 rounded-2xl text-amber-500 w-fit mb-4">
+        <div className="bg-white dark:bg-slate-900/50 backdrop-blur-xl border border-gray-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm">
+          <div className="p-3 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl text-indigo-500 w-fit mb-4">
             <Wallet className="w-6 h-6" />
           </div>
-          <p className="text-3xl font-black text-gray-900 dark:text-white">{formatNPR(totalInsuranceValue)}</p>
-          <p className="text-sm text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mt-1">Total Insurance Value</p>
+          <p className="text-3xl font-black text-gray-900 dark:text-white">{formatNPR(totalCustomerPaid)}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mt-1">Collected from Cust.</p>
         </div>
-        <div className={`bg-white dark:bg-slate-900/50 backdrop-blur-xl border rounded-3xl p-6 shadow-sm transition-all ${remainingToPay > 0 ? "border-red-200 dark:border-red-900/50" : "border-emerald-200 dark:border-emerald-900/50"}`}>
-          <div className={`p-3 rounded-2xl w-fit mb-4 ${remainingToPay > 0 ? "bg-red-50 dark:bg-red-500/10 text-red-500" : "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500"}`}>
+        <div className="bg-white dark:bg-slate-900/50 backdrop-blur-xl border border-gray-100 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm">
+          <div className="p-3 bg-amber-50 dark:bg-amber-500/10 rounded-2xl text-amber-500 w-fit mb-4">
             <CreditCard className="w-6 h-6" />
+          </div>
+          <p className="text-3xl font-black text-gray-900 dark:text-white">{formatNPR(totalPaid)}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mt-1">Total Paid to PMIL</p>
+        </div>
+        <div className={`bg-white dark:bg-slate-900/50 backdrop-blur-xl border rounded-3xl p-6 shadow-sm ${remainingToPay > 0 ? "border-red-200 dark:border-red-900/50" : "border-emerald-200 dark:border-emerald-900/50"}`}>
+          <div className={`p-3 rounded-2xl w-fit mb-4 ${remainingToPay > 0 ? "bg-red-50 dark:bg-red-500/10 text-red-500" : "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500"}`}>
+            <AlertCircle className="w-6 h-6" />
           </div>
           <p className={`text-3xl font-black ${remainingToPay > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}`}>{formatNPR(remainingToPay > 0 ? remainingToPay : 0)}</p>
           <p className="text-sm text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mt-1">
-            {remainingToPay > 0 ? "Pending Payment to PMIL" : "Fully Paid to PMIL ✓"}
+            {remainingToPay > 0 ? "Pending to PMIL" : "Fully Settled"}
           </p>
         </div>
       </div>
@@ -188,6 +283,7 @@ export default function InsuranceClient({
         {[
           { key: "vehicles", label: "Insured Vehicles", icon: ShieldCheck },
           { key: "payments", label: "Payment History", icon: CreditCard },
+          { key: "rates", label: "Insurance Rates", icon: Settings2 },
         ].map(({ key, label, icon: Icon }) => (
           <button
             key={key}
@@ -221,21 +317,15 @@ export default function InsuranceClient({
                     <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Index No.</th>
                     <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Customer</th>
                     <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Vehicle</th>
-                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Insurance Company</th>
-                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Type</th>
-                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Policy No.</th>
-                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-primary">Insurance Amt.</th>
+                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Policy Details</th>
+                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-primary">Insurance</th>
                     <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500 text-right sticky right-0 bg-gray-50/50 dark:bg-slate-900/50 z-10 border-l border-gray-100 dark:border-slate-800">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 dark:divide-slate-800/50">
-                  {filteredVehicles.length === 0 ? (
-                    <tr><td colSpan={8} className="py-12 text-center text-gray-400">No insured vehicles found.</td></tr>
-                  ) : filteredVehicles.map((tx) => (
+                  {filteredVehicles.map((tx) => (
                     <tr key={tx.id} className="group hover:bg-gray-50/80 dark:hover:bg-slate-800/30 transition-colors">
-                      <td className="py-4 px-5">
-                        <span className="font-black text-gray-900 dark:text-white">{tx.vehicle.indexNo || "—"}</span>
-                      </td>
+                      <td className="py-4 px-5 font-black text-gray-900 dark:text-white">{tx.vehicle.indexNo || "—"}</td>
                       <td className="py-4 px-5">
                         <p className="font-bold text-gray-900 dark:text-white">{tx.customer.fullName}</p>
                         <p className="text-xs text-gray-500">{tx.customer.phone}</p>
@@ -245,31 +335,37 @@ export default function InsuranceClient({
                         <p className="text-xs text-gray-500">{tx.vehicle.engineNo}</p>
                       </td>
                       <td className="py-4 px-5">
-                        <span className="inline-flex items-center gap-1.5 text-xs font-bold bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-full">
-                          <Shield className="w-3 h-3" />
-                          {tx.insuranceCompany || "PMIL"}
-                        </span>
+                        <p className={`text-sm ${tx.policyNo ? 'font-black text-gray-900 dark:text-white' : 'text-gray-400 italic'}`}>
+                          {tx.policyNo || "Not set"}
+                        </p>
+                        {tx.insuranceExpiry && (
+                          <p className="text-xs text-gray-500 font-medium">Exp: {format(new Date(tx.insuranceExpiry), "MMM d, yyyy")}</p>
+                        )}
                       </td>
                       <td className="py-4 px-5">
-                        <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
-                          tx.insuranceType === "Full Party"
-                            ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300"
-                            : "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300"
-                        }`}>
-                          {tx.insuranceType || "3rd Party"}
-                        </span>
+                        <span className="font-black text-primary">{formatNPR(tx.insurance)}</span>
                       </td>
-                      <td className="py-4 px-5 text-sm text-gray-700 dark:text-gray-300 font-mono">
-                        {tx.policyNo || <span className="text-gray-400 italic">Not set</span>}
-                      </td>
-                      <td className="py-4 px-5 font-black text-primary text-sm">{formatNPR(tx.insurance)}</td>
-                      <td className="py-4 px-5 text-right sticky right-0 bg-white dark:bg-slate-900/50 border-l border-gray-100 dark:border-slate-800 z-10 group-hover:bg-gray-50/80 dark:group-hover:bg-slate-800/30 transition-colors">
-                        <button
-                          onClick={() => { setSendingVehicle(tx); setEmailSuccess(""); setEmailError(""); }}
-                          className="inline-flex items-center gap-2 bg-primary hover:bg-red-700 text-white px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm hover:-translate-y-0.5"
-                        >
-                          <Send className="w-3.5 h-3.5" /> Send to PMIL
-                        </button>
+                      <td className="py-4 px-5 sticky right-0 bg-white group-hover:bg-gray-50/90 dark:bg-[#1a1a1a] dark:group-hover:bg-slate-800/90 border-l border-gray-100 dark:border-slate-800 text-right">
+                        <div className="flex justify-end gap-2">
+                          <button
+                            onClick={() => {
+                              setEditingVehicle(tx);
+                              setEditPolicyNo(tx.policyNo || "");
+                              setEditExpiryDate(tx.insuranceExpiry ? tx.insuranceExpiry.split('T')[0] : "");
+                              setEditError("");
+                              setEditSuccess("");
+                            }}
+                            className="bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all shadow-sm"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => setSendingVehicle(tx)}
+                            className="bg-primary hover:bg-red-700 text-white px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all shadow-sm"
+                          >
+                            <Send className="w-3 h-3" /> Send to PMIL
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -284,50 +380,115 @@ export default function InsuranceClient({
       {activeTab === "payments" && (
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <div>
-              <p className="text-sm text-gray-500">Total Paid to PMIL: <span className="font-black text-gray-900 dark:text-white">{formatNPR(totalPaid)}</span></p>
-            </div>
+            <p className="text-sm text-gray-500">Total Paid: <span className="font-black text-gray-900 dark:text-white">{formatNPR(totalPaid)}</span></p>
             <button
               onClick={() => setShowPaymentModal(true)}
-              className="inline-flex items-center gap-2 bg-primary hover:bg-red-700 text-white px-5 py-3 rounded-2xl font-bold uppercase tracking-wider text-sm transition-all shadow-lg hover:shadow-red-500/20 hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 bg-primary hover:bg-red-700 text-white px-5 py-3 rounded-2xl font-bold uppercase tracking-wider text-sm transition-all shadow-lg"
             >
               <Plus className="w-4 h-4" /> Add Payment
             </button>
           </div>
+          <div className="bg-white dark:bg-slate-900/50 backdrop-blur-xl rounded-3xl border border-gray-100 dark:border-slate-800/80 overflow-hidden shadow-sm">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-gray-50/50 dark:bg-slate-900/50 border-b border-gray-100 dark:border-slate-800">
+                  <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Date</th>
+                  <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Paid To</th>
+                  <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Amount</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-slate-800/50">
+                {payments.map((p) => (
+                  <tr key={p.id}>
+                    <td className="py-4 px-5 text-sm font-bold">{format(new Date(p.date), "MMM dd, yyyy")}</td>
+                    <td className="py-4 px-5 font-bold text-sm">{p.paidTo}</td>
+                    <td className="py-4 px-5 font-black text-emerald-600 dark:text-emerald-400">{formatNPR(p.amount)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
+      {/* Rates Tab */}
+      {activeTab === "rates" && (
+        <div className="space-y-4">
           <div className="bg-white dark:bg-slate-900/50 backdrop-blur-xl rounded-3xl border border-gray-100 dark:border-slate-800/80 overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse min-w-[700px]">
                 <thead>
                   <tr className="bg-gray-50/50 dark:bg-slate-900/50 border-b border-gray-100 dark:border-slate-800">
-                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Payment Date</th>
-                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Paid To</th>
-                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Receipt No.</th>
-                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Notes</th>
-                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-emerald-600">Amount Paid</th>
+                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Model & Variant</th>
+                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500">Insurance Type</th>
+                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-emerald-600">Max Price (Rs.)</th>
+                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-widest text-gray-500 text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 dark:divide-slate-800/50">
-                  {payments.length === 0 ? (
-                    <tr><td colSpan={5} className="py-12 text-center text-gray-400">No payments recorded yet. Click "Add Payment" to start.</td></tr>
-                  ) : payments.map((p) => (
+                  {priceList.length === 0 ? (
+                    <tr><td colSpan={4} className="py-12 text-center text-gray-400">No rates found. Please seed the database.</td></tr>
+                  ) : priceList.map((p) => (
                     <tr key={p.id} className="hover:bg-gray-50/80 dark:hover:bg-slate-800/30 transition-colors">
-                      <td className="py-4 px-5 text-sm font-bold text-gray-700 dark:text-gray-300">{format(new Date(p.date), "MMM dd, yyyy")}</td>
-                      <td className="py-4 px-5 font-bold text-gray-900 dark:text-white text-sm">{p.paidTo}</td>
-                      <td className="py-4 px-5 text-sm text-gray-500 font-mono">{p.receiptNo || "—"}</td>
-                      <td className="py-4 px-5 text-sm text-gray-500">{p.notes || "—"}</td>
-                      <td className="py-4 px-5 font-black text-emerald-600 dark:text-emerald-400">{formatNPR(p.amount)}</td>
+                      <td className="py-4 px-5 font-bold text-gray-900 dark:text-white text-sm">{p.modelName}</td>
+                      <td className="py-4 px-5">
+                        <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+                          p.insuranceType === "FULL PARTY"
+                            ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300"
+                            : "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300"
+                        }`}>
+                          {p.insuranceType}
+                        </span>
+                      </td>
+                      <td className="py-4 px-5">
+                        {editingRateId === p.id ? (
+                          <input
+                            type="number"
+                            min="0"
+                            value={editingRatePrice}
+                            onChange={(e) => setEditingRatePrice(e.target.value ? Number(e.target.value) : "")}
+                            className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 text-sm w-32 focus:ring-2 focus:ring-primary focus:outline-none"
+                            autoFocus
+                          />
+                        ) : (
+                          <span className="font-black text-emerald-600 dark:text-emerald-400">{formatNPR(p.maxPrice)}</span>
+                        )}
+                      </td>
+                      <td className="py-4 px-5 text-right">
+                        {editingRateId === p.id ? (
+                          <div className="flex justify-end gap-2">
+                            <button
+                              onClick={() => handleSaveRate(p.id)}
+                              disabled={isSavingRate || editingRatePrice === ""}
+                              className="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 p-2 rounded-lg transition-colors"
+                              title="Save"
+                            >
+                              {isSavingRate ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                            </button>
+                            <button
+                              onClick={() => setEditingRateId(null)}
+                              className="bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 p-2 rounded-lg transition-colors"
+                              title="Cancel"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setEditingRateId(p.id);
+                              setEditingRatePrice(p.maxPrice);
+                            }}
+                            className="bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 p-2 rounded-lg transition-colors inline-flex items-center"
+                            title="Edit Rate"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
-                {payments.length > 0 && (
-                  <tfoot className="border-t-2 border-gray-200 dark:border-slate-700">
-                    <tr>
-                      <td colSpan={4} className="py-3 px-5 font-black text-gray-900 dark:text-white uppercase tracking-wider text-sm text-right">Total Paid:</td>
-                      <td className="py-3 px-5 font-black text-emerald-600 dark:text-emerald-400 text-lg">{formatNPR(totalPaid)}</td>
-                    </tr>
-                  </tfoot>
-                )}
               </table>
             </div>
           </div>
@@ -337,51 +498,16 @@ export default function InsuranceClient({
       {/* Add Payment Modal */}
       {showPaymentModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full max-w-md border border-gray-200 dark:border-slate-800 animate-in zoom-in-95 duration-200">
-            <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center bg-gray-50 dark:bg-slate-900/80">
-              <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-primary" /> Record Insurance Payment
-              </h2>
-              <button onClick={() => setShowPaymentModal(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 bg-white dark:bg-slate-800 p-2 rounded-full">
-                <X className="w-5 h-5" />
-              </button>
+          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full max-w-md border border-gray-200 dark:border-slate-800">
+            <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center">
+              <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">Record Payment</h2>
+              <button onClick={() => setShowPaymentModal(false)} className="text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
             </div>
             <form onSubmit={handleAddPayment} className="p-6 space-y-5">
-              {paymentError && (
-                <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 p-4 rounded-2xl text-sm flex items-center gap-3">
-                  <AlertCircle className="w-5 h-5 shrink-0" /> {paymentError}
-                </div>
-              )}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Payment Date</label>
-                <input type="date" required value={payDate} onChange={e => setPayDate(e.target.value)} className={inputCls} />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Paid To</label>
-                <input type="text" required value={payPaidTo} onChange={e => setPayPaidTo(e.target.value)} className={inputCls} />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Amount (NPR)</label>
-                <input type="number" required min={1} value={payAmount || ""} onChange={e => setPayAmount(Number(e.target.value))} placeholder="0" className={`${inputCls} text-xl font-black text-emerald-600 dark:text-emerald-400 h-14`} />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Receipt No. (Optional)</label>
-                  <input type="text" value={payReceiptNo} onChange={e => setPayReceiptNo(e.target.value)} placeholder="PMIL receipt no." className={inputCls} />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Notes (Optional)</label>
-                  <input type="text" value={payNotes} onChange={e => setPayNotes(e.target.value)} placeholder="Any notes..." className={inputCls} />
-                </div>
-              </div>
-              <div className="flex gap-3 pt-2">
-                <button type="button" onClick={() => setShowPaymentModal(false)} className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-900 dark:text-white rounded-2xl font-bold uppercase tracking-widest transition-colors text-sm">
-                  Cancel
-                </button>
-                <button type="submit" disabled={isSubmittingPayment} className="flex-1 py-3 bg-primary hover:bg-red-700 text-white rounded-2xl font-bold uppercase tracking-widest transition-all shadow-lg disabled:opacity-50 flex items-center justify-center gap-2 text-sm">
-                  {isSubmittingPayment ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Saving...</> : <><CheckCircle2 className="w-4 h-4" /> Save Payment</>}
-                </button>
-              </div>
+              {paymentError && <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm">{paymentError}</div>}
+              <input type="date" required value={payDate} onChange={e => setPayDate(e.target.value)} className={inputCls} />
+              <input type="number" required value={payAmount || ""} onChange={e => setPayAmount(Number(e.target.value))} className={inputCls} placeholder="Amount" />
+              <button type="submit" disabled={isSubmittingPayment} className="w-full py-3 bg-primary text-white rounded-xl font-bold uppercase tracking-widest">Save</button>
             </form>
           </div>
         </div>
@@ -390,73 +516,46 @@ export default function InsuranceClient({
       {/* Send Email Modal */}
       {sendingVehicle && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full max-w-lg border border-gray-200 dark:border-slate-800 animate-in zoom-in-95 duration-200">
-            <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center bg-gray-50 dark:bg-slate-900/80">
-              <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
-                <Send className="w-5 h-5 text-primary" /> Send Details to PMIL
-              </h2>
-              <button onClick={() => setSendingVehicle(null)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 bg-white dark:bg-slate-800 p-2 rounded-full">
-                <X className="w-5 h-5" />
-              </button>
+          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full max-w-lg border border-gray-200 dark:border-slate-800">
+            <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center">
+              <h2 className="text-xl font-black flex items-center gap-2"><Send className="w-5 h-5 text-primary" /> Send Details to PMIL</h2>
+              <button onClick={() => setSendingVehicle(null)}><X className="w-5 h-5" /></button>
             </div>
             <div className="p-6 space-y-5">
-              {/* Vehicle Summary */}
-              <div className="bg-gray-50 dark:bg-slate-800/50 rounded-2xl p-4 space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-500 font-bold">Customer:</span>
-                  <span className="font-black text-gray-900 dark:text-white">{sendingVehicle.customer.fullName}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500 font-bold">Index No.:</span>
-                  <span className="font-bold text-gray-800 dark:text-gray-200">{sendingVehicle.vehicle.indexNo || "—"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500 font-bold">Vehicle:</span>
-                  <span className="font-bold text-gray-800 dark:text-gray-200">{sendingVehicle.vehicle.variant.vehicleMaster.name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500 font-bold">Engine No.:</span>
-                  <span className="font-bold text-gray-800 dark:text-gray-200">{sendingVehicle.vehicle.engineNo}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500 font-bold">Insurance Type:</span>
-                  <span className="font-bold text-gray-800 dark:text-gray-200">{sendingVehicle.insuranceType || "3rd Party"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500 font-bold">Insurance Amt.:</span>
-                  <span className="font-black text-primary">{formatNPR(sendingVehicle.insurance)}</span>
-                </div>
-                <div className="flex justify-between pt-2 border-t border-gray-200 dark:border-slate-700 mt-2">
-                  <span className="text-gray-500 font-bold">Sending To:</span>
-                  <span className="font-bold text-blue-600 dark:text-blue-400">societykarki07@gmail.com</span>
-                </div>
-              </div>
-
-              {emailSuccess && (
-                <div className="bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 p-4 rounded-2xl text-sm flex items-center gap-3 font-bold">
-                  <CheckCircle2 className="w-5 h-5 shrink-0" /> {emailSuccess}
-                </div>
-              )}
-              {emailError && (
-                <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 p-4 rounded-2xl text-sm flex items-center gap-3">
-                  <AlertCircle className="w-5 h-5 shrink-0" /> {emailError}
-                </div>
-              )}
-
+              {emailSuccess && <div className="bg-emerald-50 text-emerald-700 p-4 rounded-2xl text-sm font-bold flex items-center gap-3"><CheckCircle2 className="w-5 h-5" /> {emailSuccess}</div>}
+              {emailError && <div className="bg-red-50 text-red-600 p-4 rounded-2xl text-sm"><AlertCircle className="w-5 h-5" /> {emailError}</div>}
               <div className="flex gap-3">
-                <button onClick={() => setSendingVehicle(null)} className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-900 dark:text-white rounded-2xl font-bold uppercase tracking-widest transition-colors text-sm">
-                  {emailSuccess ? "Close" : "Cancel"}
+                <button type="button" onClick={() => setSendingVehicle(null)} className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 rounded-2xl font-bold text-sm">Close</button>
+                <button onClick={handleSendEmail} disabled={isSendingEmail || !!emailSuccess} className="flex-1 py-3 bg-primary text-white rounded-2xl font-bold text-sm flex items-center justify-center gap-2">
+                  {isSendingEmail ? <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</> : (emailSuccess ? <CheckCircle2 className="w-4 h-4" /> : <><Send className="w-4 h-4" /> Send Email</>)}
                 </button>
-                {!emailSuccess && (
-                  <button
-                    onClick={handleSendEmail}
-                    disabled={isSendingEmail}
-                    className="flex-1 py-3 bg-primary hover:bg-red-700 text-white rounded-2xl font-bold uppercase tracking-widest transition-all shadow-lg disabled:opacity-50 flex items-center justify-center gap-2 text-sm"
-                  >
-                    {isSendingEmail ? <><Loader2 className="w-4 h-4 animate-spin" /> Sending...</> : <><Send className="w-4 h-4" /> Send Email</>}
-                  </button>
-                )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Policy Modal */}
+      {editingVehicle && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl w-full max-w-lg border border-gray-200 dark:border-slate-800">
+            <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center">
+              <h2 className="text-xl font-black flex items-center gap-2"><ShieldCheck className="w-5 h-5 text-primary" /> Edit Policy</h2>
+              <button onClick={() => setEditingVehicle(null)}><X className="w-5 h-5" /></button>
+            </div>
+            <div className="p-6">
+              <form onSubmit={handleEditSubmit} className="space-y-5">
+                <input type="text" value={editPolicyNo} onChange={(e) => setEditPolicyNo(e.target.value)} className={inputCls} placeholder="Policy Number" />
+                <input type="date" value={editExpiryDate} onChange={(e) => setEditExpiryDate(e.target.value)} className={inputCls} />
+                {editSuccess && <div className="bg-emerald-50 text-emerald-700 p-4 rounded-2xl text-sm font-bold"><CheckCircle2 className="w-5 h-5" /> {editSuccess}</div>}
+                {editError && <div className="bg-red-50 text-red-600 p-4 rounded-2xl text-sm"><AlertCircle className="w-5 h-5" /> {editError}</div>}
+                <div className="flex gap-3">
+                  <button type="button" onClick={() => setEditingVehicle(null)} className="flex-1 py-3 bg-gray-100 rounded-2xl font-bold text-sm">Cancel</button>
+                  <button type="submit" disabled={isEditingPolicy || !!editSuccess} className="flex-1 py-3 bg-primary text-white rounded-2xl font-bold text-sm">
+                    {isEditingPolicy ? "Saving..." : "Save Details"}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

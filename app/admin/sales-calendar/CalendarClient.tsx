@@ -157,8 +157,11 @@ export default function CalendarClient() {
                         {format(day, dateFormat)}
                       </span>
                       {dayEvents.length > 0 && (
-                        <span className="text-[10px] font-bold text-gray-400 bg-gray-100 dark:bg-slate-700 px-1.5 py-0.5 rounded-md">
-                          {dayEvents.length}
+                        <span 
+                          title={`${dayEvents.length} Event${dayEvents.length > 1 ? 's' : ''} scheduled for this day`}
+                          className="text-[10px] font-bold text-gray-400 bg-gray-100 dark:bg-slate-700 px-1.5 py-0.5 rounded-md cursor-help"
+                        >
+                          {dayEvents.length} Events
                         </span>
                       )}
                     </div>

@@ -10,7 +10,11 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
     include: {
       customer: true,
       vehicle: {
-        include: { variant: true }
+        include: { 
+          variant: {
+            include: { vehicleMaster: true }
+          } 
+        }
       },
       receipts: true
     }
@@ -22,8 +26,8 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
   const nepaliDateObj = new NepaliDate(printDate);
   const nepaliDateStr = nepaliDateObj.format("YYYY-MM-DD");
   const englishDateStr = printDate.toISOString().split("T")[0];
-
-  const vehicleInfo = `${transaction.vehicle.variant.variantName} - ${transaction.vehicle.engineNo}`;
+  const vehicleInfo = `${transaction.vehicle.variant.vehicleMaster.name} - ${transaction.vehicle.vin}`;
+  const accountInfo = transaction.vehicle.indexNo || 'N/A';
   
   // Format numbers
   const f = (n: number | null | undefined) => (n || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -32,7 +36,7 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
 
   const ReceiptCopy = ({ isCustomer, isFirst }: { isCustomer: boolean, isFirst?: boolean }) => {
     // Calculate Total Payable based strictly on the visible rows on the receipt
-    const dFinalAmount = transaction.showroomPrice + transaction.accessoriesCharge - transaction.exchangeValue - transaction.discount;
+    const dFinalAmount = transaction.showroomPrice + transaction.accessoriesCharge - (transaction.exchangeValue || 0) - (transaction.financeAmount || 0) - transaction.discount;
     const dPaidAmount = transaction.totalAmountPaid;
     const dDueAmount = dFinalAmount - dPaidAmount;
 
@@ -46,15 +50,16 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
         <h2 className="text-lg font-bold mt-1">Money Receipt {isCustomer ? "(Customer Copy)" : "(Office Copy)"}</h2>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-2 text-sm font-medium">
-        <div>
-          <p><span className="w-32 inline-block">ACCOUNT :</span> {transaction.invoiceNo}</p>
+      <div className="flex justify-between gap-4 mb-2 text-sm font-medium">
+        <div className="whitespace-nowrap">
+          <p><span className="w-32 inline-block">ACCOUNT :</span> {accountInfo}</p>
           <p><span className="w-32 inline-block">RECEIVED FROM :</span> {transaction.customer.fullName}</p>
           <p><span className="w-32 inline-block">BIKE INFO :</span> {vehicleInfo}</p>
         </div>
         <div className="text-right">
           <p>PRINT DATE : {englishDateStr} | {nepaliDateStr}</p>
           <p>REC#: {firstReceipt}</p>
+          <p>PURCHASE M. : {transaction.paymentType.toUpperCase()}</p>
         </div>
       </div>
 
@@ -72,22 +77,32 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
             <td className="p-1 border-r border-black text-center"></td>
             <td className="p-1 text-right font-medium">{f(transaction.showroomPrice)}</td>
           </tr>
+          {transaction.discount > 0 && (
+            <tr className="border-b border-black text-rose-700 dark:text-rose-500">
+              <td className="p-1 border-r border-black">Discount</td>
+              <td className="p-1 border-r border-black text-center"></td>
+              <td className="p-1 text-right font-medium">-{f(transaction.discount)}</td>
+            </tr>
+          )}
           <tr className="border-b border-black">
             <td className="p-1 border-r border-black">Accessories</td>
             <td className="p-1 border-r border-black"></td>
             <td className="p-1 text-right font-medium">{f(transaction.accessoriesCharge)}</td>
           </tr>
-          <tr className="border-b border-black">
-            <td className="p-1 border-r border-black">Exchange Valuation</td>
-            <td className="p-1 border-r border-black"></td>
-            <td className="p-1 text-right font-medium">{f(transaction.exchangeValue)}</td>
-          </tr>
-
-          <tr className="border-b border-black">
-            <td className="p-1 border-r border-black">Discount</td>
-            <td className="p-1 border-r border-black"></td>
-            <td className="p-1 text-right font-medium">{f(transaction.discount)}</td>
-          </tr>
+          {transaction.exchangeValue > 0 && (
+            <tr className="border-b border-black text-blue-700 dark:text-blue-500">
+              <td className="p-1 border-r border-black">Exchange Valuation</td>
+              <td className="p-1 border-r border-black"></td>
+              <td className="p-1 text-right font-medium">-{f(transaction.exchangeValue)}</td>
+            </tr>
+          )}
+          {(transaction.financeAmount || 0) > 0 && (
+            <tr className="border-b border-black text-blue-700 dark:text-blue-500">
+              <td className="p-1 border-r border-black">Finance Amount</td>
+              <td className="p-1 border-r border-black"></td>
+              <td className="p-1 text-right font-medium">-{f(transaction.financeAmount)}</td>
+            </tr>
+          )}
           <tr className="border-b border-black font-bold">
             <td className="p-1 border-r border-black">Total Payable Amount</td>
             <td className="p-1 border-r border-black text-center"></td>

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { generateReceiptNo } from '@/lib/sequence';
 import { PaymentType } from '@prisma/client';
 
 export async function POST(request: Request) {
@@ -22,7 +23,8 @@ export async function POST(request: Request) {
       exchangeValue,
       downpayment,
       financerName,
-      financeDuration,
+      financePdfUrl,
+      financeAmount,
       pmCashAmount,
       bankTransfers,
       pmChequeBankName,
@@ -33,7 +35,8 @@ export async function POST(request: Request) {
       serviceBookNo,
       insuranceCompany,
       insuranceType,
-      policyNo
+      policyNo,
+      valuationBy
     } = data;
 
     if (!vehicleId || !customerId) {
@@ -47,18 +50,25 @@ export async function POST(request: Request) {
 
     // Generate unique invoice number
     const dateStr = new Date().toISOString().replace(/[-:T.]/g, '').substring(0, 14);
-    const invoiceNo = `INV-${dateStr}-${Math.floor(Math.random() * 1000)}`;
+    // Do not auto-generate invoiceNo as it will be added manually later
 
     const transaction = await prisma.$transaction(async (tx) => {
+      const vehicle = await tx.vehicleInventory.findUnique({ 
+        where: { id: vehicleId },
+        include: { variant: true } 
+      });
+      if (!vehicle) throw new Error('Vehicle not found');
+
+      const baseSellingPrice = vehicle.variant.exShowroomPriceNPR || (vehicle.purchasePrice * 1.15);
+
       // 1. Create SalesTransaction
       const sale = await tx.salesTransaction.create({
         data: {
-          invoiceNo,
-          vehicleId,
-          customerId,
+          vehicle: { connect: { id: vehicleId } },
+          customer: { connect: { id: customerId } },
           saleType: 'RETAIL',
           paymentType: pt,
-          showroomPrice: totalReceivable, 
+          showroomPrice: baseSellingPrice, 
           discount: discountAmount || 0,
           insurance: insuranceAmount || 0,
           accessoriesCharge: accessoriesAmount || 0,
@@ -71,22 +81,26 @@ export async function POST(request: Request) {
           exchangeValue,
           downpayment,
           financerName,
-          installments: financeDuration ? parseInt(financeDuration) : null,
+          financePdfUrl: financePdfUrl || null,
+          financeAmount,
+          exchangeModel: exchangeValue > 0 ? exchangeModel : null,
           accessories: accessories ? JSON.stringify(accessories) : null,
           serviceBookNo,
           insuranceCompany: insuranceAmount > 0 ? (insuranceCompany || 'Protective Micro Insurance') : null,
           insuranceType: insuranceAmount > 0 ? (insuranceType || '3rd Party') : null,
           policyNo: policyNo || null,
+          remarks: valuationBy || null,
         }
       });
 
       // 2. Create PaymentReceipts based on paymentMethod
+      let receiptOffset = 0;
       if (paymentMethod === 'Cash' || paymentMethod === 'Cash + Bank Transfer') {
         const cashAmt = paymentMethod === 'Cash' ? totalReceived : (pmCashAmount || 0);
         if (cashAmt > 0) {
           await tx.paymentReceipt.create({
             data: {
-              receiptNo: `REC-${Date.now()}-C`,
+              receiptNo: await generateReceiptNo(receiptOffset++),
               transactionId: sale.id,
               amount: cashAmt,
               paymentMethod: 'Cash',
@@ -102,7 +116,7 @@ export async function POST(request: Request) {
             if (transfer.amount > 0) {
               await tx.paymentReceipt.create({
                 data: {
-                  receiptNo: `REC-${Date.now()}-B-${Math.floor(Math.random()*1000)}`,
+                  receiptNo: await generateReceiptNo(receiptOffset++),
                   transactionId: sale.id,
                   amount: Number(transfer.amount),
                   paymentMethod: 'Bank Transfer',
@@ -117,7 +131,7 @@ export async function POST(request: Request) {
       if (paymentMethod === 'Cheque' && pmChequeAmount > 0) {
         await tx.paymentReceipt.create({
            data: {
-             receiptNo: `REC-${Date.now()}-CQ`,
+             receiptNo: await generateReceiptNo(receiptOffset++),
              transactionId: sale.id,
              amount: Number(pmChequeAmount),
              paymentMethod: 'Cheque',

@@ -48,7 +48,6 @@ export default async function AdminDashboard() {
     { label: "Outstanding Dues", value: formatCurrency(totalOutstandingDues), change: "Action Needed", trend: "down", icon: Wallet },
     { label: "Finance Sales (MTD)", value: financeSalesCount.toString(), change: "+0%", trend: "up", icon: Building },
     { label: "In-Stock Units", value: inStockCount.toString(), change: "0", trend: "up", icon: Package },
-    { label: "Monthly Commissions", value: formatCurrency(totalCommission), change: "+0%", trend: "up", icon: TrendingUp },
     { label: "Total Customers", value: totalCustomersCount.toString(), change: `+${todayCustomersCount} Today`, trend: todayCustomersCount > 0 ? "up" : "down", icon: Users },
   ];
 
@@ -230,7 +229,7 @@ export default async function AdminDashboard() {
             <Building className="w-8 h-8 mb-3 text-indigo-500 opacity-90 group-hover:scale-110 transition-transform" />
             <h4 className="font-black text-gray-900 dark:text-white uppercase tracking-widest text-sm">Finance Sales</h4>
           </Link>
-          <Link href="/admin/inventory/create" className="bg-white dark:bg-slate-900/50 backdrop-blur-xl border border-gray-100 dark:border-slate-800/80 hover:border-primary/50 p-4 md:p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none transition-all hover:-translate-y-1 group flex flex-col items-center justify-center text-center">
+          <Link href="/admin/inventory" className="bg-white dark:bg-slate-900/50 backdrop-blur-xl border border-gray-100 dark:border-slate-800/80 hover:border-primary/50 p-4 md:p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none transition-all hover:-translate-y-1 group flex flex-col items-center justify-center text-center">
             <Package className="w-8 h-8 mb-3 text-primary opacity-90 group-hover:scale-110 transition-transform" />
             <h4 className="font-black text-gray-900 dark:text-white uppercase tracking-widest text-sm">Add Inventory</h4>
           </Link>

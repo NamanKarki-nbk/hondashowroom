@@ -63,7 +63,7 @@ export async function GET(request: Request) {
         id: s.id,
         type: 'DELIVERY',
         date: s.createdAt.toISOString(),
-        title: `${s.invoiceNo} - ${s.customer.fullName}`,
+        title: `${s.vehicle.indexNo || 'N/A'} - ${s.customer.fullName}`,
         subtitle: (s.vehicle as any).name || s.vehicle.vin,
         status: 'Confirmed'
       })),

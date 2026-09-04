@@ -38,3 +38,37 @@ export async function deleteExpense(id: string) {
     return { success: false, error: error.message };
   }
 }
+
+export async function addDayBookIncome(
+  dateStr: string,
+  description: string,
+  amount: number,
+  category: string
+) {
+  try {
+    const income = await prisma.dayBookIncome.create({
+      data: {
+        id: randomUUID(),
+        date: new Date(dateStr + "T06:15:00.000Z"),
+        description,
+        amount,
+        category,
+      },
+    });
+
+    revalidatePath("/admin/accounts/daybook");
+    return { success: true, income };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function deleteDayBookIncome(id: string) {
+  try {
+    await prisma.dayBookIncome.delete({ where: { id } });
+    revalidatePath("/admin/accounts/daybook");
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}

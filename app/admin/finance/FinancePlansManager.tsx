@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Plus, Edit2, Trash2, X, Search } from "lucide-react";
+import { Plus, Edit2, Trash2, X, Search, Wallet, CalendarClock, Percent } from "lucide-react";
 import type { FinancePlan } from "@/app/generated/prisma";
 
 interface FinancePlansManagerProps {
@@ -15,14 +15,64 @@ export default function FinancePlansManager({ initialPlans }: FinancePlansManage
   const [currentPlan, setCurrentPlan] = useState<any | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  const [activeDpTab, setActiveDpTab] = useState<"All" | number>("All");
+
+  const availableDownPayments = useMemo(() => {
+    const dps = plans.map((p) => p.downPaymentPct).filter((dp) => dp != null);
+    return Array.from(new Set(dps)).sort((a, b) => a - b);
+  }, [plans]);
+
   const filteredPlans = useMemo(() => {
-    const q = searchQuery.toLowerCase();
-    return plans.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q)
-    );
-  }, [plans, searchQuery]);
+    const q = String(searchQuery || "").toLowerCase();
+    const filtered = (plans || []).filter((p) => {
+      if (!p) return false;
+      if (activeDpTab !== "All" && p.downPaymentPct !== activeDpTab) return false;
+      const nameStr = String(p.name || "").toLowerCase();
+      const catStr = String(p.category || "").toLowerCase();
+      return nameStr.includes(q) || catStr.includes(q);
+    });
+
+    return filtered.sort((a, b) => {
+      // 1. Category sort: SCOOTER first
+      const catA = String(a.category || "").toUpperCase();
+      const catB = String(b.category || "").toUpperCase();
+      if (catA === "SCOOTER" && catB !== "SCOOTER") return -1;
+      if (catB === "SCOOTER" && catA !== "SCOOTER") return 1;
+
+      // 2. Variant sort: STD first, DLX second
+      // The variantName is stored in `cc` in our mapping
+      const varA = String(a.cc || "").toUpperCase();
+      const varB = String(b.cc || "").toUpperCase();
+      
+      const getVariantRank = (v: string) => {
+        if (v.includes("STD") || v.includes("STANDARD")) return 1;
+        if (v.includes("DLX") || v.includes("DELUXE")) return 2;
+        return 3;
+      };
+
+      const rankA = getVariantRank(varA);
+      const rankB = getVariantRank(varB);
+
+      if (rankA !== rankB) return rankA - rankB;
+      
+      // 3. Alphabetical fallback
+      const nameA = String(a.name || "");
+      const nameB = String(b.name || "");
+      if (nameA !== nameB) return nameA.localeCompare(nameB);
+
+      return (a.tenureMonths || 0) - (b.tenureMonths || 0);
+    });
+  }, [plans, searchQuery, activeDpTab]);
+
+  const groupedPlans = useMemo(() => {
+    const groups: Record<number, typeof filteredPlans> = {};
+    filteredPlans.forEach((plan) => {
+      const t = plan.tenureMonths || 0;
+      if (!groups[t]) groups[t] = [];
+      groups[t].push(plan);
+    });
+    return groups;
+  }, [filteredPlans]);
 
   const handleOpenModal = (plan?: any) => {
     if (plan) {
@@ -41,6 +91,7 @@ export default function FinancePlansManager({ initialPlans }: FinancePlansManage
         emi: 0,
         totalInterest: 0,
         registration: 2000,
+        serviceCharge: 0,
         insurance: 0,
         totalCost: 0,
       });
@@ -123,63 +174,104 @@ export default function FinancePlansManager({ initialPlans }: FinancePlansManage
         </button>
       </div>
 
-      <div className="bg-white dark:bg-[#1a1a1a] shadow rounded-2xl overflow-hidden border border-gray-200 dark:border-slate-800">
-        <div className="overflow-x-auto w-full">
-          <table className="w-full text-left border-collapse min-w-[1200px]">
-            <thead>
-              <tr className="bg-slate-50 dark:bg-[#2a2a2a] border-b border-gray-200 dark:border-gray-700 text-sm whitespace-nowrap">
-                <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Model</th>
-                <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Category</th>
-                <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Vehicle Price</th>
-                <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Tenure (Months)</th>
-                <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Down Payment %</th>
-                <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Interest %</th>
-                <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">EMI</th>
-                <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Total Cost</th>
-                <th className="p-4 font-semibold text-slate-700 dark:text-slate-300 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredPlans.length === 0 ? (
-                <tr>
-                  <td colSpan={9} className="p-8 text-center text-gray-500 dark:text-gray-400">
-                    No finance plans found.
-                  </td>
-                </tr>
-              ) : (
-                filteredPlans.map((plan) => (
-                  <tr key={plan.id} className="border-b border-gray-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-[#222] transition-colors whitespace-nowrap">
-                    <td className="p-4 font-medium text-slate-900 dark:text-white">{plan.name} ({plan.cc}cc)</td>
-                    <td className="p-4 text-slate-600 dark:text-slate-400">{plan.category}</td>
-                    <td className="p-4 font-medium text-slate-900 dark:text-white">₹{plan.vehicleVariant.toLocaleString()}</td>
-                    <td className="p-4 text-slate-600 dark:text-slate-400">{plan.tenureMonths}</td>
-                    <td className="p-4 text-slate-600 dark:text-slate-400">{plan.downPaymentPct}%</td>
-                    <td className="p-4 text-slate-600 dark:text-slate-400">{plan.interestRate}%</td>
-                    <td className="p-4 font-medium text-red-600 dark:text-red-400">₹{plan.emi.toLocaleString()}</td>
-                    <td className="p-4 font-medium text-slate-900 dark:text-white">₹{plan.totalCost.toLocaleString()}</td>
-                    <td className="p-4 text-right">
-                      <button
-                        onClick={() => handleOpenModal(plan)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors mr-2 inline-flex"
-                        title="Edit"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(plan.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors inline-flex"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+
+      <div className="flex border-b border-gray-200 dark:border-slate-800 mb-6 gap-6 overflow-x-auto no-scrollbar">
+        {[
+          { label: "All Down Payments", value: "All" as const, icon: Wallet },
+          ...availableDownPayments.map((dp) => ({ label: `${dp}% Down`, value: dp, icon: Percent }))
+        ].map((tab) => {
+          const Icon = tab.icon;
+          return (
+            <button
+              key={tab.value}
+              onClick={() => setActiveDpTab(tab.value)}
+              className={`pb-3 text-sm font-semibold transition-colors relative whitespace-nowrap flex items-center gap-2 ${
+                activeDpTab === tab.value
+                  ? "text-red-600 dark:text-red-500"
+                  : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+              }`}
+            >
+              <Icon className="w-4 h-4" />
+              {tab.label}
+            {activeDpTab === tab.value && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 dark:bg-red-500" />
+            )}
+          </button>
+          );
+        })}
       </div>
+
+      {Object.keys(groupedPlans)
+        .sort((a, b) => Number(a) - Number(b))
+        .map((tenureStr) => {
+          const tenure = Number(tenureStr);
+          const groupPlans = groupedPlans[tenure];
+          return (
+            <div key={tenure} className="mb-10">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                <CalendarClock className="w-5 h-5 text-red-600" />
+                {tenure / 12} Year Plan ({tenure}M)
+              </h3>
+              <div className="bg-white dark:bg-[#1a1a1a] shadow rounded-2xl overflow-hidden border border-gray-200 dark:border-slate-800">
+                <div className="overflow-x-auto w-full">
+                  <table className="w-full text-left border-collapse whitespace-nowrap">
+                    <thead>
+                      <tr className="bg-slate-50 dark:bg-[#2a2a2a] border-b border-gray-200 dark:border-gray-700 text-sm whitespace-nowrap">
+                        <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Model</th>
+                        <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Category</th>
+                        <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Vehicle Price</th>
+                        <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Tenure (Months)</th>
+                        <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Down Payment %</th>
+                        <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Interest %</th>
+                        <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">EMI</th>
+                        <th className="p-4 font-semibold text-slate-700 dark:text-slate-300">Total Cost</th>
+                        <th className="p-4 font-semibold text-slate-700 dark:text-slate-300 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {groupPlans.length === 0 ? (
+                        <tr>
+                          <td colSpan={9} className="p-8 text-center text-gray-500 dark:text-gray-400">
+                            No finance plans found.
+                          </td>
+                        </tr>
+                      ) : (
+                        groupPlans.map((plan) => (
+                          <tr key={plan.id} className="border-b border-gray-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-[#222] transition-colors whitespace-nowrap">
+                            <td className="p-4 font-medium text-slate-900 dark:text-white">{plan.name} ({plan.cc}cc)</td>
+                            <td className="p-4 text-slate-600 dark:text-slate-400">{plan.category}</td>
+                            <td className="p-4 font-medium text-slate-900 dark:text-white">₹{plan.vehicleVariant.toLocaleString()}</td>
+                            <td className="p-4 text-slate-600 dark:text-slate-400">{plan.tenureMonths}</td>
+                            <td className="p-4 text-slate-600 dark:text-slate-400">{plan.downPaymentPct}%</td>
+                            <td className="p-4 text-slate-600 dark:text-slate-400">{plan.interestRate}%</td>
+                            <td className="p-4 font-medium text-red-600 dark:text-red-400">₹{plan.emi.toLocaleString()}</td>
+                            <td className="p-4 font-medium text-slate-900 dark:text-white">₹{plan.totalCost.toLocaleString()}</td>
+                            <td className="p-4 text-right">
+                              <button
+                                onClick={() => handleOpenModal(plan)}
+                                className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors mr-2 inline-flex"
+                                title="Edit"
+                              >
+                                <Edit2 className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(plan.id)}
+                                className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors inline-flex"
+                                title="Delete"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          );
+        })}
 
       {isModalOpen && currentPlan && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
@@ -327,7 +419,7 @@ export default function FinancePlansManager({ initialPlans }: FinancePlansManage
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Registration *</label>
                   <input
@@ -336,6 +428,17 @@ export default function FinancePlansManager({ initialPlans }: FinancePlansManage
                     step="0.01"
                     value={currentPlan.registration || ""}
                     onChange={(e) => setCurrentPlan({ ...currentPlan, registration: Number(e.target.value) })}
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#2a2a2a] focus:ring-2 focus:ring-red-600 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Service Charge *</label>
+                  <input
+                    type="number"
+                    required
+                    step="0.01"
+                    value={currentPlan.serviceCharge || ""}
+                    onChange={(e) => setCurrentPlan({ ...currentPlan, serviceCharge: Number(e.target.value) })}
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#2a2a2a] focus:ring-2 focus:ring-red-600 outline-none"
                   />
                 </div>

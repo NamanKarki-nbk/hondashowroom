@@ -102,8 +102,8 @@ export default function BranchStockPage() {
         </div>
       ) : (
         <div className="space-y-8">
-          {filteredModels.map((model) => (
-            <div key={model.name} className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-800 overflow-hidden shadow-sm print:break-inside-avoid print:shadow-none print:border-gray-300">
+          {filteredModels.map((model: any, idx: number) => (
+            <div key={`${model.name}-${idx}`} className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-800 overflow-hidden shadow-sm print:break-inside-avoid print:shadow-none print:border-gray-300">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">
                   <thead className="bg-[#2a303c] text-white">
