@@ -21,7 +21,7 @@ export default async function CustomerDetailsPage({ params }: { params: Promise<
             }
           }
         },
-        orderBy: { date: 'desc' }
+        orderBy: { createdAt: 'desc' }
       }
     }
   });
@@ -134,7 +134,7 @@ export default async function CustomerDetailsPage({ params }: { params: Promise<
                     </div>
                     <div className="sm:text-right flex flex-row sm:flex-col justify-between sm:justify-end items-center sm:items-end mt-2 sm:mt-0">
                       <p className="font-bold text-gray-900 dark:text-white">{formatCurrency(sale.finalAmount)}</p>
-                      <p className="text-xs font-medium text-gray-500 mt-1 sm:mt-1">{formatDate(sale.date)}</p>
+                      <p className="text-xs font-medium text-gray-500 mt-1 sm:mt-1">{formatDate(sale.createdAt)}</p>
                     </div>
                   </div>
                 ))}
