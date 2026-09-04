@@ -97,6 +97,9 @@ export default function Header({ initialIsLoggedIn = false }: { initialIsLoggedI
                     <Link href="/compare" className="px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-primary transition-colors text-sm font-bold whitespace-nowrap flex items-center gap-2">
                       <span className="text-lg">⚖️</span> Compare Vehicles
                     </Link>
+                    <Link href="/exchange" className="px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-primary transition-colors text-sm font-bold whitespace-nowrap flex items-center gap-2">
+                      <span className="text-lg">🔄</span> Exchange Vehicle
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -207,6 +210,7 @@ export default function Header({ initialIsLoggedIn = false }: { initialIsLoggedI
                   <Link href="/shop" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-primary transition-colors">Shop</Link>
                   <Link href="/compare" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-primary transition-colors">Compare</Link>
                   <Link href="/finance" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-primary transition-colors">Finance</Link>
+                  <Link href="/exchange" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-primary transition-colors">Exchange Vehicle</Link>
                   <Link href="/offers" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-primary transition-colors">Special Offers</Link>
                   <Link href="/service-booking" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-primary transition-colors">Service Booking</Link>
                   <Link href="/accessories" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-primary transition-colors">Accessories</Link>
