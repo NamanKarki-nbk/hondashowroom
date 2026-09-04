@@ -9,11 +9,70 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status");
 
-    const valuations = await prisma.valuationLog.findMany({
+    // Fetch Leads that came from the Exchange Valuation calculator
+    const leads = await prisma.lead.findMany({
+      where: { interestedIn: 'Exchange Valuation' },
       orderBy: { createdAt: 'desc' }
     });
 
-    return NextResponse.json(valuations);
+    // Format them to match what ValuationsClient.tsx expects
+    const valuations = leads.map(lead => {
+      // Try to parse the remarks for details. 
+      // Format: "I want to exchange my Honda Shine BS6 (2020, 10,000 km, 1st Owner).\n\nEstimated Valuation: NPR 50,000 - NPR 55,000"
+      let oldBrand = "Honda";
+      let oldModel = "Vehicle";
+      let manufactureYear = "Unknown";
+      let condition = "Unknown";
+      let estimatedValue = 0;
+
+      if (lead.remarks) {
+        const parts = lead.remarks.split('\n\n');
+        if (parts.length > 0) {
+          const match = parts[0].match(/exchange my (.*?) \((.*?)\)/);
+          if (match) {
+            const vehicleStr = match[1];
+            oldBrand = vehicleStr.split(' ')[0] || "Honda";
+            oldModel = vehicleStr.split(' ').slice(1).join(' ') || "Vehicle";
+            
+            const details = match[2].split(', ');
+            manufactureYear = details[0] || "Unknown";
+            condition = details[1] + (details[2] ? `, ${details[2]}` : '');
+          }
+        }
+        if (parts.length > 1 && parts[1].includes('Estimated Valuation: NPR')) {
+          const valMatch = parts[1].match(/NPR ([\d,]+) - NPR ([\d,]+)/);
+          if (valMatch) {
+            estimatedValue = parseInt(valMatch[2].replace(/,/g, ''));
+          }
+        }
+      }
+
+      // Map LeadStatus to ValuationStatus expected by frontend
+      let valStatus = 'EVALUATED';
+      if (lead.status === 'CONVERTED') valStatus = 'ACCEPTED';
+      if (lead.status === 'LOST') valStatus = 'REJECTED';
+
+      return {
+        id: lead.id,
+        customer: { fullName: lead.name, phone: lead.phone },
+        oldBrand,
+        oldModel,
+        manufactureYear,
+        condition,
+        estimatedValue,
+        finalOffered: null,
+        remarks: lead.remarks,
+        status: valStatus
+      };
+    });
+
+    // Client-side filtering by status if provided
+    let filtered = valuations;
+    if (status && status !== 'ALL') {
+      filtered = valuations.filter(v => v.status === status);
+    }
+
+    return NextResponse.json(filtered);
   } catch (error) {
     console.error("Failed to fetch valuations:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -27,10 +86,21 @@ export async function PATCH(req: NextRequest) {
     
     const updateData: any = {};
     
-    // finalOffered and remarks are not in the schema anymore
-    // only update what's available
+    // Map status back to LeadStatus
+    if (status) {
+      if (status === 'ACCEPTED') updateData.status = 'CONVERTED';
+      else if (status === 'REJECTED') updateData.status = 'LOST';
+      else updateData.status = 'CONTACTED';
+    }
+
+    // Since Lead doesn't have finalOffered, we append it to remarks if updated
+    if (finalOffered) {
+      updateData.remarks = remarks ? `${remarks}\n\nFinal Offered: ${finalOffered}` : `Final Offered: ${finalOffered}`;
+    } else if (remarks !== undefined) {
+      updateData.remarks = remarks;
+    }
     
-    const valuation = await prisma.valuationLog.update({
+    const lead = await prisma.lead.update({
       where: { id },
       data: updateData
     });
@@ -43,18 +113,17 @@ export async function PATCH(req: NextRequest) {
       userId: session?.userId || session?.id || "system",
       action: "UPDATE",
       entity: "Lead",
-      entityId: valuation.id,
+      entityId: lead.id,
       details: {
-        brand: valuation.brand,
-        model: valuation.model,
-        customerName: valuation.customerName,
-        customerPhone: valuation.customerPhone,
+        customerName: lead.name,
+        customerPhone: lead.phone,
+        newStatus: lead.status
       }
     });
 
-    return NextResponse.json(valuation);
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Failed to update valuation:", error);
+    console.error("Failed to update valuation lead:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
