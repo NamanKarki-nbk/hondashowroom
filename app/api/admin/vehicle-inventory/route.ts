@@ -59,6 +59,7 @@ export async function GET(req: Request) {
         (item.variant?.vehicleMaster?.name || '').toLowerCase().includes(search) ||
         item.vin.toLowerCase().includes(search) ||
         item.engineNo.toLowerCase().includes(search) ||
+        (item.tempRegistrationNo || '').toLowerCase().includes(search) ||
         (item.indexNo && item.indexNo.toLowerCase().includes(search))
       );
     });

@@ -108,10 +108,37 @@ export default function SalesHistoryClient() {
                       <span className="font-bold text-gray-900 dark:text-white">Rs. {sale.finalAmount.toLocaleString()}</span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <button className="text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1.5 rounded-lg flex items-center ml-auto">
-                        <Download className="w-3 h-3 mr-1" />
-                        Invoice
-                      </button>
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => window.open(`/print/undertaking/${sale.id}`, '_blank')}
+                          className="text-xs font-bold bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1.5 rounded-lg flex items-center"
+                          title="Print Undertaking"
+                        >
+                          Undertaking
+                        </button>
+                        <button
+                          onClick={() => window.open(`/print/pdi/${sale.id}`, '_blank')}
+                          className="text-xs font-bold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 px-3 py-1.5 rounded-lg flex items-center"
+                          title="Print PDI Checksheet"
+                        >
+                          PDI
+                        </button>
+                        <button
+                          onClick={() => window.open(`/print/receipt-payment/${sale.id}`, '_blank')}
+                          className="text-xs font-bold bg-purple-50 text-purple-700 hover:bg-purple-100 px-3 py-1.5 rounded-lg flex items-center"
+                          title="Print Cash Receipt"
+                        >
+                          Receipt
+                        </button>
+                        <button
+                          onClick={() => window.open(`/print/invoice/${sale.id}`, '_blank')}
+                          className="text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1.5 rounded-lg flex items-center"
+                          title="Print Invoice"
+                        >
+                          <Download className="w-3 h-3 mr-1" />
+                          Invoice
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

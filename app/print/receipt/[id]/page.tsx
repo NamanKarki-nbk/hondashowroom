@@ -30,17 +30,23 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
 
   const firstReceipt = transaction.receipts[0] ? transaction.receipts[0].receiptNo : "N/A";
 
-  const ReceiptCopy = ({ isCustomer, isFirst }: { isCustomer: boolean, isFirst?: boolean }) => (
-    <div className={`w-full max-w-3xl mx-auto p-4 md:p-8 bg-white text-black mb-4 border-b-2 border-dashed border-gray-300 print:border-none print:mb-2 print:break-inside-avoid ${isFirst ? 'print:pt-[1.5in]' : 'print:pt-2'}`}>
-      <div className="text-center mb-4">
-        <div className="print:hidden">
+  const ReceiptCopy = ({ isCustomer, isFirst }: { isCustomer: boolean, isFirst?: boolean }) => {
+    // Calculate Total Payable based strictly on the visible rows on the receipt
+    const dFinalAmount = transaction.showroomPrice + transaction.accessoriesCharge - transaction.exchangeValue - transaction.discount;
+    const dPaidAmount = transaction.totalAmountPaid;
+    const dDueAmount = dFinalAmount - dPaidAmount;
+
+    return (
+    <div className={`w-full max-w-3xl mx-auto p-2 md:p-4 bg-white text-black mb-2 border-b-2 border-dashed border-gray-300 print:border-none print:mb-0 ${isFirst ? 'print:pt-2' : 'print:pt-0'}`}>
+      <div className="text-center mb-2">
+        <div>
           <h1 className="text-xl font-bold uppercase tracking-wide">SOCIETY ENTERPRISES PRIVATE LIMITED</h1>
           <p className="text-sm">Damak-05, Jhapa, Nepal</p>
         </div>
-        <h2 className="text-lg font-bold mt-2">Money Receipt {isCustomer ? "(Customer Copy)" : "(Office Copy)"}</h2>
+        <h2 className="text-lg font-bold mt-1">Money Receipt {isCustomer ? "(Customer Copy)" : "(Office Copy)"}</h2>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-4 text-sm font-medium">
+      <div className="grid grid-cols-2 gap-4 mb-2 text-sm font-medium">
         <div>
           <p><span className="w-32 inline-block">ACCOUNT :</span> {transaction.invoiceNo}</p>
           <p><span className="w-32 inline-block">RECEIVED FROM :</span> {transaction.customer.fullName}</p>
@@ -52,96 +58,69 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
         </div>
       </div>
 
-      <table className="w-full border-collapse border border-black text-sm mb-8">
+      <table className="w-full border-collapse border border-black text-sm mb-4">
         <thead>
           <tr className="border-b border-black">
-            <th className="text-left p-2 border-r border-black font-bold w-1/2">DESCRIPTION</th>
-            <th className="text-center p-2 border-r border-black font-bold w-1/4">R. NO</th>
-            <th className="text-right p-2 font-bold w-1/4">AMOUNT</th>
+            <th className="text-left p-1 border-r border-black font-bold w-1/2">DESCRIPTION</th>
+            <th className="text-center p-1 border-r border-black font-bold w-1/4">R. NO</th>
+            <th className="text-right p-1 font-bold w-1/4">AMOUNT</th>
           </tr>
         </thead>
         <tbody>
           <tr className="border-b border-black">
-            <td className="p-2 border-r border-black">Vehicle Amount</td>
-            <td className="p-2 border-r border-black text-center"></td>
-            <td className="p-2 text-right font-medium">{f(transaction.showroomPrice)}</td>
+            <td className="p-1 border-r border-black">Vehicle Amount</td>
+            <td className="p-1 border-r border-black text-center"></td>
+            <td className="p-1 text-right font-medium">{f(transaction.showroomPrice)}</td>
           </tr>
           <tr className="border-b border-black">
-            <td className="p-2 border-r border-black">Accessories</td>
-            <td className="p-2 border-r border-black"></td>
-            <td className="p-2 text-right font-medium">{f(transaction.accessoriesCharge)}</td>
+            <td className="p-1 border-r border-black">Accessories</td>
+            <td className="p-1 border-r border-black"></td>
+            <td className="p-1 text-right font-medium">{f(transaction.accessoriesCharge)}</td>
           </tr>
           <tr className="border-b border-black">
-            <td className="p-2 border-r border-black">Exchange Valuation</td>
-            <td className="p-2 border-r border-black"></td>
-            <td className="p-2 text-right font-medium">{f(transaction.exchangeValue)}</td>
+            <td className="p-1 border-r border-black">Exchange Valuation</td>
+            <td className="p-1 border-r border-black"></td>
+            <td className="p-1 text-right font-medium">{f(transaction.exchangeValue)}</td>
           </tr>
+
           <tr className="border-b border-black">
-            <td className="p-2 border-r border-black">Insurance</td>
-            <td className="p-2 border-r border-black"></td>
-            <td className="p-2 text-right font-medium">{f(transaction.insurance)}</td>
-          </tr>
-          <tr className="border-b border-black">
-            <td className="p-2 border-r border-black">Discount</td>
-            <td className="p-2 border-r border-black"></td>
-            <td className="p-2 text-right font-medium">{f(transaction.discount)}</td>
+            <td className="p-1 border-r border-black">Discount</td>
+            <td className="p-1 border-r border-black"></td>
+            <td className="p-1 text-right font-medium">{f(transaction.discount)}</td>
           </tr>
           <tr className="border-b border-black font-bold">
-            <td className="p-2 border-r border-black">Total Payable Amount</td>
-            <td className="p-2 border-r border-black text-center"></td>
-            <td className="p-2 text-right">{f(transaction.finalAmount)}</td>
+            <td className="p-1 border-r border-black">Total Payable Amount</td>
+            <td className="p-1 border-r border-black text-center"></td>
+            <td className="p-1 text-right">{f(dFinalAmount)}</td>
           </tr>
           <tr className="border-b border-black font-bold">
-            <td className="p-2 border-r border-black">Paid Amount</td>
-            <td className="p-2 border-r border-black text-center">{firstReceipt}</td>
-            <td className="p-2 text-right">{f(transaction.totalAmountPaid)}</td>
+            <td className="p-1 border-r border-black">Paid Amount</td>
+            <td className="p-1 border-r border-black text-center">{firstReceipt}</td>
+            <td className="p-1 text-right">{f(dPaidAmount)}</td>
           </tr>
-          <tr className="border-b border-black font-bold">
-            <td className="p-2 border-r border-black">Amount Receivable</td>
-            <td className="p-2 border-r border-black text-center"></td>
-            <td className="p-2 text-right">{f(transaction.dueAmount)}</td>
-          </tr>
-          <tr className="border-b border-black">
-            <td className="p-2 border-r border-black">Less - 2ndPayment :</td>
-            <td className="p-2 border-r border-black text-center"></td>
-            <td className="p-2 text-right">0.00</td>
-          </tr>
-          <tr className="border-b border-black font-bold">
-            <td className="p-2 border-r border-black">Amount Receivable</td>
-            <td className="p-2 border-r border-black text-center"></td>
-            <td className="p-2 text-right">{f(transaction.dueAmount)}</td>
-          </tr>
-          <tr className="border-b border-black">
-            <td className="p-2 border-r border-black">Less - 3rd Payment :</td>
-            <td className="p-2 border-r border-black text-center"></td>
-            <td className="p-2 text-right">0.00</td>
-          </tr>
-          <tr className="border-b border-black font-bold">
-            <td className="p-2 border-r border-black">Amount Receivable</td>
-            <td className="p-2 border-r border-black text-center"></td>
-            <td className="p-2 text-right">{f(transaction.dueAmount)}</td>
-          </tr>
+          {dDueAmount > 0 && (
+            <tr className="border-b border-black font-bold">
+              <td className="p-1 border-r border-black">Due Amount</td>
+              <td className="p-1 border-r border-black text-center"></td>
+              <td className="p-1 text-right">{f(dDueAmount)}</td>
+            </tr>
+          )}
         </tbody>
       </table>
 
-      <div className="flex justify-between items-end mt-8 text-sm font-medium">
-        <div className="w-48 text-center border-t border-black pt-2">Customer Signature</div>
-        <div className="w-48 text-center border-t border-black pt-2">Prepared By</div>
-        <div className="w-48 text-center border-t border-black pt-2">Authorized Signature</div>
-      </div>
-
-      <div className="mt-6 text-xs italic text-center">
-        <p>Payment made through cheque is subject to realisation of the cheque.</p>
-        <p>Please Verify the name and M/C No. and Sign the Receipt. Otherwise the Company will not be responsible.</p>
+      <div className="flex justify-between items-end mt-2 text-sm font-medium pb-2">
+        <div className="w-48 text-center border-t border-black pt-1">Customer Signature</div>
+        <div className="w-48 text-center border-t border-black pt-1">Prepared By</div>
+        <div className="w-48 text-center border-t border-black pt-1">Authorized Signature</div>
       </div>
     </div>
-  );
+  )};
 
   return (
-    <div className="w-full bg-white text-black min-h-screen">
+    <div className="w-full bg-white text-black">
       <style>{`
         @media print {
-          @page { size: letter; margin: 0; }
+          @page { size: A4; margin: 0; }
           body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
       `}</style>
@@ -157,6 +136,16 @@ export default async function ReceiptPrintPage({ params }: { params: Promise<{ i
       
       <div className="p-0 m-0">
         <ReceiptCopy isCustomer={true} isFirst={true} />
+        
+        {/* Tear Line */}
+        <div className="w-full max-w-3xl mx-auto flex items-center justify-center my-2 text-gray-500 print:text-black opacity-60">
+          <span className="text-lg px-2">✂</span>
+          <div className="flex-grow border-t-2 border-dashed border-gray-400 print:border-black"></div>
+          <span className="text-xs px-4 uppercase tracking-widest">Tear Here</span>
+          <div className="flex-grow border-t-2 border-dashed border-gray-400 print:border-black"></div>
+          <span className="text-lg px-2">✂</span>
+        </div>
+
         <ReceiptCopy isCustomer={false} />
       </div>
 

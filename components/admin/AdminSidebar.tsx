@@ -52,6 +52,7 @@ const navCategories = [
       { name: "Purchase Invoices", href: "/admin/inventory/purchase-invoices" },
       { name: "Update Registration", href: "/admin/inventory/registration" },
       { name: "Spare Parts", href: "/admin/inventory/spare-parts" },
+      { name: "Vehicle Orders", href: "/admin/inventory/orders" },
     ]
   },
   {
@@ -65,6 +66,17 @@ const navCategories = [
       { name: "Sales Analysis", href: "/admin/sales-analysis" },
       { name: "Vehicle Price List", href: "/admin/prices" },
       { name: "Finance Plans", href: "/admin/finance" },
+    ]
+  },
+  {
+    name: "Accounts & Collections",
+    icon: DollarSign,
+    items: [
+      { name: "Due Collection", href: "/admin/accounts/dues" },
+      { name: "Finance Tracker", href: "/admin/accounts/finance-tracker" },
+      { name: "Exchange Log", href: "/admin/accounts/exchange-log" },
+      { name: "Insurance Management", href: "/admin/accounts/insurance" },
+      { name: "Day Book", href: "/admin/accounts/daybook" },
     ]
   },
   {

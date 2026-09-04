@@ -29,7 +29,11 @@ export async function POST(request: Request) {
       pmChequeNumber,
       pmChequeDate,
       pmChequeAmount,
-      accessories
+      accessories,
+      serviceBookNo,
+      insuranceCompany,
+      insuranceType,
+      policyNo
     } = data;
 
     if (!vehicleId || !customerId) {
@@ -68,7 +72,11 @@ export async function POST(request: Request) {
           downpayment,
           financerName,
           installments: financeDuration ? parseInt(financeDuration) : null,
-          accessories: accessories ? JSON.stringify(accessories) : null
+          accessories: accessories ? JSON.stringify(accessories) : null,
+          serviceBookNo,
+          insuranceCompany: insuranceAmount > 0 ? (insuranceCompany || 'Protective Micro Insurance') : null,
+          insuranceType: insuranceAmount > 0 ? (insuranceType || '3rd Party') : null,
+          policyNo: policyNo || null,
         }
       });
 

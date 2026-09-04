@@ -11,8 +11,16 @@ export async function GET(request: Request) {
       orderBy: { createdAt: 'desc' },
       include: {
         customer: true,
-        vehicle: true
-      }
+        vehicle: {
+          include: {
+            variant: { include: { vehicleMaster: true } },
+          },
+        },
+        receipts: {
+          orderBy: { createdAt: 'asc' },
+          select: { id: true, receiptNo: true, amount: true, paymentMethod: true },
+        },
+      },
     });
 
     return NextResponse.json(sales);

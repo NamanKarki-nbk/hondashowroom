@@ -9,7 +9,7 @@ export default async function PDIPrintPage({ params }: { params: Promise<{ id: s
     where: { id },
     include: {
       customer: true,
-      vehicle: { include: { variant: true } }
+      vehicle: { include: { variant: { include: { vehicleMaster: true } } } }
     }
   });
 
@@ -50,93 +50,71 @@ export default async function PDIPrintPage({ params }: { params: Promise<{ id: s
         </div>
       </div>
 
-      {/* Tables side by side */}
-      <div className="flex w-full border border-black mb-1 font-medium">
-         <div className="w-1/2 border-r border-black">
-            <table className="w-full">
-              <tbody>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold w-1/3">Index No.</td>
-                  <td className="p-1">{transaction.invoiceNo}</td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">Name</td>
-                  <td className="p-1 uppercase">{transaction.customer.fullName}</td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">Contact No.</td>
-                  <td className="p-1 uppercase">{transaction.customer.phone}</td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">VARIENT</td>
-                  <td className="p-1 uppercase">{transaction.vehicle.variant.variantName.includes("Scooter") || transaction.vehicle.variant.variantName.includes("Dio") ? "SCOOTER" : "MOTORCYCLE"}</td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">Model Code</td>
-                  <td className="p-1 uppercase">{transaction.vehicle.variant.variantName}</td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">Colour Code</td>
-                  <td className="p-1 uppercase">{transaction.vehicle.color}</td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">Chalan No.</td>
-                  <td className="p-1 uppercase"></td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">Temp. Registration No.</td>
-                  <td className="p-1 uppercase">{transaction.vehicle.tempRegistrationNo || ""}</td>
-                </tr>
-                <tr>
-                  <td className="p-1 border-r border-black font-bold">Mechi Registration No.</td>
-                  <td className="p-1 uppercase">{transaction.vehicle.mechiRegistrationNo || ""}</td>
-                </tr>
-              </tbody>
-            </table>
-         </div>
-         <div className="w-1/2">
-            <table className="w-full h-full">
-              <tbody>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold w-1/3 h-[25px]"></td>
-                  <td className="p-1"></td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">Address</td>
-                  <td className="p-1 uppercase">{transaction.customer.address || ""}</td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">S.B.N</td>
-                  <td className="p-1 uppercase"></td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">Odometer Reading</td>
-                  <td className="p-1 uppercase">0</td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">Frame No.</td>
-                  <td className="p-1 uppercase">{transaction.vehicle.vin}</td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">Engine No.</td>
-                  <td className="p-1 uppercase">{transaction.vehicle.engineNo}</td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">Key No.</td>
-                  <td className="p-1 uppercase"></td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="p-1 border-r border-black font-bold">Tyre Make :</td>
-                  <td className="p-1 uppercase"></td>
-                </tr>
-                <tr>
-                  <td className="p-1 border-r border-black font-bold">Battery No. :</td>
-                  <td className="p-1 uppercase"></td>
-                </tr>
-              </tbody>
-            </table>
-         </div>
-      </div>
+      {/* Merged Info Table */}
+      <table className="w-full border-collapse border border-black text-left table-fixed mb-1 font-medium">
+        <colgroup>
+           <col className="w-[25%]" />
+           <col className="w-[35%]" />
+           <col className="w-[20%]" />
+           <col className="w-[20%]" />
+        </colgroup>
+        <tbody>
+          <tr>
+            <td className="p-1 border border-black font-bold bg-gray-100" style={{ backgroundColor: '#f3f4f6', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>Index No.</td>
+            <td className="p-1 border border-black">{transaction.vehicle.indexNo || ""}</td>
+            <td className="p-1 border border-black font-bold"></td>
+            <td className="p-1 border border-black"></td>
+          </tr>
+          <tr>
+            <td className="p-1 border border-black font-bold">Name</td>
+            <td className="p-1 border border-black uppercase">{transaction.customer.fullName}</td>
+            <td className="p-1 border border-black font-bold">Address</td>
+            <td className="p-1 border border-black uppercase">{transaction.customer.address || ""}</td>
+          </tr>
+          <tr>
+            <td className="p-1 border border-black font-bold">Contact No.</td>
+            <td className="p-1 border border-black uppercase">{transaction.customer.phone}</td>
+            <td className="p-1 border border-black font-bold">S.B.N</td>
+            <td className="p-1 border border-black uppercase">{transaction.serviceBookNo || ""}</td>
+          </tr>
+          <tr>
+            <td className="p-1 border border-black font-bold">VARIENT</td>
+            <td className="p-1 border border-black uppercase">{transaction.vehicle.variant.variantName.includes("Scooter") || transaction.vehicle.variant.variantName.includes("Dio") ? "SCOOTER" : "MOTORCYCLE"}</td>
+            <td className="p-1 border border-black font-bold">Odometer Reading</td>
+            <td className="p-1 border border-black uppercase">0</td>
+          </tr>
+          <tr>
+            <td className="p-1 border border-black font-bold">Model Code</td>
+            <td className="p-1 border border-black uppercase">{transaction.vehicle.variant.vehicleMaster.name}</td>
+            <td className="p-1 border border-black font-bold">Frame No.</td>
+            <td className="p-1 border border-black uppercase">{transaction.vehicle.vin}</td>
+          </tr>
+          <tr>
+            <td className="p-1 border border-black font-bold">Colour Code</td>
+            <td className="p-1 border border-black uppercase">{transaction.vehicle.color}</td>
+            <td className="p-1 border border-black font-bold">Engine No.</td>
+            <td className="p-1 border border-black uppercase">{transaction.vehicle.engineNo}</td>
+          </tr>
+          <tr>
+            <td className="p-1 border border-black font-bold">Chalan No.</td>
+            <td className="p-1 border border-black uppercase"></td>
+            <td className="p-1 border border-black font-bold">Key No.</td>
+            <td className="p-1 border border-black uppercase"></td>
+          </tr>
+          <tr>
+            <td className="p-1 border border-black font-bold">Temp. Registration No.</td>
+            <td className="p-1 border border-black uppercase">{transaction.vehicle.tempRegistrationNo || ""}</td>
+            <td className="p-1 border border-black font-bold">Tyre Make :</td>
+            <td className="p-1 border border-black uppercase"></td>
+          </tr>
+          <tr>
+            <td className="p-1 border border-black font-bold">Mechi Registration No.</td>
+            <td className="p-1 border border-black uppercase">{transaction.vehicle.mechiRegistrationNo || ""}</td>
+            <td className="p-1 border border-black font-bold">Battery No. :</td>
+            <td className="p-1 border border-black uppercase"></td>
+          </tr>
+        </tbody>
+      </table>
 
       <div className="text-center font-bold text-xs p-1">
         Tick Each Item Following Satisfactory Inspection, If any Defects Put X Marks & 'NA' if item is not applicable to product initial check.
@@ -153,46 +131,46 @@ export default async function PDIPrintPage({ params }: { params: Promise<{ id: s
 
         <div className="bg-gray-300 print:bg-gray-300 font-bold text-center border-y border-black p-1 mt-4" style={{ backgroundColor: '#d1d5db', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>Function Check</div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 p-4 font-medium text-xs">
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Handle Movement</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Seat Condition / Lock operation</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Fuel lid and fuel cap operation</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Head light (Hi/Low) operation & Beam alignment</div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-3 p-4 font-medium text-[11px] leading-tight">
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Handle Movement</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Seat Condition / Lock operation</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Fuel lid and fuel cap operation</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Head light (Hi/Low) operation & Beam alignment</div>
           
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> FR Tyre cut/wear</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Kick Operation</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Tail / Brake Light operation</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Fr. LH & RH Fork Condition</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> FR Tyre cut/wear</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Kick Operation</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Tail / Brake Light operation</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Fr. LH & RH Fork Condition</div>
           
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> RR Tyre cut/wear</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Rear Suspension</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Idle RPM</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Wheel Assy. FR/RR</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> RR Tyre cut/wear</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Rear Suspension</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Idle RPM</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Wheel Assy. FR/RR</div>
           
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Rear brake freeplay & Brake switch functioning</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Side Stand Operation</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Main Stand Operation</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Winkers Indication Light</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Rear brake freeplay & Brake switch functioning</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Side Stand Operation</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Main Stand Operation</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Winkers Indication Light</div>
 
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Pass Light High/Low beam Switch</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Mirror Assembly</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Front brake freeplay & Brake switch functioning</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> MIL Indication Light</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Pass Light High/Low beam Switch</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Mirror Assembly</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Front brake freeplay & Brake switch functioning</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> MIL Indication Light</div>
 
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Winker Operation</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Throttle freeplay & functioning</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Fuel Indication</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> ECO Indicator</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Winker Operation</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Throttle freeplay & functioning</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Fuel Indication</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> ECO Indicator</div>
 
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Horn Operation</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Start button / Idling Stop Switch</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Odometer / Tripmeter / current fuel</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> SMART Key Indicator (VII ID)</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Horn Operation</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Start button / Idling Stop Switch</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Odometer / Tripmeter / current fuel</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> SMART Key Indicator (VII ID)</div>
 
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Key Switch and Handle Lock functioning</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Combi Switch (Seat/Fuel lid) functioning</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> Time</div>
-          <div className="flex gap-2 items-center"><div className="w-4 h-4 border border-black"></div> High/Low Beam Indication Light</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Key Switch and Handle Lock functioning</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Combi Switch (Seat/Fuel lid) functioning</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> Time</div>
+          <div className="flex gap-2 items-start"><div className="w-4 h-4 min-w-[1rem] min-h-[1rem] flex-shrink-0 border border-black mt-0.5"></div> High/Low Beam Indication Light</div>
         </div>
 
         <div className="bg-gray-300 print:bg-gray-300 font-bold text-center border-y border-black p-1 mt-4" style={{ backgroundColor: '#d1d5db', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' }}>Road Test</div>

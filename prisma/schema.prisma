@@ -130,6 +130,7 @@ model VehicleVariant {
   specDifferences    Json?
   financePlans       FinancePlan[]
   inventory          VehicleInventory[]
+  purchaseOrderItems PurchaseOrderItem[]
   vehicleMaster      VehicleMaster      @relation(fields: [vehicleMasterId], references: [id])
 
   @@unique([vehicleMasterId, variantName])
@@ -145,6 +146,7 @@ model VehicleColor {
   finishType      String?
   isPopular       Boolean       @default(false)
   vehicleMaster   VehicleMaster @relation(fields: [vehicleMasterId], references: [id])
+  purchaseOrderItems PurchaseOrderItem[]
 
   @@index([vehicleMasterId])
 }
@@ -237,6 +239,12 @@ model SalesTransaction {
   exchangeNumber     String?
   exchangeValue      Float?
   accessories        Json?
+  serviceBookNo      String?
+  insuranceCompany   String?
+  insuranceType      String?
+  policyNo           String?
+  vatBillNo          String?
+  vatBillIssuedDate  DateTime?
   remarks            String?
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
@@ -572,6 +580,38 @@ model PasswordResetToken {
   @@unique([email, token])
 }
 
+model InsurancePayment {
+  id        String   @id @default(uuid())
+  date      DateTime
+  paidTo    String
+  amount    Float
+  notes     String?
+  receiptNo String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model InsurancePriceList {
+  id            String   @id @default(uuid())
+  modelName     String
+  insuranceType String   // "3RD PARTY" | "FULL PARTY"
+  maxPrice      Float    // Amount paid to PMIL
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([modelName, insuranceType])
+}
+
+model DayBookExpense {
+  id          String   @id @default(uuid())
+  date        DateTime // The date this expense belongs to (day-level granularity)
+  description String
+  amount      Float
+  category    String   @default("General")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 enum DocumentType {
   CITIZENSHIP
   LICENSE
@@ -673,4 +713,30 @@ enum VehicleCategory {
   MOTORCYCLE
   SCOOTER
   POWER_PRODUCT
+}
+
+model PurchaseOrder {
+  id        String              @id @default(uuid())
+  orderNo   String              @unique
+  date      DateTime
+  status    String              @default("PENDING") // PENDING, SENT, DELIVERED, CANCELLED
+  remarks   String?
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  items     PurchaseOrderItem[]
+}
+
+model PurchaseOrderItem {
+  id        String         @id @default(uuid())
+  orderId   String
+  variantId String
+  colorId   String
+  quantity  Int
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  order     PurchaseOrder  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variant   VehicleVariant @relation(fields: [variantId], references: [id])
+  color     VehicleColor   @relation(fields: [colorId], references: [id])
+
+  @@index([orderId])
 }

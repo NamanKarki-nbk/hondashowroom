@@ -47,6 +47,7 @@ function POSContent() {
   const [insuranceCompany, setInsuranceCompany] = useState("Protective Micro Insurance");
   const [insuranceType, setInsuranceType] = useState("3rd Party");
   const [insuranceAmount, setInsuranceAmount] = useState<number>(0);
+  const [policyNo, setPolicyNo] = useState("");
 
   // Read URL params to auto-search VIN if provided
   const searchParams = useSearchParams();
@@ -156,6 +157,7 @@ function POSContent() {
         insuranceCompany,
         insuranceType,
         insuranceAmount,
+        policyNo,
         totalReceivable,
         totalReceived,
         dueAmount
@@ -779,7 +781,7 @@ function POSContent() {
                   </label>
 
                   {wantsInsurance && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 bg-zinc-50 dark:bg-black/20 p-5 rounded-2xl border border-zinc-200 dark:border-white/5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 bg-zinc-50 dark:bg-black/20 p-5 rounded-2xl border border-zinc-200 dark:border-white/5">
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Insurance Company</label>
                         <select value={insuranceCompany} onChange={e => setInsuranceCompany(e.target.value)} className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-primary outline-none transition-all appearance-none cursor-pointer">
@@ -793,6 +795,10 @@ function POSContent() {
                           <option value="3rd Party">3rd Party</option>
                           <option value="Full Party">Full Party</option>
                         </select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Policy No.</label>
+                        <input type="text" value={policyNo} onChange={e => setPolicyNo(e.target.value)} placeholder="e.g. POL-2024-001" className="w-full bg-white dark:bg-black/50 border border-zinc-300 dark:border-white/10 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:border-primary outline-none transition-all" />
                       </div>
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-zinc-500 dark:text-gray-500 uppercase tracking-wider">Premium Amount (Rs.)</label>

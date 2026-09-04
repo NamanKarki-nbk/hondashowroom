@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { TrendingUp, Package, DollarSign, Calendar as CalendarIcon, Users, ArrowUpRight, ArrowDownRight, ChevronRight, ArrowRight } from "lucide-react";
+import { TrendingUp, Package, DollarSign, Calendar as CalendarIcon, Users, ArrowUpRight, ArrowDownRight, ChevronRight, ArrowRight, Wallet, Building, Receipt, HandCoins, PlusCircle } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 
 export default async function AdminDashboard() {
@@ -11,7 +11,7 @@ export default async function AdminDashboard() {
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   // 2. Fetch KPIs
-  const [revenueResult, commissionResult, inStockCount, totalCustomersCount, todayCustomersCount] = await Promise.all([
+  const [revenueResult, commissionResult, inStockCount, totalCustomersCount, todayCustomersCount, outstandingDuesResult, financeSalesCount] = await Promise.all([
     prisma.salesTransaction.aggregate({
       _sum: { finalAmount: true },
       where: { createdAt: { gte: startOfMonth } }
@@ -26,17 +26,27 @@ export default async function AdminDashboard() {
     prisma.customer.count(),
     prisma.customer.count({
       where: { createdAt: { gte: startOfToday } }
+    }),
+    prisma.salesTransaction.aggregate({
+      _sum: { dueAmount: true },
+      where: { dueAmount: { gt: 0 } }
+    }),
+    prisma.salesTransaction.count({
+      where: { paymentType: 'FINANCE', createdAt: { gte: startOfMonth } }
     })
   ]);
 
   const totalRevenue = revenueResult._sum.finalAmount || 0;
   const totalCommission = commissionResult._sum.commission || 0;
+  const totalOutstandingDues = outstandingDuesResult._sum.dueAmount || 0;
 
   // Format currency
   const formatCurrency = (val: number) => `Rs. ${val.toLocaleString()}`;
 
   const KPI_DATA = [
     { label: "Total Revenue (MTD)", value: formatCurrency(totalRevenue), change: "+0%", trend: "up", icon: DollarSign },
+    { label: "Outstanding Dues", value: formatCurrency(totalOutstandingDues), change: "Action Needed", trend: "down", icon: Wallet },
+    { label: "Finance Sales (MTD)", value: financeSalesCount.toString(), change: "+0%", trend: "up", icon: Building },
     { label: "In-Stock Units", value: inStockCount.toString(), change: "0", trend: "up", icon: Package },
     { label: "Monthly Commissions", value: formatCurrency(totalCommission), change: "+0%", trend: "up", icon: TrendingUp },
     { label: "Total Customers", value: totalCustomersCount.toString(), change: `+${todayCustomersCount} Today`, trend: todayCustomersCount > 0 ? "up" : "down", icon: Users },
@@ -116,6 +126,13 @@ export default async function AdminDashboard() {
     include: { customer: true }
   });
 
+  const recentDuesCollected = await prisma.paymentReceipt.findMany({
+    take: 2,
+    where: { receiptNo: { endsWith: '-C' } },
+    orderBy: { createdAt: 'desc' },
+    include: { transaction: { include: { customer: true } } }
+  });
+
   const SCHEDULE = [
     ...recentSales.map(sale => ({
       date: sale.createdAt,
@@ -123,6 +140,13 @@ export default async function AdminDashboard() {
       subtitle: sale.vehicle?.variant?.vehicleMaster?.name || "Unknown Vehicle",
       status: "Delivered",
       type: "DELIVERY"
+    })),
+    ...recentDuesCollected.map(receipt => ({
+      date: receipt.createdAt,
+      title: `Due: ${receipt.transaction?.customer?.fullName || "Unknown"}`,
+      subtitle: `Collected: Rs. ${receipt.amount.toLocaleString()}`,
+      status: "Collected",
+      type: "DUE_COLLECTION"
     })),
     ...upcomingTestRides.map(tr => ({
       date: tr.preferredDate,
@@ -169,7 +193,7 @@ export default async function AdminDashboard() {
         </header>
 
         {/* KPI Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
           {KPI_DATA.map((kpi, idx) => {
             const Icon = kpi.icon;
             return (
@@ -178,18 +202,38 @@ export default async function AdminDashboard() {
                   <div className="p-3 bg-gray-50 dark:bg-zinc-800/50 rounded-2xl text-gray-500 dark:text-gray-400 group-hover:text-primary group-hover:bg-primary/10 transition-colors shadow-sm">
                      <Icon className="w-6 h-6" />
                   </div>
-                  <span className={`text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 uppercase tracking-wider ${kpi.trend === 'up' ? 'text-emerald-700 bg-emerald-100 dark:text-emerald-400 dark:bg-emerald-400/10 border border-emerald-200 dark:border-emerald-400/20' : 'text-rose-700 bg-rose-100 dark:text-rose-400 dark:bg-rose-400/10 border border-rose-200 dark:border-rose-400/20'}`}>
+                  <span className={`text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 uppercase tracking-wider ${kpi.trend === 'up' ? 'text-emerald-700 bg-emerald-100 dark:text-emerald-400 dark:bg-emerald-400/10 border border-emerald-200 dark:border-emerald-400/20' : 'text-rose-700 bg-rose-100 dark:text-rose-400 dark:bg-rose-400/10 border border-rose-200 dark:border-rose-400/20'}`}>
                      {kpi.change} 
-                     {kpi.trend === 'up' ? <ArrowUpRight className="w-3.5 h-3.5"/> : <ArrowDownRight className="w-3.5 h-3.5"/>}
+                     {kpi.trend === 'up' ? <ArrowUpRight className="w-3 h-3"/> : <ArrowDownRight className="w-3 h-3"/>}
                   </span>
                </div>
                <div>
-                 <h3 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight mb-2 group-hover:text-primary transition-colors">{kpi.value}</h3>
-                 <p className="text-sm text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider">{kpi.label}</p>
+                 <h3 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight mb-2 group-hover:text-primary transition-colors">{kpi.value}</h3>
+                 <p className="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider">{kpi.label}</p>
                </div>
             </div>
             );
           })}
+        </div>
+
+        {/* Quick Action Row */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <Link href="/admin/pos/checkout" className="bg-primary hover:bg-red-700 text-white p-4 md:p-6 rounded-3xl shadow-lg hover:shadow-red-500/30 transition-all hover:-translate-y-1 group flex flex-col items-center justify-center text-center">
+            <PlusCircle className="w-8 h-8 mb-3 opacity-90 group-hover:scale-110 transition-transform" />
+            <h4 className="font-black uppercase tracking-widest text-sm">New Invoice</h4>
+          </Link>
+          <Link href="/admin/accounts/dues" className="bg-white dark:bg-slate-900/50 backdrop-blur-xl border border-gray-100 dark:border-slate-800/80 hover:border-amber-500/50 p-4 md:p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none transition-all hover:-translate-y-1 group flex flex-col items-center justify-center text-center">
+            <HandCoins className="w-8 h-8 mb-3 text-amber-500 opacity-90 group-hover:scale-110 transition-transform" />
+            <h4 className="font-black text-gray-900 dark:text-white uppercase tracking-widest text-sm">Collect Dues</h4>
+          </Link>
+          <Link href="/admin/accounts/finance-tracker" className="bg-white dark:bg-slate-900/50 backdrop-blur-xl border border-gray-100 dark:border-slate-800/80 hover:border-indigo-500/50 p-4 md:p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none transition-all hover:-translate-y-1 group flex flex-col items-center justify-center text-center">
+            <Building className="w-8 h-8 mb-3 text-indigo-500 opacity-90 group-hover:scale-110 transition-transform" />
+            <h4 className="font-black text-gray-900 dark:text-white uppercase tracking-widest text-sm">Finance Sales</h4>
+          </Link>
+          <Link href="/admin/inventory/create" className="bg-white dark:bg-slate-900/50 backdrop-blur-xl border border-gray-100 dark:border-slate-800/80 hover:border-primary/50 p-4 md:p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none transition-all hover:-translate-y-1 group flex flex-col items-center justify-center text-center">
+            <Package className="w-8 h-8 mb-3 text-primary opacity-90 group-hover:scale-110 transition-transform" />
+            <h4 className="font-black text-gray-900 dark:text-white uppercase tracking-widest text-sm">Add Inventory</h4>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -268,7 +312,7 @@ export default async function AdminDashboard() {
                        <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mt-0.5">{item.subtitle}</p>
                     </div>
 
-                    <div className={`w-2.5 h-2.5 rounded-full ${item.status === 'Delivered' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]'}`} title={item.status} />
+                    <div className={`w-2.5 h-2.5 rounded-full ${item.status === 'Delivered' || item.status === 'Collected' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]'}`} title={item.status} />
                  </div>
                  );
                })}
